@@ -2,6 +2,7 @@ package ca.phon.project;
 
 import ca.phon.session.Session;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 
 /**
@@ -46,5 +47,17 @@ public interface SessionDetails {
      * @return session size in bytes
      */
     public long getSessionByteSize(String corpus, String session);
+
+    /**
+     * Returns the number of records in a session w/o opening
+     * the session. This method is faster than using
+     * openSession(corpus, session).numberOfRecords()
+     *
+     * @param session
+     * @return number of records in the session
+     * @throws IOException
+     */
+    public int numberOfRecordsInSession(String corpus, String session)
+            throws IOException;
 
 }

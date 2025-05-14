@@ -15,7 +15,11 @@
  */
 package ca.phon.ui.text;
 
+import ca.phon.orthography.InternalMedia;
 import ca.phon.project.Project;
+
+import javax.swing.*;
+import java.util.Iterator;
 
 /**
  * {@link PromptedTextField} for entering a corpus name.
@@ -28,7 +32,7 @@ public class CorpusNameField extends PromptedTextField {
 
 	private Project project;
 
-	private DefaultTextCompleterModel completerModel;
+	protected DefaultTextCompleterModel completerModel;
 
 	public CorpusNameField() {
 		this(null);
@@ -62,8 +66,39 @@ public class CorpusNameField extends PromptedTextField {
 			completer.setUseDataForCompletion(true);
 			completer.install(this);
 		}
-		if(getProject() != null) {
-			getProject().getCorpora().forEach( (corpus) -> completerModel.addCompletion(corpus) );
+		final AutocompleterSetupWorker worker = new AutocompleterSetupWorker();
+		worker.execute();
+	}
+
+	protected SwingWorker<?, ?> getAutocompleteWorker() {
+		return new AutocompleterSetupWorker();
+	}
+
+	private class AutocompleterSetupWorker extends SwingWorker<Integer, String> {
+		@Override
+		protected Integer doInBackground() throws Exception {
+			int result = 0;
+			if(getProject() != null) {
+				final Iterator<String> corpusIterator = getProject().getCorpusIterator();
+				while(corpusIterator.hasNext()) {
+					final String corpus = corpusIterator.next();
+					publish(corpus);
+					++result;
+				}
+			}
+			return result;
+		}
+
+		@Override
+		protected void process(java.util.List<String> chunks) {
+			for(String chunk : chunks) {
+				completerModel.addCompletion(chunk);
+			}
+		}
+
+		@Override
+		protected void done() {
+			super.done();
 		}
 	}
 

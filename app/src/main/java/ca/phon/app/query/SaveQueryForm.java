@@ -17,6 +17,7 @@ package ca.phon.app.query;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
@@ -77,8 +78,11 @@ public class SaveQueryForm extends JPanel {
 	}
 
 	private void updateLocationFields() {
-		projSaveLocField.setText("<html><p>" + QueryScriptLibrary.projectScriptFolder(getProject()) + "</p></html>");
-		saveInProjectBtn.setToolTipText(QueryScriptLibrary.projectScriptFolder(getProject()));
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			projSaveLocField.setText("<html><p>" + QueryScriptLibrary.projectScriptFolder(getProject()) + "</p></html>");
+			saveInProjectBtn.setToolTipText(QueryScriptLibrary.projectScriptFolder(getProject()));
+		}
 		libSaveLocField.setText("<html><p>" + PrefHelper.getUserDataFolder() + File.separator + "script" + "</p></html>");
 		saveInUserDirBtn.setToolTipText(PrefHelper.getUserDataFolder() + File.separator + "script");
 	}
@@ -136,9 +140,12 @@ public class SaveQueryForm extends JPanel {
 		add(nameQueryBtn, cc.xyw(2, 4, 2));
 		
 		add(saveInUserDirBtn, cc.xyw(2, 5, 2));
-		
-		add(saveInProjectBtn, cc.xyw(2, 7, 2));
-		
+
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			add(saveInProjectBtn, cc.xyw(2, 7, 2));
+		}
+
 		add(saveOtherBtn, cc.xyw(2, 9, 2));
 	}
 

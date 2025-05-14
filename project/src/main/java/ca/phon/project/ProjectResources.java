@@ -1,5 +1,6 @@
 package ca.phon.project;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,6 +9,13 @@ import java.io.OutputStream;
  * Interface for project resources extension for {@link Project}s
  */
 public interface ProjectResources {
+
+    /**
+     * Get location of project resources folder.
+     *
+     * @return location of project resources folder
+     */
+    public String getResourceLocation();
 
     /**
      * Get an input stream for the specified project resource.

@@ -29,6 +29,7 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.media.VolumeModel;
 import ca.phon.project.Project;
+import ca.phon.project.SessionDetails;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
@@ -922,13 +923,18 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	 * @throws IOException
 	 */
 	private boolean doSave(Project project, Session session, SessionWriter sessionWriter) throws IOException {
+		final SessionDetails sessionDetails = project.getExtension(SessionDetails.class);
+		if(sessionDetails == null) {
+			throw new IOException("Unable to save session, no filesystem information found");
+		}
+
 		UUID writeLock = null;
 		try {
 			LogUtil.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
 			writeLock = project.getSessionWriteLock(session);
 			project.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
 
-			final long byteSize = project.getSessionByteSize(session);
+			final long byteSize = sessionDetails.getSessionByteSize(session);
 
 			final String msg = "Save finished.  " +
 					ByteSize.humanReadableByteCount(byteSize, true) + " written to disk.";

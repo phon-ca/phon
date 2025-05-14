@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * The project folder is the root of the project.
  */
 public class LocalProject extends AbstractProject implements ProjectRefresh, SessionTemplate, SessionDetails,
-        ProjectEvents, ProjectDeprecated, ProjectResources {
+        ProjectDeprecated, ProjectResources {
 
     /**
      * Project XML file (Phon 2.x and earlier)
@@ -110,8 +110,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
 
         this.projectProperties = new ProjectProperties(this);
 
-        // project events extension
-        putExtension(ProjectEvents.class, this);
         // session details extension
         putExtension(SessionDetails.class, this);
         // session template extension
@@ -234,6 +232,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
 
         final ProjectEvent pe = ProjectEvent.newCorpusAddedEvent(name);
         fireProjectStructureChanged(pe);
+    }
+
+    @Override
+    public boolean hasCorpus(String corpus) {
+        if (corpus == null || corpus.length() == 0) {
+            return false;
+        }
+        final File corpusFolder = getCorpusFolder(corpus);
+        return corpusFolder.exists();
     }
 
     @Override
@@ -463,6 +470,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     @Override
     public Iterator<String> getSessionIterator(String corpus) {
         return new SessionIterator(corpus);
+    }
+
+    @Override
+    public boolean hasSession(String corpus, String session) {
+        if (session == null || session.length() == 0) {
+            return false;
+        }
+        final File sessionFile = getSessionFile(corpus, session);
+        return sessionFile.exists();
     }
 
     @Override
@@ -841,6 +857,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         fireProjectStructureChanged(pe);
     }
 
+    @Override
     public String getResourceLocation() {
         String retVal = this.resourceLocation;
         if (retVal == null) {

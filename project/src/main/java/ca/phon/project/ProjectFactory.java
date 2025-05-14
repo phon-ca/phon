@@ -21,7 +21,7 @@ import java.io.*;
 import java.net.URL;
 
 /**
- * Create projects from {@link URL}s
+ * Create or open projects from a given location.
  */
 public interface ProjectFactory {
 	
@@ -29,14 +29,14 @@ public interface ProjectFactory {
 	 * Open a project from the specified
 	 * folder.
 	 * 
-	 * @param projectFolder
+	 * @param projectLocation
 	 * 
 	 * @throws IOException if the given file object is
 	 *  not a folder or does not exist
 	 * @throws ProjectConfigurationException if the given
 	 *  folder is not a phon project
 	 */
-	public Project openProject(File projectFolder)
+	public Project openProject(String projectLocation)
 			throws IOException, ProjectConfigurationException;
 	
 	/**
@@ -44,12 +44,13 @@ public interface ProjectFactory {
 	 * the project will automatically be set to the value of
 	 * the final path element.
 	 * 
-	 * @param projectFolder
+	 * @param projectLocation
 	 * 
 	 * @throws IOException if a problem occurs while trying to 
-	 *  access/write to the given location
+	 *  access/write to the given location or if the given
+	 *  implementation does not support creating a project
 	 */
-	public Project createProject(File projectFolder) 
+	public Project createProject(String projectLocation)
 			throws IOException;
 	
 }

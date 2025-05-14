@@ -52,9 +52,7 @@ public class CorpusListModel implements ListModel<String> {
 	
 	public List<String> getCorpora() {
 		if(cachedCorpora == null) {
-			synchronized(cachedMutex) {
-				cachedCorpora = project.getCorpora();
-			}
+			loadCorpora();
 		}
 		return cachedCorpora;
 	}
@@ -101,11 +99,19 @@ public class CorpusListModel implements ListModel<String> {
 			l.contentsChanged(lde);
 		}
 	}
+
+	private void loadCorpora() {
+		synchronized(cachedMutex) {
+			cachedCorpora.clear();
+			final Iterator<String> corpusIter = project.getCorpusIterator();
+			while(corpusIter.hasNext()) {
+				cachedCorpora.add(corpusIter.next());
+			}
+		}
+	}
 	
 	public void refresh() {
-		synchronized(cachedMutex) {
-			cachedCorpora = project.getCorpora();
-		}
+		loadCorpora();
 		fireDataChange();
 	}
 	

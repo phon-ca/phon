@@ -56,9 +56,7 @@ public class SessionListModel implements ListModel<String> {
 	
 	public List<String> getSessions() {
 		if(cachedSessions == null) {
-			synchronized(cachedMutex) {
-				cachedSessions = project.getCorpusSessions(corpus);
-			}
+			loadSessionCache();
 		}
 		return cachedSessions;
 	}
@@ -114,9 +112,19 @@ public class SessionListModel implements ListModel<String> {
 	public void refresh() {
 		if(corpus == null) return;
 		synchronized(cachedMutex) {
-			cachedSessions = project.getCorpusSessions(corpus);
+			loadSessionCache();
 		}
 		fireDataChange();
+	}
+
+	private void loadSessionCache() {
+		synchronized(cachedMutex) {
+			cachedSessions.clear();
+			final Iterator<String> sessionIter = project.getSessionIterator(corpus);
+			while(sessionIter.hasNext()) {
+				cachedSessions.add(sessionIter.next());
+			}
+		}
 	}
 
 	@Override

@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Pane for displaying session details
+ *
+ */
 public class SessionDetailsPane extends JTextArea {
 
 	private static final long serialVersionUID = -1625212681352543764L;
@@ -47,16 +51,23 @@ public class SessionDetailsPane extends JTextArea {
 	}
 
 	public void updateText(final String corpus, final String session) {
+		final ca.phon.project.SessionDetails sessionDetails = project.getExtension(ca.phon.project.SessionDetails.class);
+		if(sessionDetails == null) {
+			setText("No session details available");
+			return;
+		} else {
+			setText("Loading session details...");
+		}
 		final StringBuffer sb = new StringBuffer();
 		final Runnable onEDT = () -> {
 			setText(sb.toString());
 		};
 		final Runnable inBg = () -> {
 			try {
-				int numRecords = project.numberOfRecordsInSession(corpus, session);
+				int numRecords = sessionDetails.numberOfRecordsInSession(corpus, session);
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
 
-				final ZonedDateTime time = project.getSessionModificationTime(corpus, session);
+				final ZonedDateTime time = sessionDetails.getSessionModificationTime(corpus, session);
 
 				sb.append("Number of records: ").append(numRecords).append("\n\n");
 				sb.append("Last modified: ").append(formatter.format(time));

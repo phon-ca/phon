@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.prefs.PreferencesEP;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.script.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
@@ -104,32 +105,36 @@ public class QueryMenuListener implements MenuListener {
 		userScriptItems.forEach( (i) -> queryMenu.add(i) );
 		
 		// project scripts
-		final ResourceLoader<QueryScript> projectScriptLoader = queryScriptLibrary.projectScriptFiles(project);
-		final Iterator<QueryScript> projectScriptIterator = projectScriptLoader.iterator();
-		if(projectScriptIterator.hasNext()) {
-			queryMenu.addSeparator();
-			final JMenuItem lbl = new JMenuItem("-- Project Library --");
-			lbl.addActionListener( (evt) -> {
-				if(Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().open(new File(QueryScriptLibrary.projectScriptFolder(project)));
-					} catch (IOException e1) {
-						LogUtil.warning(e1);
-						Toolkit.getDefaultToolkit().beep();
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			final ResourceLoader<QueryScript> projectScriptLoader = queryScriptLibrary.projectScriptFiles(project);
+			final Iterator<QueryScript> projectScriptIterator = projectScriptLoader.iterator();
+			if (projectScriptIterator.hasNext()) {
+				queryMenu.addSeparator();
+				final JMenuItem lbl = new JMenuItem("-- Project Library --");
+				lbl.addActionListener((evt) -> {
+					if (Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().open(new File(QueryScriptLibrary.projectScriptFolder(project)));
+						} catch (IOException e1) {
+							LogUtil.warning(e1);
+							Toolkit.getDefaultToolkit().beep();
+						}
 					}
-				}
-			} );
-			queryMenu.add(lbl);
+				});
+				queryMenu.add(lbl);
+			}
+			List<JMenuItem> projectScriptItems = new ArrayList<>();
+			while (projectScriptIterator.hasNext()) {
+				final QueryScript qs = projectScriptIterator.next();
+
+				final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
+				projectScriptItems.add(sItem);
+			}
+			projectScriptItems.sort((o1, o2) -> o1.getText().compareTo(o2.getText()));
+			projectScriptItems.forEach((i) -> queryMenu.add(i));
 		}
-		List<JMenuItem> projectScriptItems = new ArrayList<>();
-		while(projectScriptIterator.hasNext()) {
-			final QueryScript qs = projectScriptIterator.next();
-			
-			final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
-			projectScriptItems.add(sItem);
-		}
-		projectScriptItems.sort( (o1, o2) -> o1.getText().compareTo(o2.getText()) );
-		projectScriptItems.forEach( (i) -> queryMenu.add(i) );
+
 		
 		// plug-in script
 		final ResourceLoader<QueryScript> pluginScriptLoader = queryScriptLibrary.pluginScriptFiles(project);

@@ -223,7 +223,7 @@ public class NewCorpusDialog extends JDialog {
 			return false;
 		}
 		
-		if (projectWindow.getProject().getCorpora().contains(name)) {
+		if (projectWindow.getProject().hasCorpus(name)) {
 			showMessage("New Corpus",
 					"The corpus name you specified already exists.");
 			return false;

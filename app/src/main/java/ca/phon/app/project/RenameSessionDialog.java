@@ -21,6 +21,7 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PhonConstants;
+import ca.phon.worker.PhonWorker;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.*;
 import org.apache.commons.io.FilenameUtils;
@@ -29,10 +30,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Iterator;
 import java.util.List;
 
-public class RenameSessionDialog extends JDialog
-{
+/**
+ * Dialog for renaming a session
+ */
+public class RenameSessionDialog extends JDialog {
 	private static final long serialVersionUID = -3962929149264454215L;
 	
 	/**
@@ -140,10 +144,14 @@ public class RenameSessionDialog extends JDialog
 		jpanel1.add(jlabel3,cc.xy(2,10));
 
 		// Add corpus names to list
-		final List<String> corpora = project.getCorpora();
-		for(String corpusName : corpora)
-			cmbCorpus.addItem(corpusName);
-		
+		PhonWorker.getInstance().invokeLater( () -> {
+			final Iterator<String> corpusNames = project.getCorpusIterator();
+			while(corpusNames.hasNext()) {
+				final String corpusName = corpusNames.next();
+				SwingUtilities.invokeLater( () -> cmbCorpus.addItem(corpusName) );
+			}
+		});
+
 		cmbCorpus.setName("cmbCorpus");
 		cmbCorpus.addItemListener(new CorpusChangeListener());
 		jpanel1.add(cmbCorpus,cc.xy(2,3));
@@ -215,11 +223,16 @@ public class RenameSessionDialog extends JDialog
 		// Clear the current list of sessions
 		cmbSession.removeAllItems();
 
-		// Update with the new list of sessions
-		String corpusName = (String)cmbCorpus.getSelectedItem();
-		final List<String> sessions = project.getCorpusSessions(corpusName);
-		for(String sessionName : sessions)
-			cmbSession.addItem(sessionName);
+		PhonWorker.getInstance().invokeLater( () -> {
+			// Update with the new list of sessions
+			final String corpusName = (String)cmbCorpus.getSelectedItem();
+			if(corpusName == null) return;
+			final Iterator<String> sessionNames = project.getSessionIterator(corpusName);
+			while(sessionNames.hasNext()) {
+				final String sessionName = sessionNames.next();
+				SwingUtilities.invokeLater( () -> cmbSession.addItem(sessionName) );
+			}
+		});
 	}
 	
 	public boolean validateForm() {

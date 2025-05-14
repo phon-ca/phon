@@ -16,8 +16,10 @@
 package ca.phon.query.report;
 
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.db.*;
 import ca.phon.query.report.io.*;
+import ca.phon.util.PrefHelper;
 import jakarta.xml.bind.JAXBElement;
 
 import java.io.*;
@@ -49,7 +51,7 @@ public class ResultSetListingManager {
 	 * 
 	 * @param project
 	 * @param query
-	 * @param resultset
+	 * @param resultSet
 	 * 
 	 * @return the result list format for the 
 	 *  result set or <code>null</code> if not found.
@@ -80,7 +82,7 @@ public class ResultSetListingManager {
 	 * 
 	 * @param project
 	 * @param query
-	 * @param resultset
+	 * @param resultSet
 	 * @param listing
 	 * 
 	 * @throws IOException
@@ -110,19 +112,19 @@ public class ResultSetListingManager {
 	 * 
 	 * @param project
 	 * @param query
-	 * @param resultset
+	 * @param resultSet
 	 * 
 	 * @return the path to the result listing
 	 */
 	public String getPathForResultListing(Project project, Query query, ResultSet resultSet) {
-		final String projectLocation = 
-				project.getResourceLocation();
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		final String projectLocation = projectResources != null
+				? projectResources.getResourceLocation()
+				: PrefHelper.getUserDocumentsFolder();
 		final String queryid = query.getUUID().toString();
 		final String rsName = resultSet.getSessionPath();
-		
 		final String sc = File.separator;
-		
-		return projectLocation + sc + RESOURCE_FOLDER + sc 
+		return projectLocation + sc + RESOURCE_FOLDER + sc
 				+ queryid + sc + rsName + ".xml";
 	}
 	

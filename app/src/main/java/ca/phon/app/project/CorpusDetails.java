@@ -28,6 +28,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.Iterator;
 
 /**
  * Corpus details for project manager.
@@ -144,7 +145,7 @@ public class CorpusDetails extends JPanel {
 	}
 
 	public void setCorpus(String corpus) {
-		if(this.corpus != null && project.getCorpora().contains(this.corpus)) {
+		if(this.corpus != null && project.hasCorpus(this.corpus)) {
 			project.setCorpusDescription(this.corpus, corpusDescriptionArea.getText());
 		}
 
@@ -153,7 +154,7 @@ public class CorpusDetails extends JPanel {
 	}
 	
 	void update() {
-		if(corpus == null || !project.getCorpora().contains(corpus)) {
+		if(corpus == null || !project.hasCorpus(corpus)) {
 			// clear
 			numSessionsLabel.setText("");
 
@@ -164,7 +165,13 @@ public class CorpusDetails extends JPanel {
 			locationLabel.setIcon(null);
 			locationLabel.setToolTipText("");
 		} else {
-			numSessionsLabel.setText("" + project.getCorpusSessions(corpus).size());
+			final Iterator<String> sessionItr = project.getSessionIterator(corpus);
+			int numSessions = 0;
+			while(sessionItr.hasNext()) {
+				sessionItr.next();
+				++numSessions;
+			}
+			numSessionsLabel.setText(numSessions + "");
 
 			final String corpusAbsolutePath = project.getCorpusPath(corpus);
 			final Path corpusPath = FileSystems.getDefault().getPath(corpusAbsolutePath);

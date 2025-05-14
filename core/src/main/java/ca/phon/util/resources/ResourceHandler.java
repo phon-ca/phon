@@ -20,7 +20,7 @@ import java.util.Iterator;
 /**
  * Responsible for finding resources for a resource loader.
  * 
- * Implementing classes must defind an iterator
+ * Implementing classes must define an iterator
  * for loading objects of the parameterized type.
  */
 public interface ResourceHandler<T> extends Iterable<T> {

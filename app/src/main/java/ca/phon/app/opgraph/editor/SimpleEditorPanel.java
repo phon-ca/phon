@@ -37,6 +37,7 @@ import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.*;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
@@ -1023,13 +1024,16 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		saveUserAct.putValue(PhonUIAction.NAME, "Save in user library...");
 		saveUserAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
 		menu.add(saveUserAct);
+
+		final ProjectResources projectResources = getProject().getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			PhonUIAction<String> saveProjectAct = PhonUIAction.eventConsumer(this::saveInFolder, library.getProjectFolderPath(getProject()));
+			saveProjectAct.putValue(PhonUIAction.NAME, "Save in project library...");
+			saveProjectAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
+			menu.add(saveProjectAct);
+		}
 		
-		PhonUIAction<String> saveProjectAct = PhonUIAction.eventConsumer(this::saveInFolder, library.getProjectFolderPath(getProject()));
-		saveProjectAct.putValue(PhonUIAction.NAME, "Save in project library...");
-		saveProjectAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
-		menu.add(saveProjectAct);
-		
-		PhonUIAction<String> saveAsAct = PhonUIAction.eventConsumer(this::saveInFolder, library.getProjectFolderPath(getProject()));
+		PhonUIAction<String> saveAsAct = PhonUIAction.eventConsumer(this::saveInFolder, null);
 		saveAsAct.putValue(PhonUIAction.NAME, "Save as...");
 		saveAsAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
 		menu.add(saveAsAct);
@@ -1330,53 +1334,56 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 
 		if(getProject() != null) {
-			final ResourceLoader<URL> projectLoader = library.getProjectGraphs(getProject());
-			final Iterator<URL> projectIterator = projectLoader.iterator();
-			if(projectIterator.hasNext()) {
-				final DefaultMutableTreeNode projectNode = new DefaultMutableTreeNode("Project " + getModel().getNoun().getObj2(), true);
-				List<URL> documentURLS = new ArrayList<>();
-				while(projectIterator.hasNext()) {
-					final URL documentURL = projectIterator.next();
-					documentURLS.add(documentURL);
-				}
-				documentURLS.sort( (url1, url2) -> url1.toString().toLowerCase().compareTo(url2.toString().toLowerCase()) );
-				
-				for(URL documentURL:documentURLS) {
-					try {
-						final URI relativeURI = new File(library.getProjectFolderPath(getProject())).toURI().relativize(documentURL.toURI());
-
-						String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
-
-						DefaultMutableTreeNode parentNode = projectNode;
-						int splitIdx = -1;
-						while((splitIdx = relativePath.indexOf('/')) >= 0) {
-							final String nodeName = relativePath.substring(0, splitIdx);
-
-							DefaultMutableTreeNode node = null;
-							for(int i = 0; i < parentNode.getChildCount(); i++) {
-								final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)parentNode.getChildAt(i);
-								if(childNode.getUserObject().equals(nodeName)) {
-									node = childNode;
-									break;
-								}
-							}
-							if(node == null) {
-								node = new DefaultMutableTreeNode(nodeName, true);
-								parentNode.add(node);
-							}
-							parentNode = node;
-							relativePath = relativePath.substring(splitIdx+1);
-						}
-
-						final DefaultMutableTreeNode treeNode =
-								new DefaultMutableTreeNode(documentURL, true);
-						parentNode.add(treeNode);
-					} catch (UnsupportedEncodingException | URISyntaxException e) {
-						LogUtil.warning(e);
+			final ProjectResources projectResources = getProject().getExtension(ProjectResources.class);
+			if(projectResources != null) {
+				final ResourceLoader<URL> projectLoader = library.getProjectGraphs(getProject());
+				final Iterator<URL> projectIterator = projectLoader.iterator();
+				if (projectIterator.hasNext()) {
+					final DefaultMutableTreeNode projectNode = new DefaultMutableTreeNode("Project " + getModel().getNoun().getObj2(), true);
+					List<URL> documentURLS = new ArrayList<>();
+					while (projectIterator.hasNext()) {
+						final URL documentURL = projectIterator.next();
+						documentURLS.add(documentURL);
 					}
-				}
+					documentURLS.sort((url1, url2) -> url1.toString().toLowerCase().compareTo(url2.toString().toLowerCase()));
 
-				root.add(projectNode);
+					for (URL documentURL : documentURLS) {
+						try {
+							final URI relativeURI = new File(library.getProjectFolderPath(getProject())).toURI().relativize(documentURL.toURI());
+
+							String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
+
+							DefaultMutableTreeNode parentNode = projectNode;
+							int splitIdx = -1;
+							while ((splitIdx = relativePath.indexOf('/')) >= 0) {
+								final String nodeName = relativePath.substring(0, splitIdx);
+
+								DefaultMutableTreeNode node = null;
+								for (int i = 0; i < parentNode.getChildCount(); i++) {
+									final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(i);
+									if (childNode.getUserObject().equals(nodeName)) {
+										node = childNode;
+										break;
+									}
+								}
+								if (node == null) {
+									node = new DefaultMutableTreeNode(nodeName, true);
+									parentNode.add(node);
+								}
+								parentNode = node;
+								relativePath = relativePath.substring(splitIdx + 1);
+							}
+
+							final DefaultMutableTreeNode treeNode =
+									new DefaultMutableTreeNode(documentURL, true);
+							parentNode.add(treeNode);
+						} catch (UnsupportedEncodingException | URISyntaxException e) {
+							LogUtil.warning(e);
+						}
+					}
+
+					root.add(projectNode);
+				}
 			}
 		}
 	}

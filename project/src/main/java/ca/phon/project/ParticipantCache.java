@@ -60,23 +60,26 @@ public class ParticipantCache {
 		this.participantSet = Collections.synchronizedSet(new TreeSet<>(participantComparator));
 		this.sessionMap = Collections.synchronizedMap(new HashMap<>());
 
-		this.project.addProjectListener(new ProjectListener() {
-			@Override
-			public void projectStructureChanged(ProjectEvent pe) {
-				resetCache();
-			}
-
-			@Override
-			public void projectDataChanged(ProjectEvent pe) {
-
-			}
-
-			@Override
-			public void projectWriteLocksChanged(ProjectEvent pe) {
-				if(pe.getEventType() == ProjectEvent.ProjectEventType.SESSION_CHANGED)
+		final ProjectEvents projectEvents = project.getExtension(ProjectEvents.class);
+		if(projectEvents != null) {
+			projectEvents.addProjectListener(new ProjectListener() {
+				@Override
+				public void projectStructureChanged(ProjectEvent pe) {
 					resetCache();
-			}
-		});
+				}
+
+				@Override
+				public void projectDataChanged(ProjectEvent pe) {
+
+				}
+
+				@Override
+				public void projectWriteLocksChanged(ProjectEvent pe) {
+					if(pe.getEventType() == ProjectEvent.ProjectEventType.SESSION_CHANGED)
+						resetCache();
+				}
+			});
+		}
 	}
 
 	public void setProject(Project project) {
@@ -88,9 +91,13 @@ public class ParticipantCache {
 	}
 
 	public void loadSession(SessionPath sessionPath) {
+		final SessionDetails sessionDetails = project.getExtension(SessionDetails.class);
+		if(sessionDetails != null) {
+			return;
+		}
 		final ZonedDateTime lastScanModTime = sessionMap.get(sessionPath);
 		if(lastScanModTime != null) {
-			final ZonedDateTime currentModTime = project.getSessionModificationTime(sessionPath.getFolder(), sessionPath.getSessionFile());
+			final ZonedDateTime currentModTime = sessionDetails.getSessionModificationTime(sessionPath.getFolder(), sessionPath.getSessionFile());
 			if(currentModTime.isEqual(lastScanModTime) || currentModTime.isBefore(lastScanModTime))
 				return;
 		}
@@ -149,7 +156,7 @@ public class ParticipantCache {
 				}
 			}
 
-			sessionMap.put(sessionPath, project.getSessionModificationTime(session));
+			sessionMap.put(sessionPath, sessionDetails.getSessionModificationTime(session));
 		} catch (IOException e) {
 			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}

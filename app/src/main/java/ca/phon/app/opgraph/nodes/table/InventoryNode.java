@@ -23,7 +23,7 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.TableUtils;
+import ca.phon.query.script.TableUtils;
 import ca.phon.query.db.*;
 import ca.phon.query.report.datasource.*;
 

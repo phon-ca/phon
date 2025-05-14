@@ -19,7 +19,9 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
+import ca.phon.worker.PhonWorker;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -58,7 +60,7 @@ public class RenameCorpusAction extends ProjectWindowAction {
 				return;
 			}
 	
-			if (project.getCorpora().contains(newCorpusName)) {
+			if (project.hasCorpus(newCorpusName)) {
 				showMessage(
 					"Rename Corpus",
 					"The new corpus name you specified already exists!");
@@ -69,13 +71,24 @@ public class RenameCorpusAction extends ProjectWindowAction {
 			// the oldLoc corpus
 			try {
 				project.renameCorpus(corpusName, newCorpusName);
-				
-				final List<String> corpora = project.getCorpora();
-				Collections.sort(corpora, CollatorFactory.defaultCollator());
-				int idx = corpora.indexOf(newCorpusName);
-				if(idx >= 0) {
-					getWindow().getCorpusList().setSelectedIndex(idx);
-				}
+
+				PhonWorker.getInstance().invokeLater(() -> {
+					final Iterator<String> corpusIter = project.getCorpusIterator();
+					int idx = 0;
+					while(corpusIter.hasNext()) {
+						final String corpusNameIter = corpusIter.next();
+						if(corpusName.equals(corpusNameIter)) {
+							break;
+						}
+						++idx;
+					}
+					if(idx >= 0) {
+						final int finalIdx = idx;
+						SwingUtilities.invokeLater(() -> {
+							getWindow().getCorpusList().setSelectedIndex(finalIdx);
+						});
+					}
+				});
 			} catch(IOException e) {
 				showMessage("Rename Corpus", 
 						"Failed to rename corpus " + corpusName + ". Reason: " + e.getMessage());

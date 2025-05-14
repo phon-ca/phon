@@ -17,6 +17,10 @@ package ca.phon.ui.text;
 
 import ca.phon.project.Project;
 
+import javax.swing.*;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * {@link PromptedTextField} for session names.
  */
@@ -35,15 +39,45 @@ public class SessionNameField extends CorpusNameField {
 	}
 
 	@Override
-	protected void setupAutocomplete() {
-		super.setupAutocomplete();
+	public SwingWorker getAutocompleteWorker() {
+		if(getProject() == null) {
+			return null;
+		}
+		if(getCompleterModel() == null) {
+			this.completerModel = new DefaultTextCompleterModel();
+		}
+		final AutocompleteSetupWorker worker = new AutocompleteSetupWorker();
+		return worker;
+	}
 
-		if(getProject() != null) {
-			for(String corpus:getProject().getCorpora()) {
-				for(String sessionName:getProject().getCorpusSessions(corpus)) {
-					getCompleterModel().addCompletion( sessionName, sessionName );
+	private class AutocompleteSetupWorker extends SwingWorker<Integer, String> {
+		@Override
+		protected Integer doInBackground() throws Exception {
+			int result = 0;
+			final Iterator<String> corpusItr = getProject().getCorpusIterator();
+			while(corpusItr.hasNext()) {
+				final String corpus = corpusItr.next();
+				final Iterator<String> sessionItr = getProject().getSessionIterator(corpus);
+				while(sessionItr.hasNext()) {
+					final String session = sessionItr.next();
+					publish(session);
+					result++;
 				}
 			}
+			return result;
+		}
+
+		@Override
+		protected void process(List<String> chunks) {
+			final DefaultTextCompleterModel completerModel = getCompleterModel();
+			for(String chunk : chunks) {
+				completerModel.addCompletion(chunk);
+			}
+		}
+
+		@Override
+		protected void done() {
+			super.done();
 		}
 	}
 

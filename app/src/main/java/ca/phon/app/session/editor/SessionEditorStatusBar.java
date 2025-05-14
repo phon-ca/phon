@@ -17,6 +17,7 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
+import ca.phon.project.SessionDetails;
 import ca.phon.session.Session;
 import ca.phon.util.ByteSize;
 import ca.phon.util.icons.*;
@@ -193,12 +194,15 @@ public class SessionEditorStatusBar extends JXStatusBar {
 			buf.append("*modified* ");
 		}
 
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
-		buf.append("Last save:");
-		buf.append(formatter.format(project.getSessionModificationTime(session)));
+		final SessionDetails sessionDetails = project.getExtension(SessionDetails.class);
+		if(sessionDetails != null) {
+			final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@h:mma");
+			buf.append("Last save:");
+			buf.append(formatter.format(sessionDetails.getSessionModificationTime(session)));
 
-		buf.append(" Size:");
-		buf.append(ByteSize.humanReadableByteCount(project.getSessionByteSize(session), true));
+			buf.append(" Size:");
+			buf.append(ByteSize.humanReadableByteCount(sessionDetails.getSessionByteSize(session), true));
+		}
 
 		return buf.toString();
 	}

@@ -21,7 +21,6 @@ import ca.phon.project.*;
 import ca.phon.project.ProjectEvent.ProjectEventProp;
 import ca.phon.session.*;
 import ca.phon.util.OSInfo;
-import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import org.jdesktop.swingx.JXTable;
 
@@ -36,6 +35,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Panel showing details about a session.
+ *
+ */
 public class SessionDetails extends JPanel {
 
 	private final Project project;
@@ -57,7 +60,11 @@ public class SessionDetails extends JPanel {
 		super();
 		
 		this.project = project;
-		project.addProjectListener(projectListener);
+
+		final ProjectEvents projectEvents = project.getExtension(ProjectEvents.class);
+		if(projectEvents != null) {
+			projectEvents.addProjectListener(projectListener);
+		}
 		
 		init();
 	}
@@ -173,18 +180,21 @@ public class SessionDetails extends JPanel {
 	}
 	
 	private void update() {
-		if(this.corpus != null && this.session != null && project.getCorpusSessions(corpus).contains(session)) {
+		if(this.corpus != null && this.session != null && project.hasSession(corpus, session)) {
 			final String sessionPath = project.getSessionPath(corpus, session);
 			final File f = new File(sessionPath);
 			final String name = f.getName();
 			
 			fileLabel.setText(name);
 			fileLabel.setToolTipText(sessionPath);
-			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");
-			final ZonedDateTime time = project.getSessionModificationTime(corpus, session);
-			modifiedLabel.setText(formatter.format(time));
-			
+
+			final ca.phon.project.SessionDetails sessionDetails = project.getExtension(ca.phon.project.SessionDetails.class);
+			if(sessionDetails != null) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");
+				final ZonedDateTime time = sessionDetails.getSessionModificationTime(corpus, session);
+				modifiedLabel.setText(formatter.format(time));
+			}
+
 			final UpdateTask updateTask = new UpdateTask(corpus, session);
 			if(currentUpdateTask != null)
 				currentUpdateTask.shutdown();
@@ -217,11 +227,17 @@ public class SessionDetails extends JPanel {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			
+
+			final ca.phon.project.SessionDetails sessionDetails = project.getExtension(ca.phon.project.SessionDetails.class);
+			if(sessionDetails == null) {
+				super.setStatus(TaskStatus.FINISHED);
+				return;
+			}
+
 			SwingUtilities.invokeLater( () -> speakerTableModel.clear() );
 			
 			try {
-				final int numRecords = project.numberOfRecordsInSession(corpus, session);
+				final int numRecords = sessionDetails.numberOfRecordsInSession(corpus, session);
 				if(!isShutdown())
 					SwingUtilities.invokeLater( () -> recordsLabel.setText("" + numRecords) );
 				else {

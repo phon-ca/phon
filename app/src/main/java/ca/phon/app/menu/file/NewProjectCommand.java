@@ -104,7 +104,7 @@ private final static String TXT = "New project...";
 
 		try {
 			final ProjectFactory factory = new DesktopProjectFactory();
-			factory.createProject(folder);
+			factory.createProject(folder.getAbsolutePath());
 
 			// open project
 			final EntryPointArgs args = new EntryPointArgs();

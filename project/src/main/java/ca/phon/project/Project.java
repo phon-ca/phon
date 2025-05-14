@@ -24,11 +24,25 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 /**
- * Interface for a phon project.
- * Projects are responsible for corpus and session
- * lists as well as managing serialization for
- * sessions.
+ * Minimal interface for a phon Project.
+ * Projects are responsible for providing access to corpora and sessions.
+ * Implementations are responsible for providing the actual organization
+ * of the project data.
  *
+ * Additional project functionality is provided by the {@link IExtendable}
+ * interface.  An example is the {@link ProjectResources} interface which
+ * provides a way to listen access project resources.  To use this
+ * functionality, do the following:
+ *
+ * <pre>
+ * Project project = ...;
+ * ProjectResources projectResources = project.getExtension(ProjectResources.class);
+ * if(projectResources != null) {
+ *     // do something with project resources
+ * }
+ * </pre>
+ *
+ * All extensions are optional and may not be available for all project types.
  */
 public interface Project extends IExtendable {
 
@@ -40,7 +54,8 @@ public interface Project extends IExtendable {
 	public String getVersion();
 
 	/**
-	 * The location of the project.
+	 * The location of the project.  Meaning is dependent on implementation.
+	 * For {@link LocalProject}s this is the path to the project on disk.
 	 *
 	 * @return the project location
 	 */
@@ -125,6 +140,16 @@ public interface Project extends IExtendable {
 		throws IOException;
 
 	/**
+	 * Tests to see if a given corpus exists in the project.  This may be faster
+	 * than calling {@link #getCorpusIterator()} and checking iteratively.
+	 *
+	 * @param corpus
+	 *
+	 * @return <code>true</code> if the corpus exists, <code>false</code>
+	 */
+	public boolean hasCorpus(String corpus);
+
+	/**
 	 * Get the description of the specified corpus.
 	 *
 	 * @param corpus the corpus name
@@ -186,6 +211,18 @@ public interface Project extends IExtendable {
 	public Iterator<String> getSessionIterator(String corpus);
 
 	/**
+	 * Test if a given session exists in the specified corpus.  This method is usually
+	 * faster than calling {@link #getSessionIterator(String)} and checking
+	 * iteratively.
+	 *
+	 * @param corpus the corpus name
+	 * @param session the session name
+	 *
+	 * @return <code>true</code> if the session exists, <code>false</code> otherwise
+	 */
+	public boolean hasSession(String corpus, String session);
+
+	/**
 	 * Return the path to the given corpus.
 	 *
 	 * @param corpus
@@ -199,18 +236,6 @@ public interface Project extends IExtendable {
 	 * @param path
 	 */
 	public void setCorpusPath(String corpus, String path);
-
-	/**
-	 * Returns the number of records in a session w/o opening
-	 * the session. This method is faster than using
-	 * openSession(corpus, session).numberOfRecords()
-	 *
-	 * @param session
-	 * @return number of records in the session
-	 * @throws IOException
-	 */
-	public int numberOfRecordsInSession(String corpus, String session)
-		throws IOException;
 
 	/**
 	 * Return a set of participants which are found in the

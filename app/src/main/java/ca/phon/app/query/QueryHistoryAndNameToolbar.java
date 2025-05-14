@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.actions.*;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
@@ -315,10 +316,14 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		
 		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
 		if(cmf != null && cmf.getExtension(Project.class) != null) {
-			ExportQueryAction projectLibraryAct = new ExportQueryAction(queryScript, 
-					QueryScriptLibrary.projectScriptFolder(cmf.getExtension(Project.class)), getQueryName());
-			projectLibraryAct.putValue(PhonUIAction.NAME, "Save in project library...");
-			builder.addItem(".", projectLibraryAct);
+			final Project project = cmf.getExtension(Project.class);
+			final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+			if(projectResources != null) {
+				ExportQueryAction projectLibraryAct = new ExportQueryAction(queryScript,
+						QueryScriptLibrary.projectScriptFolder(cmf.getExtension(Project.class)), getQueryName());
+				projectLibraryAct.putValue(PhonUIAction.NAME, "Save in project library...");
+				builder.addItem(".", projectLibraryAct);
+			}
 		}
 		
 		ExportQueryAction userLibraryAct = new ExportQueryAction(queryScript, QueryScriptLibrary.USER_SCRIPT_FOLDER, getQueryName());

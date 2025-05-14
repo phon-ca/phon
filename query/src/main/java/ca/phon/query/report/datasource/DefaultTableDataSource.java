@@ -15,7 +15,7 @@
  */
 package ca.phon.query.report.datasource;
 
-import ca.phon.query.TableUtils;
+import ca.phon.query.script.TableUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -18,6 +18,7 @@ package ca.phon.query.script;
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.db.*;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
@@ -51,8 +52,20 @@ public final class QueryScriptLibrary implements IExtendable {
 
 	private final ResourceLoader<QueryScript> pluginScriptLoader = new ResourceLoader<QueryScript>();
 
+	/**
+	 * Get the script folder for the project, if not {@link ProjectResources} extension is found
+	 * in the project {@code null} is returned
+	 *
+	 * @param project
+	 * @return
+	 */
 	public static String projectScriptFolder(Project project) {
-		return project.getResourceLocation() + File.separator + "query";
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			return projectResources.getResourceLocation() + File.separator + "query";
+		} else {
+			return null;
+		}
 	}
 
 	/**

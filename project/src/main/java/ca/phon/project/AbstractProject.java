@@ -9,7 +9,7 @@ import javax.xml.stream.*;
 import java.io.*;
 import java.util.*;
 
-public abstract class AbstractProject implements Project {
+public abstract class AbstractProject implements Project, ProjectEvents {
 
 	/**
 	 * Local projects no longer create this file but will read from it
@@ -28,31 +28,8 @@ public abstract class AbstractProject implements Project {
 
 		extSupport = new ExtensionSupport(Project.class, this);
 		extSupport.initExtensions();
-	}
 
-	/**
-	 * Load project data from the project.xml file.
-	 * If not found, empty project data is created.
-	 *
-	 * @return projectData
-	 *
-	 * @deprecated Since Phon 3
-	 */
-	@Deprecated
-	protected ProjectType loadProjectData(InputStream inputStream) throws ProjectConfigurationException {
-		try {
-			final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
-			final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-			final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
-			final XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStream);
-
-			final JAXBElement<ProjectType> projectEle =
-					unmarshaller.unmarshal(eventReader, ProjectType.class);
-			return projectEle.getValue();
-		} catch (JAXBException | XMLStreamException jaxbEx) {
-			throw new ProjectConfigurationException(jaxbEx);
-		}
+		extSupport.putExtension(ProjectEvents.class, this);
 	}
 
 	@Override

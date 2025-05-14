@@ -16,33 +16,29 @@
 package ca.phon.project;
 
 /**
- * Listen for changes to project structure and
- * data.
- * 
- * @author Greg J. Hedlund <ghedlund@cs.mun.ca>
- *
+ * Listen for changes to the project structure and data.
  */
 public interface ProjectListener {
 	
 	/**
 	 * Informs the listener of changes to
 	 * project structure.
-	 * @param ProjectEvent
+	 * @param projectEvent
 	 */
-	public void projectStructureChanged(ProjectEvent pe);
+	public void projectStructureChanged(ProjectEvent projectEvent);
 	
 	/**
 	 * Informs the listener of changes to
 	 * project data.
-	 * @param ProjectEvent
+	 * @param projectEvent
 	 */
-	public void projectDataChanged(ProjectEvent pe);
+	public void projectDataChanged(ProjectEvent projectEvent);
 	
 	/**
 	 * Informs the listener of changes to
 	 * transcript write locks.
-	 * @param ProjectEvent
+	 * @param projectEvent
 	 */
-	public void projectWriteLocksChanged(ProjectEvent pe);
+	public void projectWriteLocksChanged(ProjectEvent projectEvent);
 	
 }

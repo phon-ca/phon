@@ -28,7 +28,8 @@ import java.io.*;
 public class DesktopProjectFactory extends DefaultProjectFactory {
 
 	@Override
-	public Project openProject(File projectFolder) throws IOException, ProjectConfigurationException {
+	public Project openProject(String projectLocation) throws IOException, ProjectConfigurationException {
+		final File projectFolder = new File(projectLocation);
 		// check folder
 		if(projectFolder == null) {
 			throw new NullPointerException();
@@ -50,10 +51,10 @@ public class DesktopProjectFactory extends DefaultProjectFactory {
 	}
 
 	@Override
-	public Project createProject(File projectFolder) throws IOException {
-		super.createProject(projectFolder);
-		
+	public Project createProject(String projectLocation) throws IOException {
+		super.createProject(projectLocation);
 		try {
+			final File projectFolder = new File(projectLocation);
 			return new DesktopProject(projectFolder);
 		} catch (ProjectConfigurationException e) {
 			throw new IOException(e);

@@ -108,7 +108,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		return retVal;
 	}
 
-	public File getProjectAnalysisFolder(Project project) {
+	private File getProjectAnalysisFolder(Project project) {
 		return new File(project.getResourceLocation(), ANALYSIS_FOLDER);
 	}
 

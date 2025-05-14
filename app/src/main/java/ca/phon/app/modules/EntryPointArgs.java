@@ -135,7 +135,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 		if(projectFile != null) {
 			final ProjectFactory factory = new DesktopProjectFactory();
 			try {
-				retVal = factory.openProject(projectFile);
+				retVal = factory.openProject(projectFile.getAbsolutePath());
 			} catch (IOException | ProjectConfigurationException e) {
 				LogUtil.warning(e);
 			}
