@@ -6,6 +6,6 @@ package ca.phon.project;
  */
 public interface ChangeProjectLocation {
 
-	public void setProjectLocation(String location);
+	void setProjectLocation(String location);
 
 }

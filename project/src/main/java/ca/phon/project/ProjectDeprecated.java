@@ -22,7 +22,7 @@ public interface ProjectDeprecated {
     public List<String> getCorpora();
 
     /**
-     * Get media folder for the project, if any are set.  If multiple media folders
+     * Get the media folders for the project, if any are set.  If multiple media folders
      * are set, the first one is returned.
      *
      * @deprecated Since Phon 4.0 use {@link Project#getProjectMediaFolders()} instead
@@ -67,7 +67,7 @@ public interface ProjectDeprecated {
     /**
      * Set the media folder for the specified corpus.
      *
-     * @param mediaFolder
+     * @param mediaFolder the media folder to set
      *
      * @deprecated Since Phon 4.0 will do nothing
      */
@@ -78,7 +78,7 @@ public interface ProjectDeprecated {
      * Get the session names contained in a corpus in alphabetical
      * order.
      *
-     * @param corpus
+     * @param corpus the corpus to get sessions for
      *
      * @return the list of sessions in the specified corpus
      *

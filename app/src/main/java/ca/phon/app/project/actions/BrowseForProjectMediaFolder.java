@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectMediaFolders;
 import ca.phon.ui.nativedialogs.*;
 
 import javax.swing.*;
@@ -48,6 +49,10 @@ public class BrowseForProjectMediaFolder extends ProjectWindowAction {
 
 	private void browseForMediaFolder() {
 		final Project project = getWindow()	.getProject();
+		final ProjectMediaFolders projectMediaFolders = project.getExtension(ProjectMediaFolders.class);
+		if(projectMediaFolders == null) {
+			return;
+		}
 
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(getWindow());
@@ -55,7 +60,7 @@ public class BrowseForProjectMediaFolder extends ProjectWindowAction {
 		props.setCanChooseDirectories(true);
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
-		final String currentPath = project.hasCustomProjectMediaFolder() ? project.getProjectMediaFolders().get(0) : null;
+		final String currentPath = projectMediaFolders.hasCustomProjectMediaFolder() ? projectMediaFolders.getProjectMediaFolders().get(0) : null;
 		if(currentPath != null) {
 			File currentFolder = new File(currentPath);
 			if(!currentFolder.isAbsolute()) {
@@ -69,7 +74,7 @@ public class BrowseForProjectMediaFolder extends ProjectWindowAction {
 			if(e.getDialogData() == null) return;
 
 			final String selectedFolder = e.getDialogData().toString();
-			project.addProjectMediaFolder(selectedFolder);
+			projectMediaFolders.addProjectMediaFolder(selectedFolder);
 
 			SwingUtilities.invokeLater(() -> getWindow().updateProjectMediaLabel());
 		});

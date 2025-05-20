@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * The project folder is the root of the project.
  */
 public class LocalProject extends AbstractProject implements ProjectRefresh, SessionTemplate, SessionDetails,
-        ProjectDeprecated, ProjectResources {
+        ProjectDeprecated, ProjectResources, ProjectMediaFolders {
 
     /**
      * Project XML file (Phon 2.x and earlier)
@@ -122,6 +122,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         putExtension(ChangeProjectLocation.class, new LocalProjectChangeLocation(this));
         // project resources
         putExtension(ProjectResources.class, this);
+        // project media folders
+        putExtension(ProjectMediaFolders.class, this);
         // deprecated project extension
         putExtension(ProjectDeprecated.class, this);
     }

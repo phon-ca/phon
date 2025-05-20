@@ -165,43 +165,6 @@ public interface Project extends IExtendable {
 	public void setCorpusDescription(String corpus, String description);
 
 	/**
-	 * Has a custom project media folder been assigned
-	 * 
-	 * @return <code>true</code> if project folder has been customized
-	 *
-	 */
-	public boolean hasCustomProjectMediaFolder();
-
-	/**
-	 * Get all media folders for the project
-	 *
-	 * @return list of media folders
-	 */
-	public List<String> getProjectMediaFolders();
-
-	/**
-	 * Add a media folder to the project
-	 *
-	 * @param mediaFolder
-	 */
-	public void addProjectMediaFolder(String mediaFolder);
-
-	/**
-	 * Add a media folder to the project at the specified index
-	 *
-	 * @param index
-	 * @param mediaFolder
-	 */
-	public void addProjectMediaFolder(int index, String mediaFolder);
-
-	/**
-	 * Remove a media folder from the project
-	 *
-	 * @param mediaFolder
-	 */
-	public void removeProjectMediaFolder(String mediaFolder);
-
-	/**
 	 * Get an iterator over the sessions in the specified corpus.
 	 *
 	 * @param corpus

@@ -16,6 +16,7 @@
 package ca.phon.media;
 
 import ca.phon.project.Project;
+import ca.phon.project.ProjectMediaFolders;
 import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.Queue;
@@ -87,18 +88,14 @@ public class MediaLocator {
 				retVal.add(project.getCorpusPath(sessionFolder));
 			}
 
-//			// add default media folder
-//			final File resMediaFolder = new File(project.getResourceLocation(), "media");
-//			if(resMediaFolder.exists()) {
-//				retVal.add(resMediaFolder.getAbsolutePath());
-//			}
-
-			// add project media folders
-			for(String folder:project.getProjectMediaFolders()) {
-				final File projectMediaFolder = new File(folder);
-				if(!projectMediaFolder.isAbsolute())
-					folder = project.getLocation() + File.separator + folder;
-				retVal.add(folder);
+			final ProjectMediaFolders projectMediaFolders = project.getExtension(ProjectMediaFolders.class);
+			if(projectMediaFolders != null) {
+				for(String folder:projectMediaFolders.getProjectMediaFolders()) {
+					final File projectMediaFolder = new File(folder);
+					if(!projectMediaFolder.isAbsolute())
+						folder = project.getLocation() + File.separator + folder;
+					retVal.add(folder);
+				}
 			}
 		}
 

@@ -62,8 +62,11 @@ public final class ShadowProject extends LocalProject {
 			retVal.setResourceLocation(projectResources.getResourceLocation());
 		}
 
-		for(String mediaFolder:project.getProjectMediaFolders()) {
-			retVal.addProjectMediaFolder(mediaFolder);
+		final ProjectMediaFolders projectMediaFolders = project.getExtension(ProjectMediaFolders.class);
+		if(projectMediaFolders != null) {
+			for(String mediaFolder:projectMediaFolders.getProjectMediaFolders()) {
+				retVal.addProjectMediaFolder(mediaFolder);
+			}
 		}
 		return retVal;
 	}

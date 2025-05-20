@@ -683,12 +683,9 @@ public class ProjectWindow extends CommonModuleFrame {
 	 * @param builder the menu builder
 	 */
 	private void setupProjectMediaFoldersMenu(MenuBuilder builder) {
-		// show all current project media folders
-
-
-
-		// now the project media folders
-		for (String folder : getProject().getProjectMediaFolders()) {
+		final ProjectMediaFolders projectMediaFolders = getProject().getExtension(ProjectMediaFolders.class);
+		if (projectMediaFolders == null) return;
+		for (String folder : projectMediaFolders.getProjectMediaFolders()) {
 			File projectMediaFolder = new File(folder);
 			if (!projectMediaFolder.isAbsolute()) {
 //				folder = getProject().getLocation() + File.separator + folder;
@@ -704,7 +701,7 @@ public class ProjectWindow extends CommonModuleFrame {
 			folderBuilder.addItem(".", showProjectMediaFolderAct);
 
 			final ProjectResources projectResources = getProject().getExtension(ProjectResources.class);
-			if(projectResources != null) {
+			if (projectResources != null) {
 				// first the legacy media folder: __res/media
 				final File resMediaFolder = new File(projectResources.getResourceLocation(), "media");
 				if (!resMediaFolder.getAbsolutePath().equals(projectMediaFolder.getAbsolutePath())) {
@@ -716,7 +713,7 @@ public class ProjectWindow extends CommonModuleFrame {
 				}
 			}
 		}
-		if(getProject().getProjectMediaFolders().size() > 1) {
+		if (projectMediaFolders.getProjectMediaFolders().size() > 1) {
 			builder.addSeparator(".", "s1");
 		}
 
@@ -727,12 +724,10 @@ public class ProjectWindow extends CommonModuleFrame {
 		builder.addItem(".", browseForMediaFolderAct);
 	}
 
-	private void onBrowseForMediaFolder() {
-
-	}
-
 	private void onRemoveProjectMediaFolder(PhonActionEvent<String> pae) {
-		getProject().removeProjectMediaFolder(pae.getData());
+		final ProjectMediaFolders projectMediaFolders = getProject().getExtension(ProjectMediaFolders.class);
+		if (projectMediaFolders == null) return;
+		projectMediaFolders.removeProjectMediaFolder(pae.getData());
 		updateProjectMediaLabel();
 	}
 
@@ -823,12 +818,14 @@ public class ProjectWindow extends CommonModuleFrame {
 	}
 
 	public void updateProjectMediaLabel() {
-		if(!getProject().hasCustomProjectMediaFolder()) {
+		final ProjectMediaFolders projectMediaFolders = getProject().getExtension(ProjectMediaFolders.class);
+		if (projectMediaFolders == null) return;
+		if(!projectMediaFolders.hasCustomProjectMediaFolder()) {
 			projectMediaFolderLabel.setText("(click to select)");
 			projectMediaFolderLabel.setForeground(Color.blue);
 		} else {
 			StringBuilder sb = new StringBuilder();
-			for(String mediaFolder:getProject().getProjectMediaFolders()) {
+			for(String mediaFolder:projectMediaFolders.getProjectMediaFolders()) {
 				sb.append(mediaFolder);
 				sb.append(", ");
 			}
@@ -898,15 +895,6 @@ public class ProjectWindow extends CommonModuleFrame {
 		});
 		worker.start();
 	}
-
-//	public void onRenameCorpus(PhonActionEvent pae) {
-//		if(getSelectedCorpus() == null) {
-//			Toolkit.getDefaultToolkit().beep();
-//			ToastFactory.makeToast("Please select a corpus").start(corpusList);
-//			return;
-//		}
-//		(new RenameCorpusAction(this)).actionPerformed(pae.getActionEvent());
-//	}
 
 	private MultiActionButton createCorpusButton() {
 		MultiActionButton retVal = new MultiActionButton();
