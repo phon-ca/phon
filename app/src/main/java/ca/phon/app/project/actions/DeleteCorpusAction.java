@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
@@ -62,15 +63,18 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 		int retVal = NativeDialogs.showMessageDialog(props);
 		
 		final Project project = getWindow().getProject();
-		if(retVal == 0) {
-			getWindow().getCorpusList().clearSelection();
-			for(String corpus:corpora) {
-				try {
-					project.removeCorpus(corpus);
-				} catch (IOException e) {
-					LogUtil.warning(e);
-					Toolkit.getDefaultToolkit().beep();
-					showMessage("Delete Corpus", e.getLocalizedMessage());
+		final MutableProject mutableProject = project.getExtension(MutableProject.class);
+		if(mutableProject != null) {
+			if (retVal == 0) {
+				getWindow().getCorpusList().clearSelection();
+				for (String corpus : corpora) {
+					try {
+						mutableProject.removeCorpus(corpus);
+					} catch (IOException e) {
+						LogUtil.warning(e);
+						Toolkit.getDefaultToolkit().beep();
+						showMessage("Delete Corpus", e.getLocalizedMessage());
+					}
 				}
 			}
 		}

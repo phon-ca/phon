@@ -4,6 +4,7 @@ import ca.phon.csv.CSVReader;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.formatter.PeriodFormatter;
 import ca.phon.ipa.Phone;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.session.Record;
@@ -45,11 +46,15 @@ public class CSVImporter {
     }
 
     private void saveSession(Session session) throws IOException {
-        var writeLock = project.getSessionWriteLock(session);
+        final MutableProject mutableProject = project.getExtension(MutableProject.class);
+        if(mutableProject == null) {
+            throw new IOException("Project is not mutable");
+        }
+        var writeLock = mutableProject.getSessionWriteLock(session);
         try {
-            project.saveSession(session, writeLock);
+            mutableProject.saveSession(session, writeLock);
         } finally {
-            project.releaseSessionWriteLock(session, writeLock);
+            mutableProject.releaseSessionWriteLock(session, writeLock);
         }
     }
 
@@ -77,6 +82,11 @@ public class CSVImporter {
      * @throws IOException if an error occurs while reading the file or writing the session
      */
     public void importCSV(String filePath, CSVImportSettings settings) throws IOException {
+        final MutableProject mutableProject = project.getExtension(MutableProject.class);
+        if(mutableProject == null) {
+            throw new IOException("Project is not mutable");
+        }
+
         fileName = filePath;
 
         var inputStreamReader = new InputStreamReader(new FileInputStream(filePath), settings.getEncoding());
@@ -108,7 +118,7 @@ public class CSVImporter {
         String currentCorpus = this.selectedCorpus == null ? "imported" : this.selectedCorpus;
         if (sessionPathTier.isEmpty() && corpusNameTier.isEmpty()) {
             if (!project.hasCorpus(currentCorpus)) {
-                project.addCorpus(currentCorpus);
+                mutableProject.addCorpus(currentCorpus);
             }
         }
 
@@ -140,7 +150,7 @@ public class CSVImporter {
                     currentCorpus = sp.getFolder();
                     corpusChanged = true;
                     if (!project.hasCorpus(currentCorpus)) {
-                        project.addCorpus(currentCorpus);
+                        mutableProject.addCorpus(currentCorpus);
                     }
                 }
 
@@ -156,7 +166,7 @@ public class CSVImporter {
                         currentCorpus = corpusNameFromRow;
                         corpusChanged = true;
                         if (!project.hasCorpus(currentCorpus)) {
-                            project.addCorpus(currentCorpus);
+                            mutableProject.addCorpus(currentCorpus);
                         }
                     }
                 }

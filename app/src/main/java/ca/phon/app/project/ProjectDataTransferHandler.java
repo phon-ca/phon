@@ -139,12 +139,16 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			
 			// create corpus if it does not exist
 			if(!dstProjectPath.getProject().hasCorpus(dstCorpus)) {
-				try {
-					dstProjectPath.getProject().addCorpus(dstCorpus, 
-							projectPath.getProject().getCorpusDescription(projectPath.getCorpus()));
-				} catch (IOException e) {
-					LogUtil.warning(e);
-					return false;
+				final MutableProject mutableProject =
+						dstProjectPath.getProject().getExtension(MutableProject.class);
+				if(mutableProject != null) {
+					try {
+						mutableProject.addCorpus(dstCorpus,
+								projectPath.getProject().getCorpusDescription(projectPath.getCorpus()));
+					} catch (IOException e) {
+						LogUtil.warning(e);
+						return false;
+					}
 				}
 			}
 			try {

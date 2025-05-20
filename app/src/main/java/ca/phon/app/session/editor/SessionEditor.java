@@ -28,6 +28,7 @@ import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.media.VolumeModel;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.project.SessionDetails;
 import ca.phon.session.Record;
@@ -928,11 +929,16 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			throw new IOException("Unable to save session, no filesystem information found");
 		}
 
+		final MutableProject mutableProject = project.getExtension(MutableProject.class);
+		if(mutableProject == null) {
+			throw new IOException("Project is not mutable");
+		}
+
 		UUID writeLock = null;
 		try {
 			LogUtil.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
-			writeLock = project.getSessionWriteLock(session);
-			project.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
+			writeLock = mutableProject.getSessionWriteLock(session);
+			mutableProject.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
 
 			final long byteSize = sessionDetails.getSessionByteSize(session);
 
@@ -968,7 +974,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			throw e;
 		} finally {
 			if(writeLock != null)
-				project.releaseSessionWriteLock(session, writeLock);
+				mutableProject.releaseSessionWriteLock(session, writeLock);
 		}
 	}
 

@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * The project folder is the root of the project.
  */
 public class LocalProject extends AbstractProject implements ProjectRefresh, SessionTemplate, SessionDetails,
-        ProjectDeprecated, ProjectResources, ProjectMediaFolders {
+        ProjectResources, ProjectMediaFolders, MutableProject, ProjectDeprecated {
 
     /**
      * Project XML file (Phon 2.x and earlier)
@@ -124,6 +124,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         putExtension(ProjectResources.class, this);
         // project media folders
         putExtension(ProjectMediaFolders.class, this);
+        // mutable project extension
+        putExtension(MutableProject.class, this);
         // deprecated project extension
         putExtension(ProjectDeprecated.class, this);
     }
@@ -208,11 +210,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     }
 
     @Override
-    public Iterator<String> getCorpusIterator() {
-        return new CorpusFolderIterator();
-    }
-
-    @Override
     public void addCorpus(String name) throws IOException {
         addCorpus(name, "");
     }
@@ -234,15 +231,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
 
         final ProjectEvent pe = ProjectEvent.newCorpusAddedEvent(name);
         fireProjectStructureChanged(pe);
-    }
-
-    @Override
-    public boolean hasCorpus(String corpus) {
-        if (corpus == null || corpus.length() == 0) {
-            return false;
-        }
-        final File corpusFolder = getCorpusFolder(corpus);
-        return corpusFolder.exists();
     }
 
     @Override
@@ -289,23 +277,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     }
 
     @Override
-    public String getCorpusDescription(String corpus) {
-        final File corpusFolder = getCorpusFolder(corpus);
-        final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
-
-        String retVal = "";
-        if (corpusInfoFile.exists()) {
-            try {
-                retVal = Files.readString(corpusInfoFile.toPath());
-            } catch (IOException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-        }
-
-        return retVal;
-    }
-
-    @Override
     public void setCorpusDescription(String corpus, String description) {
         String old = getCorpusDescription(corpus);
 
@@ -330,350 +301,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
 
         ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
         fireProjectDataChanged(pe);
-    }
-
-    @Override
-    public boolean hasCustomProjectMediaFolder() {
-        final var projectJson = projectProperties.getProjectJson();
-        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
-            return (!mediaFolders.isEmpty());
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public List<String> getProjectMediaFolders() {
-        final var projectJson = projectProperties.getProjectJson();
-        List<String> retVal = new ArrayList<>();
-
-        final File defaultMediaFolder = new File(getResourceLocation(), "media");
-        if (defaultMediaFolder.exists()) {
-            retVal.add(PROJECT_RES_FOLDER + File.separator + "media");
-        }
-
-        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
-            for (int i = 0; i < mediaFolders.length(); i++) {
-                retVal.add(mediaFolders.getString(i));
-            }
-        }
-        return retVal;
-    }
-
-    @Override
-    public void addProjectMediaFolder(String mediaFolder) {
-        final var projectJson = projectProperties.getProjectJson();
-        final List<String> currentMediaFolderList = getProjectMediaFolders();
-        JSONArray mediaFolders =
-                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
-                        : new JSONArray();
-
-        File mediaFolderFile = new File(mediaFolder);
-        if (!mediaFolderFile.isAbsolute()) {
-            mediaFolderFile = new File(getFolder(), mediaFolder);
-        }
-        final File resMediaFolder = new File(getResourceLocation(), "media");
-        if (resMediaFolder.getAbsoluteFile().equals(mediaFolderFile.getAbsoluteFile())) {
-            return;
-        }
-
-        // if mediaFolderFile is a child of the project folder, relativize the path
-        if (mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
-            mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
-        }
-        if (currentMediaFolderList.contains(mediaFolder)) {
-            return;
-        }
-
-        mediaFolders.put(mediaFolder);
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
-
-        try {
-            projectProperties.saveProjectJson();
-        } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-        }
-
-        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderAddedEvent(mediaFolders.length() - 1, mediaFolder);
-        fireProjectDataChanged(pe);
-    }
-
-    @Override
-    public void addProjectMediaFolder(int index, String mediaFolder) {
-        final var projectJson = projectProperties.getProjectJson();
-        if (index < 0 || index > getProjectMediaFolders().size()) {
-            throw new IndexOutOfBoundsException();
-        }
-        JSONArray mediaFolders =
-                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
-                        : new JSONArray();
-
-        File mediaFolderFile = new File(mediaFolder);
-        if (!mediaFolderFile.isAbsolute()) {
-            mediaFolderFile = new File(getFolder(), mediaFolder);
-        }
-        final File resMediaFolder = new File(getResourceLocation(), mediaFolderFile.getName());
-        if (resMediaFolder.getAbsoluteFile().equals(mediaFolderFile.getAbsoluteFile())) {
-            return;
-        }
-
-        // if mediaFolderFile is a child of the project folder, relativize the path
-        if (mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
-            mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
-        }
-
-        mediaFolders.put(index, mediaFolder);
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
-
-        try {
-            projectProperties.saveProjectJson();
-        } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-        }
-
-        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderAddedEvent(index, mediaFolder);
-        fireProjectDataChanged(pe);
-    }
-
-    @Override
-    public void removeProjectMediaFolder(String mediaFolder) {
-        final var projectJson = projectProperties.getProjectJson();
-        if (!projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
-
-        final List<String> currentMediaFolderList = getProjectMediaFolders();
-        if (!currentMediaFolderList.contains(mediaFolder)) {
-            return;
-        }
-
-        JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
-        JSONArray newMediaFolders = new JSONArray();
-        final int index = mediaFolders.toList().indexOf(mediaFolder);
-        if (index < 0) return;
-        for (int i = 0; i < mediaFolders.length(); i++) {
-            String folder = mediaFolders.getString(i);
-            if (!folder.equals(mediaFolder)) {
-                newMediaFolders.put(folder);
-            }
-        }
-
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
-        try {
-            projectProperties.saveProjectJson();
-        } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-        }
-
-        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderRemovedEvent(index, mediaFolder);
-        fireProjectDataChanged(pe);
-    }
-
-    @Override
-    public Iterator<String> getSessionIterator(String corpus) {
-        return new SessionIterator(corpus);
-    }
-
-    @Override
-    public boolean hasSession(String corpus, String session) {
-        if (session == null || session.length() == 0) {
-            return false;
-        }
-        final File sessionFile = getSessionFile(corpus, session);
-        return sessionFile.exists();
-    }
-
-    @Override
-    public String getCorpusPath(String corpus) {
-        if (corpus.isEmpty()) corpus = ".";
-        return new File(getFolder(), corpus).getAbsolutePath();
-    }
-
-    @Override
-    public void setCorpusPath(String corpus, String path) {
-        throw new UnsupportedOperationException();
-//		setCorpusFolder(corpus, new File(path));
-    }
-
-    @Override
-    public int numberOfRecordsInSession(String corpus, String session)
-            throws IOException {
-        final File sessionFile = getSessionFile(corpus, session);
-        int retVal = 0;
-
-        if (sessionFile.exists() && sessionFile.getName().endsWith(".xml")) {
-            // it's faster to use an xpath expression
-            // to determine the number of records.
-            String xpathPattern = "//u";
-            // open as dom file first
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(false);
-            DocumentBuilder builder;
-            try {
-                builder = domFactory.newDocumentBuilder();
-                Document doc = builder.parse(sessionFile);
-
-                XPathFactory xpathFactory = XPathFactory.newInstance();
-                XPath xpath = xpathFactory.newXPath();
-                XPathExpression expr = xpath.compile(xpathPattern);
-
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                retVal = nodes.getLength();
-            } catch (ParserConfigurationException e) {
-                throw new IOException(e);
-            } catch (SAXException e) {
-                throw new IOException(e);
-            } catch (XPathExpressionException e) {
-                throw new IOException(e);
-            }
-        } else {
-            final Session s = openSession(corpus, session);
-            retVal = s.getRecordCount();
-        }
-
-        return retVal;
-    }
-
-    @Override
-    public Set<Participant> getParticipants(Collection<SessionPath> sessions) {
-        final Comparator<Participant> comparator = (p1, p2) -> {
-            int retVal = p1.getId().compareTo(p2.getId());
-            if (retVal == 0) {
-                final String p1Name = (p1.getName() == null ? "" : p1.getName());
-                final String p2Name = (p2.getName() == null ? "" : p2.getName());
-                retVal = p1Name.compareTo(p2Name);
-                if (retVal == 0) {
-                    retVal = p1.getRole().compareTo(p2.getRole());
-                }
-            }
-            return retVal;
-        };
-        final Set<Participant> retVal = new TreeSet<>(comparator);
-
-        for (SessionPath sessionPath : sessions) {
-            try {
-                Session session = openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
-                Collection<Participant> participants = new ArrayList<>();
-
-                participants.add(SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN));
-                session.getParticipants().forEach((p) -> participants.add(p));
-
-                for (Participant participant : participants) {
-                    Participant speaker = null;
-                    if (retVal.contains(participant)) {
-                        for (Participant p : retVal) {
-                            if (comparator.compare(participant, p) == 0) {
-                                speaker = p;
-                                break;
-                            }
-                        }
-                    } else {
-                        speaker = SessionFactory.newFactory().cloneParticipant(participant);
-                    }
-
-                    // get record count
-                    int count = 0;
-                    for (Record r : session.getRecords()) {
-                        if (comparator.compare(r.getSpeaker(), participant) == 0) ++count;
-                    }
-
-                    if (speaker != null) {
-                        if (count == 0 && comparator.compare(Participant.UNKNOWN, speaker) == 0) {
-                            // do not add unknown speaker if there are no records
-                        } else {
-                            ParticipantHistory history = speaker.getExtension(ParticipantHistory.class);
-                            if (history == null) {
-                                history = new ParticipantHistory();
-                                speaker.putExtension(ParticipantHistory.class, history);
-                            }
-                            Period age =
-                                    (participant != null ? participant.getAge(session.getDate()) : null);
-                            history.setAgeForSession(sessionPath, age);
-                            history.setNumberOfRecordsForSession(sessionPath, count);
-                        }
-                    }
-
-                    if (!retVal.contains(speaker)) {
-                        if (comparator.compare(Participant.UNKNOWN, speaker) == 0) {
-                            if (count > 0)
-                                retVal.add(speaker);
-                        } else {
-                            retVal.add(speaker);
-                        }
-                    }
-
-                }
-            } catch (IOException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-        }
-
-        return retVal;
-    }
-
-    @Override
-    public Session openSession(String corpus, String session)
-            throws IOException {
-        final File sessionFile = getSessionFile(corpus, session);
-        final URI uri = sessionFile.toURI();
-        final SessionInputFactory inputFactory = new SessionInputFactory();
-        final SessionReader reader = inputFactory.createReaderForFile(sessionFile);
-        if (reader == null) {
-            throw new IOException("No session reader available for " + uri.toASCIIString());
-        }
-        return openSession(corpus, session, reader);
-    }
-
-    @Override
-    public Session openSession(String corpus, String session, SessionReader reader)
-            throws IOException {
-        final File sessionFile = getSessionFile(corpus, session);
-        final URI uri = sessionFile.toURI();
-
-        try (InputStream in = uri.toURL().openStream()) {
-            final Session retVal = reader.readSession(in);
-
-            // make sure corpus and session match the expected values, these
-            // can change if the session file has been manually moved
-            if (!retVal.getCorpus().equals(corpus)) {
-                retVal.setCorpus(corpus);
-            }
-            final int extIdx = session.lastIndexOf('.');
-            String sessionName = session;
-            if (extIdx >= 0) {
-                sessionName = session.substring(0, extIdx);
-            }
-            if (retVal.getName() == null || !retVal.getName().equals(sessionName)) {
-                retVal.setName(sessionName);
-            }
-            final SessionPath sp = SessionFactory.newFactory().createSessionPath(corpus, session);
-            sp.putExtension(Project.class, this);
-            retVal.setSessionPath(sp);
-
-            // set original format extension
-            final SessionIO origIO = reader.getClass().getAnnotation(SessionIO.class);
-            if (origIO != null) {
-                final OriginalFormat origFormat = new OriginalFormat(origIO);
-                retVal.putExtension(OriginalFormat.class, origFormat);
-            }
-
-            return retVal;
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            throw new IOException(e);
-        }
-    }
-
-    @Override
-    public String getSessionPath(Session session) {
-        return getSessionPath(session.getCorpus(), session.getName());
-    }
-
-    @Override
-    public String getSessionPath(String corpus, String session) {
-        final File sessionFile = getSessionFile(corpus, session);
-        return (sessionFile == null ? corpus + File.separator + session : sessionFile.getAbsolutePath());
     }
 
     @Override
@@ -859,6 +486,376 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         fireProjectStructureChanged(pe);
     }
 
+    private String sessionProjectPath(String corpus, String session) {
+        return corpus + "." + session;
+    }
+
+    @Override
+    public Iterator<String> getCorpusIterator() {
+        return new CorpusFolderIterator();
+    }
+
+    @Override
+    public boolean hasCorpus(String corpus) {
+        if (corpus == null || corpus.length() == 0) {
+            return false;
+        }
+        final File corpusFolder = getCorpusFolder(corpus);
+        return corpusFolder.exists();
+    }
+
+    @Override
+    public String getCorpusDescription(String corpus) {
+        final File corpusFolder = getCorpusFolder(corpus);
+        final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
+
+        String retVal = "";
+        if (corpusInfoFile.exists()) {
+            try {
+                retVal = Files.readString(corpusInfoFile.toPath());
+            } catch (IOException e) {
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+            }
+        }
+
+        return retVal;
+    }
+
+    @Override
+    public Iterator<String> getSessionIterator(String corpus) {
+        return new SessionIterator(corpus);
+    }
+
+    @Override
+    public boolean hasSession(String corpus, String session) {
+        if (session == null || session.length() == 0) {
+            return false;
+        }
+        final File sessionFile = getSessionFile(corpus, session);
+        return sessionFile.exists();
+    }
+
+    @Override
+    public String getCorpusPath(String corpus) {
+        if (corpus.isEmpty()) corpus = ".";
+        return new File(getFolder(), corpus).getAbsolutePath();
+    }
+
+    @Override
+    public void setCorpusPath(String corpus, String path) {
+        throw new UnsupportedOperationException();
+//		setCorpusFolder(corpus, new File(path));
+    }
+
+    @Override
+    public Set<Participant> getParticipants(Collection<SessionPath> sessions) {
+        final Comparator<Participant> comparator = (p1, p2) -> {
+            int retVal = p1.getId().compareTo(p2.getId());
+            if (retVal == 0) {
+                final String p1Name = (p1.getName() == null ? "" : p1.getName());
+                final String p2Name = (p2.getName() == null ? "" : p2.getName());
+                retVal = p1Name.compareTo(p2Name);
+                if (retVal == 0) {
+                    retVal = p1.getRole().compareTo(p2.getRole());
+                }
+            }
+            return retVal;
+        };
+        final Set<Participant> retVal = new TreeSet<>(comparator);
+
+        for (SessionPath sessionPath : sessions) {
+            try {
+                Session session = openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
+                Collection<Participant> participants = new ArrayList<>();
+
+                participants.add(SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN));
+                session.getParticipants().forEach((p) -> participants.add(p));
+
+                for (Participant participant : participants) {
+                    Participant speaker = null;
+                    if (retVal.contains(participant)) {
+                        for (Participant p : retVal) {
+                            if (comparator.compare(participant, p) == 0) {
+                                speaker = p;
+                                break;
+                            }
+                        }
+                    } else {
+                        speaker = SessionFactory.newFactory().cloneParticipant(participant);
+                    }
+
+                    // get record count
+                    int count = 0;
+                    for (Record r : session.getRecords()) {
+                        if (comparator.compare(r.getSpeaker(), participant) == 0) ++count;
+                    }
+
+                    if (speaker != null) {
+                        if (count == 0 && comparator.compare(Participant.UNKNOWN, speaker) == 0) {
+                            // do not add unknown speaker if there are no records
+                        } else {
+                            ParticipantHistory history = speaker.getExtension(ParticipantHistory.class);
+                            if (history == null) {
+                                history = new ParticipantHistory();
+                                speaker.putExtension(ParticipantHistory.class, history);
+                            }
+                            Period age =
+                                    (participant != null ? participant.getAge(session.getDate()) : null);
+                            history.setAgeForSession(sessionPath, age);
+                            history.setNumberOfRecordsForSession(sessionPath, count);
+                        }
+                    }
+
+                    if (!retVal.contains(speaker)) {
+                        if (comparator.compare(Participant.UNKNOWN, speaker) == 0) {
+                            if (count > 0)
+                                retVal.add(speaker);
+                        } else {
+                            retVal.add(speaker);
+                        }
+                    }
+
+                }
+            } catch (IOException e) {
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+            }
+        }
+
+        return retVal;
+    }
+
+    @Override
+    public Session openSession(String corpus, String session)
+            throws IOException {
+        final File sessionFile = getSessionFile(corpus, session);
+        final URI uri = sessionFile.toURI();
+        final SessionInputFactory inputFactory = new SessionInputFactory();
+        final SessionReader reader = inputFactory.createReaderForFile(sessionFile);
+        if (reader == null) {
+            throw new IOException("No session reader available for " + uri.toASCIIString());
+        }
+        return openSession(corpus, session, reader);
+    }
+
+    @Override
+    public Session openSession(String corpus, String session, SessionReader reader)
+            throws IOException {
+        final File sessionFile = getSessionFile(corpus, session);
+        final URI uri = sessionFile.toURI();
+
+        try (InputStream in = uri.toURL().openStream()) {
+            final Session retVal = reader.readSession(in);
+
+            // make sure corpus and session match the expected values, these
+            // can change if the session file has been manually moved
+            if (!retVal.getCorpus().equals(corpus)) {
+                retVal.setCorpus(corpus);
+            }
+            final int extIdx = session.lastIndexOf('.');
+            String sessionName = session;
+            if (extIdx >= 0) {
+                sessionName = session.substring(0, extIdx);
+            }
+            if (retVal.getName() == null || !retVal.getName().equals(sessionName)) {
+                retVal.setName(sessionName);
+            }
+            final SessionPath sp = SessionFactory.newFactory().createSessionPath(corpus, session);
+            sp.putExtension(Project.class, this);
+            retVal.setSessionPath(sp);
+
+            // set original format extension
+            final SessionIO origIO = reader.getClass().getAnnotation(SessionIO.class);
+            if (origIO != null) {
+                final OriginalFormat origFormat = new OriginalFormat(origIO);
+                retVal.putExtension(OriginalFormat.class, origFormat);
+            }
+
+            return retVal;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+            throw new IOException(e);
+        }
+    }
+
+    @Override
+    public String getSessionPath(Session session) {
+        return getSessionPath(session.getCorpus(), session.getName());
+    }
+
+    @Override
+    public String getSessionPath(String corpus, String session) {
+        final File sessionFile = getSessionFile(corpus, session);
+        return (sessionFile == null ? corpus + File.separator + session : sessionFile.getAbsolutePath());
+    }
+
+    public File getSessionFile(String corpus, String session) {
+        if (session.lastIndexOf('.') < 0) {
+            final List<File> potentialFiles =
+                    SessionInputFactory.getSessionExtensions().stream()
+                            .map((ext) -> new File(getCorpusFolder(corpus), session + "." + ext))
+                            .collect(Collectors.toList());
+            final Optional<File> optionalFile = potentialFiles.stream()
+                    .filter(File::exists)
+                    .findFirst();
+            return optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
+        } else {
+            return new File(getCorpusFolder(corpus), session);
+        }
+    }
+
+    public File getCorpusFolder(String corpus) {
+        File retVal = new File(getCorpusPath(corpus));
+        return retVal;
+    }
+
+    /**
+     * Local projects allow changing project location through the {@link ChangeProjectLocation}
+     * extension
+     *
+     * @param location
+     */
+    void setLocation(String location) {
+        File newLocation = new File(location);
+        this.projectFolder = newLocation;
+    }
+
+    @Override
+    public boolean hasCustomProjectMediaFolder() {
+        final var projectJson = projectProperties.getProjectJson();
+        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+            return (!mediaFolders.isEmpty());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public List<String> getProjectMediaFolders() {
+        final var projectJson = projectProperties.getProjectJson();
+        List<String> retVal = new ArrayList<>();
+
+        final File defaultMediaFolder = new File(getResourceLocation(), "media");
+        if (defaultMediaFolder.exists()) {
+            retVal.add(PROJECT_RES_FOLDER + File.separator + "media");
+        }
+
+        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+            for (int i = 0; i < mediaFolders.length(); i++) {
+                retVal.add(mediaFolders.getString(i));
+            }
+        }
+        return retVal;
+    }
+
+    @Override
+    public void addProjectMediaFolder(String mediaFolder) {
+        final var projectJson = projectProperties.getProjectJson();
+        final List<String> currentMediaFolderList = getProjectMediaFolders();
+        JSONArray mediaFolders =
+                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
+                        : new JSONArray();
+
+        File mediaFolderFile = new File(mediaFolder);
+        if (!mediaFolderFile.isAbsolute()) {
+            mediaFolderFile = new File(getFolder(), mediaFolder);
+        }
+        final File resMediaFolder = new File(getResourceLocation(), "media");
+        if (resMediaFolder.getAbsoluteFile().equals(mediaFolderFile.getAbsoluteFile())) {
+            return;
+        }
+
+        // if mediaFolderFile is a child of the project folder, relativize the path
+        if (mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
+            mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
+        }
+        if (currentMediaFolderList.contains(mediaFolder)) {
+            return;
+        }
+
+        mediaFolders.put(mediaFolder);
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+
+        try {
+            projectProperties.saveProjectJson();
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+        }
+
+        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderAddedEvent(mediaFolders.length() - 1, mediaFolder);
+        fireProjectDataChanged(pe);
+    }
+
+    @Override
+    public void addProjectMediaFolder(int index, String mediaFolder) {
+        final var projectJson = projectProperties.getProjectJson();
+        if (index < 0 || index > getProjectMediaFolders().size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        JSONArray mediaFolders =
+                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
+                        : new JSONArray();
+
+        File mediaFolderFile = new File(mediaFolder);
+        if (!mediaFolderFile.isAbsolute()) {
+            mediaFolderFile = new File(getFolder(), mediaFolder);
+        }
+        final File resMediaFolder = new File(getResourceLocation(), mediaFolderFile.getName());
+        if (resMediaFolder.getAbsoluteFile().equals(mediaFolderFile.getAbsoluteFile())) {
+            return;
+        }
+
+        // if mediaFolderFile is a child of the project folder, relativize the path
+        if (mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
+            mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
+        }
+
+        mediaFolders.put(index, mediaFolder);
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+
+        try {
+            projectProperties.saveProjectJson();
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+        }
+
+        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderAddedEvent(index, mediaFolder);
+        fireProjectDataChanged(pe);
+    }
+
+    @Override
+    public void removeProjectMediaFolder(String mediaFolder) {
+        final var projectJson = projectProperties.getProjectJson();
+        if (!projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
+
+        final List<String> currentMediaFolderList = getProjectMediaFolders();
+        if (!currentMediaFolderList.contains(mediaFolder)) {
+            return;
+        }
+
+        JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+        JSONArray newMediaFolders = new JSONArray();
+        final int index = mediaFolders.toList().indexOf(mediaFolder);
+        if (index < 0) return;
+        for (int i = 0; i < mediaFolders.length(); i++) {
+            String folder = mediaFolders.getString(i);
+            if (!folder.equals(mediaFolder)) {
+                newMediaFolders.put(folder);
+            }
+        }
+
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
+        try {
+            projectProperties.saveProjectJson();
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+        }
+
+        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderRemovedEvent(index, mediaFolder);
+        fireProjectDataChanged(pe);
+    }
+
     @Override
     public String getResourceLocation() {
         String retVal = this.resourceLocation;
@@ -893,41 +890,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         }
 
         return new FileOutputStream(resFile);
-    }
-
-    private String sessionProjectPath(String corpus, String session) {
-        return corpus + "." + session;
-    }
-
-    public File getSessionFile(String corpus, String session) {
-        if (session.lastIndexOf('.') < 0) {
-            final List<File> potentialFiles =
-                    SessionInputFactory.getSessionExtensions().stream()
-                            .map((ext) -> new File(getCorpusFolder(corpus), session + "." + ext))
-                            .collect(Collectors.toList());
-            final Optional<File> optionalFile = potentialFiles.stream()
-                    .filter(File::exists)
-                    .findFirst();
-            return optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
-        } else {
-            return new File(getCorpusFolder(corpus), session);
-        }
-    }
-
-    public File getCorpusFolder(String corpus) {
-        File retVal = new File(getCorpusPath(corpus));
-        return retVal;
-    }
-
-    /**
-     * Local projects allow changing project location through the {@link ChangeProjectLocation}
-     * extension
-     *
-     * @param location
-     */
-    void setLocation(String location) {
-        File newLocation = new File(location);
-        this.projectFolder = newLocation;
     }
 
     @Override
@@ -1028,6 +990,46 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         }
 
         return size;
+    }
+
+    @Override
+    public int numberOfRecordsInSession(String corpus, String session)
+            throws IOException {
+        final File sessionFile = getSessionFile(corpus, session);
+        int retVal = 0;
+
+        if (sessionFile.exists() && sessionFile.getName().endsWith(".xml")) {
+            // it's faster to use an xpath expression
+            // to determine the number of records.
+            String xpathPattern = "//u";
+            // open as dom file first
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            domFactory.setNamespaceAware(false);
+            DocumentBuilder builder;
+            try {
+                builder = domFactory.newDocumentBuilder();
+                Document doc = builder.parse(sessionFile);
+
+                XPathFactory xpathFactory = XPathFactory.newInstance();
+                XPath xpath = xpathFactory.newXPath();
+                XPathExpression expr = xpath.compile(xpathPattern);
+
+                Object result = expr.evaluate(doc, XPathConstants.NODESET);
+                NodeList nodes = (NodeList) result;
+                retVal = nodes.getLength();
+            } catch (ParserConfigurationException e) {
+                throw new IOException(e);
+            } catch (SAXException e) {
+                throw new IOException(e);
+            } catch (XPathExpressionException e) {
+                throw new IOException(e);
+            }
+        } else {
+            final Session s = openSession(corpus, session);
+            retVal = s.getRecordCount();
+        }
+
+        return retVal;
     }
 
     // region Deprecated methods

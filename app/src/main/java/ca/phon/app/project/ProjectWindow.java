@@ -1466,11 +1466,15 @@ public class ProjectWindow extends CommonModuleFrame {
 					}
 				}
 
-				// see if the transcript it locked...
-				SessionListModel model = (SessionListModel)list.getModel();
-				if(model.getProject().isSessionLocked(model.getCorpus(), value.toString())) {
-					comp.setIcon(
-							IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "lock", IconSize.MEDIUM, comp.getForeground()));
+				// see if the transcript is locked...
+
+				SessionListModel model = (SessionListModel) list.getModel();
+				final MutableProject mutableProject = model.getProject().getExtension(MutableProject.class);
+				if(mutableProject != null) {
+					if (mutableProject.isSessionLocked(model.getCorpus(), value.toString())) {
+						comp.setIcon(
+								IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "lock", IconSize.MEDIUM, comp.getForeground()));
+					}
 				}
 
 				comp.setIcon(icon);

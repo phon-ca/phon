@@ -17,6 +17,7 @@ package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -115,6 +116,12 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 			super.setStatus(TaskStatus.RUNNING);
 			
 			final Project project = getExtension(Project.class);
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject == null) {
+				super.err = new IOException("Project does not support writing");
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			}
 			for(SessionPath sp:sessionSelector.getSelectedSessions()) {
 				try {
 					final Session session = project.openSession(sp.getFolder(), sp.getSessionFile());
@@ -177,10 +184,10 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 							p.setGroup(null);
 						}
 					}
-					
-					final UUID writeLock = project.getSessionWriteLock(session);
-					project.saveSession(session, writeLock);
-					project.releaseSessionWriteLock(session, writeLock);
+
+					final UUID writeLock = mutableProject.getSessionWriteLock(session);
+					mutableProject.saveSession(session, writeLock);
+					mutableProject.releaseSessionWriteLock(session, writeLock);
 				} catch (IOException e) {
 					LogUtil.warning(e);
 				}

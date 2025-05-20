@@ -15,6 +15,7 @@
  */
 package ca.phon.app.autosave;
 
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 
@@ -88,9 +89,13 @@ public class Autosaves {
 	public void createAutosave(Session session, String corpus, String sessionName) throws IOException {
 		final Project project = getProject();
 		final String autosaveName = AutosaveManager.AUTOSAVE_PREFIX + sessionName;
-		final UUID writeLock = project.getSessionWriteLock(corpus, autosaveName);
-		project.saveSession(corpus, autosaveName, session, writeLock);
-		project.releaseSessionWriteLock(corpus, autosaveName, writeLock);
+		final MutableProject mutableProject = project.getExtension(MutableProject.class);
+		if(mutableProject == null) {
+			throw new IOException("Project does not support autosave");
+		}
+		final UUID writeLock = mutableProject.getSessionWriteLock(corpus, autosaveName);
+		mutableProject.saveSession(corpus, autosaveName, session, writeLock);
+		mutableProject.releaseSessionWriteLock(corpus, autosaveName, writeLock);
 	}
 	
 	public LocalDateTime getAutosaveDateTime(Session session) {

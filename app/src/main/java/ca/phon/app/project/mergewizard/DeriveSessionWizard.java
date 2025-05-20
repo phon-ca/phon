@@ -17,6 +17,7 @@ package ca.phon.app.project.mergewizard;
 
 import ca.phon.app.log.*;
 import ca.phon.app.project.SessionMerger;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.session.filter.RecordFilter;
@@ -165,13 +166,19 @@ public class DeriveSessionWizard extends WizardFrame {
 		Collections.sort(sessions);
 
 		final Project project = getProject();
+		final MutableProject mutableProject = project.getExtension(MutableProject.class);
+		if(mutableProject == null) {
+			out.println("Project is not mutable.");
+			out.flush();
+			return;
+		}
 		// first make sure we have a corpus
 		if(!project.hasCorpus(step1.getMergedCorpusName())) {
 
 			out.println("Creating corpus '" + corpus + "'");
 			out.flush();
 			try {
-				project.addCorpus(corpus, "");
+				mutableProject.addCorpus(corpus, "");
 			} catch (IOException e) {
 				out.println(e.getLocalizedMessage());
 				out.flush();
@@ -264,9 +271,9 @@ public class DeriveSessionWizard extends WizardFrame {
 			out.flush();
 
 			// save
-			final UUID writeLock = project.getSessionWriteLock(mergedSession);
-			project.saveSession(mergedSession, writeLock);
-			project.releaseSessionWriteLock(mergedSession, writeLock);
+			final UUID writeLock = mutableProject.getSessionWriteLock(mergedSession);
+			mutableProject.saveSession(mergedSession, writeLock);
+			mutableProject.releaseSessionWriteLock(mergedSession, writeLock);
 
 			out.println("Finished. New session has " + mergedSession.getRecordCount() + " records.");
 			out.flush();

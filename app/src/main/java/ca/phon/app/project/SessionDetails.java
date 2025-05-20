@@ -271,11 +271,14 @@ public class SessionDetails extends JPanel {
 		public void projectWriteLocksChanged(ProjectEvent pe) {
 			final String corpus = pe.getProperty(ProjectEventProp.CORPUS);
 			final String session = pe.getProperty(ProjectEventProp.SESSION);
-			
-			// update when unlocked
-			if(!project.isSessionLocked(corpus, session)
-					&& corpus.equals(getCorpus()) && session.equals(getSession()) ) {
-				update();
+
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject != null) {
+				// update when unlocked
+				if(!mutableProject.isSessionLocked(corpus, session)
+						&& corpus.equals(getCorpus()) && session.equals(getSession()) ) {
+					update();
+				}
 			}
 		}
 		

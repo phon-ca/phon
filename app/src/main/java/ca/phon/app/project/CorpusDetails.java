@@ -17,6 +17,7 @@ package ca.phon.app.project;
 
 import ca.hedlund.desktopicons.*;
 import ca.phon.app.log.LogUtil;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.menu.MenuBuilder;
@@ -120,8 +121,12 @@ public class CorpusDetails extends JPanel {
 
 			@Override
 			public void focusLost(FocusEvent e) {
+				final MutableProject mutableProject = project.getExtension(MutableProject.class);
+				if(mutableProject == null) {
+					return;
+				}
 				if(corpus != null) {
-					project.setCorpusDescription(corpus, corpusDescriptionArea.getText());
+					mutableProject.setCorpusDescription(corpus, corpusDescriptionArea.getText());
 				}
 			}
 
@@ -145,8 +150,12 @@ public class CorpusDetails extends JPanel {
 	}
 
 	public void setCorpus(String corpus) {
+		final MutableProject mutableProject = project.getExtension(MutableProject.class);
+		if(mutableProject == null) {
+			return;
+		}
 		if(this.corpus != null && project.hasCorpus(this.corpus)) {
-			project.setCorpusDescription(this.corpus, corpusDescriptionArea.getText());
+			mutableProject.setCorpusDescription(this.corpus, corpusDescriptionArea.getText());
 		}
 
 		this.corpus = corpus;

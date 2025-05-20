@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
 import ca.phon.worker.PhonWorker;
@@ -66,11 +67,18 @@ public class RenameCorpusAction extends ProjectWindowAction {
 					"The new corpus name you specified already exists!");
 				return;
 			}
-	
+
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if (mutableProject == null) {
+				showMessage(
+					"Rename Corpus",
+					"Project does not support renaming corpora.");
+				return;
+			}
 			// Create new corpus, transfer sessions over to it and delete
 			// the oldLoc corpus
 			try {
-				project.renameCorpus(corpusName, newCorpusName);
+				mutableProject.renameCorpus(corpusName, newCorpusName);
 
 				PhonWorker.getInstance().invokeLater(() -> {
 					final Iterator<String> corpusIter = project.getCorpusIterator();

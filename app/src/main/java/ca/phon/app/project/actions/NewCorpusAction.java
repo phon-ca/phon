@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
+import ca.phon.project.MutableProject;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -60,9 +61,14 @@ public class NewCorpusAction extends ProjectWindowAction {
 			corpusName = dlg.getCorpusName();
 			desc = dlg.getCorpusDescription();
 		}
-		
+
+		final MutableProject mutableProject = getWindow().getProject().getExtension(MutableProject.class);
+		if(mutableProject == null) {
+			showMessage("New Corpus", "Project does not support corpus creation");
+			return;
+		}
 		try {
-			getWindow().getProject().addCorpus(corpusName, desc);
+			mutableProject.addCorpus(corpusName, desc);
 			this.corpusCreated = true;
 			getWindow().refreshProject();
 		} catch (IOException e) {

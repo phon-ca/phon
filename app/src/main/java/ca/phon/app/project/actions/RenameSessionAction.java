@@ -18,6 +18,7 @@ package ca.phon.app.project.actions;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.io.OriginalFormat;
@@ -132,10 +133,15 @@ public class RenameSessionAction extends ProjectWindowAction {
 				showMessage("Rename Session", e.getLocalizedMessage());
 				return;
 			}
-			
+
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject == null) {
+				showMessage("Rename Session", "Project does not support renaming sessions.");
+				return;
+			}
 			UUID writeLock = null;
 			try {
-				writeLock = project.getSessionWriteLock(corpusName, newSessionName);
+				writeLock = mutableProject.getSessionWriteLock(corpusName, newSessionName);
 
 				// determine if the session requires conversion into Phon 4.x format
 				// if so, ask the user if they want to do that
@@ -178,9 +184,9 @@ public class RenameSessionAction extends ProjectWindowAction {
 
 				session.setName(newSessionName);
 				if(writer != null) {
-					project.saveSession(corpusName, newSessionName, session, writer, writeLock);
+					mutableProject.saveSession(corpusName, newSessionName, session, writer, writeLock);
 				} else {
-					project.saveSession(corpusName, newSessionName, session, writeLock);
+					mutableProject.saveSession(corpusName, newSessionName, session, writeLock);
 				}
 			} catch (Exception e) {
 				LogUtil.warning(e);
@@ -188,7 +194,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 			} finally {
 				if(writeLock != null) {
 					try {
-						project.releaseSessionWriteLock(corpusName, newSessionName, writeLock);
+						mutableProject.releaseSessionWriteLock(corpusName, newSessionName, writeLock);
 					} catch (IOException e) {
 						LogUtil.warning(e);
 					}
@@ -197,15 +203,15 @@ public class RenameSessionAction extends ProjectWindowAction {
 			}
 			
 			try {
-				writeLock = project.getSessionWriteLock(corpusName, sessionName);
-				project.removeSession(corpusName, sessionName, writeLock);
+				writeLock = mutableProject.getSessionWriteLock(corpusName, sessionName);
+				mutableProject.removeSession(corpusName, sessionName, writeLock);
 			} catch (Exception e) {
 				LogUtil.warning(e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 			} finally {
 				if(writeLock != null) {
 					try {
-						project.releaseSessionWriteLock(corpusName, sessionName, writeLock);
+						mutableProject.releaseSessionWriteLock(corpusName, sessionName, writeLock);
 					} catch (IOException e) {
 						LogUtil.warning(e);
 					}

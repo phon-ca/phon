@@ -24,6 +24,7 @@ import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.plugin.*;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.*;
@@ -169,12 +170,15 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 								editor.getCurrentRecordIndex()));
 				editor.getEventManager().queueEvent(evt2);
 			} else {
-				try {
-					UUID writeLock = project.getSessionWriteLock(session);
-					project.saveSession(session, writeLock);
-					project.releaseSessionWriteLock(session, writeLock);
-				} catch (IOException e) {
-					LogUtil.severe(e);
+				final MutableProject mutableProject = project.getExtension(MutableProject.class);
+				if(mutableProject != null) {
+					try {
+						UUID writeLock = mutableProject.getSessionWriteLock(session);
+						mutableProject.saveSession(session, writeLock);
+						mutableProject.releaseSessionWriteLock(session, writeLock);
+					} catch (IOException e) {
+						LogUtil.severe(e);
+					}
 				}
 			}
 		}

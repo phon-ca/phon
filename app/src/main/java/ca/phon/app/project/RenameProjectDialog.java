@@ -1,5 +1,6 @@
 package ca.phon.app.project;
 
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
@@ -95,7 +96,13 @@ public class RenameProjectDialog extends JDialog {
 
 		close();
 
-		project.setName(projectName);
+		final MutableProject mutableProject = project.getExtension(MutableProject.class);
+		if(mutableProject == null) {
+			ToastFactory.makeToast("Project does not support renaming").start(projectNameField);
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		mutableProject.setName(projectName);
 	}
 
 	public void onCancel() {

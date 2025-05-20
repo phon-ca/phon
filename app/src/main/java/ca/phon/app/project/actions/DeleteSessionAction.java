@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
@@ -62,11 +63,16 @@ public class DeleteSessionAction extends ProjectWindowAction {
 		final Project project = getWindow().getProject();
 		final String corpus = getWindow().getSelectedCorpus();
 		if(retVal == 0) {
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject == null) {
+				LogUtil.warning("Project does not support mutable operations");
+				return;
+			}
 			for(String sessionName:sessionNames) {
 				try {
-					UUID writeLock = project.getSessionWriteLock(corpus, sessionName);
-					project.removeSession(corpus, sessionName, writeLock);
-					project.releaseSessionWriteLock(corpus, sessionName, writeLock);
+					UUID writeLock = mutableProject.getSessionWriteLock(corpus, sessionName);
+					mutableProject.removeSession(corpus, sessionName, writeLock);
+					mutableProject.releaseSessionWriteLock(corpus, sessionName, writeLock);
 				} catch (IOException e) {
 					LogUtil.warning(e);
 					Toolkit.getDefaultToolkit().beep();

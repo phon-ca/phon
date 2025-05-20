@@ -51,7 +51,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @return the project version or 'unk' if not known
 	 */
-	public String getVersion();
+	String getVersion();
 
 	/**
 	 * The location of the project.  Meaning is dependent on implementation.
@@ -59,21 +59,14 @@ public interface Project extends IExtendable {
 	 *
 	 * @return the project location
 	 */
-	public String getLocation();
+	String getLocation();
 
 	/**
 	 * The name of the project.
 	 *
 	 * @return project name
 	 */
-	public String getName();
-
-	/**
-	 * Set project name
-	 *
-	 * @param name must match pattern '[ \w\d-]+'
-	 */
-	public void setName(String name);
+	String getName();
 
 	/**
 	 * Project UUID
@@ -82,62 +75,14 @@ public interface Project extends IExtendable {
 	 *
 	 * @return uuid
 	 */
-	public UUID getUUID();
-
-	/**
-	 * Set project UUID
-	 *
-	 * @param uuid
-	 */
-	public void setUUID(UUID uuid);
+	UUID getUUID();
 
 	/**
 	 * Get an iterator over the corpora in this project.
 	 *
 	 * @return iterator over corpora
 	 */
-	public Iterator<String> getCorpusIterator();
-
-	/**
-	 * Add corpus folder with given name
-	 *
-	 * @param name
-	 * @throws IOException
-	 */
-	public void addCorpus(String name) throws IOException;
-
-	/**
-	 * Add a new corpus with the specified name.
-	 *
-	 * @param name
-	 * @param description
-	 * @throws IOException if the corpus could not be
-	 *  created
-	 */
-	public void addCorpus(String name, String description)
-		throws IOException;
-
-	/**
-	 * Rename a corpus
-	 *
-	 * @param corpus
-	 * @param newName
-	 *
-	 * @throws IOException if the corpus could not be
-	 *  renamed
-	 */
-	public void renameCorpus(String corpus, String newName)
-		throws IOException;
-
-	/**
-	 * Delete the specified corpus and all sessions it contains.
-	 *
-	 * @param corpus
-	 *
-	 * @throws IOException if the corpus could not be deleted
-	 */
-	public void removeCorpus(String corpus)
-		throws IOException;
+	Iterator<String> getCorpusIterator();
 
 	/**
 	 * Tests to see if a given corpus exists in the project.  This may be faster
@@ -147,22 +92,14 @@ public interface Project extends IExtendable {
 	 *
 	 * @return <code>true</code> if the corpus exists, <code>false</code>
 	 */
-	public boolean hasCorpus(String corpus);
+	boolean hasCorpus(String corpus);
 
 	/**
 	 * Get the description of the specified corpus.
 	 *
 	 * @param corpus the corpus name
 	 */
-	public String getCorpusDescription(String corpus);
-
-	/**
-	 * Set the description for the specified corpus.
-	 *
-	 * @param corpus
-	 * @param description
-	 */
-	public void setCorpusDescription(String corpus, String description);
+	String getCorpusDescription(String corpus);
 
 	/**
 	 * Get an iterator over the sessions in the specified corpus.
@@ -171,7 +108,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @return iterator over sessions in the corpus
 	 */
-	public Iterator<String> getSessionIterator(String corpus);
+	Iterator<String> getSessionIterator(String corpus);
 
 	/**
 	 * Test if a given session exists in the specified corpus.  This method is usually
@@ -183,14 +120,14 @@ public interface Project extends IExtendable {
 	 *
 	 * @return <code>true</code> if the session exists, <code>false</code> otherwise
 	 */
-	public boolean hasSession(String corpus, String session);
+	boolean hasSession(String corpus, String session);
 
 	/**
 	 * Return the path to the given corpus.
 	 *
 	 * @param corpus
 	 */
-	public String getCorpusPath(String corpus);
+	String getCorpusPath(String corpus);
 
 	/**
 	 * Set path of corpus.
@@ -198,7 +135,7 @@ public interface Project extends IExtendable {
 	 * @param corpus
 	 * @param path
 	 */
-	public void setCorpusPath(String corpus, String path);
+	void setCorpusPath(String corpus, String path);
 
 	/**
 	 * Return a set of participants which are found in the
@@ -214,7 +151,7 @@ public interface Project extends IExtendable {
 	 * @param sessions
 	 * @return a set of participants
 	 */
-	public Set<Participant> getParticipants(Collection<SessionPath> sessions);
+	Set<Participant> getParticipants(Collection<SessionPath> sessions);
 
 	/**
 	 * Open the specified session.  This will create a new session
@@ -227,7 +164,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @throws IOException
 	 */
-	public Session openSession(String corpus, String session)
+	Session openSession(String corpus, String session)
 		throws IOException;
 
 	/**
@@ -241,7 +178,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @throws IOException
 	 */
-	public Session openSession(String corpus, String session, SessionReader reader)
+	Session openSession(String corpus, String session, SessionReader reader)
 		throws IOException;
 
 	/**
@@ -251,7 +188,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @return path to given session
 	 */
-	public String getSessionPath(Session session);
+	String getSessionPath(Session session);
 
 	/**
 	 * Get path to the given session.
@@ -261,138 +198,6 @@ public interface Project extends IExtendable {
 	 *
 	 * @return path to given session
 	 */
-	public String getSessionPath(String corpus, String session);
-
-	/**
-	 * Get a write lock for a session.  Before writing a write lock
-	 * must be obtained from the project.
-	 *
-	 * @param session
-	 *
-	 * @return the session write lock or < 0 if a write lock
-	 *  was not obtained
-	 * @throws IOException
-	 */
-	public UUID getSessionWriteLock(Session session)
-		throws IOException;
-
-	/**
-	 * Get a write lock for a session.  Before writing a write lock
-	 * must be obtained from the project.
-	 *
-	 * @param corpus
-	 * @param session
-	 *
-	 * @return the session write lock or <code>null</code>
-	 * @throws IOException
-	 */
-	public UUID getSessionWriteLock(String corpus, String session)
-		throws IOException;
-
-	/**
-	 * Release the write lock for a session.
-	 *
-	 * @param session
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void releaseSessionWriteLock(Session session, UUID writeLock)
-		throws IOException;
-
-	/**
-	 * Release the write lock for a session.
-	 *
-	 * @param session
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void releaseSessionWriteLock(String corpus, String session, UUID writeLock)
-		throws IOException;
-
-	/**
-	 * Tells whether the given session is locked
-	 *
-	 * @param session
-	 * @return <code>true</code> if session is locked, <code>false</code>
-	 *  otherwise
-	 */
-	public boolean isSessionLocked(Session session);
-
-	/**
-	 * Tells wheater the given session is locked
-	 *
-	 * @param corpus
-	 * @param session
-	 *
-	 * @return <code>true</code> if the session is locked, <code>false</code>
-	 *  otherwise
-	 */
-	public boolean isSessionLocked(String corpus, String session);
-
-	/**
-	 * Save a session
-	 *
-	 * @param session
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void saveSession(Session session, UUID writeLock)
-		throws IOException;
-
-	/**
-	 * Save a session to the specified corpus and new
-	 * sessionName.
-	 *
-	 * @param corpus
-	 * @param sessionName
-	 * @param session
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void saveSession(String corpus, String sessionName, Session session, UUID writeLock)
-		throws IOException;
-
-	/**
-	 * Save a session writing the file using the given writer.
-	 *
-	 * @param corpus
-	 * @param sessionName
-	 * @param session
-	 * @param writer
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer, UUID writeLock)
-			throws IOException;
-
-	/**
-	 * Remove a session from the project.  The writeLock
-	 * for the session is also released.
-	 *
-	 * @param session
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void removeSession(Session session, UUID writeLock)
-		throws IOException;
-
-	/**
-	 * Remove a session from the project.  The writeLock
-	 * for the session is also released.
-	 *
-	 * @parma corpus
-	 * @param session
-	 * @param writeLock
-	 *
-	 * @throws IOException
-	 */
-	public void removeSession(String corpus, String session, UUID writeLock)
-		throws IOException;
+	String getSessionPath(String corpus, String session);
 
 }

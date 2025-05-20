@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
 import org.apache.commons.io.FileUtils;
@@ -93,14 +94,18 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				projectCorpora.add(corpusItr.next());
 			}
 			Collections.sort(projectCorpora, CollatorFactory.defaultCollator());
-			for(int i = 0; i < dupCorpusNames.size(); i++) {
-				String corpusName = dupCorpusNames.get(i);
 
-				// apply corpus descriptions to duplicated corpora
-				String corpusDesc = corpusDescs.get(i);
-				project.setCorpusDescription(corpusName, corpusDesc);
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject != null) {
+				for (int i = 0; i < dupCorpusNames.size(); i++) {
+					String corpusName = dupCorpusNames.get(i);
 
-				indices[i] = projectCorpora.indexOf(corpusName);
+					// apply corpus descriptions to duplicated corpora
+					String corpusDesc = corpusDescs.get(i);
+					mutableProject.setCorpusDescription(corpusName, corpusDesc);
+
+					indices[i] = projectCorpora.indexOf(corpusName);
+				}
 			}
 			getWindow().getCorpusList().setSelectedIndices(indices);
 		}

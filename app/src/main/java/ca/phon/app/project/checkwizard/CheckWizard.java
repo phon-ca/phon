@@ -20,6 +20,7 @@ import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.*;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -218,9 +219,14 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			}
 			
 			final Project project = getProject();
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject == null) {
+				out.println("Project does not support saving.");
+				return;
+			}
 			// save xml to project
 			try {
-				final UUID writeLock = project.getSessionWriteLock(session);
+				final UUID writeLock = mutableProject.getSessionWriteLock(session);
 				
 				if(writeLock == null) {
 					out.println(
@@ -229,11 +235,11 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				}
 				
 				try {
-					project.saveSession(session, writeLock);
+					mutableProject.saveSession(session, writeLock);
 				} catch (IOException e) {
 					out.println(e.getLocalizedMessage());
 				} finally {
-					project.releaseSessionWriteLock(session, writeLock);
+					mutableProject.releaseSessionWriteLock(session, writeLock);
 				}
 				
 				super.setStatus(TaskStatus.FINISHED);
@@ -303,8 +309,13 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			}
 			
 			// save xml to project
+			final MutableProject mutableProject = project.getExtension(MutableProject.class);
+			if(mutableProject == null) {
+				out.println("Project does not support saving.");
+				return;
+			}
 			try {
-				final UUID writeLock = project.getSessionWriteLock(session);
+				final UUID writeLock = mutableProject.getSessionWriteLock(session);
 				
 				if(writeLock == null) {
 					out.println(
@@ -313,11 +324,11 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				}
 				
 				try {
-					project.saveSession(session, writeLock);
+					mutableProject.saveSession(session, writeLock);
 				} catch (IOException e) {
 					out.println(e.getLocalizedMessage());
 				} finally {
-					project.releaseSessionWriteLock(session, writeLock);
+					mutableProject.releaseSessionWriteLock(session, writeLock);
 				}
 				
 				super.setStatus(TaskStatus.FINISHED);

@@ -17,6 +17,7 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.project.SessionTemplate;
 import ca.phon.session.Session;
@@ -93,14 +94,17 @@ public class NewSessionAction extends ProjectWindowAction {
 			sessionCreated = true;
 			
 //			// setup media if available
-			if(sessionMedia != null) {
-				createdSession.setMediaLocation(sessionMedia);
-				
-				UUID wl = proj.getSessionWriteLock(createdSession);
-				proj.saveSession(createdSession, wl);
-				proj.releaseSessionWriteLock(createdSession, wl);
+			final MutableProject mutableProject = proj.getExtension(MutableProject.class);
+			if(mutableProject != null) {
+				if(sessionMedia != null) {
+					createdSession.setMediaLocation(sessionMedia);
+
+					UUID wl = mutableProject.getSessionWriteLock(createdSession);
+					mutableProject.saveSession(createdSession, wl);
+					mutableProject.releaseSessionWriteLock(createdSession, wl);
+				}
 			}
-			
+
 			getWindow().refreshProject();
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
