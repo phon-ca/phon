@@ -90,7 +90,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     /**
      * Project properties
      */
-    private final ProjectProperties projectProperties;
+    private final LocalProjectProperties projectProperties;
     /**
      * Project folder
      */
@@ -108,7 +108,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         super();
         this.projectFolder = projectFolder;
 
-        this.projectProperties = new ProjectProperties(this);
+        this.projectProperties = new LocalProjectProperties(this);
 
         // session details extension
         putExtension(SessionDetails.class, this);
@@ -158,8 +158,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     @Override
     public String getName() {
         final var projectJson = projectProperties.getProjectJson();
-        if (projectJson.has(ProjectProperties.PROJECT_NAME_KEY)) {
-            return projectJson.getString(ProjectProperties.PROJECT_NAME_KEY);
+        if (projectJson.has(LocalProjectProperties.PROJECT_NAME_KEY)) {
+            return projectJson.getString(LocalProjectProperties.PROJECT_NAME_KEY);
         } else {
             return getFolder().getName();
         }
@@ -169,7 +169,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     public void setName(String name) {
         final String oldName = getName();
         final var projectJson = projectProperties.getProjectJson();
-        projectJson.put(ProjectProperties.PROJECT_NAME_KEY, name);
+        projectJson.put(LocalProjectProperties.PROJECT_NAME_KEY, name);
         try {
             projectProperties.saveProjectJson();
         } catch (IOException e) {
@@ -187,8 +187,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     @Override
     public UUID getUUID() {
         final var projectJson = projectProperties.getProjectJson();
-        if (projectJson.has(ProjectProperties.PROJECT_UUID_KEY)) {
-            return UUID.fromString(projectJson.getString(ProjectProperties.PROJECT_UUID_KEY));
+        if (projectJson.has(LocalProjectProperties.PROJECT_UUID_KEY)) {
+            return UUID.fromString(projectJson.getString(LocalProjectProperties.PROJECT_UUID_KEY));
         } else {
             UUID uuid = UUID.randomUUID();
             setUUID(uuid);
@@ -200,7 +200,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     public void setUUID(UUID uuid) {
         final var projectJson = projectProperties.getProjectJson();
         final UUID oldUUID = getUUID();
-        projectJson.put(ProjectProperties.PROJECT_UUID_KEY, uuid.toString());
+        projectJson.put(LocalProjectProperties.PROJECT_UUID_KEY, uuid.toString());
         try {
             projectProperties.saveProjectJson();
         } catch (IOException e) {
@@ -731,8 +731,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     @Override
     public boolean hasCustomProjectMediaFolder() {
         final var projectJson = projectProperties.getProjectJson();
-        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+        if (projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
             return (!mediaFolders.isEmpty());
         } else {
             return false;
@@ -749,8 +749,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
             retVal.add(PROJECT_RES_FOLDER + File.separator + "media");
         }
 
-        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+        if (projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
             for (int i = 0; i < mediaFolders.length(); i++) {
                 retVal.add(mediaFolders.getString(i));
             }
@@ -763,7 +763,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         final var projectJson = projectProperties.getProjectJson();
         final List<String> currentMediaFolderList = getProjectMediaFolders();
         JSONArray mediaFolders =
-                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
+                projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
                         : new JSONArray();
 
         File mediaFolderFile = new File(mediaFolder);
@@ -784,7 +784,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         }
 
         mediaFolders.put(mediaFolder);
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+        projectJson.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
 
         try {
             projectProperties.saveProjectJson();
@@ -803,7 +803,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
             throw new IndexOutOfBoundsException();
         }
         JSONArray mediaFolders =
-                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
+                projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
                         : new JSONArray();
 
         File mediaFolderFile = new File(mediaFolder);
@@ -821,7 +821,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         }
 
         mediaFolders.put(index, mediaFolder);
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+        projectJson.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
 
         try {
             projectProperties.saveProjectJson();
@@ -836,14 +836,14 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     @Override
     public void removeProjectMediaFolder(String mediaFolder) {
         final var projectJson = projectProperties.getProjectJson();
-        if (!projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
+        if (!projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
 
         final List<String> currentMediaFolderList = getProjectMediaFolders();
         if (!currentMediaFolderList.contains(mediaFolder)) {
             return;
         }
 
-        JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+        JSONArray mediaFolders = projectJson.getJSONArray(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
         JSONArray newMediaFolders = new JSONArray();
         final int index = mediaFolders.toList().indexOf(mediaFolder);
         if (index < 0) return;
@@ -854,7 +854,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
             }
         }
 
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
+        projectJson.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
         try {
             projectProperties.saveProjectJson();
         } catch (IOException e) {
@@ -1061,8 +1061,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     @Override
     public String getProjectMediaFolder() {
         final var projectJson = projectProperties.getProjectJson();
-        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+        if (projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
             if (!mediaFolders.isEmpty()) {
                 return mediaFolders.getString(0);
             }
@@ -1075,8 +1075,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     public void setProjectMediaFolder(String mediaFolder) {
         final var projectJson = projectProperties.getProjectJson();
         // remove all old media folders
-        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
-            projectJson.remove(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
+        if (projectJson.has(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            projectJson.remove(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
         }
 
         final String old = getProjectMediaFolder();
