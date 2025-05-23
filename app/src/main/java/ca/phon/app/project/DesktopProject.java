@@ -47,7 +47,7 @@ public class DesktopProject extends LocalProject {
 	}
 
 	@Override
-	public void removeSession(String corpus, String session, UUID writeLock) throws IOException {
+	public void removeSession(String corpus, String session, SessionWriteLock writeLock) throws IOException {
 		checkSessionWriteLock(corpus, session, writeLock);
 		final String sessionPath = getSessionPath(corpus, session);
 

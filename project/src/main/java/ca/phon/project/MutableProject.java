@@ -79,18 +79,30 @@ public interface MutableProject {
      * Get a write lock for a session.  Before writing a write lock
      * must be obtained from the project.
      *
+     * Example:
+     * <pre>
+     *     try(SessionWriteLock writeLock = project.getSessionWriteLock(session)) {
+     *      // do some work with the session
+     *     } catch (IOException e) {
+     *      // handle exception
+     *     }
+     * </pre>
+     *
      * @param session the session to lock
      *
      * @return the session write lock or < 0 if a write lock
      *  was not obtained
      * @throws IOException
      */
-    UUID getSessionWriteLock(Session session)
+    SessionWriteLock getSessionWriteLock(Session session)
             throws IOException;
 
     /**
      * Get a write lock for a session.  Before writing a write lock
      * must be obtained from the project.
+     *
+     * See {@link #getSessionWriteLock(Session)} for more
+     * information on how to use the write lock.
      *
      * @param corpus the corpus name
      * @param session the session to lock
@@ -98,29 +110,35 @@ public interface MutableProject {
      * @return the session write lock or <code>null</code>
      * @throws IOException
      */
-    UUID getSessionWriteLock(String corpus, String session)
+    SessionWriteLock getSessionWriteLock(String corpus, String session)
             throws IOException;
 
     /**
      * Release the write lock for a session.
+     *
+     * See {@link #getSessionWriteLock(Session)} for more
+     * information on how to use the write lock.
      *
      * @param session the session to unlock
      * @param writeLock the write lock to release
      *
      * @throws IOException
      */
-    void releaseSessionWriteLock(Session session, UUID writeLock)
+    void releaseSessionWriteLock(Session session, SessionWriteLock writeLock)
             throws IOException;
 
     /**
      * Release the write lock for a session.
+     *
+     * See {@link #releaseSessionWriteLock(Session, SessionWriteLock)} for more
+     * information on how to use the write lock.
      *
      * @param session the session to unlock
      * @param writeLock the write lock to release
      *
      * @throws IOException
      */
-    void releaseSessionWriteLock(String corpus, String session, UUID writeLock)
+    void releaseSessionWriteLock(String corpus, String session, SessionWriteLock writeLock)
             throws IOException;
 
     /**
@@ -144,19 +162,34 @@ public interface MutableProject {
     boolean isSessionLocked(String corpus, String session);
 
     /**
-     * Save a session
+     * Save a session with the provided writeLock.
+     *
+     * Example:
+     * <pre>
+     *     try(SessionWriteLock writeLock = project.getSessionWriteLock(session)) {
+     *      project.saveSession(session, writeLock);
+     *     } catch (IOException e) {
+     *      // handle exception
+     *     }
+ *     </pre>
+     *
+     * The write lock is auto-closeable and will be released
+     * when the try block is exited.  To manually release the
+     * write lock, call the {@link #releaseSessionWriteLock(Session, SessionWriteLock)}
+     * method or use the {@code close()} method on the write lock.
      *
      * @param session the session to save
      * @param writeLock the write lock for the session
      *
      * @throws IOException
      */
-    void saveSession(Session session, UUID writeLock)
+    void saveSession(Session session, SessionWriteLock writeLock)
             throws IOException;
 
     /**
      * Save a session to the specified corpus and new
-     * sessionName.
+     * sessionName.  See {@link #saveSession(Session, SessionWriteLock)}
+     * for more information on how to use the write lock.
      *
      * @param corpus the corpus name
      * @param sessionName the name of the session
@@ -165,11 +198,13 @@ public interface MutableProject {
      *
      * @throws IOException
      */
-    void saveSession(String corpus, String sessionName, Session session, UUID writeLock)
+    void saveSession(String corpus, String sessionName, Session session, SessionWriteLock writeLock)
             throws IOException;
 
     /**
      * Save a session writing the file using the given writer.
+     * See {@link #saveSession(Session, SessionWriteLock)} for more
+     * information on how to use the write lock.
      *
      * @param corpus the corpus name
      * @param sessionName the name of the session
@@ -179,24 +214,30 @@ public interface MutableProject {
      *
      * @throws IOException
      */
-    void saveSession(String corpus, String sessionName, Session session, SessionWriter writer, UUID writeLock)
+    void saveSession(String corpus, String sessionName, Session session, SessionWriter writer, SessionWriteLock writeLock)
             throws IOException;
 
     /**
      * Remove a session from the project.  The writeLock
      * for the session is also released.
+     *
+     * See {@link #removeSession(Session, SessionWriteLock)} for more
+     * information on how to use the write lock.
      *
      * @param session the session to remove
      * @param writeLock the write lock for the session
      *
      * @throws IOException
      */
-    void removeSession(Session session, UUID writeLock)
+    void removeSession(Session session, SessionWriteLock writeLock)
             throws IOException;
 
     /**
      * Remove a session from the project.  The writeLock
      * for the session is also released.
+     *
+     * See {@link #removeSession(Session, SessionWriteLock)} for more
+     * information on how to use the write lock.
      *
      * @parma corpus
      * @param session the session to remove
@@ -204,6 +245,6 @@ public interface MutableProject {
      *
      * @throws IOException
      */
-    void removeSession(String corpus, String session, UUID writeLock)
+    void removeSession(String corpus, String session, SessionWriteLock writeLock)
             throws IOException;
 }

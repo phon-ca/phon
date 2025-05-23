@@ -306,13 +306,13 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     }
 
     @Override
-    public UUID getSessionWriteLock(Session session)
+    public SessionWriteLock getSessionWriteLock(Session session)
             throws IOException {
         return getSessionWriteLock(session.getCorpus(), session.getName());
     }
 
     @Override
-    public UUID getSessionWriteLock(String corpus, String session)
+    public SessionWriteLock getSessionWriteLock(String corpus, String session)
             throws IOException {
         final String key = sessionProjectPath(corpus, session);
         UUID currentLock = sessionLocks.get(key);
@@ -328,24 +328,31 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         final ProjectEvent pe = ProjectEvent.newSessionChangedEvent(corpus, session);
         fireProjectWriteLocksChanged(pe);
 
-        return lock;
+        return new SessionWriteLock(this, corpus, session, lock);
     }
 
     @Override
-    public void releaseSessionWriteLock(Session session, UUID writeLock)
+    public void releaseSessionWriteLock(Session session, SessionWriteLock writeLock)
             throws IOException {
         releaseSessionWriteLock(session.getCorpus(), session.getName(), writeLock);
     }
 
     @Override
     public void releaseSessionWriteLock(String corpus, String session,
-                                        UUID writeLock) throws IOException {
+                                        SessionWriteLock writeLock) throws IOException {
         final String sessionLoc = sessionProjectPath(corpus, session);
-        checkSessionWriteLock(corpus, session, writeLock);
-        sessionLocks.remove(sessionLoc);
+        try {
+            checkSessionWriteLock(corpus, session, writeLock);
+            sessionLocks.remove(sessionLoc);
 
-        final ProjectEvent pe = ProjectEvent.newSessionChangedEvent(corpus, session);
-        fireProjectWriteLocksChanged(pe);
+            final ProjectEvent pe = ProjectEvent.newSessionChangedEvent(corpus, session);
+            fireProjectWriteLocksChanged(pe);
+        } catch (IOException ex) {
+            // if the session is not locked, ignore
+            if(!ex.getLocalizedMessage().contains("not locked")) {
+                throw ex;
+            }
+        }
     }
 
     @Override
@@ -360,13 +367,13 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     }
 
     @Override
-    public void saveSession(Session session, UUID writeLock) throws IOException {
+    public void saveSession(Session session, SessionWriteLock writeLock) throws IOException {
         saveSession(session.getCorpus(), session.getName(), session, writeLock);
     }
 
     @Override
     public void saveSession(String corpus, String sessionName, Session session,
-                            UUID writeLock) throws IOException {
+                            SessionWriteLock writeLock) throws IOException {
         final SessionOutputFactory outputFactory = new SessionOutputFactory();
 
         // get default writer
@@ -390,7 +397,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
 
     @Override
     public void saveSession(String corpus, String sessionName, Session session, SessionWriter writer,
-                            UUID writeLock) throws IOException {
+                            SessionWriteLock writeLock) throws IOException {
         checkSessionWriteLock(corpus, sessionName, writeLock);
 
         File sessionFile = getSessionFile(corpus, sessionName);
@@ -444,7 +451,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
     }
 
     @Override
-    public void removeSession(Session session, UUID writeLock) throws IOException {
+    public void removeSession(Session session, SessionWriteLock writeLock) throws IOException {
         removeSession(session.getCorpus(), session.getName(), writeLock);
     }
 
@@ -453,20 +460,20 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
      *
      * @throws IOException if the write lock is not valid
      */
-    protected void checkSessionWriteLock(String corpus, String session, UUID writeLock)
+    protected void checkSessionWriteLock(String corpus, String session, SessionWriteLock writeLock)
             throws IOException {
         final String sessionLoc = sessionProjectPath(corpus, session);
         final UUID uuid = sessionLocks.get(sessionLoc);
         if (uuid == null) {
             throw new IOException("Session '" + sessionLoc + "' is not locked.");
         }
-        if (!uuid.equals(writeLock)) {
+        if (!uuid.equals(writeLock.getWriteLockId())) {
             throw new IOException("Given writeLock for '" + sessionLoc + "' does not match project lock.");
         }
     }
 
     @Override
-    public void removeSession(String corpus, String session, UUID writeLock)
+    public void removeSession(String corpus, String session, SessionWriteLock writeLock)
             throws IOException {
         checkSessionWriteLock(corpus, session, writeLock);
 
@@ -949,9 +956,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
             s = factory.createSession(corpus, session);
         }
 
-        final UUID writeLock = getSessionWriteLock(s);
-        saveSession(s, writeLock);
-        releaseSessionWriteLock(s, writeLock);
+        try(SessionWriteLock writeLock = getSessionWriteLock(s)) {
+            saveSession(s, writeLock);
+            releaseSessionWriteLock(s, writeLock);
+        } catch (Exception e) {
+            throw new IOException("Unable to save session " + s.getName() + " to disk.", e);
+        }
 
         return s;
     }
@@ -1269,14 +1279,13 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         @Override
         public void remove() {
             if (this.lastSession != null) {
-                try {
-                    final UUID writeLock = getSessionWriteLock(corpus, this.lastSession);
+                try(var writeLock = getSessionWriteLock(corpus, this.lastSession)) {
                     try {
                         removeSession(corpus, this.lastSession, writeLock);
                     } finally {
                         releaseSessionWriteLock(corpus, this.lastSession, writeLock);
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 this.lastSession = null;

@@ -265,7 +265,7 @@ public class ProjectTreeWindow extends CommonModuleFrame implements ClipboardOwn
         final EntryPointArgs epArgs = new EntryPointArgs();
         epArgs.put(EntryPointArgs.PROJECT_OBJECT, getProject());
         epArgs.put(EntryPointArgs.SESSION_NAME, sessionPath.getFileName().toString());
-        epArgs.put(EntryPointArgs.CORPUS_NAME, sessionPath.getParent().toString());
+        epArgs.put(EntryPointArgs.CORPUS_NAME, sessionPath.getParent() == null ? "." : sessionPath.getParent().toString());
         try {
             PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
         } catch (PluginException e) {

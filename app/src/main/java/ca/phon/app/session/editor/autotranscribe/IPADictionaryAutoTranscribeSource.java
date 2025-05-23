@@ -29,7 +29,11 @@ public class IPADictionaryAutoTranscribeSource implements AutoTranscribeSource {
     }
 
     public String[] lookup(String text) {
-        return ipaDictionary.lookup(text);
+        if(ipaDictionary == null) {
+            return new String[0];
+        } else {
+            return ipaDictionary.lookup(text);
+        }
     }
 
 }
