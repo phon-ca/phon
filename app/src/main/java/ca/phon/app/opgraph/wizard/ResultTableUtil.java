@@ -5,6 +5,7 @@ import ca.phon.app.actions.PhonURISchemeHandler;
 import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.TableDataSource;
@@ -98,7 +99,9 @@ public class ResultTableUtil {
             }
         }
 
-        final PhonURI phonURI = new PhonURI(project.getLocation(), sp.getFolder(), sp.getSessionFile(), recordNum, tiers, ranges);
+        final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+        if(projectPaths == null) return;
+        final PhonURI phonURI = new PhonURI(projectPaths.getLocation(), sp.getFolder(), sp.getSessionFile(), recordNum, tiers, ranges);
         final PhonURISchemeHandler schemeHandler = new PhonURISchemeHandler();
         try {
             schemeHandler.openURI(phonURI.toURI());

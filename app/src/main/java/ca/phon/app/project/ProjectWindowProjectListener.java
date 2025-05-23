@@ -57,33 +57,35 @@ public class ProjectWindowProjectListener implements ProjectListener {
 	}
 
 	private void handleProjectNameChange() {
-		File projectFolder = new File(getProject().getLocation());
-		String projectName = getProject().getName();
+		if(getProject() instanceof LocalProject localProject) {
+			File projectFolder = new File(localProject.getLocation());
+			String projectName = getProject().getName();
 
-		if(!projectName.equals(projectFolder.getName())) {
-			// ask user to rename project folder
-			int response = getProjectWindow().showMessageDialog("Rename project folder",
-					"Rename project folder as '" + projectName + "'?",
-					MessageDialogProperties.yesNoOptions);
-			if(response == 0) {
-				try {
-					File newFolder = new File(projectFolder.getParentFile(), projectName);
-					FileUtils.rename(projectFolder, newFolder);
+			if (!projectName.equals(projectFolder.getName())) {
+				// ask user to rename project folder
+				int response = getProjectWindow().showMessageDialog("Rename project folder",
+						"Rename project folder as '" + projectName + "'?",
+						MessageDialogProperties.yesNoOptions);
+				if (response == 0) {
+					try {
+						File newFolder = new File(projectFolder.getParentFile(), projectName);
+						FileUtils.rename(projectFolder, newFolder);
 
-					ChangeProjectLocation changeProjectLocation = getProject().getExtension(ChangeProjectLocation.class);
-					if(changeProjectLocation != null) {
-						changeProjectLocation.setProjectLocation(newFolder.getAbsolutePath());
+						ChangeProjectLocation changeProjectLocation = getProject().getExtension(ChangeProjectLocation.class);
+						if (changeProjectLocation != null) {
+							changeProjectLocation.setProjectLocation(newFolder.getAbsolutePath());
+						}
+
+						RecentProjects recentProjects = new RecentProjects();
+						recentProjects.addToHistory(newFolder);
+
+						getProjectWindow().updateLists();
+					} catch (IOException e) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.severe(e);
+						getProjectWindow().showMessageDialog("Unable to rename project", e.getLocalizedMessage(),
+								MessageDialogProperties.okOptions);
 					}
-
-					RecentProjects recentProjects = new RecentProjects();
-					recentProjects.addToHistory(newFolder);
-
-					getProjectWindow().updateLists();
-				} catch (IOException e) {
-					Toolkit.getDefaultToolkit().beep();
-					LogUtil.severe(e);
-					getProjectWindow().showMessageDialog("Unable to rename project", e.getLocalizedMessage(),
-							MessageDialogProperties.okOptions);
 				}
 			}
 		}

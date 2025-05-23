@@ -16,6 +16,7 @@
 package ca.phon.app.project.git;
 
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.dircache.DirCache;
@@ -59,7 +60,11 @@ public class ProjectGitController {
 	 * @return folder for git repository
 	 */
 	public File getRepositoryFolder() {
-		return new File(getProject().getLocation(), GIT_FOLDER);
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			throw new IllegalStateException("ProjectPaths extension not available");
+		}
+		return new File(projectPaths.getLocation(), GIT_FOLDER);
 	}
 	
 	/**
@@ -79,16 +84,24 @@ public class ProjectGitController {
 	 * @throws IllegalStateException 
 	 */
 	public Git init() throws IOException, IllegalStateException, GitAPIException {
-		git = Git.init().setDirectory(new File(getProject().getLocation())).call();
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			throw new IllegalStateException("ProjectPaths extension not available");
+		}
+		git = Git.init().setDirectory(new File(projectPaths.getLocation())).call();
 		return git;
 	}
 	
 	public void setupDefaultGitIgnore() throws IOException {
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			throw new IllegalStateException("ProjectPaths extension not available");
+		}
 		final StringBuilder sb = new StringBuilder();
 		sb.append("__autosave").append("\n");
 		sb.append("__res/media").append("\n");
 		sb.append("backups.zip").append("\n");
-		final File gitIgnore = new File(getProject().getLocation(), ".gitignore");
+		final File gitIgnore = new File(projectPaths.getLocation(), ".gitignore");
 		
 		// don't overwrite an existing file
 		if(!gitIgnore.exists()) {

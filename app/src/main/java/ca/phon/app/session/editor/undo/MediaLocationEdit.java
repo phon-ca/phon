@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.*;
 import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 import ca.phon.util.PrefHelper;
 import org.apache.commons.io.FilenameUtils;
@@ -57,10 +58,11 @@ public class MediaLocationEdit extends SessionUndoableEdit {
 		if(mediaFile.isAbsolute()) {
 			// check media include paths
 			final String resolvedPath = MediaLocator.getRelativeMediaFilePath(project, mediaFile.getAbsolutePath());
-			if(resolvedPath.equals(mediaFile.getAbsolutePath())) {
+			final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+			if(resolvedPath.equals(mediaFile.getAbsolutePath()) && projectPaths != null) {
 				// attempt to resolve relative to session file location in project
-				final String projectLocation = project.getLocation();
-				final String corpusPath = project.getCorpusPath(getSession().getCorpus());
+				final String projectLocation = projectPaths.getLocation();
+				final String corpusPath = projectPaths.getCorpusPath(getSession().getCorpus());
 				if(mediaLocation.startsWith(projectLocation)) {
 					// relative path to corpusPath parent
 					final File corpusFolder = new File(corpusPath);

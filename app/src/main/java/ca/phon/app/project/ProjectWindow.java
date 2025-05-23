@@ -567,26 +567,29 @@ public class ProjectWindow extends CommonModuleFrame {
 		++gbc.gridx;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
-		projectFolderLabel = new JLabel(getProject().getLocation());
-		projectFolderLabel.setForeground(Color.blue);
-		projectFolderLabel.setToolTipText("Click to show project folder");
-		projectFolderLabel.addMouseListener(new MouseAdapter() {
+		projectFolderLabel = new JLabel();
+		final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
+			projectFolderLabel.setText(projectPaths.getLocation());
+			projectFolderLabel.setForeground(Color.blue);
+			projectFolderLabel.setToolTipText("Click to show project folder");
+			projectFolderLabel.addMouseListener(new MouseAdapter() {
 
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().open(new File(getProject().getLocation()));
-					} catch (IOException e) {
-						LogUtil.warning(e);
-						Toolkit.getDefaultToolkit().beep();
+				@Override
+				public void mouseClicked(MouseEvent me) {
+					if (Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().open(new File(projectPaths.getLocation()));
+						} catch (IOException e) {
+							LogUtil.warning(e);
+							Toolkit.getDefaultToolkit().beep();
+						}
 					}
 				}
-			}
 
-		});
-
-		projectFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			});
+			projectFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
 		projectInfoPanel.add(projectFolderLabel, gbc);
 		
 		++gbc.gridy;
@@ -687,9 +690,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		if (projectMediaFolders == null) return;
 		for (String folder : projectMediaFolders.getProjectMediaFolders()) {
 			File projectMediaFolder = new File(folder);
-			if (!projectMediaFolder.isAbsolute()) {
-//				folder = getProject().getLocation() + File.separator + folder;
-				projectMediaFolder = new File(getProject().getLocation(), folder);
+			final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+			if (!projectMediaFolder.isAbsolute() && projectPaths != null) {
+				projectMediaFolder = new File(projectPaths.getLocation(), folder);
 			}
 
 			final JMenu folderMenu = builder.addMenu(".", folder);
@@ -813,7 +816,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		this.setTitle("Phon : " + getProject().getName() + " : Project Manager");
 		if(header != null)
 			header.setHeaderText(getProject().getName());
-		projectFolderLabel.setText(getProject().getLocation());
+		final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+		if(projectPaths != null)
+			projectFolderLabel.setText(projectPaths.getLocation());
 		updateProjectMediaLabel();
 	}
 
@@ -844,27 +849,6 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 	}
 
-	private String makeRelativetoProject(String filename) {
-		File file = new File(filename);
-		String retVal = filename;
-		if(file.isAbsolute()) {
-			File projectFolder = new File(getProject().getLocation());
-			Path projectPath = projectFolder.toPath();
-			Path path = file.toPath();
-			if(projectPath.getRoot().equals(path.getRoot())) {				
-				path = projectPath.relativize(path);
-			} else {
-				try {
-					path = path.toRealPath();
-				} catch (IOException e) {
-					LogUtil.warning(e);
-				}
-			}
-			retVal = path.toString();
-		}
-		return retVal;
-	}
-	
 	public void onOpenSelectedSession(PhonActionEvent<Void> pae) {
 		final PhonWorker worker = PhonWorker.createWorker();
 		busyLabel.setBusy(true);
@@ -1389,7 +1373,8 @@ public class ProjectWindow extends CommonModuleFrame {
 			if(".".equals(corpus)) {
 				comp.setText("<html><i>default</i></html>");
 			}
-			final String corpusPath = getProject().getCorpusPath(corpus);
+			final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+			final String corpusPath = projectPaths != null ? projectPaths.getCorpusPath(corpus) : corpus;
 
 			ImageIcon icon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.MEDIUM, comp.getForeground());
 
@@ -1429,14 +1414,18 @@ public class ProjectWindow extends CommonModuleFrame {
 				final String corpus = getCorpusList().getSelectedValue();
 				final String session = comp.getText();
 
-				final String projectLocation = getProject().getLocation();
-				final String sessionLocation = getProject().getSessionPath(corpus, session);
+				String sessionRelPath = corpus + File.separator + session;
+				final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+				if(projectPaths != null) {
+					final String projectLocation = projectPaths.getLocation();
+					final String sessionLocation = projectPaths.getSessionPath(corpus, session);
 
-				// get relative path for session
-				final Path projectPath = FileSystems.getDefault().getPath(projectLocation);
-				final Path sessionPath = FileSystems.getDefault().getPath(sessionLocation);
-				final Path relPath = projectPath.relativize(sessionPath);
-				final String sessionRelPath = relPath.toString();
+					// get relative path for session
+					final Path projectPath = FileSystems.getDefault().getPath(projectLocation);
+					final Path sessionPath = FileSystems.getDefault().getPath(sessionLocation);
+					final Path relPath = projectPath.relativize(sessionPath);
+					sessionRelPath = relPath.toString();
+				}
 
 				ImageIcon icon =
 						IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "draft", IconSize.MEDIUM, comp.getForeground());

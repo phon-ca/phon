@@ -22,6 +22,7 @@ import ca.phon.app.session.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -89,7 +90,12 @@ public class SessionCheckWizard extends NodeWizard {
 	@Override
 	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
 		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
-		final File projectLocationFile = new File(getExtension(Project.class).getLocation());
+		final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			LogUtil.warning("No project paths for session editor: " + getProject().getName());
+			return retVal;
+		}
+		final File projectLocationFile = new File(projectPaths.getLocation());
 		final URI projectLocationURI = projectLocationFile.toURI();
 		retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
 		return retVal;

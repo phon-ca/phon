@@ -17,6 +17,7 @@
 package ca.phon.query.db.xml;
 
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.query.QueryType;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;
@@ -53,17 +54,20 @@ public class XMLResultSetManager implements ResultSetManager {
 
 	/**
 	 * Get the path for storing queries.
-	 * @param project
-	 * @return
+	 * @param project the project
+	 * @return the path to the queries folder for the project or the current working folder
 	 */
 	static File getQueriesPath(Project project) {
-		final File retVal = new File(project.getLocation(), DEFAULT_QUERY_FOLDER);
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		final String location = projectPaths != null
+				? projectPaths.getLocation()
+				: ".";
+		final File retVal = new File(location, DEFAULT_QUERY_FOLDER);
 		return retVal;
 	}
 
 	static File getQueryPath(Project project, Query query) {
 		final File queriesPath = getQueriesPath(project);
-
 		final File retVal = new File(queriesPath, query.getUUID().toString());
 		return retVal;
 	}

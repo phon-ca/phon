@@ -16,7 +16,9 @@
 package ca.phon.app.autosave;
 
 import ca.phon.extensions.*;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 
 @Extension(Project.class)
 public class AutosavesProvider implements ExtensionProvider {
@@ -24,8 +26,12 @@ public class AutosavesProvider implements ExtensionProvider {
 	@Override
 	public void installExtension(IExtendable obj) {
 		final Project project = Project.class.cast(obj);
-		final Autosaves autosaves = new Autosaves(project);
-		project.putExtension(Autosaves.class, autosaves);
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		final MutableProject mutableProject = MutableProject.class.cast(project);
+		if(projectPaths != null && mutableProject != null) {
+			final Autosaves autosaves = new Autosaves(project);
+			project.putExtension(Autosaves.class, autosaves);
+		}
 	}
 
 }

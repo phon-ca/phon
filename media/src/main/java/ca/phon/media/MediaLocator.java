@@ -17,6 +17,7 @@ package ca.phon.media;
 
 import ca.phon.project.Project;
 import ca.phon.project.ProjectMediaFolders;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.Queue;
@@ -83,18 +84,21 @@ public class MediaLocator {
 		List<String> retVal = new ArrayList<String>();
 
 		if(project != null) {
-			// add session folder
-			if(sessionFolder != null) {
-				retVal.add(project.getCorpusPath(sessionFolder));
-			}
+			final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+			if(projectPaths != null) {
+				// add session folder
+				if(sessionFolder != null) {
+					retVal.add(projectPaths.getCorpusPath(sessionFolder));
+				}
 
-			final ProjectMediaFolders projectMediaFolders = project.getExtension(ProjectMediaFolders.class);
-			if(projectMediaFolders != null) {
-				for(String folder:projectMediaFolders.getProjectMediaFolders()) {
-					final File projectMediaFolder = new File(folder);
-					if(!projectMediaFolder.isAbsolute())
-						folder = project.getLocation() + File.separator + folder;
-					retVal.add(folder);
+				final ProjectMediaFolders projectMediaFolders = project.getExtension(ProjectMediaFolders.class);
+				if(projectMediaFolders != null) {
+					for(String folder:projectMediaFolders.getProjectMediaFolders()) {
+						final File projectMediaFolder = new File(folder);
+						if(!projectMediaFolder.isAbsolute())
+							folder = projectPaths.getLocation() + File.separator + folder;
+						retVal.add(folder);
+					}
 				}
 			}
 		}
@@ -259,8 +263,8 @@ public class MediaLocator {
 	 * Check to see if the provided absolute path is inside on of the
 	 * media include paths.
 	 *
-	 * @param project
-	 * @param poth
+	 * @param project the project to check
+	 * @param path the absolute path to check
 	 *
 	 * @return the relative path to one of the media include paths or the
 	 *  absolute path if it is not in a media include path

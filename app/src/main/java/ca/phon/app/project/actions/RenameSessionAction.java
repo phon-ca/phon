@@ -18,8 +18,10 @@ package ca.phon.app.project.actions;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.LocalProject;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
@@ -57,36 +59,45 @@ public class RenameSessionAction extends ProjectWindowAction {
 	 * @param session
 	 * @param backupFolderName should be a relative path to the project location
 	 *
+	 * @return the backup file path or null if the backup could not be created
+	 *
 	 * @throws IOException
 	 *
 	 */
-	private void createUpgradeBackup(Project project, Session session, String backupFolderName) throws IOException {
-		final File sessionFile = new File(project.getSessionPath(session));
-		if(!sessionFile.exists()) {
-			throw new IOException("Session file does not exist");
-		}
+	private String createUpgradeBackup(Project project, Session session, String backupFolderName) throws IOException {
+		if(project instanceof LocalProject localProject) {
+			final File sessionFile = new File(localProject.getSessionPath(session));
+			if(!sessionFile.exists()) {
+				throw new IOException("Session file does not exist");
+			}
 
-		final File backupsFolder = new File(project.getLocation(), backupFolderName);
-		if(!backupsFolder.exists()) {
-			backupsFolder.mkdirs();
-		}
+			final File backupsFolder = new File(localProject.getLocation(), backupFolderName);
+			if(!backupsFolder.exists()) {
+				backupsFolder.mkdirs();
+			}
 
-		// copy file to backup folder, using relative path from project location
-		// as the inner corpus path
-		final String corpusPath = session.getCorpus();
-		final String backupPath = backupFolderName + File.separator + corpusPath;
-		final File backupFolder = new File(project.getLocation(), backupPath);
-		if(!backupFolder.exists()) {
-			backupFolder.mkdirs();
-		}
+			// copy file to backup folder, using relative path from project location
+			// as the inner corpus path
+			final String corpusPath = session.getCorpus();
+			final String backupPath = backupFolderName + File.separator + corpusPath;
+			final File backupFolder = new File(localProject.getLocation(), backupPath);
+			if(!backupFolder.exists()) {
+				backupFolder.mkdirs();
+			}
 
-		final File backupFile = new File(backupFolder, sessionFile.getName());
-		if(backupFile.exists()) {
-			backupFile.delete();
-		}
+			final File backupFile = new File(backupFolder, sessionFile.getName());
+			if(backupFile.exists()) {
+				backupFile.delete();
+			}
 
-		// copy file to backup folder
-		FileUtils.copyFile(sessionFile, backupFile);
+			// copy file to backup folder
+			FileUtils.copyFile(sessionFile, backupFile);
+
+			return backupFile.getAbsolutePath();
+		} else {
+			LogUtil.severe(new IOException("Project is not a local project"));
+			return null;
+		}
 	}
 
 	@Override
@@ -154,7 +165,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 					final SessionOutputFactory sessionOutputFactory = new SessionOutputFactory();
 					writer = sessionOutputFactory.createWriter(originalSessionIO);
 
-					if(writer == null) {
+					if(writer == null && project instanceof LocalProject localProject) {
 						writer = sessionOutputFactory.createWriter();
 						final SessionIO currentFormat = writer.getClass().getAnnotation(SessionIO.class);
 						final MessageDialogProperties props = new MessageDialogProperties();
@@ -169,13 +180,14 @@ public class RenameSessionAction extends ProjectWindowAction {
 						props.setHeader("Upgrade transcript for " + formatName + "?");
 
 						final String backupFolderName = "__v" + originalFormat.getSessionIO().version().replaceAll("\\.", "_") + "-backups__";
-						props.setMessage("A backup file will be created at: " + project.getLocation() + File.separator + backupFolderName +
+						props.setMessage("A backup file will be created at: " + localProject.getLocation() + File.separator + backupFolderName +
 								". After upgrading, the current transcript will not open in previous versions of Phon.");
 						props.setOptions(MessageDialogProperties.okCancelOptions);
 
 						final int retVal = NativeDialogs.showMessageDialog(props);
 						if(retVal == 0) {
-							createUpgradeBackup(project, session, backupFolderName);
+							final String backupFile = createUpgradeBackup(project, session, backupFolderName);
+							LogUtil.info("Created backup file: " + backupFile);
 						} else {
 							return;
 						}

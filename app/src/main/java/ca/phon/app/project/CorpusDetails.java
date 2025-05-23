@@ -19,6 +19,7 @@ import ca.hedlund.desktopicons.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OSInfo;
@@ -65,23 +66,26 @@ public class CorpusDetails extends JPanel {
 
 		locationLabel = new JLabel();
 		locationLabel.setForeground(new Color(0, 90, 140));
-		locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		locationLabel.addMouseListener(new MouseAdapter() {
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
+			locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			locationLabel.addMouseListener(new MouseAdapter() {
 
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(corpus != null && Desktop.isDesktopSupported()) {
-					final String corpusPath = project.getCorpusPath(corpus);
-					try {
-						Desktop.getDesktop().open(new File(corpusPath));
-					} catch (IOException e) {
-						LogUtil.severe(e);
-						Toolkit.getDefaultToolkit().beep();
+				@Override
+				public void mouseClicked(MouseEvent me) {
+					if (corpus != null && Desktop.isDesktopSupported()) {
+						final String corpusPath = projectPaths.getCorpusPath(corpus);
+						try {
+							Desktop.getDesktop().open(new File(corpusPath));
+						} catch (IOException e) {
+							LogUtil.severe(e);
+							Toolkit.getDefaultToolkit().beep();
+						}
 					}
 				}
-			}
 
-		});
+			});
+		}
 
 		numSessionsLabel = new JLabel();
 
@@ -182,14 +186,17 @@ public class CorpusDetails extends JPanel {
 			}
 			numSessionsLabel.setText(numSessions + "");
 
-			final String corpusAbsolutePath = project.getCorpusPath(corpus);
-			final Path corpusPath = FileSystems.getDefault().getPath(corpusAbsolutePath);
-			final Path projectPath = FileSystems.getDefault().getPath(project.getLocation());
-			final Path relativePath  = projectPath.relativize(corpusPath);
-			locationLabel.setText(relativePath.toString());
-			locationLabel.setForeground(Color.blue);
-			locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			locationLabel.setToolTipText(corpusAbsolutePath);
+			final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+			if(projectPaths != null) {
+				final String corpusAbsolutePath = projectPaths.getCorpusPath(corpus);
+				final Path corpusPath = FileSystems.getDefault().getPath(corpusAbsolutePath);
+				final Path projectPath = FileSystems.getDefault().getPath(projectPaths.getLocation());
+				final Path relativePath = projectPath.relativize(corpusPath);
+				locationLabel.setText(relativePath.toString());
+				locationLabel.setForeground(Color.blue);
+				locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				locationLabel.setToolTipText(corpusAbsolutePath);
+			}
 
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));
 			corpusDescriptionArea.setEnabled(true);

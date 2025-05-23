@@ -20,6 +20,7 @@ import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.opgraph.*;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.*;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
@@ -168,9 +169,12 @@ public class AnalysisWizard extends NodeWizard {
 	@Override
 	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
 		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
-		final File projectLocationFile = new File(project.getLocation());
-		final URI projectLocationURI = projectLocationFile.toURI();
-		retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
+		final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
+			final File projectLocationFile = new File(projectPaths.getLocation());
+			final URI projectLocationURI = projectLocationFile.toURI();
+			retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
+		}
 		return retVal;
 	}
 

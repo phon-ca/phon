@@ -22,6 +22,7 @@ import ca.phon.app.project.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
 import ca.phon.session.io.*;
@@ -69,10 +70,16 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
 				SessionEditor editor = sessionEditorWindow.getSessionEditor();
-				
+
+				final ProjectPaths projectPaths = editor.getProject().getExtension(ProjectPaths.class);
+				if(projectPaths == null) {
+					LogUtil.warning("No project paths for session editor: " + editor.getProject().getName());
+					continue;
+				}
+
 				Project project = editor.getProject();
 				Session session = editor.getSession();
-				String sessionPath = project.getSessionPath(session);
+				String sessionPath = projectPaths.getSessionPath(session);
 				File sessionFile = new File(sessionPath);
 				
 				if(sessionFile.equals(file)) {
@@ -137,9 +144,10 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 		
 		// see if project is already open
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			Project windowProj = cmf.getExtension(Project.class);
+			final Project windowProj = cmf.getExtension(Project.class);
+			final ProjectPaths projectPaths = windowProj.getExtension(ProjectPaths.class);
 			if(windowProj != null) {
-				File windowProjFolder = new File(windowProj.getLocation());
+				File windowProjFolder = new File(projectPaths.getLocation());
 				if(windowProjFolder.equals(projectFolder)) {
 					return windowProj;
 				}

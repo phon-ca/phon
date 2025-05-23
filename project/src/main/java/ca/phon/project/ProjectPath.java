@@ -87,15 +87,19 @@ public class ProjectPath {
 	 * @return
 	 */
 	public String getAbsolutePath() {
-		if(project != null) {
+		if(project == null) {
+			return "";
+		}
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
 			if(corpus != null) {
 				if(session != null) {
-					return project.getSessionPath(corpus, session);
+					return projectPaths.getSessionPath(corpus, session);
 				} else {
-					return project.getCorpusPath(corpus);
+					return projectPaths.getCorpusPath(corpus);
 				}
 			} else {
-				return project.getLocation();
+				return projectPaths.getLocation();
 			}
 		} else {
 			return "";

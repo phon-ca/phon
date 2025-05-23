@@ -30,6 +30,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.media.VolumeModel;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.project.SessionDetails;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -849,8 +850,12 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				}
 				props.setHeader("Upgrade transcript for " + formatName + "?");
 
+				final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+				if(projectPaths == null) {
+					throw new IOException("Unable to save session, no filesystem information found");
+				}
 				final String backupFolderName = "__v" + origFormat.getSessionIO().version().replaceAll("\\.", "_") + "-backups__";
-				props.setMessage("A backup file will be created at: " + project.getLocation() + File.separator + backupFolderName +
+				props.setMessage("A backup file will be created at: " + projectPaths.getLocation() + File.separator + backupFolderName +
 						". After upgrading, the current transcript will not open in previous versions of Phon.");
 				props.setOptions(MessageDialogProperties.okCancelOptions);
 				props.setListener((e) -> {
@@ -886,12 +891,16 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	 *
 	 */
 	private void createUpgradeBackup(Project project, Session session, String backupFolderName) throws IOException {
-		final File sessionFile = new File(project.getSessionPath(session));
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			throw new IOException("Unable to save session, no filesystem information found");
+		}
+		final File sessionFile = new File(projectPaths.getSessionPath(session));
 		if(!sessionFile.exists()) {
 			throw new IOException("Session file does not exist");
 		}
 
-		final File backupsFolder = new File(project.getLocation(), backupFolderName);
+		final File backupsFolder = new File(projectPaths.getLocation(), backupFolderName);
 		if(!backupsFolder.exists()) {
 			backupsFolder.mkdirs();
 		}
@@ -900,7 +909,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		// as the inner corpus path
 		final String corpusPath = session.getCorpus();
 		final String backupPath = backupFolderName + File.separator + corpusPath;
-		final File backupFolder = new File(project.getLocation(), backupPath);
+		final File backupFolder = new File(projectPaths.getLocation(), backupPath);
 		if(!backupFolder.exists()) {
 			backupFolder.mkdirs();
 		}

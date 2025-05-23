@@ -9,6 +9,7 @@ import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectEvent;
 import ca.phon.project.ProjectListener;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownIcon;
@@ -98,13 +99,16 @@ public class ProjectTreeWindow extends CommonModuleFrame implements ClipboardOwn
             } else {
                 final DefaultMutableTreeNode node = (DefaultMutableTreeNode)selectedNode;
                 final Object userObject = node.getUserObject();
-                final Path projectPath = Path.of(project.getLocation());
-                if(userObject instanceof Path path) {
-                    final Path fullPath = projectPath.resolve(path);
-                    if(Files.isDirectory(fullPath)) {
-                        previewPanel.add(createFolderInfoPanel(path), BorderLayout.CENTER);
-                    } else {
-                        previewPanel.add(createSessionInfoPanel(path), BorderLayout.CENTER);
+                final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+                if(projectPaths != null) {
+                    final Path projectPath = Path.of(projectPaths.getLocation());
+                    if (userObject instanceof Path path) {
+                        final Path fullPath = projectPath.resolve(path);
+                        if (Files.isDirectory(fullPath)) {
+                            previewPanel.add(createFolderInfoPanel(path), BorderLayout.CENTER);
+                        } else {
+                            previewPanel.add(createSessionInfoPanel(path), BorderLayout.CENTER);
+                        }
                     }
                 }
             }

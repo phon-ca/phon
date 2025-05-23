@@ -184,8 +184,11 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 		final Component comp = support.getComponent();
 		final Project project = getWindow().getProject();
 		
-		// TODO import file as project path if possible
-		
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			LogUtil.warning("Project does not support file import");
+			return false;
+		}
 		if(file.isDirectory()) {
 			// copy folder if dropped on corpus list
 			if(comp == getWindow().getCorpusList()) {
@@ -194,7 +197,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 				while(project.hasCorpus(corpusName)) {
 					corpusName = file.getName() + " (" + (++idx) + ")";
 				}
-				final File destFile = new File(project.getCorpusPath(corpusName));
+				final File destFile = new File(projectPaths.getCorpusPath(corpusName));
 				FileUtils.copyDirectory(file, destFile);
 				window.refreshProject();
 				return true;
@@ -213,7 +216,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 					while(project.hasSession(corpus, sessionName)) {
 						sessionName = fileName + " (" + (++idx) + ")";
 					}
-					final File destFile = new File(project.getSessionPath(corpus, sessionName));
+					final File destFile = new File(projectPaths.getSessionPath(corpus, sessionName));
 					FileUtils.copyFile(file, destFile);
 					window.refreshProject();
 					return true;

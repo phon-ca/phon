@@ -59,8 +59,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		final Project project = epArgs.getProject();
 		final Session session = epArgs.getSession();
 		if(project != null) {
-			moveOldPropertiesFile(project);
-
 			final boolean openWithSession =
 					epArgs.containsKey(OPEN_WITH_SESSION) ? (Boolean)epArgs.get(OPEN_WITH_SESSION) :
 					session != null;
@@ -90,13 +88,20 @@ public class OpenProjectEP implements IPluginEntryPoint {
     	props.setRunAsync(false);
     	props.setOptions(MessageDialogProperties.okOptions);
     	props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-    	
+
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			props.setMessage("Project does not have a project paths extension");
+			NativeDialogs.showMessageDialog(props);
+			return false;
+		}
+
     	try{
-			File myFile = new File(project.getLocation());
+			File myFile = new File(projectPaths.getLocation());
 			
 			// file does not exist, return
 			if(!myFile.exists()) {
-				props.setMessage("Could not find a project at '" + project.getLocation() + "'");
+				props.setMessage("Could not find a project at '" + projectPaths.getLocation() + "'");
 				NativeDialogs.showMessageDialog(props);
 				return false;
 			}
@@ -110,7 +115,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 					if(!(cmf instanceof ProjectWindow)) continue;
 				}
 				final Project pfe = cmf.getExtension(Project.class);
-				if(pfe != null && pfe.getLocation().equals(project.getLocation())) {
+				if(pfe == null) {
+					continue;
+				}
+//				final ProjectPaths windowProjectPaths = pfe.getExtension(ProjectPaths.class);
+				if(pfe.getUUID().equals(project.getUUID())) {
 					if(requestFocus) {
 						cmf.toFront();
 						cmf.requestFocus();
@@ -148,7 +157,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				return true;
 			}
 
-			final CommonModuleFrame pwindow = isUseNewUI ? new ProjectTreeWindow(project) : new ProjectWindow(project, project.getLocation());
+			final CommonModuleFrame pwindow = isUseNewUI ? new ProjectTreeWindow(project) : new ProjectWindow(project, projectPaths.getLocation());
     		pwindow.pack();
 			if(isUseNewUI) {
 				//pwindow.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -177,19 +186,6 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		}
 		
 		return false;
-    }
-
-    private void moveOldPropertiesFile(Project project) {
-		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
-		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
-		if(oldPropsFile.exists() && !newPropsFile.exists()) {
-			LogUtil.info("Moving oldLoc .properties file to new project.properties");
-			try {
-				Files.move(oldPropsFile.toPath(), newPropsFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
-			} catch (IOException e) {
-				LogUtil.warning(e);
-			}
-		}
     }
 
 	@Override

@@ -17,6 +17,7 @@ package ca.phon.app.autosave;
 
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 
 import java.io.*;
@@ -55,7 +56,8 @@ public class Autosaves {
 	 * @return autosave path
 	 */
 	public String getAutosavePath(String corpus, String session) {
-		final File projectFolder = new File(getProject().getLocation());
+		final ProjectPaths projectPaths = getProject().getExtension(ProjectPaths.class);
+		final File projectFolder = new File(projectPaths.getLocation());
 		final File corpusFolder = ".".equals(corpus) ? projectFolder : new File(projectFolder, corpus);
 		final File autosaveFile = new File(corpusFolder, AutosaveManager.AUTOSAVE_PREFIX + session + ".xml");
 		return autosaveFile.getAbsolutePath();

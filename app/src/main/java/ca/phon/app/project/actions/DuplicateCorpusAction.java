@@ -17,8 +17,10 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.project.LocalProject;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.session.Session;
 import ca.phon.util.CollatorFactory;
 import org.apache.commons.io.FileUtils;
 
@@ -72,16 +74,46 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 			while(project.hasCorpus(corpusName)) {
 				corpusName = corpus + " (" + (++idx) + ")";
 			}
-			final File oldCorpusFile = new File(project.getCorpusPath(corpus));
-			final File dupCorpusFile = new File(project.getCorpusPath(corpusName));
-			try {
-				FileUtils.copyDirectory(oldCorpusFile, dupCorpusFile);
-				dupCorpusNames.add(corpusName);
-				corpusDescs.add(project.getCorpusDescription(corpus));
-			} catch (IOException e) {
-				LogUtil.warning(e);
-				Toolkit.getDefaultToolkit().beep();
-				showMessage("Duplicate Corpus", e.getLocalizedMessage());
+			if(project instanceof LocalProject localProject) {
+				final File oldCorpusFile = new File(localProject.getCorpusPath(corpus));
+				final File dupCorpusFile = new File(localProject.getCorpusPath(corpusName));
+				try {
+					FileUtils.copyDirectory(oldCorpusFile, dupCorpusFile);
+					dupCorpusNames.add(corpusName);
+					corpusDescs.add(project.getCorpusDescription(corpus));
+				} catch (IOException e) {
+					LogUtil.warning(e);
+					Toolkit.getDefaultToolkit().beep();
+					showMessage("Duplicate Corpus", e.getLocalizedMessage());
+				}
+			} else {
+				final MutableProject  mutableProject = project.getExtension(MutableProject.class);
+				if(mutableProject != null) {
+					final String corpusDescription = project.getCorpusDescription(corpus);
+					try {
+						mutableProject.addCorpus(corpusName, corpusDescription);
+						final Iterator<String> sessionItr = project.getSessionIterator(corpus);
+						while(sessionItr.hasNext()) {
+							final String sessionName = sessionItr.next();
+							final Session session = project.openSession(corpus, sessionName);
+							session.setCorpus(corpusName);
+
+							final var writeLock = mutableProject.getSessionWriteLock(session);
+							try {
+								mutableProject.saveSession(session, writeLock);
+							} finally {
+								mutableProject.releaseSessionWriteLock(session, writeLock);
+							}
+						}
+					} catch (IOException e) {
+						LogUtil.warning(e);
+						Toolkit.getDefaultToolkit().beep();
+						showMessage("Duplicate Corpus", e.getLocalizedMessage());
+					}
+				} else {
+					Toolkit.getDefaultToolkit().beep();
+					showMessage("Duplicate Corpus", "Cannot duplicate corpus in this project type.");
+				}
 			}
 		}
 		if(corpora.size() > 0) {

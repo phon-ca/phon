@@ -20,6 +20,7 @@ import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.opgraph.*;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.query.db.*;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
@@ -123,8 +124,9 @@ public class ReportWizard extends NodeWizard {
 	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
 		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
 		final Project project = (Project)getProcessor().getContext().get("_project");
-		if(project != null) {
-			final File projectLocationFile = new File(project.getLocation());
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(project != null && projectPaths != null) {
+			final File projectLocationFile = new File(projectPaths.getLocation());
 			final URI projectLocationURI = projectLocationFile.toURI();
 			retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
 		}

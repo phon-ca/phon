@@ -142,7 +142,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 				boolean openedInProject = false;
 				if(isUseNewUI) {
 					for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-						if(cmf instanceof UnifiedProjectWindow unifiedProjectWindow && unifiedProjectWindow.getProject().getLocation().equalsIgnoreCase(project.getLocation())) {
+						if(cmf instanceof UnifiedProjectWindow unifiedProjectWindow
+								&& unifiedProjectWindow.getProject().getUUID().equals(project.getUUID())) {
 							unifiedProjectWindow.openSession(sessionRef.get().getSessionPath());
 							openedInProject = true;
 						}
@@ -190,7 +191,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
 				final SessionEditor editor = sessionEditorWindow.getSessionEditor();
-				if(editor.getProject().getLocation().equals(project.getLocation()) &&
+				if(editor.getProject().getUUID().equals(project.getUUID()) &&
 						(editor.getSession().getCorpus().equals(session.getCorpus()) &&
 								editor.getSession().getName().equals(session.getName()))) {
 					editor.requestFocus();

@@ -17,6 +17,7 @@ package ca.phon.app.welcome;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.project.ProjectResources;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
@@ -53,18 +54,20 @@ public class ProjectArchiveTask extends PhonTask {
 	private List<File> buildFileList() {
 		List<File> retVal = new ArrayList<File>();
 
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null)
+			return retVal;
+
 		// TODO add .phonproj files from root folder
-
-
 		final Iterator<String> corpusIterator = project.getCorpusIterator();
 		while(corpusIterator.hasNext()) {
 			String corpus = corpusIterator.next();
-			File corpusDir = new File(project.getCorpusPath(corpus));
+			File corpusDir = new File(projectPaths.getCorpusPath(corpus));
 			if(corpusDir.exists()) {
 				final Iterator<String> sessionIterator = project.getSessionIterator(corpus);
 				while(sessionIterator.hasNext()) {
 					String session = sessionIterator.next();
-					File sessionFile = new File(project.getSessionPath(corpus, session));
+					File sessionFile = new File(projectPaths.getSessionPath(corpus, session));
 					if(sessionFile.exists()) {
 						retVal.add(sessionFile);
 					}
@@ -117,6 +120,13 @@ public class ProjectArchiveTask extends PhonTask {
 	@Override
 	public void performTask() {
 		super.setStatus(TaskStatus.RUNNING);
+
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			super.setStatus(TaskStatus.ERROR);
+			super.err = new IOException("Project paths not found");
+			return;
+		}
 		
 		super.setProperty(STATUS_PROP, "Writing to file " + destFile.getAbsolutePath());
 		if(destFile.exists()) {
@@ -135,7 +145,7 @@ public class ProjectArchiveTask extends PhonTask {
 			int rlen = 0;
 			
 			// create a zip entry for each project file
-			File projectRoot = new File(project.getLocation());
+			File projectRoot = new File(projectPaths.getLocation());
 			
 			super.setProperty(STATUS_PROP, "Building file list");
 			List<File> projectFiles = buildFileList();

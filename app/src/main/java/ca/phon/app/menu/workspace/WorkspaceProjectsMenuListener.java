@@ -20,6 +20,7 @@ import ca.phon.app.project.OpenProjectEP;
 import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -33,13 +34,15 @@ public class WorkspaceProjectsMenuListener implements MenuListener {
 		
 		final Workspace workspace = Workspace.userWorkspace();
 		for(Project project:workspace.getProjects()) {
-			final String projectPath = project.getLocation();
+			final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+			if(projectPaths == null) continue;
+			final String projectPath = projectPaths.getLocation();
 			final EntryPointArgs args = new EntryPointArgs();
 			args.put(EntryPointArgs.PROJECT_LOCATION, projectPath);
 			
 			final PluginAction act = new PluginAction(OpenProjectEP.EP_NAME, true);
 			act.putValue(PluginAction.NAME, project.getName());
-			act.putValue(PluginAction.SHORT_DESCRIPTION, project.getLocation());
+			act.putValue(PluginAction.SHORT_DESCRIPTION, projectPaths.getLocation());
 			act.putArgs(args);
 			menu.add(act);
 		}

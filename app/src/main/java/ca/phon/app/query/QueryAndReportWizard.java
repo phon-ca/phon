@@ -33,6 +33,7 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.project.SessionDetails;
 import ca.phon.query.db.*;
 import ca.phon.query.history.QueryHistoryManager;
@@ -1050,7 +1051,11 @@ public class QueryAndReportWizard extends NodeWizard {
 	@Override
 	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
 		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
-		final File projectLocationFile = new File(project.getLocation());
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths == null) {
+			return retVal;
+		}
+		final File projectLocationFile = new File(projectPaths.getLocation());
 		final URI projectLocationURI = projectLocationFile.toURI();
 		retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
 		return retVal;

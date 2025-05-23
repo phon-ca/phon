@@ -17,7 +17,11 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.project.LocalProject;
+import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
+import ca.phon.session.Session;
 import ca.phon.util.CollatorFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -75,15 +79,35 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 			while(project.hasSession(corpus, dupSessionName)) {
 				dupSessionName = sessionBase + " (" + (++idx) + ")." + sessionExtension;
 			}
-			final File oldSessionFile = new File(project.getSessionPath(corpus, sessionName));
-			final File dupSessionFile = new File(project.getSessionPath(corpus, dupSessionName));
-			try {
-				FileUtils.copyFile(oldSessionFile, dupSessionFile);
-				dupSessionNames.add(dupSessionName);
-			} catch (IOException e) {
-				LogUtil.warning(e);
-				Toolkit.getDefaultToolkit().beep();
-				showMessage("Duplicate Session", e.getLocalizedMessage());
+			if(project instanceof LocalProject localProject) {
+				// quick duplication
+				final File oldSessionFile = new File(localProject.getSessionPath(corpus, sessionName));
+				final File dupSessionFile = new File(localProject.getSessionPath(corpus, dupSessionName));
+				try {
+					FileUtils.copyFile(oldSessionFile, dupSessionFile);
+					dupSessionNames.add(dupSessionName);
+				} catch (IOException e) {
+					LogUtil.warning(e);
+					Toolkit.getDefaultToolkit().beep();
+					showMessage("Duplicate Session", e.getLocalizedMessage());
+				}
+			} else {
+				// open and write session
+				final MutableProject mutableProject = project.getExtension(MutableProject.class);
+				if(mutableProject != null) {
+					try {
+						final Session origSession = project.openSession(corpus, sessionName);
+						origSession.setName(dupSessionName);
+
+						final UUID writeLock = mutableProject.getSessionWriteLock(origSession);
+						mutableProject.saveSession(origSession, writeLock);
+						mutableProject.releaseSessionWriteLock(origSession, writeLock);
+					} catch (IOException e) {
+						LogUtil.warning(e);
+						Toolkit.getDefaultToolkit().beep();
+						showMessage("Duplicate Session", e.getLocalizedMessage());
+					}
+				}
 			}
 		}
 		if(sessionNames.size() > 0) {

@@ -17,6 +17,7 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectPaths;
 import ca.phon.project.SessionDetails;
 import ca.phon.session.Session;
 import ca.phon.util.ByteSize;
@@ -115,56 +116,44 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	private void init() {
 		statusLabel = new JLabel();
 
-//		modifiedIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
-//				"save", IconSize.SMALL, Color.darkGray);
-//		unmodifiedIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
-//				"save", IconSize.SMALL, Color.lightGray);
-//		if(getEditor().isModified()) {
-//			statusLabel.setIcon(modifiedIcon);
-//		} else {
-//			statusLabel.setIcon(unmodifiedIcon);
-//		}
-//		statusLabel.setToolTipText(getStatusTooltipText());
-//		add(statusLabel, new JXStatusBar.Constraint(IconSize.SMALL.getWidth()));
+		final ProjectPaths projectPaths = getEditor().getProject().getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
+			sessionPathLabel = new JLabel(getEditor().getSession().getSessionPath().toString());
+			sessionPathLabel.setFont(sessionPathLabel.getFont().deriveFont(10.0f));
+			sessionPathLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			sessionPathLabel.setToolTipText(
+					projectPaths.getSessionPath(getEditor().getSession()) + " (click to show corpus folder)");
+			sessionPathLabel.addMouseListener(new MouseInputAdapter() {
 
-		sessionPathLabel = new JLabel(getEditor().getSession().getSessionPath().toString() );
-		sessionPathLabel.setFont(sessionPathLabel.getFont().deriveFont(10.0f));
-		sessionPathLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		sessionPathLabel.setToolTipText(
-				getEditor().getProject().getSessionPath(getEditor().getSession()) + " (click to show corpus folder)");
-		sessionPathLabel.addMouseListener(new MouseInputAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(arg0.getClickCount() == 1) {
-					final String sessionPath = getEditor().getProject().getSessionPath(getEditor().getSession());
-					if(Desktop.isDesktopSupported()) {
-						try {
-							Desktop.getDesktop().browseFileDirectory(new File(sessionPath));
-						} catch (Exception e) {
-							LogUtil.warning(e);
-							Toolkit.getDefaultToolkit().beep();
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if (arg0.getClickCount() == 1) {
+						final String sessionPath = projectPaths.getSessionPath(getEditor().getSession());
+						if (Desktop.isDesktopSupported()) {
+							try {
+								Desktop.getDesktop().browseFileDirectory(new File(sessionPath));
+							} catch (Exception e) {
+								LogUtil.warning(e);
+								Toolkit.getDefaultToolkit().beep();
+							}
 						}
 					}
 				}
-			}
 
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				sessionPathLabel.setForeground(Color.blue);
-			}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					sessionPathLabel.setForeground(Color.blue);
+				}
 
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				sessionPathLabel.setForeground(Color.gray);
-			}
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					sessionPathLabel.setForeground(Color.gray);
+				}
 
-		});
+			});
+		}
 		sessionPathLabel.setForeground(Color.gray);
 		add(sessionPathLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
-
-//		navigationPanel = new NavigationPanel(getEditor());
-//		add(navigationPanel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 
 		extrasPanel = new JPanel(new HorizontalLayout());
 		extrasPanel.setOpaque(false);
@@ -180,7 +169,6 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		add(progressLabel, new JXStatusBar.Constraint(200));
 		add(progressBar, new JXStatusBar.Constraint(120));
 		add(new JLabel(), new JXStatusBar.Constraint(5));
-
 	}
 
 	private String getStatusTooltipText() {

@@ -52,9 +52,12 @@ public final class ShadowProject extends LocalProject {
 		
 		final ShadowProject retVal = new ShadowProject(shadowFolder, project);
 		final Iterator<String> corpusItr = project.getCorpusIterator();
-		while(corpusItr.hasNext()) {
-			final String corpusName = corpusItr.next();
-			retVal.setCorpusPath(corpusName, project.getCorpusPath(corpusName));
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
+			while(corpusItr.hasNext()) {
+				final String corpusName = corpusItr.next();
+				retVal.setCorpusPath(corpusName, projectPaths.getCorpusPath(corpusName));
+			}
 		}
 
 		final ProjectResources projectResources = project.getExtension(ProjectResources.class);

@@ -19,6 +19,7 @@ import ca.phon.app.hooks.ActionHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
+import ca.phon.project.LocalProject;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.util.PrefHelper;
@@ -41,53 +42,57 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 
 	private void backupSession(Project project, Session session) 
 		throws IOException, ZipException {
-		// save current session to backup zip
-		final String zipFilePath = project.getLocation() + File.separator + "backups.zip";
-		// create backup zip if necessary
-		final ZipFile zipFile = new ZipFile(zipFilePath);
-		
-        final LocalDateTime dateTime = LocalDateTime.now();
-        final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
-        final String dateSuffix = formatterBuilder.appendPattern("yyyy").appendLiteral("-").appendPattern("MM").appendLiteral("-")
-            .appendPattern("dd").appendLiteral("_").appendPattern("HH").appendLiteral("-")
-            .appendPattern("mm").appendLiteral("-").appendPattern("ss").toFormatter().format(dateTime);
+		if(project instanceof LocalProject localProject) {
+			// save current session to backup zip
+			final String zipFilePath = localProject.getLocation() + File.separator + "backups.zip";
+			// create backup zip if necessary
+			final ZipFile zipFile = new ZipFile(zipFilePath);
 
-        final String zipName =
-        		session.getName() + "_" + dateSuffix + ".xml";
-      
-        final File sessionFile = new File(project.getLocation(), 
-        	session.getCorpus() + File.separator + session.getName() + ".xml");
-    
-        if(sessionFile.exists()) {
-        	if(!zipFile.getFile().exists()) {
-        		ZipParameters parameters = new ZipParameters();
-    			
-    			parameters.setCompressionMethod(CompressionMethod.DEFLATE);
-    			parameters.setCompressionLevel(CompressionLevel.NORMAL);
+			final LocalDateTime dateTime = LocalDateTime.now();
+			final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
+			final String dateSuffix = formatterBuilder.appendPattern("yyyy").appendLiteral("-").appendPattern("MM").appendLiteral("-")
+					.appendPattern("dd").appendLiteral("_").appendPattern("HH").appendLiteral("-")
+					.appendPattern("mm").appendLiteral("-").appendPattern("ss").toFormatter().format(dateTime);
 
-				// add .phonproj file (if exists)
-				final File projectFile = new File(project.getLocation(), project.getName() + ".phonproj");
-				if(projectFile.exists()) {
-					zipFile.addFile(projectFile, parameters);
+			final String zipName =
+					session.getName() + "_" + dateSuffix + ".xml";
+
+			final File sessionFile = new File(localProject.getLocation(),
+					session.getCorpus() + File.separator + session.getName() + ".xml");
+
+			if (sessionFile.exists()) {
+				if (!zipFile.getFile().exists()) {
+					ZipParameters parameters = new ZipParameters();
+
+					parameters.setCompressionMethod(CompressionMethod.DEFLATE);
+					parameters.setCompressionLevel(CompressionLevel.NORMAL);
+
+					// add .phonproj file (if exists)
+					final File projectFile = new File(localProject.getLocation(), project.getName() + ".phonproj");
+					if (projectFile.exists()) {
+						zipFile.addFile(projectFile, parameters);
+					}
 				}
-        	}
-        	// add to zip file
-    		ZipParameters parameters = new ZipParameters();
-			parameters.setCompressionMethod(CompressionMethod.DEFLATE);
-			parameters.setCompressionLevel(CompressionLevel.NORMAL);
-			parameters.setFileNameInZip(session.getCorpus() + File.separator + zipName);
-			
-			FileInputStream fin = null;
-			try {
-				fin = new FileInputStream(sessionFile);
-				zipFile.addStream(fin, parameters);
-			} catch (IOException e) {
-				LogUtil.warning(e);
-				
-			} finally {
-				if(fin != null) fin.close();
+				// add to zip file
+				ZipParameters parameters = new ZipParameters();
+				parameters.setCompressionMethod(CompressionMethod.DEFLATE);
+				parameters.setCompressionLevel(CompressionLevel.NORMAL);
+				parameters.setFileNameInZip(session.getCorpus() + File.separator + zipName);
+
+				FileInputStream fin = null;
+				try {
+					fin = new FileInputStream(sessionFile);
+					zipFile.addStream(fin, parameters);
+				} catch (IOException e) {
+					LogUtil.warning(e);
+
+				} finally {
+					if (fin != null) fin.close();
+				}
 			}
-        }
+		} else {
+			throw new IOException("Project is not a local project");
+		}
 	}
 	
 	@Override

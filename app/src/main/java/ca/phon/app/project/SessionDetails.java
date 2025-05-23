@@ -73,36 +73,39 @@ public class SessionDetails extends JPanel {
 		setLayout(new BorderLayout());
 		
 		fileLabel = new JLabel();
-		fileLabel.addMouseListener(new MouseInputAdapter() {
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(OSInfo.isMacOs()) {
-					final String sessionPath = project.getSessionPath(corpus, session);
-					final StringBuffer buffer = new StringBuffer();
-					buffer.append("tell application \"Finder\" to (activate) & ");
-					buffer.append("(reveal \"").append(sessionPath).append("\" as POSIX file) & return");
-					final String script = buffer.toString();		
-					
-					String[] args = { "osascript", "-e", script };
-					try {
-						Runtime.getRuntime().exec(args);
-					} catch (IOException e) {
-						LogUtil.severe(e);
-					}
-				} else if(Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().open(new File(project.getSessionPath(corpus, session)));
-					} catch (IOException e) {
-						Toolkit.getDefaultToolkit().beep();
-						LogUtil.severe(e);
+		final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+		if(projectPaths != null) {
+			fileLabel.addMouseListener(new MouseInputAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent me) {
+					if (OSInfo.isMacOs()) {
+						final String sessionPath = projectPaths.getSessionPath(corpus, session);
+						final StringBuffer buffer = new StringBuffer();
+						buffer.append("tell application \"Finder\" to (activate) & ");
+						buffer.append("(reveal \"").append(sessionPath).append("\" as POSIX file) & return");
+						final String script = buffer.toString();
+
+						String[] args = {"osascript", "-e", script};
+						try {
+							Runtime.getRuntime().exec(args);
+						} catch (IOException e) {
+							LogUtil.severe(e);
+						}
+					} else if (Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().open(new File(projectPaths.getSessionPath(corpus, session)));
+						} catch (IOException e) {
+							Toolkit.getDefaultToolkit().beep();
+							LogUtil.severe(e);
+						}
 					}
 				}
-			}
-			
-		});
-		fileLabel.setForeground(Color.blue);
-		fileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+			});
+			fileLabel.setForeground(Color.blue);
+			fileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
 		
 		modifiedLabel = new JLabel();
 		
@@ -181,25 +184,28 @@ public class SessionDetails extends JPanel {
 	
 	private void update() {
 		if(this.corpus != null && this.session != null && project.hasSession(corpus, session)) {
-			final String sessionPath = project.getSessionPath(corpus, session);
-			final File f = new File(sessionPath);
-			final String name = f.getName();
-			
-			fileLabel.setText(name);
-			fileLabel.setToolTipText(sessionPath);
+			final ProjectPaths projectPaths = project.getExtension(ProjectPaths.class);
+			if(projectPaths != null) {
+				final String sessionPath = projectPaths.getSessionPath(corpus, session);
+				final File f = new File(sessionPath);
+				final String name = f.getName();
 
-			final ca.phon.project.SessionDetails sessionDetails = project.getExtension(ca.phon.project.SessionDetails.class);
-			if(sessionDetails != null) {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");
-				final ZonedDateTime time = sessionDetails.getSessionModificationTime(corpus, session);
-				modifiedLabel.setText(formatter.format(time));
+				fileLabel.setText(name);
+				fileLabel.setToolTipText(sessionPath);
+
+				final ca.phon.project.SessionDetails sessionDetails = project.getExtension(ca.phon.project.SessionDetails.class);
+				if (sessionDetails != null) {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");
+					final ZonedDateTime time = sessionDetails.getSessionModificationTime(corpus, session);
+					modifiedLabel.setText(formatter.format(time));
+				}
+
+				final UpdateTask updateTask = new UpdateTask(corpus, session);
+				if (currentUpdateTask != null)
+					currentUpdateTask.shutdown();
+				currentUpdateTask = updateTask;
+				PhonWorker.getInstance().invokeLater(updateTask);
 			}
-
-			final UpdateTask updateTask = new UpdateTask(corpus, session);
-			if(currentUpdateTask != null)
-				currentUpdateTask.shutdown();
-			currentUpdateTask = updateTask;
-			PhonWorker.getInstance().invokeLater(updateTask);
 		} else {
 			fileLabel.setText("");
 			fileLabel.setToolTipText("");

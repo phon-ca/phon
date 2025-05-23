@@ -54,14 +54,6 @@ public interface Project extends IExtendable {
 	String getVersion();
 
 	/**
-	 * The location of the project.  Meaning is dependent on implementation.
-	 * For {@link LocalProject}s this is the path to the project on disk.
-	 *
-	 * @return the project location
-	 */
-	String getLocation();
-
-	/**
 	 * The name of the project.
 	 *
 	 * @return project name
@@ -123,21 +115,6 @@ public interface Project extends IExtendable {
 	boolean hasSession(String corpus, String session);
 
 	/**
-	 * Return the path to the given corpus.
-	 *
-	 * @param corpus
-	 */
-	String getCorpusPath(String corpus);
-
-	/**
-	 * Set path of corpus.
-	 *
-	 * @param corpus
-	 * @param path
-	 */
-	void setCorpusPath(String corpus, String path);
-
-	/**
 	 * Return a set of participants which are found in the
 	 * given collection of Sessions.  The participant objects
 	 * returned by this method will include the {@link ParticipantHistory}
@@ -180,24 +157,5 @@ public interface Project extends IExtendable {
 	 */
 	Session openSession(String corpus, String session, SessionReader reader)
 		throws IOException;
-
-	/**
-	 * Get path to the given session.
-	 *
-	 * @param session
-	 *
-	 * @return path to given session
-	 */
-	String getSessionPath(Session session);
-
-	/**
-	 * Get path to the given session.
-	 *
-	 * @param corpus
-	 * @param session
-	 *
-	 * @return path to given session
-	 */
-	String getSessionPath(String corpus, String session);
 
 }
