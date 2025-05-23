@@ -18,10 +18,7 @@ package ca.phon.app.project.actions;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.project.LocalProject;
-import ca.phon.project.MutableProject;
-import ca.phon.project.Project;
-import ca.phon.project.ProjectPaths;
+import ca.phon.project.*;
 import ca.phon.session.Session;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
@@ -150,10 +147,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 				showMessage("Rename Session", "Project does not support renaming sessions.");
 				return;
 			}
-			UUID writeLock = null;
-			try {
-				writeLock = mutableProject.getSessionWriteLock(corpusName, newSessionName);
-
+			try(var writeLock = mutableProject.getSessionWriteLock(corpusName, newSessionName)) {
 				// determine if the session requires conversion into Phon 4.x format
 				// if so, ask the user if they want to do that
 				final OriginalFormat originalFormat = session.getExtension(OriginalFormat.class);
@@ -203,31 +197,13 @@ public class RenameSessionAction extends ProjectWindowAction {
 			} catch (Exception e) {
 				LogUtil.warning(e);
 				showMessage("Rename Session", e.getLocalizedMessage());
-			} finally {
-				if(writeLock != null) {
-					try {
-						mutableProject.releaseSessionWriteLock(corpusName, newSessionName, writeLock);
-					} catch (IOException e) {
-						LogUtil.warning(e);
-					}
-					writeLock = null;
-				}
 			}
 			
-			try {
-				writeLock = mutableProject.getSessionWriteLock(corpusName, sessionName);
+			try(var writeLock = mutableProject.getSessionWriteLock(corpusName, sessionName)) {
 				mutableProject.removeSession(corpusName, sessionName, writeLock);
 			} catch (Exception e) {
 				LogUtil.warning(e);
 				showMessage("Rename Session", e.getLocalizedMessage());
-			} finally {
-				if(writeLock != null) {
-					try {
-						mutableProject.releaseSessionWriteLock(corpusName, sessionName, writeLock);
-					} catch (IOException e) {
-						LogUtil.warning(e);
-					}
-				}
 			}
 			
 			// select new session

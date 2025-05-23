@@ -271,11 +271,13 @@ public class DeriveSessionWizard extends WizardFrame {
 			out.flush();
 
 			// save
-			final UUID writeLock = mutableProject.getSessionWriteLock(mergedSession);
-			mutableProject.saveSession(mergedSession, writeLock);
-			mutableProject.releaseSessionWriteLock(mergedSession, writeLock);
+			try (var writeLock = mutableProject.getSessionWriteLock(mergedSession)) {
+				mutableProject.saveSession(mergedSession, writeLock);
+			} catch (Exception e) {
+				throw new IOException(e);
+            }
 
-			out.println("Finished. New session has " + mergedSession.getRecordCount() + " records.");
+            out.println("Finished. New session has " + mergedSession.getRecordCount() + " records.");
 			out.flush();
 		} catch (IOException e) {
 			out.println(e.getLocalizedMessage());

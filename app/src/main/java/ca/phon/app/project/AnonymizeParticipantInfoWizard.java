@@ -185,10 +185,10 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 						}
 					}
 
-					final UUID writeLock = mutableProject.getSessionWriteLock(session);
-					mutableProject.saveSession(session, writeLock);
-					mutableProject.releaseSessionWriteLock(session, writeLock);
-				} catch (IOException e) {
+					try(var writeLock = mutableProject.getSessionWriteLock(session)) {
+						mutableProject.saveSession(session, writeLock);
+					}
+				} catch (Exception e) {
 					LogUtil.warning(e);
 				}
 			}

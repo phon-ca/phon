@@ -943,10 +943,8 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			throw new IOException("Project is not mutable");
 		}
 
-		UUID writeLock = null;
-		try {
+		try(var writeLock = mutableProject.getSessionWriteLock(session)) {
 			LogUtil.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
-			writeLock = mutableProject.getSessionWriteLock(session);
 			mutableProject.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
 
 			final long byteSize = sessionDetails.getSessionByteSize(session);
@@ -971,7 +969,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 
 			// show a short message next to the save button to indicate save completed
 			return true;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setRunAsync(false);
 			props.setTitle("Save failed");
@@ -980,10 +978,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			props.setOptions(MessageDialogProperties.okOptions);
 			NativeDialogs.showMessageDialog(props);
 
-			throw e;
-		} finally {
-			if(writeLock != null)
-				mutableProject.releaseSessionWriteLock(session, writeLock);
+			throw new IOException(e);
 		}
 	}
 

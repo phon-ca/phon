@@ -225,27 +225,11 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				return;
 			}
 			// save xml to project
-			try {
-				final UUID writeLock = mutableProject.getSessionWriteLock(session);
-				
-				if(writeLock == null) {
-					out.println(
-							"Could not get write lock for: " + corpusName + "." + sessionName);
-					return;
-				}
-				
-				try {
-					mutableProject.saveSession(session, writeLock);
-				} catch (IOException e) {
-					out.println(e.getLocalizedMessage());
-				} finally {
-					mutableProject.releaseSessionWriteLock(session, writeLock);
-				}
-				
+			try(var writeLock = mutableProject.getSessionWriteLock(session)) {
+				mutableProject.saveSession(session, writeLock);
 				super.setStatus(TaskStatus.FINISHED);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				LogUtil.warning(e);
-				
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
 			}
@@ -314,25 +298,10 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				out.println("Project does not support saving.");
 				return;
 			}
-			try {
-				final UUID writeLock = mutableProject.getSessionWriteLock(session);
-				
-				if(writeLock == null) {
-					out.println(
-							"Could not get write lock for: " + corpusName + "." + sessionName);
-					return;
-				}
-				
-				try {
-					mutableProject.saveSession(session, writeLock);
-				} catch (IOException e) {
-					out.println(e.getLocalizedMessage());
-				} finally {
-					mutableProject.releaseSessionWriteLock(session, writeLock);
-				}
-				
+			try(var writeLock = mutableProject.getSessionWriteLock(session)) {
+				mutableProject.saveSession(session, writeLock);
 				super.setStatus(TaskStatus.FINISHED);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				LogUtil.warning(e);
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);

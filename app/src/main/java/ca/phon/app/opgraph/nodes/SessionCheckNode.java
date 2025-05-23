@@ -172,11 +172,9 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 			} else {
 				final MutableProject mutableProject = project.getExtension(MutableProject.class);
 				if(mutableProject != null) {
-					try {
-						UUID writeLock = mutableProject.getSessionWriteLock(session);
+					try(var writeLock = mutableProject.getSessionWriteLock(session)) {
 						mutableProject.saveSession(session, writeLock);
-						mutableProject.releaseSessionWriteLock(session, writeLock);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						LogUtil.severe(e);
 					}
 				}

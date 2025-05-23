@@ -95,9 +95,11 @@ public class Autosaves {
 		if(mutableProject == null) {
 			throw new IOException("Project does not support autosave");
 		}
-		final UUID writeLock = mutableProject.getSessionWriteLock(corpus, autosaveName);
-		mutableProject.saveSession(corpus, autosaveName, session, writeLock);
-		mutableProject.releaseSessionWriteLock(corpus, autosaveName, writeLock);
+		try (var writeLock = mutableProject.getSessionWriteLock(corpus, autosaveName)) {
+			mutableProject.saveSession(corpus, autosaveName, session, writeLock);
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
 	}
 	
 	public LocalDateTime getAutosaveDateTime(Session session) {

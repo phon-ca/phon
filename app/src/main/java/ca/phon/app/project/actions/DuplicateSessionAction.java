@@ -99,10 +99,10 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 						final Session origSession = project.openSession(corpus, sessionName);
 						origSession.setName(dupSessionName);
 
-						final UUID writeLock = mutableProject.getSessionWriteLock(origSession);
-						mutableProject.saveSession(origSession, writeLock);
-						mutableProject.releaseSessionWriteLock(origSession, writeLock);
-					} catch (IOException e) {
+						try (var writeLock = mutableProject.getSessionWriteLock(origSession)) {
+							mutableProject.saveSession(origSession, writeLock);
+						}
+					} catch (Exception e) {
 						LogUtil.warning(e);
 						Toolkit.getDefaultToolkit().beep();
 						showMessage("Duplicate Session", e.getLocalizedMessage());

@@ -99,14 +99,14 @@ public class NewSessionAction extends ProjectWindowAction {
 				if(sessionMedia != null) {
 					createdSession.setMediaLocation(sessionMedia);
 
-					UUID wl = mutableProject.getSessionWriteLock(createdSession);
-					mutableProject.saveSession(createdSession, wl);
-					mutableProject.releaseSessionWriteLock(createdSession, wl);
+					try (var wl = mutableProject.getSessionWriteLock(createdSession)) {
+						mutableProject.saveSession(createdSession, wl);
+					}
 				}
 			}
 
 			getWindow().refreshProject();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Toolkit.getDefaultToolkit().beep();
 			showMessage("New Session", e.getLocalizedMessage());
 			LogUtil.warning(e);

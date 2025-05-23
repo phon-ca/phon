@@ -69,11 +69,9 @@ public class DeleteSessionAction extends ProjectWindowAction {
 				return;
 			}
 			for(String sessionName:sessionNames) {
-				try {
-					UUID writeLock = mutableProject.getSessionWriteLock(corpus, sessionName);
+				try(var writeLock = mutableProject.getSessionWriteLock(corpus, sessionName)) {
 					mutableProject.removeSession(corpus, sessionName, writeLock);
-					mutableProject.releaseSessionWriteLock(corpus, sessionName, writeLock);
-				} catch (IOException e) {
+				} catch (Exception e) {
 					LogUtil.warning(e);
 					Toolkit.getDefaultToolkit().beep();
 					showMessage("Delete Session", e.getLocalizedMessage());
