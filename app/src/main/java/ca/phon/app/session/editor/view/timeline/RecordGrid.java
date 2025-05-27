@@ -172,7 +172,7 @@ public class RecordGrid extends TimeComponent {
 	}
 	
 	public void setCurrentRecord(Record r) {
-		int rIdx = session.getRecordPosition(r);
+		int rIdx = session.getRecordIndex(r);
 		if(rIdx < 0)
 			throw new IllegalArgumentException("Record not part of session");
 		setCurrentRecordIndex(rIdx);

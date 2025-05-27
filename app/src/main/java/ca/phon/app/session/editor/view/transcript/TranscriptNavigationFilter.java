@@ -4,9 +4,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.util.PrefHelper;
 
-import javax.swing.*;
 import javax.swing.text.*;
 
 /**
@@ -88,7 +86,7 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                 case TranscriptStyleConstants.ATTR_KEY_RECORD, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION -> {
                     Record record = TranscriptStyleConstants.getRecord(attrs);
                     if(record == null) return;
-                    int recordIndex = editor.getSession().getRecordPosition(record);
+                    int recordIndex = editor.getSession().getRecordIndex(record);
                     if(recordIndex < 0) return;
                     Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                     if (tier != null) {

@@ -72,7 +72,7 @@ public class MoveRecordEdit extends SessionUndoableEdit {
 	public void undo() throws CannotUndoException {
 		final Session session = getSession();
 		
-		session.setRecordPosition(record, oldPosition);
+		session.setRecordIndex(record, oldPosition);
 
 		final EditorEvent<EditorEventType.ElementMovedData> elementMovedEvt =
 				new EditorEvent<>(EditorEventType.ElementMoved, getSource(),
@@ -93,9 +93,9 @@ public class MoveRecordEdit extends SessionUndoableEdit {
 
 	@Override
 	public void doIt() {
-		oldPosition = getSession().getRecordPosition(record);
+		oldPosition = getSession().getRecordIndex(record);
 		oldElementIndex = getSession().getRecordElementIndex(record);
-		getSession().setRecordPosition(record, position);
+		getSession().setRecordIndex(record, position);
 		newElementIndex = getSession().getRecordElementIndex(record);
 
 		final EditorEvent<EditorEventType.ElementMovedData> elementMovedEvt =

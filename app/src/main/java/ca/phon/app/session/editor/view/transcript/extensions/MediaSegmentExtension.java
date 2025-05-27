@@ -139,7 +139,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         final var segmentEditor = getSegmentEditorPopup(segmentCalloutRequestInfo);
 
         try {
-            final int recordIndex = editor.getSession().getRecordPosition(segmentCalloutRequestInfo.record());
+            final int recordIndex = editor.getSession().getRecordIndex(segmentCalloutRequestInfo.record());
             if (recordIndex < 0) {
                 return;
             }

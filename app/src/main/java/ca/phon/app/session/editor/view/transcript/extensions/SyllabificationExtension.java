@@ -280,7 +280,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         final SyllabifyEdit edit = new SyllabifyEdit(editor.getSession(), editor.getEventManager(), ipaTier, syllabifier, editor.getDataModel().getTranscriber());
 
         // find component to use as source for edit
-        final int recordIndex = editor.getSession().getRecordPosition(resetData.getData().record());
+        final int recordIndex = editor.getSession().getRecordIndex(resetData.getData().record());
         final String tierName = getSyllabifierTierNameForIPATier(resetData.getData().ipaTier().getName());
         final TranscriptDocument.StartEnd syllabificationTierStartEnd =
                 editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, syllabifierTier.getName());
@@ -443,7 +443,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 final IPATranscript transcript = tier.isBlind()
                     ? editor.getTranscriptDocument().getTranscriber() == Transcriber.VALIDATOR ? (IPATranscript)tier.getValue() : (IPATranscript) tier.getBlindTranscription(editor.getTranscriptDocument().getTranscriber().getUsername())
                     : (IPATranscript)tier.getValue();
-                final TranscriptDocument.StartEnd range = doc.getTierStartEnd(editor.getSession().getRecordPosition(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
+                final TranscriptDocument.StartEnd range = doc.getTierStartEnd(editor.getSession().getRecordIndex(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
                 if(!range.valid()) return;
                 LogUtil.info("Updating syllabification for " + tier.getName());
                 final TranscriptElementLocation currentLocation = editor.getTranscriptEditorCaret().getCurrentLocation();
@@ -470,7 +470,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 editor.getTranscriptEditorCaret().unfreeze();
                 if (currentLocation.valid() && currentLocation.tier().equals(getSyllabifierTierNameForIPATier(tier.getName()))) {
                     // refocus the caret
-                    final TranscriptDocument.StartEnd contentStartEnd = doc.getTierContentStartEnd(editor.getSession().getRecordPosition(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
+                    final TranscriptDocument.StartEnd contentStartEnd = doc.getTierContentStartEnd(editor.getSession().getRecordIndex(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
                     final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(contentStartEnd.start()).getAttributes();
                     final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
                     if (componentFactory instanceof SyllabificationComponentFactory) {
@@ -613,7 +613,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                             final Record record = TranscriptStyleConstants.getRecord(prevAttrs);
                             if (record == null) break;
-                            int recordIndex = doc.getSession().getRecordPosition(record);
+                            int recordIndex = doc.getSession().getRecordIndex(record);
                             Tier<?> prevTier = TranscriptStyleConstants.getTier(prevAttrs);
                             if (prevTier == null || prevTier.getDeclaredType().equals(PhoneAlignment.class)) break;
                             if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
@@ -639,7 +639,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
             if (nextTier != null && nextAttrs.getAttribute("syllabification") != null) {
                 final Record nextRecord = TranscriptStyleConstants.getRecord(nextAttrs);
-                final int recordIndex = doc.getSession().getRecordPosition(nextRecord);
+                final int recordIndex = doc.getSession().getRecordIndex(nextRecord);
                 int tierEnd = doc.getTierEnd(recordIndex, nextTier.getName());
                 fb.setDot(dot, Position.Bias.Forward);
                 if (dot != tierEnd) {
@@ -716,7 +716,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
                     if (text == null || text.isEmpty()) return;
                     final Record record = TranscriptStyleConstants.getRecord(attrs);
-                    final int recordIndex = doc.getSession().getRecordPosition(record);
+                    final int recordIndex = doc.getSession().getRecordIndex(record);
                     if(recordIndex < 0) return;
                     final String textUpper = text.toUpperCase();
                     char c = textUpper.charAt(0);

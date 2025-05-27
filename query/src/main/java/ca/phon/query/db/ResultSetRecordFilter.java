@@ -44,7 +44,7 @@ public class ResultSetRecordFilter extends AbstractRecordFilter {
 
 	@Override
 	public boolean checkRecord(Record utt) {
-		int uttIdx = t.getRecordPosition(utt);
+		int uttIdx = t.getRecordIndex(utt);
 		return (uttIdx >= 0 && resultRecords.contains(uttIdx));
 	}
 }

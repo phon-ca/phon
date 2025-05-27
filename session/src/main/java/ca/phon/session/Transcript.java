@@ -433,7 +433,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
      * @param record
      * @return record index or -1 if not found
      */
-    public int getRecordPosition(Record record) {
+    public int getRecordIndex(Record record) {
         int rIdx = -1;
         for(int i = 0; i < getNumberOfElements(); i++) {
             if(getElementAt(i).isRecord()) {
@@ -454,7 +454,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
      * @param recordIndex
      * @throws ArrayIndexOutOfBoundsException
      */
-    public void setRecordPosition(Record record, int recordIndex) {
+    public void setRecordIndex(Record record, int recordIndex) {
         final int eleIdx = getRecordElementIndex(recordIndex);
         if(eleIdx >= 0) {
             addRecord(recordIndex, record);

@@ -186,7 +186,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void acceptAutoTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
-        final int recordIndex = editor.getSession().getRecordPosition(record);
+        final int recordIndex = editor.getSession().getRecordIndex(record);
         if(recordIndex < 0) return;
 
         final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
@@ -229,7 +229,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void acceptAutoTranscriptionToFirstSelection(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
-        final int recordIndex = editor.getSession().getRecordPosition(record);
+        final int recordIndex = editor.getSession().getRecordIndex(record);
         if(recordIndex < 0) return;
 
         final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
@@ -300,7 +300,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final Tier<?> tier = TranscriptStyleConstants.getTier(eleAttrs);
         final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
         if(record != null && tier != null) {
-            int recordIndex = editor.getSession().getRecordPosition(record);
+            int recordIndex = editor.getSession().getRecordIndex(record);
             if(tier.getDeclaredType().equals(IPATranscript.class)) {
                 final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
                 try {

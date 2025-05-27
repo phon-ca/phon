@@ -207,7 +207,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         Tier<?> tier = editorEvent.data().record().getPhoneAlignmentTier();
         if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 
-        final int recordIndex = editor.getSession().getTranscript().getRecordPosition(editorEvent.data().record());
+        final int recordIndex = editor.getSession().getTranscript().getRecordIndex(editorEvent.data().record());
         final TranscriptDocument.StartEnd alignmentTierContentRange = doc.getTierContentStartEnd(recordIndex, tier.getName());
         if(!alignmentTierContentRange.valid()) return;
 

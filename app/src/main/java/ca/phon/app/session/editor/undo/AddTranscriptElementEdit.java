@@ -51,7 +51,7 @@ public class AddTranscriptElementEdit extends SessionUndoableEdit {
         } else if(this.element.isRecord()) {
             final EditorEvent<EditorEventType.RecordAddedData> recordAddedEvt =
                     new EditorEvent<>(EditorEventType.RecordAdded, getSource(),
-                            new EditorEventType.RecordAddedData(this.element.asRecord(), this.elementIndex, getSession().getRecordPosition(this.element.asRecord())));
+                            new EditorEventType.RecordAddedData(this.element.asRecord(), this.elementIndex, getSession().getRecordIndex(this.element.asRecord())));
             getEditorEventManager().queueEvent(recordAddedEvt);
         }
     }
@@ -75,7 +75,7 @@ public class AddTranscriptElementEdit extends SessionUndoableEdit {
         } else if(this.element.isRecord()) {
             final EditorEvent<EditorEventType.RecordAddedData> recordAddedEvt =
                     new EditorEvent<>(EditorEventType.RecordAdded, getSource(),
-                            new EditorEventType.RecordAddedData(this.element.asRecord(), this.elementIndex, getSession().getRecordPosition(this.element.asRecord())));
+                            new EditorEventType.RecordAddedData(this.element.asRecord(), this.elementIndex, getSession().getRecordIndex(this.element.asRecord())));
             getEditorEventManager().queueEvent(recordAddedEvt);
         }
     }

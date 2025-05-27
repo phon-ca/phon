@@ -399,7 +399,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         if (firstInnerElem != null) {
             Record record = (Record) firstInnerElem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
             if (record != null) {
-                return getSession().getRecordPosition(record);
+                return getSession().getRecordIndex(record);
             }
         }
 
@@ -407,7 +407,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         for (int i = getCurrentElementIndex(); i < transcript.getNumberOfElements(); i++) {
             Transcript.Element transcriptElem = transcript.getElementAt(i);
             if (transcriptElem.isRecord()) {
-                return transcript.getRecordPosition(transcriptElem.asRecord());
+                return transcript.getRecordIndex(transcriptElem.asRecord());
             }
         }
 
@@ -737,7 +737,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         if (elementType == null) {
             return;
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-            final int recordIndex = getSession().getRecordPosition(TranscriptStyleConstants.getRecord(prevElementAttributes));
+            final int recordIndex = getSession().getRecordIndex(TranscriptStyleConstants.getRecord(prevElementAttributes));
             final Tier<?> tier = TranscriptStyleConstants.getTier(prevElementAttributes);
             final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(prevElementAttributes);
             if(componentFactory != null)
@@ -811,7 +811,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         if (elementType == null) {
             return;
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD)) {
-            final int recordIndex = getSession().getRecordPosition(TranscriptStyleConstants.getRecord(nextElementAttributes));
+            final int recordIndex = getSession().getRecordIndex(TranscriptStyleConstants.getRecord(nextElementAttributes));
             final Tier<?> tier = TranscriptStyleConstants.getTier(nextElementAttributes);
             final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(nextElementAttributes);
             if(componentFactory != null)
@@ -1031,7 +1031,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             final Record record = elem.asRecord();
             final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
             if(tier.getDeclaredType() == PhoneAlignment.class) return;
-            final int recordIndex = getSession().getRecordPosition(record);
+            final int recordIndex = getSession().getRecordIndex(record);
             final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
             if(!startEnd.valid()) return;
             try {
@@ -1098,7 +1098,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         switch (elementType) {
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                 Record record = TranscriptStyleConstants.getRecord(attrs);
-                int recordIndex = getSession().getRecordPosition(record);
+                int recordIndex = getSession().getRecordIndex(record);
                 Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                 if (tier != null && recordIndex >= 0) {
                     start = doc.getTierContentStart(recordIndex, tier.getName());
@@ -1142,7 +1142,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         switch (elementType) {
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                 Record record = TranscriptStyleConstants.getRecord(attrs);
-                int recordIndex = getSession().getRecordPosition(record);
+                int recordIndex = getSession().getRecordIndex(record);
                 Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                 if (tier != null && recordIndex >= 0) {
                     end = doc.getTierContentEnd(recordIndex, tier.getName());
@@ -1465,7 +1465,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         int end = -1;
 
         if (changedTier.isUnvalidated()) {
-            int recordIndex = doc.getSession().getRecordPosition(editorEvent.data().record());
+            int recordIndex = doc.getSession().getRecordIndex(editorEvent.data().record());
             if (recordIndex < 0) return;
             TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, changedTier.getName());
             start = se.start() + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
@@ -1878,7 +1878,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             }
 
             final Record record = TranscriptStyleConstants.getRecord(attrs);
-            final int recordIdx = record != null ? getSession().getRecordPosition(record) : -1;
+            final int recordIdx = record != null ? getSession().getRecordIndex(record) : -1;
             if (uv != null) {
                 TranscriptDocument.StartEnd startEnd = switch (elementType) {
                     case TranscriptStyleConstants.ELEMENT_TYPE_RECORD ->
@@ -2662,7 +2662,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 AttributeSet attrs = elem.getAttributes();
                 if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
                     Record record = TranscriptStyleConstants.getRecord(attrs);
-                    int recordIndex = getSession().getRecordPosition(record);
+                    int recordIndex = getSession().getRecordIndex(record);
                     if (recordIndex < 0) return;
                     Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                     final TranscriptDocument.StartEnd startEnd = doc.getTierContentStartEnd(recordIndex, tier.getName());
@@ -2791,7 +2791,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                                 case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
                                     Record record = TranscriptStyleConstants.getRecord(attrs);
                                     if (record == null) return;
-                                    final int recordIndex = getSession().getRecordPosition(record);
+                                    final int recordIndex = getSession().getRecordIndex(record);
                                     if (recordIndex == -1) return;
                                     Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                                     final TranscriptDocument.StartEnd startEnd = doc.getTierContentStartEnd(recordIndex, tier.getName());
@@ -2833,7 +2833,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                             case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
                                 Record record = TranscriptStyleConstants.getRecord(attrs);
                                 if (record == null) return;
-                                final int recordIndex = getSession().getRecordPosition(record);
+                                final int recordIndex = getSession().getRecordIndex(record);
                                 if (recordIndex == -1) return;
                                 Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                                 if (tier != null) {

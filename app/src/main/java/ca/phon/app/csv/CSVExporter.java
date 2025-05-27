@@ -226,7 +226,7 @@ public class CSVExporter {
     }
 
     private String getRecordNumber(Session session, Record record) {
-        return String.valueOf(session.getRecordPosition(record) + 1);
+        return String.valueOf(session.getRecordIndex(record) + 1);
     }
 
     private String getRecordLanguage(Record record) {

@@ -550,12 +550,12 @@ public final class Session extends ExtendableObject {
 		return getTranscript().getRecordCount();
 	}
 
-	public int getRecordPosition(Record record) {
-		return getTranscript().getRecordPosition(record);
+	public int getRecordIndex(Record record) {
+		return getTranscript().getRecordIndex(record);
 	}
 
-	public void setRecordPosition(Record record, int recordIndex) {
-		getTranscript().setRecordPosition(record, recordIndex);
+	public void setRecordIndex(Record record, int recordIndex) {
+		getTranscript().setRecordIndex(record, recordIndex);
 	}
 
 	// endregion Records (old api)

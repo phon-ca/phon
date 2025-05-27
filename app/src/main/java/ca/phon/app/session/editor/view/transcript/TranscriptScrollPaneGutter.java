@@ -1,15 +1,12 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcript.extensions.BlindTranscriptionExtension;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.Transcript;
-import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
@@ -23,7 +20,6 @@ import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
-import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -345,7 +341,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
                 if(record != null && tier != null) {
                     if(tier.getName().equals(firstTier)) {
-                        final int recordNumber = editor.getSession().getRecordPosition(record);
+                        final int recordNumber = editor.getSession().getRecordIndex(record);
                         final String recordNumberText = String.valueOf(recordNumber + 1);
 
                         final FontMetrics fontMetrics = g.getFontMetrics();

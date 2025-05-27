@@ -52,7 +52,7 @@ public class NewRecordAction extends SessionEditorAction {
 		final AddRecordEdit edit = new AddRecordEdit(getEditor());
 		getEditor().getUndoSupport().postEdit(edit);
 
-		int recordIndex = getEditor().getSession().getRecordPosition(edit.getRecord());
+		int recordIndex = getEditor().getSession().getRecordIndex(edit.getRecord());
 		getEditor().setCurrentRecordIndex(recordIndex);
 	}
 

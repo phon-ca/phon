@@ -1177,7 +1177,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         AttributeSet attributes = getCharacterElement(position).getAttributes();
         Record record = (Record) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
         if (record == null) return -1;
-        return session.getRecordPosition(record);
+        return session.getRecordIndex(record);
     }
 
     /**
@@ -1219,7 +1219,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                 Record record = TranscriptStyleConstants.getRecord(attrs);
                 if (record == null) return -1;
-                int recordIndex = session.getRecordPosition(record);
+                int recordIndex = session.getRecordIndex(record);
                 if(recordIndex == -1) return -1;
                 Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                 if (tier == null) return -1;
@@ -1278,7 +1278,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 if (record == null) {
                     return new TranscriptElementLocation(-1, null, -1);
                 }
-                int recordIndex = transcript.getRecordPosition(record);
+                int recordIndex = transcript.getRecordIndex(record);
 //                if (recordIndex == -1) {
 //                    return new TranscriptElementLocation(-1, null, -1);
 //                }
@@ -1332,7 +1332,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.transcriptElementIndex());
 
             if (transcriptElement.isRecord()) {
-                int recordIndex = transcript.getRecordPosition(transcriptElement.asRecord());
+                int recordIndex = transcript.getRecordIndex(transcriptElement.asRecord());
                 return doc.getTierContentStart(recordIndex, transcriptLocation.tier()) + transcriptLocation.charPosition();
             } else if (transcriptElement.isComment()) {
                 return doc.getCommentContentStart(transcriptElement.asComment()) + transcriptLocation.charPosition();
@@ -1516,7 +1516,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the speaker on the separator / record header
      */
     public void onChangeSpeaker(Record record) {
-        int recordIndex = session.getRecordPosition(record);
+        int recordIndex = session.getRecordIndex(record);
         final StartEnd orthoLblStartEnd = getTierLabelStartEnd(recordIndex, SystemTierType.Orthography.getName());
         if(!orthoLblStartEnd.valid()) return;
 
@@ -1549,7 +1549,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         if (tier.getDeclaredType().equals(PhoneAlignment.class)) return;
 
         try {
-            int recordIndex = session.getRecordPosition(record);
+            int recordIndex = session.getRecordIndex(record);
             final StartEnd tierRange = getTierContentStartEnd(recordIndex, tier.getName());
             if(tierRange.start() < 0) return;
             final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
@@ -1584,7 +1584,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             if (transcriptElementIndex == 0) {
                 var elementAfterComment = session.getTranscript().getElementAt(1);
                 if (elementAfterComment.isRecord()) {
-                    offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+                    offset = getRecordStart(session.getRecordIndex(elementAfterComment.asRecord()));
                 } else if (elementAfterComment.isComment()) {
                     offset = getCommentStart(elementAfterComment.asComment());
                 } else if (elementAfterComment.isGem()) {
@@ -1595,7 +1595,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             } else {
                 var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
                 if (elementBeforeComment.isRecord()) {
-                    offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+                    offset = getRecordEnd(session.getRecordIndex(elementBeforeComment.asRecord()));
                 } else if (elementBeforeComment.isComment()) {
                     offset = getCommentEnd(elementBeforeComment.asComment());
                 } else if (elementBeforeComment.isGem()) {
@@ -1626,7 +1626,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             if (transcriptElementIndex == 0) {
                 var elementAfterComment = session.getTranscript().getElementAt(1);
                 if (elementAfterComment.isRecord()) {
-                    offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+                    offset = getRecordStart(session.getRecordIndex(elementAfterComment.asRecord()));
                 } else if (elementAfterComment.isComment()) {
                     offset = getCommentStart(elementAfterComment.asComment());
                 } else if (elementAfterComment.isGem()) {
@@ -1637,7 +1637,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             } else {
                 var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
                 if (elementBeforeComment.isRecord()) {
-                    offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+                    offset = getRecordEnd(session.getRecordIndex(elementBeforeComment.asRecord()));
                 } else if (elementBeforeComment.isComment()) {
                     offset = getCommentEnd(elementBeforeComment.asComment());
                 } else if (elementBeforeComment.isGem()) {
@@ -1787,7 +1787,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             final Transcript.Element element = session.getTranscript().getElementAt(sessionEleIdx);
             if(!element.isRecord()) continue;
             final Record record = element.asRecord();
-            final int recordIndex = session.getRecordPosition(record);
+            final int recordIndex = session.getRecordIndex(record);
             final Tier<?> tier = tierSupplier.apply(record);
             if(tier == null) continue;
             final int recordParagraphIdx = findParagraphElementIndexForSessionElementIndex(sessionEleIdx);

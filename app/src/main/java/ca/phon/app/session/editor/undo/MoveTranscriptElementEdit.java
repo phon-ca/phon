@@ -39,7 +39,7 @@ public class MoveTranscriptElementEdit extends SessionUndoableEdit {
                             new EditorEventType.GemMovedData(this.element.asGem(), oldElementIndex, newElementIndex));
             getEditorEventManager().queueEvent(gemMovedEvt);
         } else if(this.element.isRecord()) {
-            final int recordIndex = getSession().getRecordPosition(this.element.asRecord());
+            final int recordIndex = getSession().getRecordIndex(this.element.asRecord());
             final EditorEvent<EditorEventType.RecordMovedData> recordMovedEvt =
                     new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
                             new EditorEventType.RecordMovedData(this.element.asRecord(), this.oldElementIndex, this.oldRecordIndex, this.newElementIndex, recordIndex));
@@ -58,7 +58,7 @@ public class MoveTranscriptElementEdit extends SessionUndoableEdit {
     public void doIt() {
         this.oldElementIndex = getSession().getTranscript().getElementIndex(this.element);
         if(this.element.isRecord())
-            oldRecordIndex = getSession().getTranscript().getRecordPosition(this.element.asRecord());
+            oldRecordIndex = getSession().getTranscript().getRecordIndex(this.element.asRecord());
         getSession().getTranscript().removeElement(this.oldElementIndex);
         int addIndex = newElementIndex > oldElementIndex ? newElementIndex - 1 : newElementIndex;
         getSession().getTranscript().addElement(addIndex, this.element);

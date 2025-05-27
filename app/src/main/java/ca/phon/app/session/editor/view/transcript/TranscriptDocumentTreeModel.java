@@ -1,7 +1,5 @@
 package ca.phon.app.session.editor.view.transcript;
 
-import ca.phon.session.Comment;
-import ca.phon.session.Gem;
 import ca.phon.session.Record;
 
 import javax.swing.text.AttributeSet;
@@ -42,7 +40,7 @@ public class TranscriptDocumentTreeModel extends DefaultTreeModel {
                 if (TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType) ||
                         TranscriptStyleConstants.ELEMENT_TYPE_BLIND_TRANSCRIPTION.equals(elementType)) {
                     final Record record = TranscriptStyleConstants.getRecord(paragraphAttrs);
-                    int recordIndex = document.getSession().getRecordPosition(record);
+                    int recordIndex = document.getSession().getRecordIndex(record);
                     if (recordIndex != currentRecordIndex) {
                         currentRecordIndex = recordIndex;
                         currentTranscriptEleNode = new DefaultMutableTreeNode("Record " + (recordIndex + 1));

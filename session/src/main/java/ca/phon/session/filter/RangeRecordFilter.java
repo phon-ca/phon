@@ -119,7 +119,7 @@ public class RangeRecordFilter extends AbstractRecordFilter {
 	
 	@Override
 	public boolean checkRecord(Record utt) {
-		int uttIdx = transcript.getRecordPosition(utt);
+		int uttIdx = transcript.getRecordIndex(utt);
 		
 		boolean retVal = false;
 		
