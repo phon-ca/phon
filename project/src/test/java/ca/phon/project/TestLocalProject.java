@@ -40,7 +40,7 @@ public class TestLocalProject {
 	@Test
 	public void testProjectInfo() throws IOException, ProjectConfigurationException {
 		final ProjectFactory projectFactory = new DefaultProjectFactory();
-		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
+		final Project project = projectFactory.openProject("src/test/resources/TestCorpus");
 		
 		Assert.assertNotNull(project);
 		Assert.assertEquals("TestCorpus", project.getName());
@@ -50,19 +50,19 @@ public class TestLocalProject {
 	@Test
 	public void testCorpusList() throws IOException, ProjectConfigurationException {
 		final ProjectFactory projectFactory = new DefaultProjectFactory();
-		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
+		final Project project = projectFactory.openProject("src/test/resources/TestCorpus");
 		
 		Assert.assertNotNull(project);
-		Assert.assertEquals(List.of("Anne").toString(), project.getCorpora().toString());
+		Assert.assertEquals(true, project.hasCorpus("Anne"));
 	}
 	
 	@Test
 	public void testSessionList() throws IOException, ProjectConfigurationException {
 		final ProjectFactory projectFactory = new DefaultProjectFactory();
-		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
+		final Project project = projectFactory.openProject("src/test/resources/TestCorpus");
 		
 		Assert.assertNotNull(project);
-		Assert.assertEquals(Collections.singleton("TestSession.xml").toString(), project.getCorpusSessions("Anne").toString());
+		Assert.assertEquals(true, project.hasSession("Anne", "TestSession.xml"));
 	}
 	
 }

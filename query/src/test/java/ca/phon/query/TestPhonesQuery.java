@@ -52,7 +52,7 @@ public class TestPhonesQuery extends TestQuery {
 
 		final ProjectFactory factory = new DefaultProjectFactory();
 		try {
-			final Project project = factory.openProject(new File(TEST_PROJECT));
+			final Project project = factory.openProject(TEST_PROJECT);
 			final Session session = project.openSession(TEST_CORPUS, TEST_SESSION);
 
 			retVal.add(basicTestParams(project, session));
