@@ -12,18 +12,26 @@ import java.io.IOException;
 public interface ProjectProperties {
 
     /**
-     * Get the project JSON object
+     * Get the project JSON object.
      *
-     * @return
+     * @return a copy of the project JSON object
      */
     public JSONObject getProjectJson();
 
     /**
-     * Save the project JSON object
+     * Atomically modify the project JSON object
      *
-     * @throws IOException on error.  If the project does not support
-     * mutable properties, an IOException will be thrown as well.
+     * @param modifier function that receives current JSON and returns modified JSON
+     * @throws IOException on error
      */
-    public void saveProjectJson() throws IOException;
+    public void modifyProjectJson(PropertyModifier modifier) throws IOException;
+
+    /**
+     * Functional interface for atomic property modifications
+     */
+    @FunctionalInterface
+    public interface PropertyModifier {
+        JSONObject modify(JSONObject currentJson);
+    }
 
 }

@@ -9,10 +9,9 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +50,11 @@ public final class LocalProjectProperties implements ProjectProperties {
      */
     private JSONObject projectJson;
 
+    /**
+     * Lock for project properties
+     */
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
     public LocalProjectProperties(LocalProject localProject) {
         this.localProject = localProject;
         loadProjectData();
@@ -62,7 +66,25 @@ public final class LocalProjectProperties implements ProjectProperties {
      * @return
      */
     public JSONObject getProjectJson() {
-        return projectJson;
+        lock.readLock().lock();
+        try {
+            return projectJson != null ? new JSONObject(projectJson.toString()) : new JSONObject();
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public void modifyProjectJson(PropertyModifier modifier) throws IOException {
+        lock.writeLock().lock();
+        try {
+            final JSONObject modifiedJson = modifier.modify(projectJson);
+            // Update version and save
+            this.projectJson = modifiedJson;
+            persistToStorage();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     /**
@@ -183,13 +205,21 @@ public final class LocalProjectProperties implements ProjectProperties {
         }
     }
 
-
-    public void saveProjectJson() throws IOException {
+    private void persistToStorage() throws IOException {
         final File projectJsonFile = new File(localProject.getLocation(), localProject.getName() + LocalProject.PROJECT_FILE_EXT);
         try (final FileOutputStream fout = new FileOutputStream(projectJsonFile)) {
             final byte[] jsonBytes = projectJson.toString(2).getBytes(StandardCharsets.UTF_8);
             fout.write(jsonBytes);
             fout.flush();
+        }
+    }
+
+    public void saveProjectJson() throws IOException {
+        lock.writeLock().lock();
+        try {
+            persistToStorage();
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
