@@ -170,6 +170,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     public TranscriptEditor(EditorDataModel dataModel, EditorSelectionModel selectionModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, UndoManager undoManager) {
         super();
 
+        registerStandardActions();
         caret = new TranscriptEditorCaret();
         super.setCaret(caret);
         this.dataModel = dataModel;
@@ -2436,6 +2437,33 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         }
     }
 
+    /***
+     * Fix to issue with standard actions not being registered
+     * when the editor is created a second time.
+     */
+    private void registerStandardActions() {
+        ActionMap actionMap = getActionMap();
+
+        // Create and register standard editing actions
+        Action cutAction = new DefaultEditorKit.CutAction();
+        cutAction.putValue(Action.NAME, "Cut");
+        actionMap.put(DefaultEditorKit.cutAction, cutAction);
+
+        Action copyAction = new DefaultEditorKit.CopyAction();
+        copyAction.putValue(Action.NAME, "Copy");
+        actionMap.put(DefaultEditorKit.copyAction, copyAction);
+
+        Action pasteAction = new DefaultEditorKit.PasteAction();
+        pasteAction.putValue(Action.NAME, "Paste");
+        actionMap.put(DefaultEditorKit.pasteAction, pasteAction);
+
+        // Set key bindings
+        InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.cutAction);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.copyAction);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.pasteAction);
+    }
+
     /**
      * Setup context menu items on provided menu builder
      *
@@ -2446,20 +2474,31 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         // add edit menu items
         final Action cutAct = getActionMap().get(DefaultEditorKit.cutAction);
-        cutAct.putValue(Action.NAME, "Cut");
-        cutAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menuBuilder.addItem(".", cutAct);
+        if(cutAct == null) {
+            LogUtil.warning("No cut action found in action map");
+        } else {
+            cutAct.putValue(Action.NAME, "Cut");
+            cutAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+            menuBuilder.addItem(".", cutAct);
+        }
 
         final Action copyAct = getActionMap().get(DefaultEditorKit.copyAction);
-        copyAct.putValue(Action.NAME, "Copy");
-        copyAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menuBuilder.addItem(".", copyAct);
+        if(copyAct == null) {
+            LogUtil.warning("No copy action found in action map");
+        } else {
+            copyAct.putValue(Action.NAME, "Copy");
+            copyAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+            menuBuilder.addItem(".", copyAct);
+        }
 
         final Action pasteAct = getActionMap().get(DefaultEditorKit.pasteAction);
-        pasteAct.putValue(Action.NAME, "Paste");
-        pasteAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menuBuilder.addItem(".", pasteAct);
-
+        if(pasteAct == null) {
+            LogUtil.warning("No paste action found in action map");
+        } else {
+            pasteAct.putValue(Action.NAME, "Paste");
+            pasteAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+            menuBuilder.addItem(".", pasteAct);
+        }
         menuBuilder.addSeparator(".", "edit");
 
         final Action selectTierAct = PhonUIAction.runnable(this::selectTier);
