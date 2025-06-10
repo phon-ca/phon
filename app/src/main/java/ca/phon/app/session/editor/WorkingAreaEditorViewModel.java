@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -118,6 +118,15 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			Collections.synchronizedMap(new TreeMap<EditorViewCategory, List<String>>());
 
 	/**
+	 * A map of view name to properties.  These properties are used to restore
+	 * the state of views as they are opened.  This map is created on read
+	 * and updated as the perspective is saved.  The map is required to retain
+	 * state for views which may not be open at the time the perspective is opened.
+	 */
+	private final Map<String, Properties> viewStateProperties =
+			Collections.synchronizedMap(new HashMap<String, Properties>());
+
+	/**
 	 * Weak reference to editor
 	 */
 	private final WeakReference<SessionEditor> editorRef;
@@ -126,7 +135,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	 * Editor view extension points
 	 */
 	private List<IPluginExtensionPoint<EditorView>> extPts;
-	
+
 	// flag for initial perspective loading
 	private volatile boolean perspectiveFinishedLoading = false;
 
@@ -161,11 +170,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		icons.setIconClient("locationmanager.normalize", IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "fullscreen_exit", IconSize.SMALL, Color.darkGray));
 
 		dockControl.addControlListener(new CControlListener() {
-			
+
 			@Override
 			public void removed(CControl arg0, CDockable arg1) {
 			}
-			
+
 			@Override
 			public void opened(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
@@ -176,7 +185,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					}
 				}
 			}
-			
+
 			@Override
 			public void closed(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
@@ -187,21 +196,21 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					}
 				}
 			}
-			
+
 			@Override
 			public void added(CControl arg0, CDockable arg1) {
-				
+
 			}
-			
+
 		});
-		
+
 		dockControl.addFocusListener(new CFocusListener() {
-			
+
 			@Override
 			public void focusLost(CDockable arg0) {
-				
+
 			}
-			
+
 			@Override
 			public void focusGained(CDockable arg0) {
 				EditorView focusedView = getFocusedView();
@@ -209,9 +218,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					focusedView.onFocused();
 				}
 			}
-			
+
 		});
-		
+
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
 			// fix accelerators for non-mac systems
@@ -411,7 +420,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		for(CDockable currentDockable:register.getDockables()) {
 			if(currentDockable.intern().getTitleText().equals(viewName)) {
 				retVal = currentDockable.isVisible();
-				
+
 				DockStation station = currentDockable.intern().getDockParent();
 				if(station instanceof StackDockStation) {
 					retVal = ((StackDockStation)station).isChildShowing(currentDockable.intern());
@@ -512,6 +521,12 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		if(dockable == null) {
 			final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
 			dockable = (EditorViewDockable) factory.createBackup(viewName);
+
+			// load cached state properties if available
+			final Properties viewProps = viewStateProperties.get(viewName);
+			if(viewProps != null) {
+				dockable.getView().loadStateProperties(viewProps);
+			}
 		}
 
 		if(dockable != null) {
@@ -625,6 +640,28 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 							window.setVisible(true);
 						}
 					}
+
+					// view states
+					final XElement viewsEle = xele.getElement("views");
+					if (viewsEle != null) {
+						for (int i = 0; i < viewsEle.getElementCount(); i++) {
+							final XElement viewEle = viewsEle.getElement(i);
+							final String viewName = viewEle.getAttribute("name").getString();
+							final EditorView view = registeredViews.get(viewName);
+							final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
+							if (viewProps != null) {
+								for (int j = 0; j < viewEle.getElementCount(); j++) {
+									final XElement propEle = viewEle.getElement(j);
+									final String propName = propEle.getAttribute("name").getString();
+									final String propValue = propEle.getAttribute("value").getString();
+									viewProps.setProperty(propName, propValue);
+								}
+							}
+							// if view is already registered, load state properties
+							if(view != null)
+								view.loadStateProperties(viewProps);
+						}
+					}
 				}
 			} catch (IOException e) {
 				LogUtil.severe(e);
@@ -708,6 +745,34 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					winEle.addAttribute(uuid);
 
 					writeBoundsInfo(winEle, window);
+				}
+
+				// view states
+				final XElement viewsEle = root.addElement("views");
+                // flatten list of view names from the viewsByCategory map
+                final List<String> viewNames = new ArrayList<>();
+                for (List<String> viewList : viewsByCategory.values()) {
+                    viewNames.addAll(viewList);
+                }
+				for(String viewName:viewNames) {
+					final EditorView view = registeredViews.get(viewName);
+					final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
+					if(viewProps != null && !viewProps.isEmpty()) {
+                        final XElement viewEle = viewsEle.addElement("view");
+                        final XAttribute nameAttr = new XAttribute("name");
+                        nameAttr.setString(viewName);
+                        viewEle.addAttribute(nameAttr);
+						for(String propName:viewProps.stringPropertyNames()) {
+							final String propValue = viewProps.getProperty(propName);
+							final XElement propEle = viewEle.addElement("property");
+							final XAttribute propNameAttr = new XAttribute("name");
+							propNameAttr.setString(propName);
+							propEle.addAttribute(propNameAttr);
+							final XAttribute propValueAttr = new XAttribute("value");
+							propValueAttr.setString(propValue);
+							propEle.addAttribute(propValueAttr);
+						}
+					}
 				}
 
 				dockControl.getPerspectives().writeXML(root, perspective, true);

@@ -308,6 +308,13 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		Tier<T> tier = getTier();
 
 		T newValue = getNewValue();
+		if(newValue == null) {
+			try {
+				newValue = tier.getDeclaredType().getDeclaredConstructor().newInstance();
+			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException("Could not create new value for tier " + tier.getName(), e);
+			}
+		}
 		if(tier.getDeclaredType() == IPATranscript.class && !((IPATranscript)newValue).hasSyllableInformation()) {
 			final IPATranscript ipa = (IPATranscript) newValue;
 			@SuppressWarnings("unchecked")

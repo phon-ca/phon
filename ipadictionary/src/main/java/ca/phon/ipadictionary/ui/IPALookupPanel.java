@@ -17,6 +17,7 @@ package ca.phon.ipadictionary.ui;
 
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipadictionary.exceptions.IPADictionaryException;
+import ca.phon.ipadictionary.cmd.*;
 import ca.phon.util.*;
 import ca.phon.worker.PhonTask;
 import org.antlr.runtime.*;
@@ -63,41 +64,41 @@ public class IPALookupPanel extends JPanel {
 
 			long st = System.currentTimeMillis();
 			// parse the line
-//			ByteArrayInputStream bin = new ByteArrayInputStream(query.getBytes());
-//			try {
-//				ANTLRInputStream ain = new ANTLRInputStream(bin);
-//				IPADictLexer lexer = new IPADictLexer(ain);
-//				TokenStream tokens = new CommonTokenStream(lexer);
-//
-//				IPADictParser parser = new IPADictParser(tokens);
-//				parser.setLookupContext(getLookupContext());
-//				IPADictParser.expr_return r = parser.expr();
-//
-//				CommonTree t = (CommonTree)r.getTree();
-//				CommonTreeNodeStream nodeStream = new CommonTreeNodeStream(t);
-//				IPADictTree walker = new IPADictTree(nodeStream);
-//				walker.setLookupContext(context);
-//				walker.expr();
-//
-//			} catch (IOException e) {
-//				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-//				err = e;
-//				context.fireError(e.getLocalizedMessage());
-//				super.setStatus(TaskStatus.ERROR);
-//				return;
-//			} catch (RecognitionException e) {
-//				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-//				err = e;
-//				context.fireError(e.getLocalizedMessage());
-//				super.setStatus(TaskStatus.ERROR);
-//				return;
-//			} catch (IPADictionaryException e) {
-//				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-//				err = e;
-//				context.fireError(e.getLocalizedMessage());
-//				super.setStatus(TaskStatus.ERROR);
-//				return;
-//			}
+			ByteArrayInputStream bin = new ByteArrayInputStream(query.getBytes());
+			try {
+				ANTLRInputStream ain = new ANTLRInputStream(bin);
+				IPADictLexer lexer = new IPADictLexer(ain);
+				TokenStream tokens = new CommonTokenStream(lexer);
+
+				IPADictParser parser = new IPADictParser(tokens);
+				parser.setLookupContext(getLookupContext());
+				var r = parser.expr();
+
+				CommonTree t = (CommonTree)r.getTree();
+				CommonTreeNodeStream nodeStream = new CommonTreeNodeStream(t);
+				IPADictTree walker = new IPADictTree(nodeStream);
+				walker.setLookupContext(context);
+				walker.expr();
+
+			} catch (IOException e) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+				err = e;
+				context.fireError(e.getLocalizedMessage());
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			} catch (RecognitionException e) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+				err = e;
+				context.fireError(e.getLocalizedMessage());
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			} catch (IPADictionaryException e) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+				err = e;
+				context.fireError(e.getLocalizedMessage());
+				super.setStatus(TaskStatus.ERROR);
+				return;
+			}
 			long et = System.currentTimeMillis();
 
 			String msg =

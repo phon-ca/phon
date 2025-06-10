@@ -23,6 +23,7 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.lang.ref.WeakReference;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -163,6 +164,28 @@ public abstract class EditorView extends JPanel implements IExtendable {
 	 */
 	public void setPreferredDockPosition(DockPosition dockPosition) {
 		this.preferredDockPosition = dockPosition;
+	}
+
+	/**
+	 * Return state information for the view.  This is information which will be saved with the editor
+	 * perspective and loaded when the view is opened again.
+	 */
+	public Properties getStateProperties() {
+		Properties retVal = new Properties();
+		return retVal;
+	}
+
+	/**
+	 * Load state information for the view.  This is information which was saved with the editor
+	 * perspective and loaded when the view is opened again.
+	 *
+	 * @param props state properties
+	 */
+	public void loadStateProperties(Properties props) {
+		if(props.containsKey("preferredDockPosition")) {
+			String dockPosStr = props.getProperty("preferredDockPosition");
+			setPreferredDockPosition(DockPosition.valueOf(dockPosStr));
+		}
 	}
 
 	public void initExtensions() {
