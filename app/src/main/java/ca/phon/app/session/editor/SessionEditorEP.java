@@ -271,12 +271,14 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		if(projectProperties != null) {
 			final JSONObject projectJson = projectProperties.getProjectJson();
 			final SessionPath sp = session.getSessionPath();
-			final JSONObject perspectivesJson = projectJson.getJSONObject("perspectives");
-			if(perspectivesJson != null && perspectivesJson.has(sp.toString())) {
-				final String perspectiveBase64 = perspectivesJson.getString(sp.toString());
-				if(perspectiveBase64 != null) {
-					projectPerspective = new RecordEditorPerspective("Previous",
-							new String(Base64.decode(perspectiveBase64), StandardCharsets.UTF_8));
+			if(projectJson.has("perspectives")) {
+				final JSONObject perspectivesJson = projectJson.getJSONObject("perspectives");
+				if (perspectivesJson.has(sp.toString())) {
+					final String perspectiveBase64 = perspectivesJson.getString(sp.toString());
+					if (perspectiveBase64 != null) {
+						projectPerspective = new RecordEditorPerspective("Previous",
+								new String(Base64.decode(perspectiveBase64), StandardCharsets.UTF_8));
+					}
 				}
 			}
 		}

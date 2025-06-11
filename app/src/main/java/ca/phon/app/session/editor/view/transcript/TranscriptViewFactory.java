@@ -304,7 +304,9 @@ public class TranscriptViewFactory implements ViewFactory {
             Segment text = getText(p0, p1);
             String str = text.toString();
             Font font = getFont();
-            Rectangle2D textBounds = getGraphics().getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
+            final Graphics2D g2 = (Graphics2D)getGraphics();
+            if(g2 == null) return 0;
+            Rectangle2D textBounds = g2.getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
             return (int)textBounds.getWidth();
         }
 
@@ -313,7 +315,9 @@ public class TranscriptViewFactory implements ViewFactory {
             int p1 = getEndOffset();
             String text = ": ";
             Font font = getFont();
-            Rectangle2D textBounds = getGraphics().getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
+            final Graphics2D g2 = (Graphics2D)getGraphics();
+            if(g2 == null) return 0;
+            Rectangle2D textBounds = g2.getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
             return (int)textBounds.getWidth();
         }
 

@@ -133,34 +133,35 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             TranscriptStyleConstants.setTier(finalAttrs, record.getPhoneAlignmentTier());
             TranscriptStyleConstants.setNotEditable(finalAttrs, true);
             TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
-            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
-                @Override
-                public JComponent createComponent(AttributeSet attrs) {
-                    final JPanel retVal = new JPanel();
-                    retVal.setPreferredSize(new Dimension(0, 0));
-                    return retVal;
-                }
-
-                @Override
-                public JComponent getComponent() {
-                    return null;
-                }
-
-                @Override
-                public void requestFocusStart() {
-
-                }
-
-                @Override
-                public void requestFocusEnd() {
-
-                }
-
-                @Override
-                public void requestFocusAtOffset(int offset) {
-
-                }
-            });
+            TranscriptStyleConstants.setComponentFactory(finalAttrs, null);
+//            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
+//                @Override
+//                public JComponent createComponent(AttributeSet attrs) {
+//                    final JPanel retVal = new JPanel();
+//                    retVal.setPreferredSize(new Dimension(0, 0));
+//                    return retVal;
+//                }
+//
+//                @Override
+//                public JComponent getComponent() {
+//                    return null;
+//                }
+//
+//                @Override
+//                public void requestFocusStart() {
+//
+//                }
+//
+//                @Override
+//                public void requestFocusEnd() {
+//
+//                }
+//
+//                @Override
+//                public void requestFocusAtOffset(int offset) {
+//
+//                }
+//            });
             batchBuilder.appendEOL(finalAttrs);
         }
     }
@@ -211,7 +212,19 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         // update the existing alignment components
         final AttributeSet attrs = doc.getCharacterElement(alignmentTierContentRange.start()).getAttributes();
         final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
-        if (componentFactory instanceof AlignmentComponentFactory) {
+        if(componentFactory == null) {
+            // batch update
+            try {
+                doc.setBypassDocumentFilter(true);
+                doc.remove(alignmentTierContentRange.start(), alignmentTierContentRange.length());
+                doc.processBatchUpdates(alignmentTierContentRange.start(),
+                        getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, editor.getDataModel().getTranscriber(), attrs));
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            } finally {
+                doc.setBypassDocumentFilter(false);
+            }
+        } else if (componentFactory instanceof AlignmentComponentFactory) {
             final JPanel component = (JPanel) componentFactory.getComponent();
             if(component != null) {
                 int i = 0;
@@ -256,6 +269,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 //            doc.setBypassDocumentFilter(false);
 //            editor.getTranscriptEditorCaret().unfreeze();
 //        }
+
     }
 
     /**
@@ -324,7 +338,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     }
 
     public void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> event) {
-        final TranscriptElementLocation oldLocation = event.data().oldLoc();
+//        final TranscriptElementLocation oldLocation = event.data().oldLoc();
         final TranscriptElementLocation newLocation = event.data().newLoc();
 
         // handle caret movements into syllabifier tiers
@@ -341,32 +355,34 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             return;
         }
 
+        // XXX this was an attempt to handle alignment tiers when moving between records but it doesn't work well
+        // keep it here for now in case we want to revisit this later
         // single record view is already handled
-        if(!isAlignmentVisible() || editor.isSingleRecordView()) return;
-        if(oldLocation.transcriptElementIndex() == newLocation.transcriptElementIndex()) return;
-
-        // remove syllabification tiers from previous record (if any)
-        editor.getTranscriptEditorCaret().freeze();
-        if(oldLocation.transcriptElementIndex() >= 0) {
-            final Transcript.Element prevElement = editor.getSession().getTranscript().getElementAt(oldLocation.transcriptElementIndex());
-            if (prevElement.isRecord()) {
-                removeAlignmentTiersForRecord(oldLocation.transcriptElementIndex());
-            }
-        }
-
-        if(newLocation.transcriptElementIndex() >= 0) {
-            final Transcript.Element newElement = editor.getSession().getTranscript().getElementAt(newLocation.transcriptElementIndex());
-            if (newElement.isRecord()) {
-                addAlignmentTiersForRecord(newLocation.transcriptElementIndex());
-            }
-        }
-
-        // force update dot to new location without issuing a new location changed event by keeping caret frozen
-        final int newCaretLoc = editor.sessionLocationToCharPos(newLocation);
-        if(newCaretLoc >= 0) {
-            editor.getTranscriptEditorCaret().setDot(newCaretLoc, true);
-        }
-        editor.getTranscriptEditorCaret().unfreeze();
+//        if(!isAlignmentVisible() || editor.isSingleRecordView()) return;
+//        if(oldLocation.transcriptElementIndex() == newLocation.transcriptElementIndex()) return;
+//
+//        // remove syllabification tiers from previous record (if any)
+//        editor.getTranscriptEditorCaret().freeze();
+//        if(oldLocation.transcriptElementIndex() >= 0) {
+//            final Transcript.Element prevElement = editor.getSession().getTranscript().getElementAt(oldLocation.transcriptElementIndex());
+//            if (prevElement.isRecord()) {
+//                removeAlignmentTiersForRecord(oldLocation.transcriptElementIndex());
+//            }
+//        }
+//
+//        if(newLocation.transcriptElementIndex() >= 0) {
+//            final Transcript.Element newElement = editor.getSession().getTranscript().getElementAt(newLocation.transcriptElementIndex());
+//            if (newElement.isRecord()) {
+//                addAlignmentTiersForRecord(newLocation.transcriptElementIndex());
+//            }
+//        }
+//
+//        // force update dot to new location without issuing a new location changed event by keeping caret frozen
+//        final int newCaretLoc = editor.sessionLocationToCharPos(newLocation);
+//        if(newCaretLoc >= 0) {
+//            editor.getTranscriptEditorCaret().setDot(newCaretLoc, true);
+//        }
+//        editor.getTranscriptEditorCaret().unfreeze();
     }
 
     /**
