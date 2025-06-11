@@ -182,9 +182,9 @@ public class AlignmentComponentFactory implements ComponentFactory {
         }
         final Record record = TranscriptStyleConstants.getRecord(this.attrs);
         final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
-        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final int recordIdx = editor.getSession().getRecordIndex(record);
         final TranscriptDocument.StartEnd alignmentRange =
-                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+                editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(alignmentRange.valid()) {
             editor.offsetInNextTierOrElement(alignmentRange.start() + offset, offset);
             editor.requestFocus();
@@ -210,9 +210,9 @@ public class AlignmentComponentFactory implements ComponentFactory {
 
         final Record record = TranscriptStyleConstants.getRecord(this.attrs);
         final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
-        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final int recordIdx = editor.getSession().getRecordIndex(record);
         final TranscriptDocument.StartEnd alignmentRange =
-                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+                editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(alignmentRange.valid()) {
             editor.offsetInPrevTierOrElement(alignmentRange.start() + offset, offset);
             editor.requestFocus();

@@ -1495,6 +1495,9 @@ public class TranscriptView extends EditorView {
                     SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE,
                     Boolean.parseBoolean(props.getProperty("syllabificationVisible"))
                 );
+                transcriptEditor.addAdditionalTierName(SystemTierType.TargetSyllables.getName());
+                transcriptEditor.addAdditionalTierName(SystemTierType.ActualSyllables.getName());
+                transcriptEditor.recalculateTierLabelWidth();
             } catch (Exception e) {
                 // ignore, use default
             }
@@ -1506,6 +1509,8 @@ public class TranscriptView extends EditorView {
                     AlignmentExtension.ALIGNMENT_IS_VISIBLE,
                     Boolean.parseBoolean(props.getProperty("alignmentVisible"))
                 );
+                transcriptEditor.addAdditionalTierName(SystemTierType.PhoneAlignment.getName());
+                transcriptEditor.recalculateTierLabelWidth();
             } catch (Exception e) {
                 // ignore, use default
             }

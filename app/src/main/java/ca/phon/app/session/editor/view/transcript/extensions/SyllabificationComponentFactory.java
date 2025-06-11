@@ -185,9 +185,9 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         }
         final Record record = TranscriptStyleConstants.getRecord(this.attrs);
         final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
-        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final int recordIdx = editor.getSession().getRecordIndex(record);
         final TranscriptDocument.StartEnd syllabificationRange =
-                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+                editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(syllabificationRange.valid()) {
             editor.offsetInNextTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
             editor.requestFocus();
@@ -213,9 +213,9 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         }
         final Record record = TranscriptStyleConstants.getRecord(this.attrs);
         final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
-        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final int recordIdx = editor.getSession().getRecordIndex(record);
         final TranscriptDocument.StartEnd syllabificationRange =
-                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+                editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(syllabificationRange.valid()) {
             editor.offsetInPrevTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
             editor.requestFocus();

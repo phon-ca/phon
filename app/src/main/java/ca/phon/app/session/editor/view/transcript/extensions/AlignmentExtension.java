@@ -257,19 +257,6 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                 }
             }
         }
-
-//        try {
-//            editor.getTranscriptEditorCaret().freeze();
-//            doc.setBypassDocumentFilter(true);
-//            doc.remove(alignmentTierContentRange.start(), alignmentTierContentRange.length());
-//            doc.processBatchUpdates(alignmentTierContentRange.start(), getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, editor.getDataModel().getTranscriber(), new SimpleAttributeSet()));
-//        } catch (BadLocationException e) {
-//            LogUtil.severe(e);
-//        } finally {
-//            doc.setBypassDocumentFilter(false);
-//            editor.getTranscriptEditorCaret().unfreeze();
-//        }
-
     }
 
     /**
