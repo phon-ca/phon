@@ -15,6 +15,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Action to toggle visibility of syllabification in a transcript view.
+ * This action updates the view and the transcript editor accordingly.
+ */
 public class ToggleSyllabificationVisibleViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6339597839656747666L;
 

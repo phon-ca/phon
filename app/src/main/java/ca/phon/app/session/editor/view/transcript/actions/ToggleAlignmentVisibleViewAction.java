@@ -5,6 +5,10 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
+/**
+ * Action to toggle visibility of alignment in a transcript view.
+ * This action updates the view and the transcript editor accordingly.
+ */
 public class ToggleAlignmentVisibleViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6337537859256747666L;
 

@@ -153,7 +153,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         });
 
         Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-        if (tier != null && tier.getDeclaredType().equals(IPATranscript.class)) {
+        if (tier != null && tier.getDeclaredType().equals(IPATranscript.class) && !tier.getName().endsWith(" Syllables")) {
             Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
 
             // Create a dummy tier for the syllabification
@@ -215,6 +215,10 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             });
 
             builder.appendEOL(finalAttrs);
+
+            for(var hook:builder.getInsertionHooks()) {
+                builder.appendAll(hook.endTier(builder.getTrailingAttributes()));
+            }
         }
     }
 
