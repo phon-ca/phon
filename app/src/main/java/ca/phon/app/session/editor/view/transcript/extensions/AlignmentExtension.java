@@ -46,8 +46,6 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         this.editor = editor;
         doc = editor.getTranscriptDocument();
 
-        // TODO: make this stuff happen in the right order
-
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
@@ -57,7 +55,6 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                 return builder.getBatch();
             }
         });
-
 
         doc.addDocumentPropertyChangeListener(ALIGNMENT_IS_VISIBLE, this::alignmentVisiblePropertyChangeHandler);
         doc.addDocumentPropertyChangeListener(ALIGNMENT_IS_COMPONENT, this::alignmentComponentPropertyChangeHandler);

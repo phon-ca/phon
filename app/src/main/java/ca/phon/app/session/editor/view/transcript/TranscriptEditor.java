@@ -153,6 +153,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     private final TranscriptEditorKit editorKit;
 
     /**
+     * Additional tier names that should be considered when recalculating the tier label width
+     */
+    private final Set<String> additionalTierNames = new HashSet<>();
+
+    /**
      * The current callout window being displayed (if any)
      */
     private AtomicReference<CalloutWindow> currentCallout = new AtomicReference<>();
@@ -2656,7 +2661,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      *
      * @param additionalTierNames additional tier names to consider when recalculating the tier label width
      */
-    public void recalculateTierLabelWidth(List<String> additionalTierNames) {
+    public void recalculateTierLabelWidth(Collection<String> additionalTierNames) {
         editorKit.invalidateTierLabelWidth(additionalTierNames);
         getTranscriptDocument().updateGlobalParagraphAttributes();
     }
@@ -2665,7 +2670,25 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * Recalculates the width of the tier labels and updates all paragraph attributes
      */
     public void recalculateTierLabelWidth() {
-        recalculateTierLabelWidth(Collections.emptyList());
+        recalculateTierLabelWidth(this.additionalTierNames);
+    }
+
+    /**
+     * Add a tier name to the set of tier names used to calculate the width of the tier labels.
+     *
+     * @param tierName the tier name to add
+     */
+    public void addAdditionalTierName(String tierName) {
+        this.additionalTierNames.add(tierName);
+    }
+
+    /**
+     * Remove a tier name from the set of tier names used to calculate the width of the tier labels.
+     *
+     * @param tierName the tier name to remove
+     */
+    public void removeAdditionalTierName(String tierName) {
+        this.additionalTierNames.remove(tierName);
     }
 
     /**

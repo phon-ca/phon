@@ -12,7 +12,7 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -34,7 +34,7 @@ public class TranscriptViewFactory implements ViewFactory {
 
     private int labelColumnWidth = -1;
 
-    private List<String> additionalTiers = new ArrayList<>();
+    private Set<String> additionalTiers = new HashSet<>();
 
     /**
      * The spacing between the lines of the document
@@ -77,7 +77,7 @@ public class TranscriptViewFactory implements ViewFactory {
         }
     }
 
-    private static int calculatePreferredLabelColumnWidth(Graphics g, Session session, List<String> additionalTiers) {
+    private static int calculatePreferredLabelColumnWidth(Graphics g, Session session, Collection<String> additionalTiers) {
         int currentMax = 0;
 
         for (var tier : session.getTierView()) {
@@ -135,7 +135,7 @@ public class TranscriptViewFactory implements ViewFactory {
         this.labelColumnWidth = width;
     }
 
-    public void setAdditionalTiers(List<String> additionalTiers) {
+    public void setAdditionalTiers(Collection<String> additionalTiers) {
         this.additionalTiers.clear();
         this.additionalTiers.addAll(additionalTiers);
     }

@@ -18,6 +18,11 @@ public class ToggleAlignmentVisibleViewAction extends TranscriptViewAction {
     @Override
     public void hookableActionPerformed(ActionEvent e) {
         this.getView().toggleAlignmentVisible();
+        if(this.getView().isAlignmentVisible()) {
+            this.getView().getTranscriptEditor().addAdditionalTierName("Alignment");
+        } else {
+            this.getView().getTranscriptEditor().removeAdditionalTierName("Alignment");
+        }
         this.getView().getTranscriptEditor().recalculateTierLabelWidth();
     }
 }
