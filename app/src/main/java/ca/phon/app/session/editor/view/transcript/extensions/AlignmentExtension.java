@@ -281,7 +281,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
         // Get the string version of the alignment
         // Add component factory if needed
-        if (isAlignmentComponent()) {
+        if (isAlignmentComponent() && alignmentTier.hasValue() && alignmentTier.getValue().getFullAlignment().getAlignmentLength() > 0) {
             tierAttrs.addAttributes(getAlignmentAttributes());
         }
         batchBuilder.appendTierContent(record, alignmentTier, editor.getDataModel().getTranscriber(), tierAttrs);

@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.Phone;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.mor.Grasp;
@@ -666,7 +668,7 @@ public class TranscriptBatchBuilder {
                             attrs = styleContext.getTierCommentAttributes();
                         } else if (elem instanceof TierInternalMedia internalMedia) {
                             attrs = styleContext.getTierInternalMediaAttributes();
-                            if(tierAttrs != null)
+                            if (tierAttrs != null)
                                 attrs.addAttributes(tierAttrs);
                             appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
                         } else if (elem instanceof TierLink link) {
@@ -685,6 +687,23 @@ public class TranscriptBatchBuilder {
                     }
                 } else {
                     appendBatchString("", tierAttrs);
+                }
+            } else if (tierType.equals(PhoneAlignment.class)) {
+                PhoneAlignment phoneAlignment = (PhoneAlignment) tierValue;
+                if (phoneAlignment.getFullAlignment().getAlignmentLength() == 0) {
+                    final SimpleAttributeSet tierAttrsCopy = new SimpleAttributeSet(tierAttrs);
+                    TranscriptStyleConstants.setNotTraversable(tierAttrsCopy, true);
+                    appendBatchString("", tierAttrsCopy);
+                } else {
+                    final StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < phoneAlignment.getAlignments().size(); i++) {
+                        PhoneMap pm = phoneAlignment.getAlignments().get(i);
+                        if (i > 0) {
+                            builder.append(" ");
+                        }
+                        builder.append(pm.toString());
+                    }
+                    appendBatchString(builder.toString(), tierAttrs);
                 }
             } else {
                 appendBatchString(tier.toString(), tierAttrs);

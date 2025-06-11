@@ -876,7 +876,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                         return innerDocElem.getStartOffset();
                     }
                     if (innerDocElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-                        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) != content) {
+                        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) != content
+                          && !TranscriptStyleConstants.isNotTraversable(attrs)) {
                             return innerDocElem.getStartOffset();
                         }
                     } else {
@@ -928,7 +929,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                         return innerDocElem.getStartOffset();
                     }
                     if (innerDocElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-                        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) != content) {
+                        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) != content
+                         && !TranscriptStyleConstants.isNotTraversable(attrs)) {
                             return innerDocElem.getStartOffset();
                         }
                     } else {

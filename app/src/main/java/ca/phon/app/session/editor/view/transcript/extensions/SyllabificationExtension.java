@@ -68,6 +68,13 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 TranscriptBatchBuilder builder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
                 if (!isSyllabificationVisible() || !doc.getSingleRecordView()) return builder.getBatch();
                 buildSyllabificationBatch(builder, attrs);
+                for(var hook:builder.getInsertionHooks()) {
+                    if(hook == this) {
+                        // skip this hook, we already handled it
+                        continue;
+                    }
+                    builder.appendAll(hook.endTier(builder.getTrailingAttributes()));
+                }
                 return builder.getBatch();
             }
         });
@@ -174,7 +181,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             TranscriptStyleConstants.setClickHandler(tierAttrs, SyllabificationExtension.this::syllabificationTierLabelClickHandler);
             builder.appendTierLabel(doc.getSession(), record, syllableTier, syllableTier.getName(), null, doc.isChatTierNamesShown(), tierAttrs);
 
-            if(isSyllabificationComponent()) {
+            if(isSyllabificationComponent() && ipaTier.hasValue() && ipaTier.getValue().length() > 0) {
                 tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
                 builder.appendBatchString(syllableTier.getValue().toString(), tierAttrs);
             } else {
@@ -215,10 +222,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 //            });
 
             builder.appendEOL(finalAttrs);
-
-            for(var hook:builder.getInsertionHooks()) {
-                builder.appendAll(hook.endTier(builder.getTrailingAttributes()));
-            }
         }
     }
 

@@ -1469,10 +1469,10 @@ public class TranscriptView extends EditorView {
     public Properties getStateProperties() {
         final Properties props = super.getStateProperties();
 
-        props.setProperty("fontSizeDelta", String.valueOf(getFontSizeDelta()));
+//        props.setProperty("fontSizeDelta", String.valueOf(getFontSizeDelta()));
         props.setProperty("syllabificationVisible", String.valueOf(isSyllabificationVisible()));
         props.setProperty("alignmentVisible", String.valueOf(isAlignmentVisible()));
-        props.setProperty("currentRecordIndex", String.valueOf(getEditor().getCurrentRecordIndex()));
+//        props.setProperty("currentRecordIndex", String.valueOf(getEditor().getCurrentRecordIndex()));
 
         return props;
     }
@@ -1481,13 +1481,13 @@ public class TranscriptView extends EditorView {
     public void loadStateProperties(Properties props) {
         super.loadStateProperties(props);
 
-        if(props.containsKey("fontSizeDelta")) {
-            try {
-                setFontSizeDelta(Float.parseFloat(props.getProperty("fontSizeDelta")));
-            } catch (NumberFormatException e) {
-                // ignore, use default
-            }
-        }
+//        if(props.containsKey("fontSizeDelta")) {
+//            try {
+//                setFontSizeDelta(Float.parseFloat(props.getProperty("fontSizeDelta")));
+//            } catch (NumberFormatException e) {
+//                // ignore, use default
+//            }
+//        }
 
         if(props.containsKey("syllabificationVisible")) {
             try {
