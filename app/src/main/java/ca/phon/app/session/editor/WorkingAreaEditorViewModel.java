@@ -39,14 +39,18 @@ import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectProperties;
 import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.Base64;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.*;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -56,6 +60,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.lang.ref.WeakReference;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
@@ -584,7 +589,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 
 		if(editorPerspective != null) {
-			try (InputStream is = editorPerspective.getLocation().openStream()) {
+			try (InputStream is = editorPerspective.getInputStream()) {
 				if (is != null) {
 					final XElement xele = XIO.readUTF(is);
 
@@ -860,6 +865,38 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					new RecordEditorPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME,
 							prevPerspetiveFile.toURI().toURL());
 			savePerspective(prevPerspective);
+
+            // save perspective to project properties
+            final ProjectProperties projectProperties = getEditor().getProject().getExtension(ProjectProperties.class);
+            if(projectProperties != null) {
+                // get xml string from perspective url
+                try(BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(prevPerspetiveFile.toURI().toURL().openStream(), "UTF-8"))) {
+                    final StringBuilder sb = new StringBuilder();
+                    String line;
+                    while((line = reader.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+
+					// update project properties with last used perspective for this session
+                    projectProperties.modifyProjectJson((json) -> {
+                        JSONObject retVal = new JSONObject(json.toString());
+                        JSONObject perspectivesJson = retVal.has("perspectives") ?
+                                retVal.getJSONObject("perspectives") : null;
+                        if(perspectivesJson == null) {
+                            perspectivesJson = new JSONObject();
+                            retVal.put("perspectives", perspectivesJson);
+                        }
+                        // set the last used perspective for the session
+                        final SessionPath sessionPath = getEditor().getSession().getSessionPath();
+                        final String xmlBase64 = Base64.encodeBytes(sb.toString().getBytes(StandardCharsets.UTF_8));
+                        perspectivesJson.put(sessionPath.toString(), xmlBase64);
+                        return retVal;
+                    });
+                } catch (IOException e) {
+                    LogUtil.warning(e);
+                }
+            }
 		} catch (MalformedURLException e1) {
 			LogUtil.severe(e1.getLocalizedMessage(), e1);
 		}

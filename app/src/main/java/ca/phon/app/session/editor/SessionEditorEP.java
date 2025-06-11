@@ -15,6 +15,10 @@
  */
 package ca.phon.app.session.editor;
 
+import bibliothek.gui.dock.common.perspective.CControlPerspective;
+import bibliothek.gui.dock.common.perspective.CPerspective;
+import bibliothek.util.xml.XElement;
+import bibliothek.util.xml.XIO;
 import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.file.OpenFileHistory;
@@ -31,12 +35,15 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.*;
 import com.jgoodies.forms.layout.*;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -257,8 +264,26 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		}
 
 		final SessionEditorWindow sessionEditorWindow = new SessionEditorWindow(project, session, transcriber);
-		final RecordEditorPerspective prevPerspective =
-				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
+
+		// load previous perspective for session from project props
+		final ProjectProperties projectProperties = project.getExtension(ProjectProperties.class);
+		RecordEditorPerspective projectPerspective = null;
+		if(projectProperties != null) {
+			final JSONObject projectJson = projectProperties.getProjectJson();
+			final SessionPath sp = session.getSessionPath();
+			final JSONObject perspectivesJson = projectJson.getJSONObject("perspectives");
+			if(perspectivesJson != null && perspectivesJson.has(sp.toString())) {
+				final String perspectiveBase64 = perspectivesJson.getString(sp.toString());
+				if(perspectiveBase64 != null) {
+					projectPerspective = new RecordEditorPerspective("Previous",
+							new String(Base64.decode(perspectiveBase64), StandardCharsets.UTF_8));
+				}
+			}
+		}
+		final RecordEditorPerspective prevPerspective = projectPerspective;
+
+//		final RecordEditorPerspective prevPerspective =
+//				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
 		final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 		editor.getStatusBar().getProgressBar().setIndeterminate(true);
 		editor.getViewModel().setupWindows(prevPerspective);

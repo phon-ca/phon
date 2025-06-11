@@ -141,6 +141,11 @@ public class RecordEditorPerspective {
 	private URL location;
 
 	/**
+	 * Perspective xml data.
+	 */
+	private String xmlData;
+
+	/**
 	 * perspective
 	 */
 	private CPerspective perspective;
@@ -158,6 +163,14 @@ public class RecordEditorPerspective {
 		super();
 		this.name = name;
 		this.location = location;
+		this.perspective = null;
+	}
+
+	public RecordEditorPerspective(String name, String xmlData) {
+		super();
+		this.name = name;
+		this.xmlData = xmlData;
+		this.location = null;
 		this.perspective = null;
 	}
 
@@ -184,12 +197,22 @@ public class RecordEditorPerspective {
 		this.location = location;
 	}
 
+	public InputStream getInputStream() throws IOException {
+		if(location != null) {
+			return location.openStream();
+		} else if(xmlData != null) {
+			return new ByteArrayInputStream(xmlData.getBytes());
+		} else {
+			throw new IOException("No location or xml data specified for perspective.");
+		}
+	}
+
 	/**
 	 * Return perspective or load from file if not already loaded
 	 */
 	public CPerspective getPerspective(CControlPerspective perspectives) {
 		if(perspective == null) {
-			try(InputStream is = getLocation().openStream()) {
+			try(InputStream is = getInputStream()) {
 				final XElement xele = XIO.readUTF(is);
 				perspective = perspectives.readXML( xele );
 			} catch (IOException e) {

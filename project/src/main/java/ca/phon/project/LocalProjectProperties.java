@@ -78,7 +78,7 @@ public final class LocalProjectProperties implements ProjectProperties {
     public void modifyProjectJson(PropertyModifier modifier) throws IOException {
         lock.writeLock().lock();
         try {
-            final JSONObject modifiedJson = modifier.modify(projectJson);
+            final JSONObject modifiedJson = modifier.modify(getProjectJson());
             // Update version and save
             this.projectJson = modifiedJson;
             persistToStorage();
