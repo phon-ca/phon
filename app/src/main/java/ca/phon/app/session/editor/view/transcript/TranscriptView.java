@@ -1463,6 +1463,70 @@ public class TranscriptView extends EditorView {
 
     //endregion Getters and Setters
 
+    // region Properties
+
+    @Override
+    public Properties getStateProperties() {
+        final Properties props = super.getStateProperties();
+
+        props.setProperty("fontSizeDelta", String.valueOf(getFontSizeDelta()));
+        props.setProperty("syllabificationVisible", String.valueOf(isSyllabificationVisible()));
+        props.setProperty("alignmentVisible", String.valueOf(isAlignmentVisible()));
+        props.setProperty("currentRecordIndex", String.valueOf(getEditor().getCurrentRecordIndex()));
+
+        return props;
+    }
+
+    @Override
+    public void loadStateProperties(Properties props) {
+        super.loadStateProperties(props);
+
+        if(props.containsKey("fontSizeDelta")) {
+            try {
+                setFontSizeDelta(Float.parseFloat(props.getProperty("fontSizeDelta")));
+            } catch (NumberFormatException e) {
+                // ignore, use default
+            }
+        }
+
+        if(props.containsKey("syllabificationVisible")) {
+            try {
+                transcriptEditor.getTranscriptDocument().putDocumentProperty(
+                    SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE,
+                    Boolean.parseBoolean(props.getProperty("syllabificationVisible"))
+                );
+            } catch (Exception e) {
+                // ignore, use default
+            }
+        }
+
+        if(props.containsKey("alignmentVisible")) {
+            try {
+                transcriptEditor.getTranscriptDocument().putDocumentProperty(
+                    AlignmentExtension.ALIGNMENT_IS_VISIBLE,
+                    Boolean.parseBoolean(props.getProperty("alignmentVisible"))
+                );
+            } catch (Exception e) {
+                // ignore, use default
+            }
+        }
+
+//        if(props.containsKey("currentRecordIndex")) {
+//            try {
+//                int currentRecordIndex = Integer.parseInt(props.getProperty("currentRecordIndex"));
+//                if(currentRecordIndex >= 0 && currentRecordIndex < getEditor().getSession().getRecordCount()) {
+//                    getEditor().setCurrentRecordIndex(currentRecordIndex);
+//                }
+//            } catch (NumberFormatException e) {
+//                // ignore, use default
+//            }
+//        }
+//        transcriptEditor.getTranscriptDocument().reload();
+    }
+
+
+    // endregion Properties
+
     /**
      * The dialog that shows the metadata for the session
      * */

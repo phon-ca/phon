@@ -341,6 +341,12 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					try {
 						retVal = viewFactory.createObject(getEditor());
 						registeredViews.put(viewName, retVal);
+
+						// load state properties if available
+						final Properties viewProps = viewStateProperties.get(viewName);
+						if(viewProps != null) {
+							retVal.loadStateProperties(viewProps);
+						}
 					} catch (Exception e) {
 						LogUtil.severe( e.getLocalizedMessage(),
 								e);
@@ -653,15 +659,14 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 							final XElement viewEle = viewsEle.getElement(i);
 							final String viewName = viewEle.getAttribute("name").getString();
 							final EditorView view = registeredViews.get(viewName);
-							final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
-							if (viewProps != null) {
-								for (int j = 0; j < viewEle.getElementCount(); j++) {
-									final XElement propEle = viewEle.getElement(j);
-									final String propName = propEle.getAttribute("name").getString();
-									final String propValue = propEle.getAttribute("value").getString();
-									viewProps.setProperty(propName, propValue);
-								}
+							final Properties viewProps = new Properties();
+							for (int j = 0; j < viewEle.getElementCount(); j++) {
+								final XElement propEle = viewEle.getElement(j);
+								final String propName = propEle.getAttribute("name").getString();
+								final String propValue = propEle.getAttribute("value").getString();
+								viewProps.setProperty(propName, propValue);
 							}
+							viewStateProperties.put(viewName, viewProps);
 							// if view is already registered, load state properties
 							if(view != null)
 								view.loadStateProperties(viewProps);
