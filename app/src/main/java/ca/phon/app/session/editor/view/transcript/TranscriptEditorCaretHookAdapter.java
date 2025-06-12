@@ -23,7 +23,7 @@ public class TranscriptEditorCaretHookAdapter implements TranscriptEditorCaretHo
     @Override
     public boolean beforeMoveCaret(int dot, int moveTo) {
         // No action by default
-        return false;
+        return true;
     }
 
     @Override

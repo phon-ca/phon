@@ -131,8 +131,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             batchBuilder.appendAll(getFormattedAlignment(record, record.getPhoneAlignmentTier(), editor.getDataModel().getTranscriber(), tierAttrs));
             final SimpleAttributeSet finalAttrs = new SimpleAttributeSet(batchBuilder.getTrailingAttributes());
             TranscriptStyleConstants.setTier(finalAttrs, record.getPhoneAlignmentTier());
-            TranscriptStyleConstants.setNotEditable(finalAttrs, true);
-            TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
+//            TranscriptStyleConstants.setNotEditable(finalAttrs, true);
+//            TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
             TranscriptStyleConstants.setComponentFactory(finalAttrs, null);
 //            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
 //                @Override

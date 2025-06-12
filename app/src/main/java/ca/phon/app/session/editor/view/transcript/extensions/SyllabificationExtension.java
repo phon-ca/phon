@@ -181,6 +181,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             TranscriptStyleConstants.setClickHandler(tierAttrs, SyllabificationExtension.this::syllabificationTierLabelClickHandler);
             builder.appendTierLabel(doc.getSession(), record, syllableTier, syllableTier.getName(), null, doc.isChatTierNamesShown(), tierAttrs);
 
+            TranscriptStyleConstants.setNotTraversable(tierAttrs, false);
+            TranscriptStyleConstants.setClickHandler(tierAttrs, null);
             if(isSyllabificationComponent()) {
                 if(ipaTier.hasValue() && ipaTier.getValue().length() > 0) {
                     tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
@@ -194,8 +196,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
             final SimpleAttributeSet finalAttrs = new SimpleAttributeSet(builder.getTrailingAttributes());
             TranscriptStyleConstants.setTier(finalAttrs, syllableTier);
-            TranscriptStyleConstants.setNotEditable(finalAttrs, true);
-            TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
+//            TranscriptStyleConstants.setNotEditable(finalAttrs, true);
+//            TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
 //            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
 //                @Override
 //                public JComponent createComponent(AttributeSet attrs) {

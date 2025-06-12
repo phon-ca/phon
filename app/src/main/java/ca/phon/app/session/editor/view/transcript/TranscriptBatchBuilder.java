@@ -692,6 +692,7 @@ public class TranscriptBatchBuilder {
                 PhoneAlignment phoneAlignment = (PhoneAlignment) tierValue;
                 final SimpleAttributeSet tierAttrsCopy = new SimpleAttributeSet(tierAttrs);
                 TranscriptStyleConstants.setNotTraversable(tierAttrsCopy, false);
+                TranscriptStyleConstants.setClickHandler(tierAttrsCopy, null);
                 if (phoneAlignment.getFullAlignment().getAlignmentLength() == 0) {
                     appendBatchString("", tierAttrsCopy);
                 } else {
