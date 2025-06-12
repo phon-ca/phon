@@ -181,9 +181,13 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             TranscriptStyleConstants.setClickHandler(tierAttrs, SyllabificationExtension.this::syllabificationTierLabelClickHandler);
             builder.appendTierLabel(doc.getSession(), record, syllableTier, syllableTier.getName(), null, doc.isChatTierNamesShown(), tierAttrs);
 
-            if(isSyllabificationComponent() && ipaTier.hasValue() && ipaTier.getValue().length() > 0) {
-                tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
-                builder.appendBatchString(" ", tierAttrs);
+            if(isSyllabificationComponent()) {
+                if(ipaTier.hasValue() && ipaTier.getValue().length() > 0) {
+                    tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
+                    builder.appendBatchString(ipa.toString(true), tierAttrs);
+                } else {
+                    builder.appendBatchString("", tierAttrs);
+                }
             } else {
                 builder.appendAll(getFormattedSyllabification(ipa, tierAttrs));
             }
