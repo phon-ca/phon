@@ -301,7 +301,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
         if(record != null && tier != null) {
             int recordIndex = editor.getSession().getRecordIndex(record);
-            if(tier.getDeclaredType().equals(IPATranscript.class)) {
+            if(tier.getDeclaredType().equals(IPATranscript.class) && !tier.getName().endsWith(" Syllables")) {
                 final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
                 try {
                     final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());

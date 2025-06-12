@@ -76,6 +76,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     /* Extension support */
     private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptEditor.class, this);
 
+    /**
+     * List of tier change listeners, these listeners are notified after a tier is updated in the editor
+     */
+    private final List<TranscriptEditorTierChangeListener> tierChangeListeners = new ArrayList<>();
+
     /* State */
     /**
      * The instance of {@link DefaultHighlighter.DefaultHighlightPainter} that acts as the debug highlight painter
@@ -358,6 +363,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     // endregion
 
     // region getters/setters
+    public void addTierChangeListener(TranscriptEditorTierChangeListener listener) {
+        if (!tierChangeListeners.contains(listener)) {
+            tierChangeListeners.add(listener);
+        }
+    }
+
+    public void removeTierChangeListener(TranscriptEditorTierChangeListener listener) {
+        tierChangeListeners.remove(listener);
+    }
+
     public SessionEditUndoSupport getUndoSupport() {
         return undoSupport;
     }
@@ -1083,6 +1098,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         final Element charElem = getTranscriptDocument().getCharacterElement(charPos);
         final AttributeSet attrs = charElem.getAttributes();
         final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+        if(tier == null) return false;
         if(tier.getDeclaredType() == MediaSegment.class) {
             return false;
         }
@@ -1541,6 +1557,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         getTranscriptDocument().setBypassDocumentFilter(false);
         if (!wasCaretFrozen) {
             getTranscriptEditorCaret().unfreeze();
+        }
+
+        for(var changeListener:this.tierChangeListeners) {
+            changeListener.tierChanged(changedTier.getName(), editorEvent.data().oldValue(), editorEvent.data().newValue());
         }
 
         if (changedTier.isUnvalidated()) {

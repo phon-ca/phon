@@ -21,7 +21,7 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
 
     public TierChangeCaretHook(TranscriptEditor editor) {
         this.editor = editor;
-        editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::tierChanged);
+        this.editor.addTierChangeListener(this::tierChanged);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         return true;
     }
 
-    private void tierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+    private void tierChanged(String tierName, Object oldValue, Object newValue) {
         if(this.gotoLocation == null) return;
         if(this.savedTierName == null) return;
-//        if(!this.savedTierName.equals(ee.data().tier())) return;
+        if(!this.savedTierName.equals(tierName)) return;
         final int newDot = editor.sessionLocationToCharPos(gotoLocation);
         if(newDot >= 0) {
             SwingUtilities.invokeLater(() -> {

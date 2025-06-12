@@ -690,8 +690,8 @@ public class TranscriptBatchBuilder {
                 }
             } else if (tierType.equals(PhoneAlignment.class)) {
                 PhoneAlignment phoneAlignment = (PhoneAlignment) tierValue;
+                final SimpleAttributeSet tierAttrsCopy = new SimpleAttributeSet(tierAttrs);
                 if (phoneAlignment.getFullAlignment().getAlignmentLength() == 0) {
-                    final SimpleAttributeSet tierAttrsCopy = new SimpleAttributeSet(tierAttrs);
                     TranscriptStyleConstants.setNotTraversable(tierAttrsCopy, true);
                     appendBatchString("", tierAttrsCopy);
                 } else {
@@ -703,7 +703,8 @@ public class TranscriptBatchBuilder {
                         }
                         builder.append(pm.toString());
                     }
-                    appendBatchString(builder.toString(), tierAttrs);
+                    TranscriptStyleConstants.setNotTraversable(tierAttrsCopy, false);
+                    appendBatchString(builder.toString(), tierAttrsCopy);
                 }
             } else {
                 appendBatchString(tier.toString(), tierAttrs);

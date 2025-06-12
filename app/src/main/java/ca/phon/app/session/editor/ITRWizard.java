@@ -100,7 +100,7 @@ public class ITRWizard extends NodeWizard {
         for(Transcriber transcriber:session.getTranscribers()) {
 
             String transcriberInfo =
-                    (transcriber.getRealName().length() > 0
+                    (transcriber.getRealName() != null && transcriber.getRealName().length() > 0
                         ? String.format("%s (%s)", transcriber.getRealName(), transcriber.getUsername())
                         : transcriber.getUsername());
 
