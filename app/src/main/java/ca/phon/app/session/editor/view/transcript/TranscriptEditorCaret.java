@@ -5,10 +5,11 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.Level;
 
-import javax.swing.*;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Custom caret implementation for {@link TranscriptEditor}.
@@ -21,6 +22,8 @@ public class TranscriptEditorCaret extends DefaultCaret {
     private transient TranscriptElementLocation currentLocation = new TranscriptElementLocation(-1, "Date", 0);
 
     private transient TranscriptElementLocation previousLocation = currentLocation;
+
+    private transient List<TranscriptEditorCaretHook> caretHooks = new ArrayList<>();
 
     public TranscriptEditorCaret() {
         super();
@@ -178,8 +181,8 @@ public class TranscriptEditorCaret extends DefaultCaret {
         this.freezeCaret = freezeCaret;
         if(oldVal != freezeCaret) {
             fireStateChanged();
-            if(PrefHelper.getBoolean("phon.debug", false)) {
-                LogUtil.log(Level.INFO, "Transcript Editor caret freeze: " + freezeCaret);
+            for(TranscriptEditorCaretHook hook: caretHooks) {
+                hook.caretFrozen(freezeCaret);
             }
         }
     }
@@ -206,16 +209,37 @@ public class TranscriptEditorCaret extends DefaultCaret {
 
     public void setDot(int dot, Position.Bias bias, boolean force) {
         if(force || !isFreezeCaret()) {
+            int oldDot = getDot();
+            if(!force) {
+                for (TranscriptEditorCaretHook hook : caretHooks) {
+                    if (!hook.beforeSetDot(oldDot, dot)) {
+                        return; // don't move caret
+                    }
+                }
+            }
             previousLocation = currentLocation;
             currentLocation = getTranscriptLocation(dot);
             super.setDot(dot, bias);
+            if(!force) {
+                for (TranscriptEditorCaretHook hook : caretHooks) {
+                    hook.afterSetDot(oldDot, dot);
+                }
+            }
         }
     }
 
     @Override
     public void moveDot(int dot, Position.Bias bias) {
-        if(!isFreezeCaret())
+        if(!isFreezeCaret()) {
+            for(TranscriptEditorCaretHook hook: caretHooks) {
+                if(!hook.beforeMoveCaret(getDot(), dot))
+                    return; // don't move caret
+            }
             super.moveDot(dot, bias);
+            for(TranscriptEditorCaretHook hook: caretHooks) {
+                hook.afterMoveCaret(getDot(), dot);
+            }
+        }
     }
 
     /**
@@ -242,6 +266,28 @@ public class TranscriptEditorCaret extends DefaultCaret {
      */
     public TranscriptElementLocation getPreviousLocation() {
         return this.previousLocation;
+    }
+
+    /**
+     * Add a caret hook
+     *
+     * @param hook the hook to add
+     */
+    public void addCaretHook(TranscriptEditorCaretHook hook) {
+        if (hook != null && !caretHooks.contains(hook)) {
+            caretHooks.add(hook);
+        }
+    }
+
+    /**
+     * Remove a caret hook
+     *
+     * @param hook the hook to remove
+     */
+    public void removeCaretHook(TranscriptEditorCaretHook hook) {
+        if (hook != null) {
+            caretHooks.remove(hook);
+        }
     }
 
 }

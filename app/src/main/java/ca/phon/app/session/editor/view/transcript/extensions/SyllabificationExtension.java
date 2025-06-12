@@ -183,7 +183,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
             if(isSyllabificationComponent() && ipaTier.hasValue() && ipaTier.getValue().length() > 0) {
                 tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
-                builder.appendBatchString(syllableTier.getValue().toString(), tierAttrs);
+                builder.appendBatchString(" ", tierAttrs);
             } else {
                 builder.appendAll(getFormattedSyllabification(ipa, tierAttrs));
             }

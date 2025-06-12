@@ -183,6 +183,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
         this.undoManager = undoManager;
+        final TierChangeCaretHook tierChangeHook = new TierChangeCaretHook(this);
+        caret.addCaretHook(tierChangeHook);
         initActions();
         registerEditorActions();
         this.editorKit = new TranscriptEditorKit(dataModel.getSession());
@@ -1070,6 +1072,52 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             }
         }
     }
+
+    /**
+     * Report if tier at caret position has uncommitted changes
+     *
+     * @param charPos the character position in the document
+     * @return true if there are uncommitted changes, false otherwise
+     */
+    public boolean tierHasUncommittedChanges(int charPos) {
+        final Element charElem = getTranscriptDocument().getCharacterElement(charPos);
+        final AttributeSet attrs = charElem.getAttributes();
+        final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+        if(tier.getDeclaredType() == MediaSegment.class) {
+            return false;
+        }
+        if(SystemTierType.TargetSyllables.getName().equals(tier.getName()) ||
+            SystemTierType.ActualSyllables.getName().equals(tier.getName()) ||
+            SystemTierType.PhoneAlignment.getName().equals(tier.getName())) {
+            return false; // no changes to syllabification tiers
+        }
+        if(tier == null) return false;
+        final String oldTierVal = tier.isUnvalidated() ? tier.getUnvalidatedValue().getValue() :
+                (tier.hasValue() ? tier.getValue().toString() : "");
+        // get text in document for tier
+        final Element parentElem = charElem.getParentElement();
+        if(parentElem == null) return false;
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < parentElem.getElementCount(); i++) {
+            Element innerElem = parentElem.getElement(i);
+            AttributeSet innerAttrs = innerElem.getAttributes();
+            if(TranscriptStyleConstants.isLabel(innerAttrs)) continue;
+            if(TranscriptStyleConstants.isNewParagraph(innerAttrs)) continue;
+            final String elementType = TranscriptStyleConstants.getElementType(innerAttrs);
+            if(elementType == null) break;
+            try {
+                String text = getTranscriptDocument().getText(innerElem.getStartOffset(), innerElem.getEndOffset() - innerElem.getStartOffset());
+                sb.append(text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        }
+        if(oldTierVal == null && sb.length() == 0) {
+            return false; // no changes
+        }
+        return !Objects.equals(oldTierVal, sb.toString().trim());
+    }
+
     // endregion
 
     // region event handlers
@@ -1295,23 +1343,23 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * Sets the {@code currentTranscriptLocation} to the new location
      */
     private void onSessionLocationChanged(EditorEvent<TranscriptLocationChangeData> editorEvent) {
-        try {
-            SwingUtilities.invokeAndWait(() -> {
+//        try {
+//            SwingUtilities.invokeAndWait(() -> {
                 setCurrentSessionLocation(editorEvent.data().newLoc);
 
-                final TranscriptElementLocation oldLoc = editorEvent.data().oldLoc;
-                final TranscriptElementLocation newLoc = editorEvent.data().newLoc;
+//                final TranscriptElementLocation oldLoc = editorEvent.data().oldLoc;
+//                final TranscriptElementLocation newLoc = editorEvent.data().newLoc;
 
-                if (oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
-                    // header tiers are updated in the HeaderTierExtension
-                    if (oldLoc.transcriptElementIndex() >= 0) {
-                        commitChanges(sessionLocationToCharPos(oldLoc));
-                    }
-                }
-            });
-        } catch (InterruptedException | InvocationTargetException e) {
-            LogUtil.warning(e);
-        }
+//                if (oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
+//                    // header tiers are updated in the HeaderTierExtension
+//                    if (oldLoc.transcriptElementIndex() >= 0) {
+//                        commitChanges(sessionLocationToCharPos(oldLoc));
+//                    }
+//                }
+//            });
+//        } catch (InterruptedException | InvocationTargetException e) {
+//            LogUtil.warning(e);
+//        }
     }
 
     private void onParticipantChanged() {
@@ -1483,9 +1531,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
         final int currentDot = getTranscriptEditorCaret().getDot();
 
-        if(PrefHelper.isDebugMode()) {
-            LogUtil.info("Updating tier text: " + changedTier.getName());
-        }
         boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
         getTranscriptEditorCaret().freeze();
         // Update the changed tier data in the doc
@@ -3107,5 +3152,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         }
 
     }
+
+    /**
+     * Caret adapter to handle commiting changes before the caret is moved.
+     * The caret will be allowed to move only when the changes have been committed.
+     */
 
 }
