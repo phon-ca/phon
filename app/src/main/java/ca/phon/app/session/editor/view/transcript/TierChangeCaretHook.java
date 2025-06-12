@@ -44,14 +44,12 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         if(this.gotoLocation == null) return;
         if(this.savedTierName == null) return;
         if(!this.savedTierName.equals(tierName)) return;
-        final int newDot = editor.sessionLocationToCharPos(gotoLocation);
-        if(newDot >= 0) {
-            SwingUtilities.invokeLater(() -> {
-                editor.getTranscriptEditorCaret().setDot(newDot, true);
-            });
-        }
-        this.gotoLocation = null;
-        this.savedTierName = null;
+        SwingUtilities.invokeLater(() -> {
+            final int newDot = editor.sessionLocationToCharPos(gotoLocation);
+            editor.getTranscriptEditorCaret().setDot(newDot);
+            this.gotoLocation = null;
+            this.savedTierName = null;
+        });
     }
 
 }
