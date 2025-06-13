@@ -20,6 +20,7 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.io.*;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -784,10 +785,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         }
 
         mediaFolders.put(mediaFolder);
-        projectJson.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
-
         try {
-            projectProperties.saveProjectJson();
+            projectProperties.modifyProjectJson((json) -> {
+                final JSONObject retVal = new JSONObject(json.toString());
+                retVal.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+                return retVal;
+            });
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -821,10 +824,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         }
 
         mediaFolders.put(index, mediaFolder);
-        projectJson.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
-
         try {
-            projectProperties.saveProjectJson();
+            projectProperties.modifyProjectJson((json) -> {
+                final JSONObject retVal = new JSONObject(json.toString());
+                retVal.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+                return retVal;
+            });
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -854,9 +859,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
             }
         }
 
-        projectJson.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
         try {
-            projectProperties.saveProjectJson();
+            projectProperties.modifyProjectJson((json) -> {
+                final JSONObject retVal = new JSONObject(json.toString());
+                retVal.put(LocalProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
+                return retVal;
+            });
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }

@@ -276,6 +276,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			});
 			NativeDialogs.showMessageDialog(props);
 		} else {
+			setVisible(false);
 			dispose();
 		}
 	}

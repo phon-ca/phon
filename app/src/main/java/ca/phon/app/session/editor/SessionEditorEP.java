@@ -291,6 +291,13 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		editor.getViewModel().setupWindows(prevPerspective);
 		sessionEditorWindow.setVisible(true);
 
+		sessionEditorWindow.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				editor.getViewModel().savePreviousPerspective();
+			}
+		});
+
 		SwingUtilities.invokeLater( () -> {
 			if(prevPerspective != null) {
 				editor.getViewModel().applyPerspective(prevPerspective);

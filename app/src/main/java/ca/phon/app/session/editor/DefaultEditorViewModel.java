@@ -724,7 +724,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		rootBoundsEle.addAttribute(extendedStateAttr);
 	}
 	
-	private void savePreviousPerspective() {
+	public void savePreviousPerspective() {
 		System.out.println("Saving previous perspective");
 		// XXX Only save previous perspective when running as
 		// a 'Session Editor' window

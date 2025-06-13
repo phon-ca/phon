@@ -196,6 +196,11 @@ public interface EditorViewModel {
 	public void setupDefaultPerspective();
 
 	/**
+	 * Save previous perspective
+	 */
+	public void savePreviousPerspective();
+
+	/**
 	 * Setup views based on the given perspective 
 	 * 
 	 * @param editorPerspective

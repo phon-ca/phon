@@ -857,7 +857,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	 * Save pervious perspective for the current session.
 	 *
 	 */
-	private void savePreviousPerspective() {
+	public void savePreviousPerspective() {
 		// XXX Only save previous perspective when running as
 		// a 'Session Editor' window
 		if(!getEditor().getTitle().startsWith("Session Editor")) return;
