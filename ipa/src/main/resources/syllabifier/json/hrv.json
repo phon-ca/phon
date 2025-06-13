@@ -71,6 +71,10 @@
     {
       "name": "MaxCoda3 #1",
       "pattern": ".:C(C=\\c:U+)"
+    },
+    {
+      "name": "cleanup",
+      "pattern": "(O=\\c:U)"
     }
   ]
 }

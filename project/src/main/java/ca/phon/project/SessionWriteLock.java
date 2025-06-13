@@ -45,4 +45,9 @@ public final class SessionWriteLock implements AutoCloseable {
         project.releaseSessionWriteLock(corpus, session, this);
     }
 
+    @Override
+    public String toString() {
+        return "SessionWriteLock [corpus=" + corpus + ", session=" + session + ", writeLockId=" + writeLockId + "]";
+    }
+
 }
