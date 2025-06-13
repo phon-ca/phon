@@ -467,7 +467,7 @@ public class TranscriptBatchBuilder {
      * @param record
      * @param tier the tier that will be inserted
      * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
-     * @param chatTierNamesShown whether or not chat tier names are shown
+     * @param chatTierNamesShown whether chat tier names are shown
      * @param transcriber the transcriber whose text will be batched (if tier is blind)
      * @param additionalAttrs an attribute set containing attributes for the containing record to be added to the tier
      *  attributes (none will be added if {@code null})
@@ -824,6 +824,8 @@ public class TranscriptBatchBuilder {
             TranscriptStyleConstants.setComponentFactory(attrs, null);
 //        TranscriptStyleConstants.setEnterAction(attrs, null);
             TranscriptStyleConstants.setUnderlineOnHover(attrs, false);
+            TranscriptStyleConstants.setClickHandler(attrs, null);
+            TranscriptStyleConstants.setBorder(attrs, null);
             return attrs;
         } else {
             final AttributeSet attrs = trailingAttrs;

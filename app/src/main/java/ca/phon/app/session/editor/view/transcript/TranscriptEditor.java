@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
@@ -2313,6 +2314,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                         final int start = markers.get(0);
                         final int end = markers.get(1);
                         sb.replace(start, end, selectedText);
+                        markers.clear();
+                        markers.add(start);
+                        markers.add(start + selectedText.length());
                     }
                 }
 
@@ -2326,25 +2330,44 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
                 // insert into document
                 TranscriptEditor.this.paste();
-                final EditorAction<EditorEventType.TierChangeData> act = new EditorAction<>() {
+                TranscriptEditor.this.addTierChangeListener(new TranscriptEditorTierChangeListener() {
                     @Override
-                    public void eventOccurred(EditorEvent<EditorEventType.TierChangeData> ee) {
-                        if(ee.data().valueAdjusting()) return;
-                        if(markers.size() == 1) {
-                            // set caret position to first marker
-                            final int markerPos = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
-                        } else if(markers.size() == 2) {
-                            // set selection to markers
-                            final int start = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
-                            final int end = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(1);
-                            TranscriptEditor.this.setSelectionStart(start);
-                            TranscriptEditor.this.setSelectionEnd(end);
-                        }
-                        TranscriptEditor.this.getEventManager().removeActionForEvent(EditorEventType.TierChange, this);
+                    public void tierChanged(String tierName, Object oldValue, Object newValue) {
+                        SwingUtilities.invokeLater(() -> {
+                            if(currentLocation.tier() != null && !currentLocation.tier().equals(tierName)) return;
+                            if(markers.size() == 1) {
+                                // set caret position to first marker
+                                final int markerPos = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
+                            } else if(markers.size() == 2) {
+                                // set selection to markers
+                                final int start = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
+                                final int end = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(1);
+                                TranscriptEditor.this.setSelectionStart(start);
+                                TranscriptEditor.this.setSelectionEnd(end);
+                            }
+                            TranscriptEditor.this.removeTierChangeListener(this);
+                        });
                     }
-                };
-                TranscriptEditor.this.getEventManager().registerActionForEvent(
-                        EditorEventType.TierChange, act, EditorEventManager.RunOn.AWTEventDispatchThread);
+                });
+//                final EditorAction<EditorEventType.TierChangeData> act = new EditorAction<>() {
+//                    @Override
+//                    public void eventOccurred(EditorEvent<EditorEventType.TierChangeData> ee) {
+//                        if(ee.data().valueAdjusting()) return;
+//                        if(markers.size() == 1) {
+//                            // set caret position to first marker
+//                            final int markerPos = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
+//                        } else if(markers.size() == 2) {
+//                            // set selection to markers
+//                            final int start = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
+//                            final int end = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(1);
+//                            TranscriptEditor.this.setSelectionStart(start);
+//                            TranscriptEditor.this.setSelectionEnd(end);
+//                        }
+//                        TranscriptEditor.this.getEventManager().removeActionForEvent(EditorEventType.TierChange, this);
+//                    }
+//                };
+//                TranscriptEditor.this.getEventManager().registerActionForEvent(
+//                        EditorEventType.TierChange, act, EditorEventManager.RunOn.AWTEventDispatchThread);
                 TranscriptEditor.this.commitChanges(TranscriptEditor.this.getCaretPosition());
                 clipboard.setContents(currentContents, TranscriptEditor.this);
             }
@@ -2460,31 +2483,33 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             TranscriptEditor.this.addPropertyChangeListener("currentSessionLocation", new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent e) {
-                    if(window.isVisible()) {
-                        // if tier had changed
-                        final TranscriptElementLocation oldLoc = (TranscriptElementLocation)e.getOldValue();
-                        final TranscriptElementLocation newLoc = (TranscriptElementLocation)e.getNewValue();
-                        if(oldLoc != null && newLoc != null && (oldLoc.tier() != newLoc.tier() || oldLoc.transcriptElementIndex() != newLoc.transcriptElementIndex())) {
-                            window.setVisible(false);
-                            window.dispose();
-                            TranscriptEditor.this.removePropertyChangeListener("currentSessionLocation", this);
-                        } else {
-                            // move window to new caret position
-                            final Rectangle2D caretRect;
-                            try {
-                                caretRect = modelToView2D(getCaretPosition());
-                            } catch (BadLocationException ex) {
-                                return;
+                    SwingUtilities.invokeLater(() -> {
+                        if (window.isVisible()) {
+                            // if tier had changed
+                            final TranscriptElementLocation oldLoc = (TranscriptElementLocation) e.getOldValue();
+                            final TranscriptElementLocation newLoc = (TranscriptElementLocation) e.getNewValue();
+                            if (oldLoc != null && newLoc != null && (oldLoc.tier() != newLoc.tier() || oldLoc.transcriptElementIndex() != newLoc.transcriptElementIndex())) {
+                                window.setVisible(false);
+                                window.dispose();
+                                TranscriptEditor.this.removePropertyChangeListener("currentSessionLocation", this);
+                            } else {
+                                // move window to new caret position
+                                final Rectangle2D caretRect;
+                                try {
+                                    caretRect = modelToView2D(getCaretPosition());
+                                } catch (BadLocationException ex) {
+                                    return;
+                                }
+                                final Point caretPoint = new Point((int) caretRect.getMinX(), (int) caretRect.getMinY());
+                                SwingUtilities.convertPointToScreen(caretPoint, TranscriptEditor.this);
+                                // get font ascent at caret position
+                                final FontMetrics fm = getFontMetrics(getFont());
+                                final int fontAscent = fm.getAscent();
+                                final Rectangle r = new Rectangle(caretPoint.x, caretPoint.y - fontAscent, (int) caretRect.getWidth(), (int) caretRect.getHeight() + fontAscent);
+                                window.pointAtRect(SwingConstants.TOP, r);
                             }
-                            final Point caretPoint = new Point((int)caretRect.getMinX(), (int)caretRect.getMinY());
-                            SwingUtilities.convertPointToScreen(caretPoint, TranscriptEditor.this);
-                            // get font ascent at caret position
-                            final FontMetrics fm = getFontMetrics(getFont());
-                            final int fontAscent = fm.getAscent();
-                            final Rectangle r = new Rectangle(caretPoint.x, caretPoint.y - fontAscent, (int)caretRect.getWidth(), (int)caretRect.getHeight() + fontAscent);
-                            window.pointAtRect(SwingConstants.TOP, r);
                         }
-                    }
+                    });
                 }
             });
         } catch (BadLocationException e) {
@@ -2908,10 +2933,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             // Left click
             if (mouseButton == MouseEvent.BUTTON1) {
                 int mousePosInDoc = viewToModel2D(e.getPoint());
-
                 Element elem = doc.getCharacterElement(mousePosInDoc);
                 AttributeSet attrs = elem.getAttributes();
-
                 if (TranscriptStyleConstants.isNotTraversable(attrs)) {
                     String elementType = TranscriptStyleConstants.getElementType(attrs);
                     if (elementType != null) {
@@ -2949,7 +2972,21 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                         }
 
                         final BiConsumer<MouseEvent, AttributeSet> clickHandler = TranscriptStyleConstants.getClickHandler(attrs);
+                        boolean clickHandlerFound = false;
+                        var attrNames = attrs.getAttributeNames();
+                        while (attrNames.hasMoreElements()) {
+                            String attributeName = (String) attrNames.nextElement().toString();
+                            if("clickHandler".equals(attributeName)) {
+                                clickHandlerFound = true;
+                                break;
+                            }
+                        }
                         if (clickHandler != null) {
+                            // XXX this is a hack to avoid a bug where the label context menu would appear - fix properties
+                            // so this does not happen
+                            if(!clickHandlerFound) {
+                                return;
+                            }
                             clickHandler.accept(e, attrs);
                         }
                     }

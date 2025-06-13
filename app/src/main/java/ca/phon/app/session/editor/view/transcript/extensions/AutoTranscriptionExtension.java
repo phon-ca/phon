@@ -168,9 +168,10 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             try {
                 editor.getTranscriptDocument().remove(ghostRange.start(), ghostRange.length());
                 ghostRange = null;
-                editor.getTranscriptEditorCaret().unfreeze();
             } catch (BadLocationException ex) {
                 LogUtil.warning(ex);
+            } finally {
+                editor.getTranscriptEditorCaret().unfreeze();
             }
         }
     }
