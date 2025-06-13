@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.34/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_34.dmg" newVersion="4.0.0-alpha.34" newMediaFileId="macos" fileSize="392779296" md5Sum="2686e273e5e6c3213d769d19554cde9c" sha256Sum="5bdf564e5b53965a2fe9c14d62951f7193fba22dbda0b2eaf998e78531a3ca93" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.37/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_37.dmg" newVersion="4.0.0-alpha.37" newMediaFileId="macos" fileSize="392761608" md5Sum="94c68661ec319c54d1902572f0d30807" sha256Sum="31c74060a82c60caa8f9fc2df6b51490e02ad72591731dda758fb9f83a3ff7e6" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -54,7 +54,7 @@ These changes collectively represent significant improvements to the user interf
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_34.dmg" newVersion="4.0.0-alpha.34" newMediaFileId="macos" fileSize="392779296" md5Sum="2686e273e5e6c3213d769d19554cde9c" sha256Sum="5bdf564e5b53965a2fe9c14d62951f7193fba22dbda0b2eaf998e78531a3ca93" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_37.dmg" newVersion="4.0.0-alpha.37" newMediaFileId="macos" fileSize="392761608" md5Sum="94c68661ec319c54d1902572f0d30807" sha256Sum="31c74060a82c60caa8f9fc2df6b51490e02ad72591731dda758fb9f83a3ff7e6" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -108,7 +108,7 @@ These changes collectively represent significant improvements to the user interf
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.exe" newVersion="4.0.0-alpha.34" newMediaFileId="win64" fileSize="374708736" md5Sum="ff35b5d01ff3182ef0592ec9d8e8aa81" sha256Sum="caaf6372ef8a3b1e4f01f34c1222b6433ba5c2463fa2ad95aecaf3be5d03f7ff" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_37.exe" newVersion="4.0.0-alpha.37" newMediaFileId="win64" fileSize="374710272" md5Sum="dc1fb134508c0c502a601e497ee0c507" sha256Sum="9ab60a8cafa098fcbab67de6550ddc03ae2b13334b0b978c1587c19a26153945" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -162,7 +162,7 @@ These changes collectively represent significant improvements to the user interf
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.exe" newVersion="4.0.0-alpha.34" newMediaFileId="win64" fileSize="374708736" md5Sum="ff35b5d01ff3182ef0592ec9d8e8aa81" sha256Sum="caaf6372ef8a3b1e4f01f34c1222b6433ba5c2463fa2ad95aecaf3be5d03f7ff" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_37.exe" newVersion="4.0.0-alpha.37" newMediaFileId="win64" fileSize="374710272" md5Sum="dc1fb134508c0c502a601e497ee0c507" sha256Sum="9ab60a8cafa098fcbab67de6550ddc03ae2b13334b0b978c1587c19a26153945" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -216,7 +216,7 @@ These changes collectively represent significant improvements to the user interf
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.exe" newVersion="4.0.0-alpha.34" newMediaFileId="win64" fileSize="374708736" md5Sum="ff35b5d01ff3182ef0592ec9d8e8aa81" sha256Sum="caaf6372ef8a3b1e4f01f34c1222b6433ba5c2463fa2ad95aecaf3be5d03f7ff" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_37.exe" newVersion="4.0.0-alpha.37" newMediaFileId="win64" fileSize="374710272" md5Sum="dc1fb134508c0c502a601e497ee0c507" sha256Sum="9ab60a8cafa098fcbab67de6550ddc03ae2b13334b0b978c1587c19a26153945" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -270,7 +270,7 @@ These changes collectively represent significant improvements to the user interf
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.zip" newVersion="4.0.0-alpha.34" newMediaFileId="win64zip" fileSize="373510965" md5Sum="7c28be95ca2f05b872afe0630a5bce57" sha256Sum="84898b8f36d39e3767e24e5fd2bf5adbdce49163bf7883761c78f38f56ccf9ce" bundledJre="windows-amd64-21.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_37.zip" newVersion="4.0.0-alpha.37" newMediaFileId="win64zip" fileSize="373512747" md5Sum="72f2d9441c4a7150cd97cacf2c3c0871" sha256Sum="3c36310a4827043cda69c8bd4ab94dbfb0d57a3800a9689a0ce4c69e02e6993d" bundledJre="windows-amd64-21.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
