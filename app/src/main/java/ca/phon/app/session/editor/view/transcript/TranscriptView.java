@@ -1718,6 +1718,14 @@ public class TranscriptView extends EditorView {
      * Context mouse handler for transcript editor
      */
     private final MouseAdapter contextMouseHandler = new MouseAdapter() {
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if(e.isPopupTrigger()) {
+                mousePressed(e);
+            }
+        }
+
         @Override
         public void mousePressed(MouseEvent e) {
         if(e.isPopupTrigger()) {
