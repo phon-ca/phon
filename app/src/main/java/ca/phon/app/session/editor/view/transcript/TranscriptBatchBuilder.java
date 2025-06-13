@@ -822,7 +822,6 @@ public class TranscriptBatchBuilder {
             final AttributeSet prevAttrs = batch.get(batch.size() - 1).getAttributes();
             SimpleAttributeSet attrs = new SimpleAttributeSet(prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
             TranscriptStyleConstants.setComponentFactory(attrs, null);
-//        TranscriptStyleConstants.setEnterAction(attrs, null);
             TranscriptStyleConstants.setUnderlineOnHover(attrs, false);
             TranscriptStyleConstants.setClickHandler(attrs, null);
             TranscriptStyleConstants.setBorder(attrs, null);

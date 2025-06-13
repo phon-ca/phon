@@ -156,6 +156,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             LogUtil.severe(e);
         } finally {
             editor.getTranscriptEditorCaret().unfreeze();
+            doc.setBypassDocumentFilter(false);
         }
     }
 
@@ -303,6 +304,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             LogUtil.severe(e);
         } finally {
             editor.getTranscriptEditorCaret().unfreeze();
+            doc.setBypassDocumentFilter(false);
         }
     }
 
@@ -587,6 +589,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             LogUtil.severe(e);
         } finally {
             editor.getTranscriptEditorCaret().unfreeze();
+            doc.setBypassDocumentFilter(false);
         }
     }
 
@@ -658,6 +661,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             LogUtil.severe(e);
         } finally {
             editor.getTranscriptEditorCaret().unfreeze();
+            doc.setBypassDocumentFilter(false);
         }
     }
 
