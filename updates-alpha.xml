@@ -1,201 +1,327 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.33/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_33.dmg" newVersion="4.0.0-alpha.33" newMediaFileId="macos" fileSize="387592463" md5Sum="9009cf2893d561532e217a709c71fc4d" sha256Sum="dce00cce4b1bcb0dfcde673ce8a0066c2015e0a7544ccbd07ddb1b8dedf96bb6" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.34/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_34.dmg" newVersion="4.0.0-alpha.34" newMediaFileId="macos" fileSize="392779296" md5Sum="2686e273e5e6c3213d769d19554cde9c" sha256Sum="5bdf564e5b53965a2fe9c14d62951f7193fba22dbda0b2eaf998e78531a3ca93" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
-## General
-  
- * Updated transcript format  with improved support for the CHAT transcription format.
- * Update to TalkBank 3.0.1/chatter 3.0.9.
- * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
-   Existing projects will be automatically converted to the new format when opened.
- * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
 
-## Welcome window
+## User Interface and Experience Improvements
 
- * Welcome window will close after a project is opened and re-open when all other windows have been closed.
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
 
-## Project window
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
 
- * Project window now shows a 'default' corpus which will display all sessions in the project root.
- * New corpus/session actions are no longer displayed automatically.
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
 
-## Session editor
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
 
- * The 'Record data' view has been replaced with the 'Transcript' view.  The transcript view displays the contents
-of the session's transcript including comments, gems, and records.  Records may be viewed as a single text document
-or one at a time as is traditional in Phon.
- * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
- * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
+These changes collectively represent significant improvements to the user interface navigation, fixes for various bugs, and enhanced analysis capabilities, all while maintaining compatibility with the CHAT transcription system format.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_33.dmg" newVersion="4.0.0-alpha.33" newMediaFileId="macos" fileSize="387592463" md5Sum="9009cf2893d561532e217a709c71fc4d" sha256Sum="dce00cce4b1bcb0dfcde673ce8a0066c2015e0a7544ccbd07ddb1b8dedf96bb6" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_34.dmg" newVersion="4.0.0-alpha.34" newMediaFileId="macos" fileSize="392779296" md5Sum="2686e273e5e6c3213d769d19554cde9c" sha256Sum="5bdf564e5b53965a2fe9c14d62951f7193fba22dbda0b2eaf998e78531a3ca93" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
-## General
-  
- * Updated transcript format  with improved support for the CHAT transcription format.
- * Update to TalkBank 3.0.1/chatter 3.0.9.
- * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
-   Existing projects will be automatically converted to the new format when opened.
- * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
 
-## Welcome window
+## User Interface and Experience Improvements
 
- * Welcome window will close after a project is opened and re-open when all other windows have been closed.
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
 
-## Project window
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
 
- * Project window now shows a 'default' corpus which will display all sessions in the project root.
- * New corpus/session actions are no longer displayed automatically.
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
 
-## Session editor
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
 
- * The 'Record data' view has been replaced with the 'Transcript' view.  The transcript view displays the contents
-of the session's transcript including comments, gems, and records.  Records may be viewed as a single text document
-or one at a time as is traditional in Phon.
- * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
- * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
+These changes collectively represent significant improvements to the user interface navigation, fixes for various bugs, and enhanced analysis capabilities, all while maintaining compatibility with the CHAT transcription system format.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.exe" newVersion="4.0.0-alpha.33" newMediaFileId="win64" fileSize="370513920" md5Sum="b9b8f577b171697292759e27b30bc4f0" sha256Sum="5b1779a91881ddb800b085ba4f770b7c61d1bafd79ff9505fed9e045659afcfe" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.exe" newVersion="4.0.0-alpha.34" newMediaFileId="win64" fileSize="374708736" md5Sum="ff35b5d01ff3182ef0592ec9d8e8aa81" sha256Sum="caaf6372ef8a3b1e4f01f34c1222b6433ba5c2463fa2ad95aecaf3be5d03f7ff" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
-## General
-  
- * Updated transcript format  with improved support for the CHAT transcription format.
- * Update to TalkBank 3.0.1/chatter 3.0.9.
- * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
-   Existing projects will be automatically converted to the new format when opened.
- * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
 
-## Welcome window
+## User Interface and Experience Improvements
 
- * Welcome window will close after a project is opened and re-open when all other windows have been closed.
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
 
-## Project window
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
 
- * Project window now shows a 'default' corpus which will display all sessions in the project root.
- * New corpus/session actions are no longer displayed automatically.
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
 
-## Session editor
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
 
- * The 'Record data' view has been replaced with the 'Transcript' view.  The transcript view displays the contents
-of the session's transcript including comments, gems, and records.  Records may be viewed as a single text document
-or one at a time as is traditional in Phon.
- * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
- * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
+These changes collectively represent significant improvements to the user interface navigation, fixes for various bugs, and enhanced analysis capabilities, all while maintaining compatibility with the CHAT transcription system format.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.exe" newVersion="4.0.0-alpha.33" newMediaFileId="win64" fileSize="370513920" md5Sum="b9b8f577b171697292759e27b30bc4f0" sha256Sum="5b1779a91881ddb800b085ba4f770b7c61d1bafd79ff9505fed9e045659afcfe" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.exe" newVersion="4.0.0-alpha.34" newMediaFileId="win64" fileSize="374708736" md5Sum="ff35b5d01ff3182ef0592ec9d8e8aa81" sha256Sum="caaf6372ef8a3b1e4f01f34c1222b6433ba5c2463fa2ad95aecaf3be5d03f7ff" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
-## General
-  
- * Updated transcript format  with improved support for the CHAT transcription format.
- * Update to TalkBank 3.0.1/chatter 3.0.9.
- * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
-   Existing projects will be automatically converted to the new format when opened.
- * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
 
-## Welcome window
+## User Interface and Experience Improvements
 
- * Welcome window will close after a project is opened and re-open when all other windows have been closed.
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
 
-## Project window
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
 
- * Project window now shows a 'default' corpus which will display all sessions in the project root.
- * New corpus/session actions are no longer displayed automatically.
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
 
-## Session editor
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
 
- * The 'Record data' view has been replaced with the 'Transcript' view.  The transcript view displays the contents
-of the session's transcript including comments, gems, and records.  Records may be viewed as a single text document
-or one at a time as is traditional in Phon.
- * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
- * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
+These changes collectively represent significant improvements to the user interface navigation, fixes for various bugs, and enhanced analysis capabilities, all while maintaining compatibility with the CHAT transcription system format.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.exe" newVersion="4.0.0-alpha.33" newMediaFileId="win64" fileSize="370513920" md5Sum="b9b8f577b171697292759e27b30bc4f0" sha256Sum="5b1779a91881ddb800b085ba4f770b7c61d1bafd79ff9505fed9e045659afcfe" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.exe" newVersion="4.0.0-alpha.34" newMediaFileId="win64" fileSize="374708736" md5Sum="ff35b5d01ff3182ef0592ec9d8e8aa81" sha256Sum="caaf6372ef8a3b1e4f01f34c1222b6433ba5c2463fa2ad95aecaf3be5d03f7ff" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
-## General
-  
- * Updated transcript format  with improved support for the CHAT transcription format.
- * Update to TalkBank 3.0.1/chatter 3.0.9.
- * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
-   Existing projects will be automatically converted to the new format when opened.
- * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
 
-## Welcome window
+## User Interface and Experience Improvements
 
- * Welcome window will close after a project is opened and re-open when all other windows have been closed.
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
 
-## Project window
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
 
- * Project window now shows a 'default' corpus which will display all sessions in the project root.
- * New corpus/session actions are no longer displayed automatically.
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
 
-## Session editor
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
 
- * The 'Record data' view has been replaced with the 'Transcript' view.  The transcript view displays the contents
-of the session's transcript including comments, gems, and records.  Records may be viewed as a single text document
-or one at a time as is traditional in Phon.
- * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
- * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
+These changes collectively represent significant improvements to the user interface navigation, fixes for various bugs, and enhanced analysis capabilities, all while maintaining compatibility with the CHAT transcription system format.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.zip" newVersion="4.0.0-alpha.33" newMediaFileId="win64zip" fileSize="369258349" md5Sum="04dd2c6c40e77a27df34dea866183315" sha256Sum="155c27a650e707de0b4f58e6b5fb7de8edb2d9a3c348d96ec2370eca4e89b9b4" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_34.zip" newVersion="4.0.0-alpha.34" newMediaFileId="win64zip" fileSize="373510965" md5Sum="7c28be95ca2f05b872afe0630a5bce57" sha256Sum="84898b8f36d39e3767e24e5fd2bf5adbdce49163bf7883761c78f38f56ccf9ce" bundledJre="windows-amd64-21.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
-## General
-  
- * Updated transcript format  with improved support for the CHAT transcription format.
- * Update to TalkBank 3.0.1/chatter 3.0.9.
- * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
-   Existing projects will be automatically converted to the new format when opened.
- * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
 
-## Welcome window
+## User Interface and Experience Improvements
 
- * Welcome window will close after a project is opened and re-open when all other windows have been closed.
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
 
-## Project window
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
 
- * Project window now shows a 'default' corpus which will display all sessions in the project root.
- * New corpus/session actions are no longer displayed automatically.
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
 
-## Session editor
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
 
- * The 'Record data' view has been replaced with the 'Transcript' view.  The transcript view displays the contents
-of the session's transcript including comments, gems, and records.  Records may be viewed as a single text document
-or one at a time as is traditional in Phon.
- * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
- * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
+These changes collectively represent significant improvements to the user interface navigation, fixes for various bugs, and enhanced analysis capabilities, all while maintaining compatibility with the CHAT transcription system format.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.34
 </comment>
   </entry>
 </updateDescriptor>
