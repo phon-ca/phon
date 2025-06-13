@@ -1382,6 +1382,7 @@
             <xs:element ref="lig" minOccurs="1" maxOccurs="1"/>
             <xs:element ref="ph" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
+        <xs:attribute name="scType" type="syllableConstituentType"/>
     </xs:complexType>
 
     <xs:simpleType name="syllableConstituentType">

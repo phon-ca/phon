@@ -109,6 +109,25 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		lig.setType(ligType);
 		xmlCompoundPhoneType.getContent().add(factory.createLig(lig));
 
+		if(cmpPhone.getScType() != SyllableConstituentType.UNKNOWN) {
+			XmlSyllableConstituentType scType = switch (cmpPhone.getScType()) {
+				case AMBISYLLABIC -> XmlSyllableConstituentType.AMBISYLLABIC;
+				case CODA -> XmlSyllableConstituentType.CODA;
+				case LEFTAPPENDIX -> XmlSyllableConstituentType.LEFT_APPENDIX;
+				case NUCLEUS -> XmlSyllableConstituentType.NUCLEUS;
+				case OEHS -> XmlSyllableConstituentType.OEHS;
+				case ONSET -> XmlSyllableConstituentType.ONSET;
+				case RIGHTAPPENDIX -> XmlSyllableConstituentType.RIGHT_APPENDIX;
+				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
+			};
+			if(scType == XmlSyllableConstituentType.NUCLEUS) {
+				final SyllabificationInfo info = cmpPhone.getExtension(SyllabificationInfo.class);
+				if(info.isDiphthongMember())
+					scType = XmlSyllableConstituentType.DIPHTHONG;
+			}
+			xmlCompoundPhoneType.setScType(scType);
+		}
+
 		xmlCompoundPhoneType.getContent().add(factory.createPh(((XmlPhoneType) secondPhoneXmlType)));
 		this.currentWord.getStressOrPhOrCmph().add(xmlCompoundPhoneType);
 	}

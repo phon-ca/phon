@@ -123,7 +123,25 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
                 };
             }
         }
+        SyllableConstituentType scType = SyllableConstituentType.UNKNOWN;
+        if(xmlCompoundPhoneType.getScType() != null) {
+            scType = switch (xmlCompoundPhoneType.getScType()) {
+                case AMBISYLLABIC -> SyllableConstituentType.AMBISYLLABIC;
+                case CODA -> SyllableConstituentType.CODA;
+                case DIPHTHONG, NUCLEUS -> SyllableConstituentType.NUCLEUS;
+                case LEFT_APPENDIX -> SyllableConstituentType.LEFTAPPENDIX;
+                case OEHS -> SyllableConstituentType.OEHS;
+                case ONSET -> SyllableConstituentType.ONSET;
+                case RIGHT_APPENDIX -> SyllableConstituentType.RIGHTAPPENDIX;
+            };
+        }
         builder.makeCompoundPhone(ligCh);
+        builder.last().setScType(scType);
+        if(xmlCompoundPhoneType.getScType() == XmlSyllableConstituentType.DIPHTHONG) {
+            final SyllabificationInfo syllabificationInfo = builder.last().getExtension(SyllabificationInfo.class);
+            syllabificationInfo.setDiphthongMember(true);
+        }
+
     }
 
     @Visits
