@@ -131,6 +131,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         putExtension(MutableProject.class, this);
         // deprecated project extension
         putExtension(ProjectDeprecated.class, this);
+
+        ParticipantCache participantCache = new ParticipantCache(this);
+        putExtension(ParticipantCache.class, new ParticipantCache(this));
     }
 
     /**

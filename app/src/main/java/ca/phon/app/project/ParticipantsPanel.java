@@ -151,6 +151,7 @@ public class ParticipantsPanel extends JPanel {
 
 		@Override
 		public void treeNodesChanged(TreeModelEvent e) {
+			System.out.println("treeNodesChanged: " + e);
 			if(e instanceof TristateCheckBoxTreeModelEvent) {
 				participantBusyLabel.setBusy(true);
 

@@ -82,6 +82,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 		super.firePropertyChange("project", oldProject, project);
 
 		setModel(createModel(project, isHideEmptyCorpora()));
+		new ProjectTreeWorker().execute();
 	}
 
 	public boolean isHideEmptyCorpora() {
@@ -250,29 +251,30 @@ public class SessionSelector extends TristateCheckBoxTree {
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			final ProjectTreeNode root = (ProjectTreeNode)getModel().getRoot();
-			// create new tree structure
-			final Iterator<String> corpusNames = project.getCorpusIterator();
-			while (corpusNames.hasNext()) {
-				String corpus = corpusNames.next();
-				TristateCheckBoxTreeNode corpusNode = new CorpusTreeNode(corpus);
-				corpusNode.setEnablePartialCheck(false);
+			if(getModel().getRoot() instanceof ProjectTreeNode root) {
+				// create new tree structure
+				final Iterator<String> corpusNames = project.getCorpusIterator();
+				while (corpusNames.hasNext()) {
+					String corpus = corpusNames.next();
+					TristateCheckBoxTreeNode corpusNode = new CorpusTreeNode(corpus);
+					corpusNode.setEnablePartialCheck(false);
 
-				final Iterator<String> sessionNames = project.getSessionIterator(corpus);
-				if(!sessionNames.hasNext() && hideEmptyCorpora) continue;
-				if(".".equals(corpus)) {
-					corpusNode = root;
-				} else {
-					publish(new ProjectTreeInsertionData(root, corpusNode));
-				}
+					final Iterator<String> sessionNames = project.getSessionIterator(corpus);
+					if (!sessionNames.hasNext() && hideEmptyCorpora) continue;
+					if (".".equals(corpus)) {
+						corpusNode = root;
+					} else {
+						publish(new ProjectTreeInsertionData(root, corpusNode));
+					}
 
-				while(sessionNames.hasNext()) {
-					final String session = sessionNames.next();
-					SessionPath sp = new SessionPath(corpus, session);
+					while (sessionNames.hasNext()) {
+						final String session = sessionNames.next();
+						SessionPath sp = new SessionPath(corpus, session);
 
-					SessionTreeNode sessionNode = new SessionTreeNode(sp);
-					sessionNode.setEnablePartialCheck(false);
-					publish(new ProjectTreeInsertionData(corpusNode, sessionNode));
+						SessionTreeNode sessionNode = new SessionTreeNode(sp);
+						sessionNode.setEnablePartialCheck(false);
+						publish(new ProjectTreeInsertionData(corpusNode, sessionNode));
+					}
 				}
 			}
 			return null;

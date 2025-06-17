@@ -1,5 +1,7 @@
 package ca.phon.ipa.ipc;
 
+import ca.phon.ipa.IPATranscript;
+
 /**
  * Index of phonetic complexity components.
  * Jakielski, Kathy J.. "The Index of Phonetic Complexity: At-a-Glance Scoring System, Terminology,
@@ -32,6 +34,15 @@ public record IndexOfPhoneticComplexity(
          (CCV) gets 1 point for being heterorganic. */
         int T
 ) {
+    /**
+     * Calculate the Index of Phonetic Complexity from an IPATranscript.
+     *
+     * @param ipa the IPATranscript to calculate the index from
+     * @return an IndexOfPhoneticComplexity object representing the calculated index
+     */
+    public static IndexOfPhoneticComplexity FromTranscript(IPATranscript ipa) {
+        return IPCCalculator.calculate(ipa);
+    }
 
     /**
      * Default constructor for the Index of Phonetic Complexity. Zero scores for all components.

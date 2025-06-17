@@ -25,7 +25,7 @@ public class IPCCalculator {
      * @param ipa the transcript to analyze
      * @return index of phonetic complexity
      */
-    public IndexOfPhoneticComplexity calculate(IPATranscript ipa) {
+    public static IndexOfPhoneticComplexity calculate(IPATranscript ipa) {
         if (ipa.length() == 0) return new IndexOfPhoneticComplexity();
 
         // Place (D)

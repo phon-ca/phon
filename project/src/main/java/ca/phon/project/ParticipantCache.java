@@ -92,7 +92,7 @@ public class ParticipantCache {
 
 	public void loadSession(SessionPath sessionPath) {
 		final SessionDetails sessionDetails = project.getExtension(SessionDetails.class);
-		if(sessionDetails != null) {
+		if(sessionDetails == null) {
 			return;
 		}
 		final ZonedDateTime lastScanModTime = sessionMap.get(sessionPath);
