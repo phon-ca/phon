@@ -55,11 +55,11 @@ public class PrefHelper {
 		if(OSInfo.isMacOs()) {
 			retVal = 
 				userHomePath + File.separator + "Library" + File.separator + "Application Support"
-				+ File.separator + "Phon";
+				+ File.separator + "Phon4";
 		} else if(OSInfo.isWindows()) {
-			retVal = System.getenv("APPDATA") + File.separator + "Phon";
+			retVal = System.getenv("APPDATA") + File.separator + "Phon4";
 		} else {
-			retVal = userHomePath + File.separator + ".phon";
+			retVal = userHomePath + File.separator + ".phon4";
 		}
 		
 		return retVal;
@@ -68,7 +68,7 @@ public class PrefHelper {
 	/**
 	 * Application prefs root node
 	 */
-	public final static String PREF_ROOT = "/ca/phon/util";
+	public final static String PREF_ROOT = "/ca/phon4/prefs";
 	
 	public static String getUserDocumentsFolder() {
 		final File userHome = new File(System.getProperty("user.home"));
@@ -81,7 +81,7 @@ public class PrefHelper {
 	 * 
 	 */
 	public static String getUserDocumentsPhonFolder() {
-		final File phonDocs = new File(getUserDocumentsFolder(), "Phon");
+		final File phonDocs = new File(getUserDocumentsFolder(), "Phon4");
 		return phonDocs.getAbsolutePath();
 	}
 	
