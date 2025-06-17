@@ -51,7 +51,7 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="19" y="521"/>
+                <oga:meta x="20" y="589"/>
             </extensions>
         </node>
         <node id="54f766fd" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -69,7 +69,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="5a4eea925a1245d1" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1ce02dd8">
+            <graph id="435c216b">
                 <node id="8d99d99155574bfb" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -221,11 +221,11 @@ function tableOp(context, table) {
 ]]></oga:property>
                     <oga:property key="columnName"><![CDATA[Session]]></oga:property>
                 </oga:settings>
-                <oga:meta x="810" y="15"/>
+                <oga:meta x="919" y="22"/>
             </extensions>
         </node>
         <ogcn:macro id="5e5c1236" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="1b268fe0">
+            <graph id="5c10226c">
                 <node id="3cc69c9c" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -252,7 +252,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4cb1e252b87847a6" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="44b7b05b">
+                    <graph id="529a388e">
                         <node id="66a88c96c102425d" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -307,7 +307,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="1b98667e" name="If Has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="119a5a3f">
+                    <graph id="4296497a">
                         <node id="2c1ed0fb" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -401,7 +401,7 @@ function run(context) {
                 <oga:settings>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Set]]></oga:property>
                 </oga:settings>
-                <oga:meta x="1047" y="15"/>
+                <oga:meta x="1156" y="22"/>
             </extensions>
         </ogcn:macro>
         <link dest="54f766fd" destField="project" source="178c2e58" sourceField="obj"/>
@@ -419,7 +419,7 @@ function run(context) {
         <link dest="3a0d083334f744fb" destField="cacheId" source="210547c8" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Inventory by Session">
+                <opqry:info format="html" minVersion="4.0.0" title="Inventory by Session">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="66402141b8874d46" showAsStep="true">

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor"
-         xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes"
-         xmlns:opqry="https://phon.ca/ns/opgraph_query">
+<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
         <node id="53fa4503af9e4420" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="15"/>
             </extensions>
@@ -15,10 +13,10 @@
         <node id="f5756e53e77e4bf2" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                 </oga:settings>
-                <oga:meta x="116" y="246"/>
+                <oga:meta x="39" y="247"/>
             </extensions>
         </node>
         <node id="ea0f9d2afb6c419a" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -43,7 +41,7 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="98" y="402"/>
+                <oga:meta x="38" y="402"/>
             </extensions>
         </node>
         <node id="58072efd" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -52,9 +50,9 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="7035e30a3ede49b6" name="Start Report Template" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3b40b33e">
+            <graph id="5474c8e6">
                 <ogcn:macro id="ad726d6e76304b05" name="Get Process Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="52f706e5">
+                    <graph id="5515f952">
                         <node id="e4fe0eb484474c69" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -97,12 +95,13 @@ function setup_params(params) {
                     <input name="data" optional="false">Data to print</input>
                     <extensions>
                         <oga:settings>
+                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                             <oga:property key="dataTemplate"><![CDATA[
 #h1("$DATA")
 ]]></oga:property>
                             <oga:property key="showText"><![CDATA[true]]></oga:property>
                             <oga:property key="showTable"><![CDATA[false]]></oga:property>
-                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                            <oga:property key="showBuffer"><![CDATA[true]]></oga:property>
                         </oga:settings>
                         <oga:meta x="229" y="39">
                             <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
@@ -121,20 +120,15 @@ function setup_params(params) {
                 <oga:meta x="320" y="406"/>
             </extensions>
         </ogcn:macro>
-        <opqry:reportDesignNode id="334d668e" type="ca.phon.app.opgraph.nodes.query.ReportDesignNode" useLastReport="true">
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="531" y="66"/>
-            </extensions>
-        </opqry:reportDesignNode>
         <node id="7ab6cf1a" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <input name="data" optional="false">Data to print</input>
             <extensions>
                 <oga:settings>
+                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                     <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
-                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                    <oga:property key="showBuffer"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="749" y="72"/>
             </extensions>
@@ -143,6 +137,7 @@ function setup_params(params) {
             <input name="data" optional="false">Data to print</input>
             <extensions>
                 <oga:settings>
+                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                     <oga:property key="dataTemplate"><![CDATA[
 #set($buffer = $buffers.get("$DATA"))
 
@@ -152,18 +147,14 @@ $buffer
 ]]></oga:property>
                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
-                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                    <oga:property key="showBuffer"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="752" y="398">
-                    <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
                     <oga:default for="append" type="java.lang.Boolean">true</oga:default>
+                    <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
                 </oga:meta>
             </extensions>
         </node>
-        <link dest="334d668e" destField="project" source="58072efd" sourceField="project"/>
-        <link dest="334d668e" destField="query" source="58072efd" sourceField="query"/>
-        <link dest="7ab6cf1a" destField="data" source="334d668e" sourceField="report"/>
-        <link dest="334d668e" destField="results" source="58072efd" sourceField="result sets"/>
         <link dest="58072efd" destField="project" source="53fa4503af9e4420" sourceField="obj"/>
         <link dest="58072efd" destField="queryId" source="f5756e53e77e4bf2" sourceField="obj"/>
         <link dest="7035e30a3ede49b6" destField="parameters" source="ea0f9d2afb6c419a" sourceField="parameters"/>
@@ -171,16 +162,9 @@ $buffer
         <link dest="4e658b782747465f" destField="data" source="7ab6cf1a" sourceField="buffer"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Legacy Report">
+                <opqry:info format="html" minVersion="4.0.0" title="Legacy Report Design">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="334d668e" showAsStep="true">
-                    <opqry:info format="html" title="Report Design">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:report-template name="Report Prefix"/>
-                <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>

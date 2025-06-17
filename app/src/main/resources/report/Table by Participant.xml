@@ -51,7 +51,7 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="53" y="610"/>
+                <oga:meta x="24" y="743"/>
             </extensions>
         </node>
         <node id="1218edab" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -69,7 +69,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="cefeea9929f34628" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5a5efcc6">
+            <graph id="1bfabc71">
                 <node id="cc47418ba9f4481d" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -105,7 +105,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="cf36fe27606748db"/>
             <ogcn:published_output field="value" name="value" ref="5d658b7ca49a46e6"/>
             <extensions>
-                <oga:meta x="290" y="612"/>
+                <oga:meta x="290" y="691"/>
             </extensions>
         </ogcn:macro>
         <node id="3db44f0a3c554e14" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -116,13 +116,13 @@ function setup_params(params) {
                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
                     <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="754" y="136"/>
+                <oga:meta x="700" y="78"/>
             </extensions>
         </node>
         <node id="fa3ba983be664a03" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="508" y="612">
+                <oga:meta x="508" y="691">
                     <oga:default for="reportName" type="java.lang.String">Results by Session</oga:default>
                 </oga:meta>
             </extensions>
@@ -223,11 +223,11 @@ function tableOp(context, table) {
 ]]></oga:property>
                     <oga:property key="columnName"><![CDATA[Speaker]]></oga:property>
                 </oga:settings>
-                <oga:meta x="952" y="130"/>
+                <oga:meta x="1032" y="120"/>
             </extensions>
         </node>
         <ogcn:macro id="377dc934a03c4467" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="33c15388">
+            <graph id="66f7e9e4">
                 <node id="2b8ec9139ac44ac3" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -272,7 +272,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="b23fe102f72345c5" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="39a59e23">
+                    <graph id="217bf390">
                         <node id="34d8fd40cddc4eb4" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -321,7 +321,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="acdfc9d81204886" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="30f3e95a">
+                    <graph id="5aa61461">
                         <node id="5407785632ac4bc0" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -411,7 +411,7 @@ Result]]></oga:property>
                 <oga:settings>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Set]]></oga:property>
                 </oga:settings>
-                <oga:meta x="1193" y="127"/>
+                <oga:meta x="1209" y="335"/>
             </extensions>
         </ogcn:macro>
         <link dest="1218edab" destField="project" source="4d6972a5" sourceField="obj"/>
@@ -430,7 +430,7 @@ Result]]></oga:property>
         <link dest="3db44f0a3c554e14" destField="cacheId" source="1ec39b7c" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Table by Participant">
+                <opqry:info format="html" minVersion="4.0.0" title="Table by Participant">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="d3ef487aaa654f10">
@@ -440,9 +440,9 @@ Result]]></oga:property>
                 </opqry:node>
             </opqry:nodewizard>
             <oga:notes>
-                <oga:note color="0xffff96" height="536" title="Report Inputs" width="653" x="10" y="10"/>
+                <oga:note color="0xffff96" height="625" title="Report Inputs" width="653" x="10" y="10"/>
                 <oga:note color="0x96ff96" height="537" title="Inventory By Participant" width="820" x="680" y="10"/>
-                <oga:note color="0xffc864" height="267" title="Report" width="779" x="10" y="570"/>
+                <oga:note color="0xffc864" height="267" title="Report" width="779" x="11" y="649"/>
             </oga:notes>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>

@@ -4,12 +4,8 @@
         <node id="6c4d263f" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_project]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[ca.phon.project.Project]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="15"/>
             </extensions>
@@ -17,12 +13,8 @@
         <node id="eb1d4c7" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_queryId]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[java.lang.String]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="272"/>
             </extensions>
@@ -30,24 +22,17 @@
         <node id="7d9fc9cb" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_selectedSessions]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[java.util.ArrayList]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="385"/>
+                <oga:meta x="20" y="411"/>
             </extensions>
         </node>
         <node id="e00f987320814dda" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="reportTitle">
-                        <![CDATA[Listing by Session]]>
-                    </oga:property>
-                    <oga:property key="__script">
-                        <![CDATA[var reportTitleParamInfo = {
+                    <oga:property key="reportTitle"><![CDATA[Listing by Session]]></oga:property>
+                    <oga:property key="__script"><![CDATA[var reportTitleParamInfo = {
 	"id": "reportTitle",
 	"title": "Report Title",
 	"def": "Aggregate (IPA results)",
@@ -64,10 +49,9 @@ function setup_params(params) {
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
 }
-]]>
-                    </oga:property>
+]]></oga:property>
                 </oga:settings>
-                <oga:meta x="17" y="522"/>
+                <oga:meta x="25" y="566"/>
             </extensions>
         </node>
         <node id="36bd98cf" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -76,16 +60,12 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="ca7b0861e06b4ba8" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5c5f379b">
+            <graph id="7fec6a4b">
                 <node id="979ae4b083f840f8" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
-                                <![CDATA[<init>(java.lang.String)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.declaredClass">
-                                <![CDATA[java.lang.String]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                         </oga:settings>
                         <oga:meta x="78" y="88">
                             <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
@@ -95,12 +75,8 @@ function setup_params(params) {
                 <node id="17bf3ca943da40ac" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="236" y="91"/>
                     </extensions>
@@ -108,12 +84,8 @@ function setup_params(params) {
                 <node id="3ef4da1319234b8e" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[toString()]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
                         <oga:meta x="393" y="100"/>
                     </extensions>
@@ -130,52 +102,22 @@ function setup_params(params) {
         <node id="c520598a74a24628" name="Results by Session" type="class:ca.phon.app.opgraph.nodes.query.ResultsToHTMLNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="includeGroup">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="includeAlignment">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="includeAge">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeEducation">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="excludeTiers">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="includeSyllabification">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="resultValues">
-                        <![CDATA[Alignment]]>
-                    </oga:property>
-                    <oga:property key="includeParticipantInfo">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeSES">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="excludeResultValues">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeLanguage">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="includeSex">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeBirthday">
-                        <![CDATA[false]]>
-                    </oga:property>
+                    <oga:property key="includeGroup"><![CDATA[false]]></oga:property>
+                    <oga:property key="includeAlignment"><![CDATA[false]]></oga:property>
+                    <oga:property key="includeAge"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeEducation"><![CDATA[false]]></oga:property>
+                    <oga:property key="excludeTiers"><![CDATA[false]]></oga:property>
+                    <oga:property key="includeSyllabification"><![CDATA[false]]></oga:property>
+                    <oga:property key="resultValues"><![CDATA[Alignment]]></oga:property>
+                    <oga:property key="includeParticipantInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSES"><![CDATA[false]]></oga:property>
+                    <oga:property key="excludeResultValues"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeLanguage"><![CDATA[false]]></oga:property>
+                    <oga:property key="includeSex"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeBirthday"><![CDATA[false]]></oga:property>
                     <oga:property key="tierNames"/>
-                    <oga:property key="includeRole">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeTierData">
-                        <![CDATA[false]]>
-                    </oga:property>
+                    <oga:property key="includeRole"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeTierData"><![CDATA[false]]></oga:property>
                 </oga:settings>
                 <oga:meta x="621" y="35"/>
             </extensions>
@@ -189,16 +131,12 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="1d3c68d27c44dc" name="For each SessionPath" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="24a0a06e">
+            <graph id="13006e02">
                 <node id="2361616a6cb14de8" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
-                                <![CDATA[currentValue]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                         </oga:settings>
                         <oga:meta x="39" y="59"/>
                     </extensions>
@@ -206,9 +144,7 @@ function setup_params(params) {
                 <node id="ac75147c63c44f54" name="HTML Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="166" y="183"/>
                     </extensions>
@@ -216,24 +152,18 @@ function setup_params(params) {
                 <node id="563e1f5677dc48dd" name="Exporter Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="167" y="288"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="d158423836494b23" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="2a1716e4">
+                    <graph id="92ffd07">
                         <node id="45845fe19bae44ba" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
-                                        <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
-                                    </oga:property>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
-                                        <![CDATA[currentValue]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="60" y="41"/>
                             </extensions>
@@ -241,9 +171,7 @@ function setup_params(params) {
                     </graph>
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className">
-                                <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                         </oga:settings>
                         <oga:meta x="78" y="408"/>
                     </extensions>
@@ -251,12 +179,8 @@ function setup_params(params) {
                 <node id="4c3fa9bf0e9e4fe2" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[toString()]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
                         <oga:meta x="522" y="48"/>
                     </extensions>
@@ -264,12 +188,8 @@ function setup_params(params) {
                 <node id="42f30d0f078946ed" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="521" y="175"/>
                     </extensions>
@@ -277,12 +197,8 @@ function setup_params(params) {
                 <node id="1299f004bcf048fd" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="523" y="286"/>
                     </extensions>
@@ -290,12 +206,8 @@ function setup_params(params) {
                 <node id="df16e46d7ed74aad" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[toString()]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
                         <oga:meta x="720" y="179"/>
                     </extensions>
@@ -303,9 +215,7 @@ function setup_params(params) {
                 <node id="407fda45" name="Excel Exporter" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
-                                <![CDATA[ca.phon.app.log.ExcelExporter]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.app.log.ExcelExporter]]></oga:property>
                         </oga:settings>
                         <oga:meta x="718" y="295"/>
                     </extensions>
@@ -338,9 +248,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="obj" ref="563e1f5677dc48dd"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className">
-                        <![CDATA[java.util.Collection]]>
-                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Collection]]></oga:property>
                 </oga:settings>
                 <oga:meta x="903" y="39"/>
             </extensions>
@@ -358,7 +266,7 @@ function setup_params(params) {
         <link dest="1d3c68d27c44dc" destField="obj" source="c520598a74a24628" sourceField="excelExporterMap"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Listing by Session (with optional tier data)">
+                <opqry:info format="html" minVersion="4.0.0" title="Listing by Session (with optional tier data)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c520598a74a24628" showAsStep="true">

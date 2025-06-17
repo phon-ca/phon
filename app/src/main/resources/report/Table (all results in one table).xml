@@ -51,7 +51,7 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="518"/>
+                <oga:meta x="12" y="567"/>
             </extensions>
         </node>
         <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -69,7 +69,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="e427d9aa23ab4b01" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1b8d93af">
+            <graph id="1f8b024e">
                 <node id="7f11a30608e64fee" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -154,7 +154,7 @@ Result]]></oga:property>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Table (all results in one table)">
+                <opqry:info format="html" minVersion="4.0.0" title="Table (all results in one table)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="4026874c">

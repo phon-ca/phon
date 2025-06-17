@@ -51,7 +51,7 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="19" y="521"/>
+                <oga:meta x="28" y="577"/>
             </extensions>
         </node>
         <node id="87e30b6166544cc8" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -69,7 +69,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="bbb7f2a">
+            <graph id="6e7ffa4">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -128,7 +128,7 @@ function setup_params(params) {
                     </opqry:automaticConfiguration>
                 </opqry:inventoryoptions>
                 <oga:settings/>
-                <oga:meta x="810" y="15"/>
+                <oga:meta x="957" y="170"/>
             </extensions>
         </node>
         <node id="1271664e64514bf6" name="Sort Settings" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
@@ -137,7 +137,7 @@ function setup_params(params) {
                     <opqry:sortBy column="" order="ascending" type="plain"/>
                 </opqry:sortoptions>
                 <oga:settings/>
-                <oga:meta x="1007" y="16"/>
+                <oga:meta x="1274" y="215"/>
             </extensions>
         </node>
         <node id="5bd4e982" name="Is Group by Session?" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -160,11 +160,11 @@ function run(context) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="673" y="244"/>
+                <oga:meta x="820" y="399"/>
             </extensions>
         </node>
         <ogcn:macro id="188591ef" name="Add Missing Columns and Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="dd52e83">
+            <graph id="34fb4f21">
                 <node id="1f8d4516" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -287,16 +287,16 @@ function run(context) {
             <ogcn:published_input field="obj" name="selectedSessions" ref="35dad2ef"/>
             <ogcn:published_input field="obj" name="table" ref="5385017f"/>
             <extensions>
-                <oga:meta x="1016" y="244"/>
+                <oga:meta x="1283" y="443"/>
             </extensions>
         </ogcn:macro>
         <node id="12841e12" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
             <extensions>
-                <oga:meta x="794" y="414"/>
+                <oga:meta x="941" y="569"/>
             </extensions>
         </node>
         <ogcn:macro id="ab5736d740c447c4" name="Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="23bb81bb">
+            <graph id="2b45c2e1">
                 <node id="ef178149f4714517" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -337,7 +337,7 @@ function run(context) {
             <ogcn:published_input field="obj" name="sectionName" ref="ef178149f4714517"/>
             <ogcn:published_input field="obj" name="table" ref="3977446dae2d42b8"/>
             <extensions>
-                <oga:meta x="1016" y="414"/>
+                <oga:meta x="1283" y="613"/>
             </extensions>
         </ogcn:macro>
         <link dest="1271664e64514bf6" destField="table" source="c41947665b034a0e" sourceField="table"/>
@@ -361,7 +361,7 @@ function run(context) {
         <link dest="c2c36aa400ff4f50" destField="cacheId" source="41557c4" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate">
+                <opqry:info format="html" minVersion="4.0.0" title="Aggregate">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c41947665b034a0e" showAsStep="true">
