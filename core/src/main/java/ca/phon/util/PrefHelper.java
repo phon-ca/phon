@@ -37,7 +37,7 @@ import java.util.prefs.*;
  *  <em>except</em> byte arrays).  These can be specified on the command line
  *  using the <pre>-D&lt;key&gt;=&lt;value&gt;</pre> command line option.</li>
  * <li>User preferences {@link #getUserPreferences()} </li>
- * <li>Finally, the provide default is returned if the key is not found.</li>
+ * <li>Finally, the default is returned if the key is not found.</li>
  * </ol>
  */
 public class PrefHelper {
