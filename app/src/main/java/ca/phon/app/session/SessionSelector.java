@@ -19,6 +19,7 @@ import ca.hedlund.desktopicons.*;
 import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
+import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.tristatecheckbox.*;
 import ca.phon.util.*;
@@ -144,12 +145,9 @@ public class SessionSelector extends TristateCheckBoxTree {
 
 		for(TreePath checkPath:checkPaths) {
 			final TristateCheckBoxTreeNode checkNode = (TristateCheckBoxTreeNode)checkPath.getLastPathComponent();
-			if(!checkNode.isLeaf()) {
-				continue;
+			if(checkNode.getUserObject() instanceof SessionPath loc) {
+				retVal.add(loc);
 			}
-			
-			SessionPath loc = (SessionPath) checkNode.getUserObject();
-			retVal.add(loc);
 		}
 
 		Collections.sort(retVal, (sp1, sp2) -> sp1.toString().compareTo(sp2.toString()) );
