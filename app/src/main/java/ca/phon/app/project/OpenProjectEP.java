@@ -25,6 +25,7 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -168,6 +169,13 @@ public class OpenProjectEP implements IPluginEntryPoint {
 
     		pwindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
     		pwindow.setVisible(true);
+
+			// upgrade project properties if needed when opening a project
+			final ProjectProperties projectProperties = project.getExtension(ProjectProperties.class);
+			if(projectProperties instanceof LocalProjectProperties localProjectProperties) {
+				// switch to JSON project properties
+				localProjectProperties.upgradeProjectProperties();
+			}
 
 			// close the welcome window
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {

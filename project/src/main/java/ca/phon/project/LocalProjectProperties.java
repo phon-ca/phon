@@ -5,6 +5,7 @@ import ca.phon.extensions.ExtensionProvider;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.project.io.CorpusType;
 import ca.phon.project.io.ProjectType;
+import ca.phon.worker.PhonWorker;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -109,15 +110,6 @@ public final class LocalProjectProperties implements ProjectProperties {
                 Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
             }
 
-            try {
-                boolean deleted = propsFile.delete();
-                if (!deleted) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to delete old properties file.");
-                }
-            } catch (SecurityException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-
             // convert properties to JSON and save, remove old properties file
             for (String propKey : props.stringPropertyNames()) {
                 switch (propKey) {
@@ -138,11 +130,6 @@ public final class LocalProjectProperties implements ProjectProperties {
                     }
                 }
             }
-            try {
-                saveProjectJson();
-            } catch (IOException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
             if (!projectMediaFolders.isEmpty()) {
                 projectJson.put(PROJECT_MEDIAFOLDERS_KEY, projectMediaFolders);
             }
@@ -154,6 +141,31 @@ public final class LocalProjectProperties implements ProjectProperties {
             this.projectJson.put(PROJECT_NAME_KEY, (new File(localProject.getLocation())).getName());
             this.projectJson.put(PROJECT_UUID_KEY, UUID.randomUUID().toString());
         }
+    }
+
+    /**
+     * Upgrade project properties from Phon 3.x and earlier properties file to a JSON file.
+     *
+     * @return true if the properties were upgraded, false otherwise
+     */
+    public boolean upgradeProjectProperties() {
+        lock.writeLock().lock();
+        try {
+            final File oldPropertiesFile = new File(localProject.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
+            if (oldPropertiesFile.exists()) {
+                persistToStorage();
+                // delete old properties file
+                if (!oldPropertiesFile.delete()) {
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to delete old properties file: " + oldPropertiesFile.getAbsolutePath());
+                }
+                return true;
+            }
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+        } finally {
+            lock.writeLock().unlock();
+        }
+        return false;
     }
 
     private File getFolder() {
