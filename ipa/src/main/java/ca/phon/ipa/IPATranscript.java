@@ -919,16 +919,35 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	public IPATranscript cover(Character consonantCover, Character vowelCover) {
 		PhoneMatcher consonantMatcher = new FeatureSetMatcher(FeatureSet.fromArray(new String[]{"consonant"}));
 		PhoneMatcher vowelMatcher = new FeatureSetMatcher(FeatureSet.fromArray(new String[]{"vowel"}));
-		
+
 		Map<PhoneMatcher, Character> coverMap = new LinkedHashMap<PhoneMatcher, Character>();
 		coverMap.put(consonantMatcher, consonantCover);
 		coverMap.put(vowelMatcher, vowelCover);
-		
+
 		return cover(List.of(consonantMatcher, vowelMatcher), coverMap, true, true, true);
 	}
 	
 	public IPATranscript cover(String consonantCover, String vowelCover) {
 		return cover(consonantCover.charAt(0), vowelCover.charAt(0));
+	}
+
+	/**
+	 * Get syllable index of given phone
+	 *
+	 * @param phone
+	 * @return syllable index of phone or -1 if not found
+	 */
+	public int syllableIndexOf(IPAElement phone) {
+		int retVal = -1;
+		int syllableIdx = 0;
+		for(IPATranscript syllable:this.syllables()) {
+			if(syllable.indexOf(phone) >= 0) {
+				retVal = syllableIdx;
+				break;
+			}
+			syllableIdx++;
+		}
+		return retVal;
 	}
 
 	@Override

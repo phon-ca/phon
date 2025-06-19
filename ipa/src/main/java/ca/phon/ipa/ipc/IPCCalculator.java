@@ -81,7 +81,7 @@ public class IPCCalculator {
                             lastWasConsonant = false;
                             ++i; // move past next non-consonant
                         } else {
-                            FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getFeatures(), t.getFeatureSet());
+                            FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.getFeatureSet());
                             if (prevPlace != null) {
                                 if (!prevPlace.equals(currentPlace)) {
                                     P++;
@@ -106,24 +106,32 @@ public class IPCCalculator {
         PhonexMatcher matcher = pattern.matcher(ipa);
         while (matcher.find()) {
             C++;
-        }
 
-        // Cluster type (T)
-        for (IPATranscript syll : ipa.syllables()) {
-            if (syll.length() > 2) {
-                FeatureSet lastPlace = null;
-                for (IPAElement t : syll.audiblePhones()) {
-                    if (t.getFeatureSet().hasFeature("consonant")) {
-                        FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getFeatures(), t.getFeatureSet());
-                        if (lastPlace != null) {
-                            if (!lastPlace.equals(currentPlace)) {
-                                T++;
-                                break;
-                            }
+            // if place variegation is present, increment T
+            prevPlace = null;
+            for(var ele:matcher.group()) {
+                if(ele.getFeatureSet().hasFeature("consonant")) {
+                    FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), ele.getFeatureSet());
+                    if (prevPlace != null) {
+                        if (!prevPlace.equals(currentPlace)) {
+                            T++;
+                            break;
                         }
-                        lastPlace = currentPlace;
                     }
+                    prevPlace = currentPlace;
                 }
+            }
+
+            // if cluster is heterosyllabic, increment T
+            int lastSyllableIdx = 0;
+            for(var ele:matcher.group()) {
+               if(ele.getFeatureSet().hasFeature("consonant")) {
+                   int currentSyllableIdx = ipa.syllableIndexOf(ele);
+                   if(lastSyllableIdx != currentSyllableIdx) {
+                       T++;
+                       break;
+                   }
+               }
             }
         }
 

@@ -64,6 +64,10 @@ public enum PhoneDimension {
 		return retVal;
 	}
 
+	public FeatureSet getPrimaryFeatures() {
+		return featureSets.size() > 0 ? featureSets.get(0) : new FeatureSet();
+	}
+
 	public FeatureSet getTerminalFeatures() {
 		return featureSets.stream().findFirst().orElse(null);
 	}
