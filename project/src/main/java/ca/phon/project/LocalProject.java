@@ -1241,6 +1241,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         @Override
         public boolean hasNext() {
             if (nextPath != null) return true;
+            if(pathIterator == null) return false;
             while (pathIterator.hasNext()) {
                 Path p = pathIterator.next();
                 try {

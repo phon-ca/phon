@@ -87,10 +87,30 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		Syllabifier syllabifier = SyllabifierLibrary.getInstance().defaultSyllabifier();
 		if(isResetSyllabification() && getSyllabifierLang() != null) {
 			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(getSyllabifierLang());
+
 		}
 
 		for(int eleIdx = 0; eleIdx < session.getTranscript().getNumberOfElements(); eleIdx++) {
+			final Transcript.Element transcriptElement = session.getTranscript().getElementAt(eleIdx);
 			checkTranscriptElement(validator, session, eleIdx);
+			if(isResetSyllabification() && transcriptElement.isRecord()) {
+				// reset syllabification for all ipa tiers
+				IPATranscript ipaT = transcriptElement.asRecord().getIPATarget();
+				if(ipaT != null) {
+					syllabifier.syllabify(ipaT.toList());
+				}
+				IPATranscript ipaA = transcriptElement.asRecord().getIPAActual();
+				if(ipaA != null) {
+					syllabifier.syllabify(ipaA.toList());
+				}
+
+				for(Tier<IPATranscript> ipaUserTier: transcriptElement.asRecord().getTiersOfType(IPATranscript.class)) {
+					if(ipaUserTier.isUnvalidated()) continue;
+					if(ipaUserTier.getExtension(UnvalidatedValue.class) != null) continue;
+					syllabifier.syllabify(ipaUserTier.getValue().toList());
+				}
+				modified = true;
+			}
 		}
 
 		return modified;
