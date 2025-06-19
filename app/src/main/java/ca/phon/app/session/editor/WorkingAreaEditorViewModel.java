@@ -865,6 +865,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		final File prevPerspetiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER,
 				RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME + ".xml");
+		if(!prevPerspetiveFile.getParentFile().exists()) {
+			prevPerspetiveFile.getParentFile().mkdirs();
+		}
 		try {
 			final RecordEditorPerspective prevPerspective =
 					new RecordEditorPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME,

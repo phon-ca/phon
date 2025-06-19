@@ -291,6 +291,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		editor.getViewModel().setupWindows(prevPerspective);
 		sessionEditorWindow.setVisible(true);
 
+		// windowClosing was not always called on macos, switched to using
+		// save perspective on session save
 //		sessionEditorWindow.addWindowListener(new WindowAdapter() {
 //			@Override
 //			public void windowClosing(WindowEvent e) {
