@@ -964,6 +964,10 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				if(retVal == 1) return false;
 			}
 
+			// save perspective
+			final EditorViewModel viewModel = getViewModel();
+			viewModel.savePreviousPerspective();
+
 			final EditorEvent<Session> ee = new EditorEvent<>(EditorEventType.SessionSaved, this, session);
 			getEventManager().queueEvent(ee);
 
