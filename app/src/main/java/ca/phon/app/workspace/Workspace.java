@@ -31,7 +31,7 @@ public class Workspace {
 	 */
 	public final static String WORKSPACE_FOLDER = Workspace.class.getName() + ".workspaceFolder";
 	
-	private final static String WORKSPACE_FOLDER_NAME = "PhonWorkspace";
+	private final static String WORKSPACE_FOLDER_NAME = "Phon4Workspace";
 	
 	/**
 	 * Folder
