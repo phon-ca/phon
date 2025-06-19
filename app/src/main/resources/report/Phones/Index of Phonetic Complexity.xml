@@ -78,7 +78,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="9280767f2ad04a82" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="726be90d">
+            <graph id="78492795">
                 <node id="1113543fd9424d48" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -139,6 +139,15 @@ function setup_params(params) {
                 <oga:meta x="871" y="53"/>
             </extensions>
         </node>
+        <node id="2d1a9107" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"/>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1160" y="66"/>
+            </extensions>
+        </node>
         <node id="777df0e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
@@ -150,6 +159,106 @@ function setup_params(params) {
                 </oga:meta>
             </extensions>
         </node>
+        <node id="647fe34b" name="Map#keySet()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[keySet()]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1377" y="68"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="7e3c5aa6" name="For each exaplanation" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
+            <graph id="8be55a">
+                <node id="7f508aba" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey"/>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="40" y="20"/>
+                    </extensions>
+                </node>
+                <node id="675283ae2c8b47b8" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey"/>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="44" y="127"/>
+                    </extensions>
+                </node>
+                <ogcn:macro id="411165ad58cf4b8c" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
+                    <graph id="370df2aa">
+                        <node id="576312cd5ac6462b" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                </oga:settings>
+                            </extensions>
+                        </node>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="107" y="309"/>
+                    </extensions>
+                </ogcn:macro>
+                <node id="63348df3" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="507" y="24"/>
+                    </extensions>
+                </node>
+                <node id="ad5ae12" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="496" y="143"/>
+                    </extensions>
+                </node>
+                <node id="e972e51c71b446fa" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="717" y="155"/>
+                    </extensions>
+                </node>
+                <node id="69a866c0" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"/>
+                        </oga:settings>
+                        <oga:meta x="1010" y="87"/>
+                    </extensions>
+                </node>
+                <link dest="63348df3" destField="obj" source="7f508aba" sourceField="obj"/>
+                <link dest="ad5ae12" destField="obj" source="675283ae2c8b47b8" sourceField="obj"/>
+                <link dest="ad5ae12" destField="arg1" source="7f508aba" sourceField="obj"/>
+                <link dest="e972e51c71b446fa" destField="obj" source="ad5ae12" sourceField="value"/>
+                <link dest="69a866c0" destField="parent" source="411165ad58cf4b8c" sourceField="parent"/>
+                <link dest="69a866c0" destField="sectionName" source="63348df3" sourceField="value"/>
+                <link dest="69a866c0" destField="text" source="e972e51c71b446fa" sourceField="value"/>
+            </graph>
+            <ogcn:published_input field="obj" name="Map" ref="675283ae2c8b47b8"/>
+            <ogcn:published_input field="collection" name="ReportTreeNode.collection" ref="411165ad58cf4b8c"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Set]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1404" y="312"/>
+            </extensions>
+        </ogcn:macro>
         <link dest="6d6d4558" destField="project" source="4e320465" sourceField="obj"/>
         <link dest="6d6d4558" destField="queryId" source="6d14eb42" sourceField="obj"/>
         <link dest="6d6d4558" destField="selectedResults" source="7807159d" sourceField="obj"/>
@@ -160,6 +269,11 @@ function setup_params(params) {
         <link dest="38c0e51f" destField="reportName" source="9280767f2ad04a82" sourceField="value"/>
         <link dest="777df0e" destField="parent" source="38c0e51f" sourceField="root"/>
         <link dest="777df0e" destField="table" source="58946ba1" sourceField="table"/>
+        <link dest="2d1a9107" destField="obj" source="58946ba1" sourceField="explanations"/>
+        <link dest="647fe34b" destField="obj" source="2d1a9107" sourceField="obj"/>
+        <link dest="7e3c5aa6" destField="collection" source="647fe34b" sourceField="value"/>
+        <link dest="7e3c5aa6" destField="Map" source="2d1a9107" sourceField="obj"/>
+        <link dest="7e3c5aa6" destField="ReportTreeNode.collection" source="38c0e51f" sourceField="root"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" minVersion="4.0.0" title="Index of Phonetic Complexity">

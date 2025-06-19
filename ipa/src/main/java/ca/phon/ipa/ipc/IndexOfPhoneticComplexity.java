@@ -32,7 +32,13 @@ public record IndexOfPhoneticComplexity(
 
         /** Cluster type (T) - Each cluster that is comprised of segments that vary in place
          (CCV) gets 1 point for being heterorganic. */
-        int T
+        int T,
+
+        /**
+         * String explaining the index of phonetic complexity calculation
+         * including the elements contributing to the score.
+         */
+        String explanation
 ) {
     /**
      * Calculate the Index of Phonetic Complexity from an IPATranscript.
@@ -48,7 +54,7 @@ public record IndexOfPhoneticComplexity(
      * Default constructor for the Index of Phonetic Complexity. Zero scores for all components.
      */
     public IndexOfPhoneticComplexity() {
-        this(0, 0, 0, 0, 0, 0, 0, 0);
+        this(0, 0, 0, 0, 0, 0, 0, 0, "Index of Phonetic Complexity: D=0, M=0, V=0, S=0, L=0, P=0, C=0, T=0");
     }
 
     /**
@@ -63,7 +69,7 @@ public record IndexOfPhoneticComplexity(
      * @param C Contiguous clusters score
      * @param T Cluster type score (heterorganic clusters)
      */
-    public IndexOfPhoneticComplexity(int D, int M, int V, int S, int L, int P, int C, int T) {
+    public IndexOfPhoneticComplexity(int D, int M, int V, int S, int L, int P, int C, int T, String explanation) {
         this.D = D;
         this.M = M;
         this.V = V;
@@ -72,6 +78,7 @@ public record IndexOfPhoneticComplexity(
         this.P = P;
         this.C = C;
         this.T = T;
+        this.explanation = explanation != null ? explanation : String.format("Index of Phonetic Complexity: D=%d, M=%d, V=%d, S=%d, L=%d, P=%d, C=%d, T=%d", D, M, V, S, L, P, C, T);
     }
 
     /**
@@ -99,7 +106,16 @@ public record IndexOfPhoneticComplexity(
                 this.L - other.L,
                 this.P - other.P,
                 this.C - other.C,
-                this.T - other.T
+                this.T - other.T,
+                String.format("Difference: D=%d, M=%d, V=%d, S=%d, L=%d, P=%d, C=%d, T=%d",
+                        this.D - other.D,
+                        this.M - other.M,
+                        this.V - other.V,
+                        this.S - other.S,
+                        this.L - other.L,
+                        this.P - other.P,
+                        this.C - other.C,
+                        this.T - other.T)
         );
     }
 

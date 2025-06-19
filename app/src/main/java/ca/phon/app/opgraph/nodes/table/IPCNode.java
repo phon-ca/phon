@@ -6,13 +6,13 @@ import ca.phon.ipa.ipc.IndexOfPhoneticComplexity;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import org.commonmark.node.Link;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Creates a table of results for the Index of Phonetic Complexity (IPC)
@@ -58,10 +58,15 @@ public class IPCNode extends TableOpNode {
     private InputField tierNamesField = new InputField("tierNames", "Comma-separated list of tier names",
             true, true, String.class);
 
+    private OutputField explanationsField = new OutputField("explanations", "Explanations for the IPC calculation",
+            true, Map.class);
+
     public IPCNode() {
         super();
 
         putField(tierNamesField);
+
+        putField(explanationsField);
     }
 
     /**
@@ -206,42 +211,42 @@ public class IPCNode extends TableOpNode {
 
         row.add(ipct.D());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.D());
+            row.add(ipca.get().D());
         }
 
         row.add(ipct.M());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.M());
+            row.add(ipca.get().M());
         }
 
         row.add(ipct.V());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.V());
+            row.add(ipca.get().V());
         }
 
         row.add(ipct.S());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.S());
+            row.add(ipca.get().S());
         }
 
         row.add(ipct.L());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.L());
+            row.add(ipca.get().L());
         }
 
         row.add(ipct.P());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.P());
+            row.add(ipca.get().P());
         }
 
         row.add(ipct.C());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.C());
+            row.add(ipca.get().C());
         }
 
         row.add(ipct.T());
         if(actualTranscript.isPresent()) {
-            row.add(ipct.T());
+            row.add(ipca.get().T());
         }
 
         row.add(ipct.totalScore());
@@ -276,6 +281,9 @@ public class IPCNode extends TableOpNode {
         setupOutputTable(inputTable, outputTable, tierNames);
         setTableOutput(opContext, outputTable);
 
+        final Map<IPATranscript, String> explanations = new LinkedHashMap<>();
+        opContext.put(explanationsField, explanations);
+
         for(int i = 0; i < tierNames.length; i++) {
             String tierName = tierNames[i].trim();
             int colIdx = findTierColumn(inputTable, tierName);
@@ -304,9 +312,13 @@ public class IPCNode extends TableOpNode {
 
             }
             final IndexOfPhoneticComplexity ipct = IndexOfPhoneticComplexity.FromTranscript(targetTranscript);
+            explanations.put(targetTranscript, "<pre>" + ipct.explanation() + "</pre>");
             Optional<IndexOfPhoneticComplexity> ipca = Optional.empty();
             if(tierNames.length > 1) {
                 ipca = Optional.of(IndexOfPhoneticComplexity.FromTranscript(actualTranscript));
+                if(ipca.isPresent()) {
+                    explanations.put(actualTranscript, "<pre>" + ipca.get().explanation() + "</pre>");
+                }
             }
             appendIPCRow(inputTable, outputTable, i, tierNames, targetTranscript, Optional.of(actualTranscript), ipct, ipca);
         }
