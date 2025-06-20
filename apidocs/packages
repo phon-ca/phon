@@ -83,6 +83,7 @@ ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes.table
+ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes.log
 ca.phon.app.opgraph.nodes.log
@@ -850,7 +851,6 @@ ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session
-ca.phon.project
 ca.phon.project
 ca.phon.project
 ca.phon.project
@@ -1662,6 +1662,8 @@ ca.phon.ipa.alignment.pmlu
 ca.phon.ipa.alignment.pmlu
 ca.phon.ipa.alignment.pmlu
 ca.phon.ipa
+ca.phon.ipa.ipc
+ca.phon.ipa.ipc
 ca.phon.ipa
 ca.phon.ipa
 ca.phon.ipa

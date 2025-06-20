@@ -111,6 +111,7 @@ ca.phon.ipa
 ca.phon.ipa.alignment
 ca.phon.ipa.alignment.pmlu
 ca.phon.ipa.features
+ca.phon.ipa.ipc
 ca.phon.ipa.parser
 ca.phon.ipa.parser.exceptions
 ca.phon.ipa.relations
