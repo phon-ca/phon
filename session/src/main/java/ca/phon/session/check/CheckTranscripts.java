@@ -90,24 +90,42 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 		}
 
+		int rIdx = 0;
 		for(int eleIdx = 0; eleIdx < session.getTranscript().getNumberOfElements(); eleIdx++) {
 			final Transcript.Element transcriptElement = session.getTranscript().getElementAt(eleIdx);
 			checkTranscriptElement(validator, session, eleIdx);
 			if(isResetSyllabification() && transcriptElement.isRecord()) {
+				rIdx++;
 				// reset syllabification for all ipa tiers
 				IPATranscript ipaT = transcriptElement.asRecord().getIPATarget();
 				if(ipaT != null) {
 					syllabifier.syllabify(ipaT.toList());
+					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
+							SystemTierType.IPATarget.getName(), "IPA target syllabification reset for record #" + rIdx);
+					validator.fireValidationEvent(evt);
 				}
 				IPATranscript ipaA = transcriptElement.asRecord().getIPAActual();
 				if(ipaA != null) {
 					syllabifier.syllabify(ipaA.toList());
+					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
+							SystemTierType.IPAActual.getName(), "IPA actual syllabification reset for record #" + rIdx);
+					validator.fireValidationEvent(evt);
 				}
+
+				// also reset alignment
+				final PhoneAlignment alignment = PhoneAlignment.fromTiers(transcriptElement.asRecord().getIPATargetTier(), transcriptElement.asRecord().getIPAActualTier());
+				transcriptElement.asRecord().setPhoneAlignment(alignment);
+				final ValidationEvent alignEvt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
+						SystemTierType.PhoneAlignment.getName(), "Phone alignment reset for record #" + rIdx);
+				validator.fireValidationEvent(alignEvt);
 
 				for(Tier<IPATranscript> ipaUserTier: transcriptElement.asRecord().getTiersOfType(IPATranscript.class)) {
 					if(ipaUserTier.isUnvalidated()) continue;
 					if(ipaUserTier.getExtension(UnvalidatedValue.class) != null) continue;
 					syllabifier.syllabify(ipaUserTier.getValue().toList());
+					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
+							ipaUserTier.getName(), ipaUserTier.getName() + " syllabification reset for record #" + rIdx);
+					validator.fireValidationEvent(evt);
 				}
 				modified = true;
 			}
