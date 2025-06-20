@@ -16,7 +16,7 @@
                     <oga:property key="contextKey"><![CDATA[_session]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Session]]></oga:property>
                 </oga:settings>
-                <oga:meta x="112" y="335"/>
+                <oga:meta x="70" y="275"/>
             </extensions>
         </node>
         <node id="329582f9" name="Transcribers" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -25,43 +25,16 @@
                     <oga:property key="contextKey"><![CDATA[_transcribers]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.List]]></oga:property>
                 </oga:settings>
-                <oga:meta x="210" y="756"/>
+                <oga:meta x="70" y="916"/>
             </extensions>
         </node>
-        <node id="5231c1b7" name="groupOrWord" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="5231c1b7" name="tierOrWord" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey"><![CDATA[_groupOrWord]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_tierOrWord]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                 </oga:settings>
-                <oga:meta x="210" y="857"/>
-            </extensions>
-        </node>
-        <node id="15b88cc0" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-            <extensions>
-                <oga:settings>
-                    <oga:property key="contextKey"><![CDATA[_ignoreDiacritics]]></oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
-                </oga:settings>
-                <oga:meta x="210" y="958"/>
-            </extensions>
-        </node>
-        <node id="2da78402" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-            <extensions>
-                <oga:settings>
-                    <oga:property key="contextKey"><![CDATA[_onlyOrExcept]]></oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
-                </oga:settings>
-                <oga:meta x="210" y="1059"/>
-            </extensions>
-        </node>
-        <node id="15dba9cd" name="SelectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-            <extensions>
-                <oga:settings>
-                    <oga:property key="contextKey"><![CDATA[_selectedDiacritics]]></oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
-                </oga:settings>
-                <oga:meta x="210" y="1160"/>
+                <oga:meta x="70" y="1077"/>
             </extensions>
         </node>
         <node id="562e602" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
@@ -72,13 +45,40 @@
                 </oga:meta>
             </extensions>
         </node>
+        <node id="15b88cc0" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_ignoreDiacritics]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="70" y="1190"/>
+            </extensions>
+        </node>
+        <node id="2da78402" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_onlyOrExcept]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="70" y="1303"/>
+            </extensions>
+        </node>
+        <node id="15dba9cd" name="SelectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_selectedDiacritics]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
+                </oga:settings>
+                <oga:meta x="70" y="1416"/>
+            </extensions>
+        </node>
         <node id="1102605d" name="includeConsonantAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey"><![CDATA[_includeConsonantAgreement]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                 </oga:settings>
-                <oga:meta x="149" y="1261"/>
+                <oga:meta x="70" y="1529"/>
             </extensions>
         </node>
         <node id="14f1d7f1" name="includeVowelAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -87,7 +87,7 @@
                     <oga:property key="contextKey"><![CDATA[_includeVowelAgreement]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                 </oga:settings>
-                <oga:meta x="181" y="1362"/>
+                <oga:meta x="70" y="1642"/>
             </extensions>
         </node>
         <node id="717efc81" name="includeDiacriticAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -96,7 +96,7 @@
                     <oga:property key="contextKey"><![CDATA[_includeDiacriticAgreement]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                 </oga:settings>
-                <oga:meta x="166" y="1463"/>
+                <oga:meta x="70" y="1755"/>
             </extensions>
         </node>
         <node id="72680407" name="includeToneNumberAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -105,14 +105,14 @@
                     <oga:property key="contextKey"><![CDATA[_includeToneNumberAgreement]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                 </oga:settings>
-                <oga:meta x="132" y="1564"/>
+                <oga:meta x="70" y="1868"/>
             </extensions>
         </node>
         <node id="b92bf05360124e26" name="ITR" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <input name="project" optional="false"/>
             <input name="session" optional="false"/>
             <input name="transcribers" optional="false"/>
-            <input name="groupOrWord" optional="false"/>
+            <input name="tierOrWord" optional="false"/>
             <input name="ignoreDiacritics" optional="true"/>
             <input name="onlyOrExcept" optional="true"/>
             <input name="selectedDiacritics" optional="true"/>
@@ -127,7 +127,10 @@
                     <oga:property key="filters.allphones.filter"><![CDATA[\w]]></oga:property>
                     <oga:property key="filters.consonants.filter"><![CDATA[\c]]></oga:property>
                     <oga:property key="filters.vowels.filter"><![CDATA[\v]]></oga:property>
-                    <oga:property key="__script"><![CDATA[var PPC = require("lib/PPC").PPC;
+                    <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.session.alignment)
+importClass(Packages.ca.phon.orthography.Word)
+
+var PPC = require("lib/PPC").PPC;
 var PDC = require("lib/PDC").PDC;
 var PNTC = require("lib/PNTC").PNTC;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
@@ -170,7 +173,7 @@ function init(inputs, outputs) {
     inputs.add("project", "", false, false);
     inputs.add("session", "", false, false);
     inputs.add("transcribers", "", false, false);
-    inputs.add("groupOrWord", "", false, false);
+    inputs.add("tierOrWord", "", false, false);
     inputs.add("ignoreDiacritics", "", true, false);
     inputs.add("onlyOrExcept", "", true, false);
     inputs.add("selectedDiacritics", "", true, false);
@@ -596,7 +599,7 @@ function run(context) {
     var project = context.get("project");
     var session = context.get("session");
     var transcribers = context.get("transcribers");
-    var groupOrWord = context.get("groupOrWord");
+    var tierOrWord = context.get("tierOrWord");
     var ignoreDiacritics = context.get("ignoreDiacritics");
     var onlyOrExcept = context.get("onlyOrExcept");
     var selectedDiacritics = context.get("selectedDiacritics");
@@ -626,100 +629,111 @@ function run(context) {
 
             for(var rIdx = 0; rIdx < session.recordCount; rIdx++) {
                 var record = session.getRecord(rIdx);
-                for(var gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
-                    var group = record.getGroup(gIdx);
 
-                    var ipaA = group.IPAActual;
-                    var blindTranscripts = ipaA.getExtension(Packages.ca.phon.ipa.AlternativeTranscript);
+                var ipaTargetTier = record.getIPATargetTier();
+                var ipaActualTier = record.getIPAActualTier();
 
-                    if(blindTranscripts == null) continue;
+                
+                var t1 = ipaActualTier.getBlindTranscription(transcriber1.username);
+                var t2 = ipaActualTier.getBlindTranscription(transcriber2.username);
+                
 
-                    var t1 = blindTranscripts.get(transcriber1.username);
-                    var t1orig = t1;
-                    var t2 = blindTranscripts.get(transcriber2.username);
-                    var t2orig = t2;
+                if(t1 == null || t2 == null
+                   || t1.length() == 0 || t2.length() == 0) continue;
+                var t1orig = t1;
+                var t2orig = t2;
 
-                    if(t1 == null || t2 == null
-                        || t1.length() == 0 || t2.length() == 0) continue;
-
-                    // ignoreDiacritics
-                    if(ignoreDiacritics == true) {
-                        if(onlyOrExcept == true) {
-                            t1 = t1.stripDiacritics(selectedDiacritics);
-                            t2 = t2.stripDiacritics(selectedDiacritics);
-                        } else {
-                            t1 = t1.stripDiacriticsExcept(selectedDiacritics);
-                            t2 = t2.stripDiacriticsExcept(selectedDiacritics);
-                        }
+                // ignoreDiacritics
+                if(ignoreDiacritics == true) {
+                    if(onlyOrExcept == true) {
+                        t1 = t1.stripDiacritics(selectedDiacritics);
+                        t2 = t2.stripDiacritics(selectedDiacritics);
+                    } else {
+                        t1 = t1.stripDiacriticsExcept(selectedDiacritics);
+                        t2 = t2.stripDiacriticsExcept(selectedDiacritics);
                     }
+                }
 
-                    // syllabify transcriptions
-                    syllabifier.syllabify(t1.toList());
-                    syllabifier.syllabify(t2.toList());
+                // syllabify transcriptions
+                syllabifier.syllabify(t1.toList());
+                syllabifier.syllabify(t2.toList());
 
-                    if(groupOrWord == true) {
+                if(tierOrWord == true) {
+                   obj = {
+                       orthography: record.orthography,
+                       IPATarget: record.IPATarget,
+                       t1: t1,
+                       t1orig: t1orig,
+                       t2: t2,
+                       t2orig: t2orig
+                   }
+
+                   rowData = calcITRRow(obj, transcriber1, transcriber2,
+                       ignoreDiacritics, onlyOrExcept, selectedDiacritics,
+                       includeConsonantAgreement, includeVowelAgreement,
+                       includeDiacriticAgreement, includeToneNumberAgreement);
+                   rowData.unshift( java.lang.Integer.valueOf(rIdx+1) );
+                   table.addRow(rowData);
+                } else {
+                	var xTierAlignment = TierAligner.calculateCrossTierAlignment(record);
+                	var orthoElements = xTierAlignment.getTopAlignmentElements();
+                	var t1Words = t1.words();
+                	var t1OrigWords = t1orig.words();
+                	var t2Words = t2.words();
+                	var t2OrigWords = t2orig.words();
+                	var wIdx = 0;
+                    for(var k = 0; k < orthoElements.size(); k++) {
+                        var word = orthoElements.get(k);
+                        if(!(word instanceof Word)) {
+                            continue;
+                        }
+                        var alignedEles = xTierAlignment.getAlignedElements(word);
+                        var ipaTWord = alignedEles.get("IPA Target");
+                        if(ipaTWord == null) ipaTWord = new IPATranscript();
+                        
                         obj = {
-                            orthography: group.orthography,
-                            IPATarget: group.IPATarget,
-                            t1: t1,
-                            t1orig: t1orig,
-                            t2: t2,
-                            t2orig: t2orig
+                            orthography: word.orthography,
+                            IPATarget: ipaTWord,
+                            t1: (t1Words.size() > wIdx ? t1Words.get(wIdx) : new IPATranscript()),
+                            t1orig: (t1OrigWords.size() > wIdx ? t1OrigWords.get(wIdx) : new IPATranscript()),
+                            t2: (t2Words.size() > wIdx ? t2Words.get(wIdx) : new IPATranscript()),
+                            t2orig: (t2OrigWords.size() > wIdx ? t2OrigWords.get(wIdx) : new IPATranscript())
                         }
 
-                        rowData = calcITRRow(obj, transcriber1, transcriber2,
+                        var rowData = calcITRRow(obj, transcriber1, transcriber2,
                             ignoreDiacritics, onlyOrExcept, selectedDiacritics,
                             includeConsonantAgreement, includeVowelAgreement,
                             includeDiacriticAgreement, includeToneNumberAgreement);
-                        rowData.unshift( java.lang.Integer.valueOf(rIdx+1), java.lang.Integer.valueOf(gIdx+1) );
+                        rowData.unshift( java.lang.Integer.valueOf(rIdx+1) );
                         table.addRow(rowData);
-                    } else {
-                        for(var wIdx = 0; wIdx < group.getAlignedWordCount(); wIdx++) {
-                            var word = group.getAlignedWord(wIdx);
-
-                            obj = {
-                                orthography: word.orthography,
-                                IPATarget: word.IPATarget,
-                                t1: (t1.words().size() > wIdx ? t1.words().get(wIdx) : new IPATranscript()),
-                                t1orig: (t1orig.words().size() > wIdx ? t1orig.words().get(wIdx) : new IPATranscript()),
-                                t2: (t2.words().size() > wIdx ? t2.words().get(wIdx) : new IPATranscript()),
-                                t2orig: (t2orig.words().size() > wIdx ? t2orig.words().get(wIdx) : new IPATranscript())
-                            }
-
-                            var rowData = calcITRRow(obj, transcriber1, transcriber2,
-                                ignoreDiacritics, onlyOrExcept, selectedDiacritics,
-                                includeConsonantAgreement, includeVowelAgreement,
-                                includeDiacriticAgreement, includeToneNumberAgreement);
-                            rowData.unshift( java.lang.Integer.valueOf(rIdx+1), java.lang.Integer.valueOf(gIdx+1) );
-                            table.addRow(rowData);
-                        }
+                        wIdx++;
                     }
                 }
-            }
+             }
 
-            addSummaryRow(table,
-                includeConsonantAgreement, includeVowelAgreement,
-                includeDiacriticAgreement, includeToneNumberAgreement);
-            // add to summary table
-            var summaryRow = [];
-            summaryRow.push(transcriber1 + " vs. " + transcriber2);
-            summaryRow.push(table.getValueAt(table.rowCount-1, LEVENSHTEIN_DISTANCE));
-            summaryRow.push(table.getValueAt(table.rowCount-1, PHONE_AGREEMENT));
-            if(includeConsonantAgreement == true)
-                summaryRow.push(table.getValueAt(table.rowCount-1, CONSONANT_AGREEMENT));
-            if(includeVowelAgreement == true)
-                summaryRow.push(table.getValueAt(table.rowCount-1, VOWEL_AGREEMENT));
-            if(includeDiacriticAgreement == true)
-                summaryRow.push(table.getValueAt(table.rowCount-1, DIACRITIC_AGREEMENT));
-            if(includeToneNumberAgreement == true)
-                summaryRow.push(table.getValueAt(table.rowCount-1, TONE_NUMBER_AGREEMENT));
-            summaryTable.addRow(summaryRow);
+             addSummaryRow(table,
+                 includeConsonantAgreement, includeVowelAgreement,
+                 includeDiacriticAgreement, includeToneNumberAgreement);
+             // add to summary table
+             var summaryRow = [];
+             summaryRow.push(transcriber1 + " vs. " + transcriber2);
+             summaryRow.push(table.getValueAt(table.rowCount-1, LEVENSHTEIN_DISTANCE));
+             summaryRow.push(table.getValueAt(table.rowCount-1, PHONE_AGREEMENT));
+             if(includeConsonantAgreement == true)
+                 summaryRow.push(table.getValueAt(table.rowCount-1, CONSONANT_AGREEMENT));
+             if(includeVowelAgreement == true)
+                 summaryRow.push(table.getValueAt(table.rowCount-1, VOWEL_AGREEMENT));
+             if(includeDiacriticAgreement == true)
+                 summaryRow.push(table.getValueAt(table.rowCount-1, DIACRITIC_AGREEMENT));
+             if(includeToneNumberAgreement == true)
+                 summaryRow.push(table.getValueAt(table.rowCount-1, TONE_NUMBER_AGREEMENT));
+             summaryTable.addRow(summaryRow);
         }
     }
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="627" y="725"/>
+                <oga:meta x="638" y="737"/>
             </extensions>
         </node>
         <node id="4bd4ce11" name="Map#keySet()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
@@ -743,7 +757,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="6a1258a1" name="For Each Transcriber Tuple" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="1935a126">
+            <graph id="52bcec72">
                 <node id="4557ef60" name="CurrentItem" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -762,7 +776,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="b98aa833682544a0" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="5e89c5f1">
+                    <graph id="2f4f3ecb">
                         <node id="1bc77e70df5d4114" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -872,7 +886,6 @@ function run(context) {
         <link dest="b92bf05360124e26" destField="project" source="63f943fe" sourceField="obj"/>
         <link dest="b92bf05360124e26" destField="session" source="5a71fd4" sourceField="obj"/>
         <link dest="b92bf05360124e26" destField="transcribers" source="329582f9" sourceField="obj"/>
-        <link dest="b92bf05360124e26" destField="groupOrWord" source="5231c1b7" sourceField="obj"/>
         <link dest="b92bf05360124e26" destField="onlyOrExcept" source="2da78402" sourceField="obj"/>
         <link dest="b92bf05360124e26" destField="selectedDiacritics" source="15dba9cd" sourceField="obj"/>
         <link dest="b92bf05360124e26" destField="includeConsonantAgreement" source="1102605d" sourceField="obj"/>
@@ -886,15 +899,16 @@ function run(context) {
         <link dest="2d337296" destField="table" source="b92bf05360124e26" sourceField="summary"/>
         <link dest="2d337296" destField="parent" source="562e602" sourceField="root"/>
         <link dest="6a1258a1" destField="reportNode" source="2d337296" sourceField="parent"/>
+        <link dest="b92bf05360124e26" destField="tierOrWord" source="5231c1b7" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.wizard.WizardExtension">
-                <opqry:info format="html" title="ITRGraph">
+                <opqry:info format="html" minVersion="4.0.0" title="ITRGraph">
                     <opqry:message/>
                 </opqry:info>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.macro.MacroOpgraphEditorModel"/>
             <oga:notes>
-                <oga:note color="0xffff96" height="1631" title="Macro Inputs" width="439" x="23" y="24"/>
+                <oga:note color="0xffff96" height="1971" title="Macro Inputs" width="431" x="23" y="24"/>
             </oga:notes>
         </extensions>
     </graph>

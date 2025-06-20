@@ -27,7 +27,7 @@ public class ITRWizard extends NodeWizard {
     private final static String PROJECT = "_project";
     private final static String SESSION = "_session";
     private final static String TRANSCRIBERS = "_transcribers";
-    private final static String GROUPORWORD = "_groupOrWord";
+    private final static String TIERORWORD = "_tierOrWord";
     private final static String IGNOREDIACRITICS = "_ignoreDiacritics";
     private final static String ONLYOREXCEPT = "_onlyOrExcept";
     private final static String SELECTEDDIACRITICS = "_selectedDiacritics";
@@ -41,7 +41,7 @@ public class ITRWizard extends NodeWizard {
     private Session session;
 
     private WizardStep optionsStep;
-    private JRadioButton byGroupBtn;
+    private JRadioButton byTierBtn;
     private JRadioButton byWordBtn;
     private Map<Transcriber, JCheckBox> transcriberBoxMap =
             new LinkedHashMap<>();
@@ -87,10 +87,10 @@ public class ITRWizard extends NodeWizard {
 
         JPanel domainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         ButtonGroup btnGrp = new ButtonGroup();
-        byGroupBtn = new JRadioButton("By Group");
-        byGroupBtn.setSelected(false);
-        btnGrp.add(byGroupBtn);
-        domainPanel.add(byGroupBtn);
+        byTierBtn = new JRadioButton("By Tier");
+        byTierBtn.setSelected(false);
+        btnGrp.add(byTierBtn);
+        domainPanel.add(byTierBtn);
         byWordBtn = new JRadioButton("By Word");
         byWordBtn.setSelected(true);
         btnGrp.add(byWordBtn);
@@ -146,8 +146,8 @@ public class ITRWizard extends NodeWizard {
                 .collect(Collectors.toList());
     }
 
-    private boolean isGroupOrWord() {
-        return byGroupBtn.isSelected();
+    private boolean isTierOrWord() {
+        return byTierBtn.isSelected();
     }
 
     private boolean isIgnoreDiacritics() {
@@ -185,7 +185,7 @@ public class ITRWizard extends NodeWizard {
         ctx.put(PROJECT, project);
         ctx.put(SESSION, session);
         ctx.put(TRANSCRIBERS, getSelectedTranscribers());
-        ctx.put(GROUPORWORD, isGroupOrWord());
+        ctx.put(TIERORWORD, isTierOrWord());
         ctx.put(IGNOREDIACRITICS, isIgnoreDiacritics());
         ctx.put(ONLYOREXCEPT, isOnlyOrExcept());
         ctx.put(SELECTEDDIACRITICS, getSelectedDiacritics());
