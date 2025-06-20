@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Session Check", description="Check session for errors", category="Session", showInLibrary=true)
-public class SessionCheckNode extends OpNode implements NodeSettings{
+public class SessionCheckNode extends OpNode implements NodeSettings {
 
 	private InputField projectInput = new InputField("project", "Project", Project.class);
 	

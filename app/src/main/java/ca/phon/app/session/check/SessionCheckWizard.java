@@ -39,8 +39,6 @@ import java.util.List;
  */
 public class SessionCheckWizard extends NodeWizard {
 
-	private static final long serialVersionUID = 6650736926995551274L;
-	
 	private final static String SESSION_CHECK_GRAPH = "session_check.xml";
 
 	private SessionSelector sessionSelector;
@@ -52,7 +50,6 @@ public class SessionCheckWizard extends NodeWizard {
 		
 		try {
 			OpGraph graph = OpgraphIO.read(in);
-			
 			return new SessionCheckWizard(project, new Processor(graph), graph);
 		} catch (IOException e) {
 			LogUtil.severe(e);
@@ -62,11 +59,8 @@ public class SessionCheckWizard extends NodeWizard {
 	
 	private SessionCheckWizard(Project project, Processor processor, OpGraph graph) {
 		super("Session Check", processor, graph);
-		
 		putExtension(Project.class, project);
-		
 		globalOptionsPanel.setVisible(false);
-		
 		init();
 	}
 	
@@ -76,7 +70,6 @@ public class SessionCheckWizard extends NodeWizard {
 	
 	private void init() {
 		WizardStep step1 = getWizardStep(0);
-		
 		TitledPanel tp = new TitledPanel("Select Sessions");
 		sessionSelector = new SessionSelector(getProject());
 		editorSupport = new SessionSelectorActiveEditorSupport();

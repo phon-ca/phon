@@ -95,7 +95,9 @@ public class CheckTranscriptsUI extends JPanel implements SessionCheckUI {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.toString().compareTo(o2.toString());
+			final String o1Str = o1.getName() != null ? o1.getName() : o1.getLanguage().toString();
+			final String o2Str = o2.getName() != null ? o2.getName() : o2.getLanguage().toString();
+			return o1Str.compareTo(o2Str);
 		}
 
 	}
