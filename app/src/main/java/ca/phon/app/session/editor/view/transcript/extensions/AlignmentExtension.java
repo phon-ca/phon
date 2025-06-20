@@ -132,36 +132,36 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             final SimpleAttributeSet finalAttrs = new SimpleAttributeSet(batchBuilder.getTrailingAttributes());
             TranscriptStyleConstants.setTier(finalAttrs, record.getPhoneAlignmentTier());
             TranscriptStyleConstants.setNotEditable(finalAttrs, true);
-//            TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
+            TranscriptStyleConstants.setNotTraversable(finalAttrs, record.getPhoneAlignment().getFullAlignment().getAlignmentLength() != 0);
             TranscriptStyleConstants.setComponentFactory(finalAttrs, null);
-//            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
-//                @Override
-//                public JComponent createComponent(AttributeSet attrs) {
-//                    final JPanel retVal = new JPanel();
-//                    retVal.setPreferredSize(new Dimension(0, 0));
-//                    return retVal;
-//                }
-//
-//                @Override
-//                public JComponent getComponent() {
-//                    return null;
-//                }
-//
-//                @Override
-//                public void requestFocusStart() {
-//
-//                }
-//
-//                @Override
-//                public void requestFocusEnd() {
-//
-//                }
-//
-//                @Override
-//                public void requestFocusAtOffset(int offset) {
-//
-//                }
-//            });
+            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
+                @Override
+                public JComponent createComponent(AttributeSet attrs) {
+                    final JPanel retVal = new JPanel();
+                    retVal.setPreferredSize(new Dimension(0, 0));
+                    return retVal;
+                }
+
+                @Override
+                public JComponent getComponent() {
+                    return null;
+                }
+
+                @Override
+                public void requestFocusStart() {
+
+                }
+
+                @Override
+                public void requestFocusEnd() {
+
+                }
+
+                @Override
+                public void requestFocusAtOffset(int offset) {
+
+                }
+            });
             batchBuilder.appendEOL(finalAttrs);
         }
     }
@@ -186,7 +186,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         final Tier<IPATranscript> ipaActualTier = record.getIPAActualTier();
         final Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
 
-        final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTier, ipaActualTier);
+        final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTier, ipaActualTier, editor.getDataModel().getTranscriber());
 
         final TierEdit<PhoneAlignment> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(),
                 record, alignmentTier, phoneAlignment);
@@ -212,23 +212,15 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         // update the existing alignment components
         final AttributeSet attrs = doc.getCharacterElement(alignmentTierContentRange.start()).getAttributes();
         final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
-        if(componentFactory == null) {
-            // batch update
-            try {
-                doc.setBypassDocumentFilter(true);
-                doc.remove(alignmentTierContentRange.start(), alignmentTierContentRange.length());
-                doc.processBatchUpdates(alignmentTierContentRange.start(),
-                        getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, editor.getDataModel().getTranscriber(), attrs));
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
-            } finally {
-                doc.setBypassDocumentFilter(false);
-            }
-        } else if (componentFactory instanceof AlignmentComponentFactory) {
+        if (componentFactory instanceof AlignmentComponentFactory) {
             final JPanel component = (JPanel) componentFactory.getComponent();
             if(component != null) {
                 int i = 0;
-                final PhoneAlignment alignment = (PhoneAlignment) tier.getValue();
+                final PhoneAlignment alignment = tier.isBlind()
+                        ? editor.getDataModel().getTranscriber() == Transcriber.VALIDATOR
+                            ? (PhoneAlignment) tier.getValue()
+                            : (PhoneAlignment) tier.getBlindTranscription(editor.getDataModel().getTranscriber().getUsername())
+                        : (PhoneAlignment) tier.getValue();
                 for(; i < component.getComponentCount() && i < alignment.getAlignments().size(); i++) {
                     final Component comp = component.getComponent(i);
                     if(comp instanceof PhoneMapDisplay) {
@@ -256,6 +248,18 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                     component.remove(i);
                 }
             }
+        } else {
+            // batch update
+            try {
+                doc.setBypassDocumentFilter(true);
+                doc.remove(alignmentTierContentRange.start(), alignmentTierContentRange.length());
+                doc.processBatchUpdates(alignmentTierContentRange.start(),
+                        getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, editor.getDataModel().getTranscriber(), attrs));
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            } finally {
+                doc.setBypassDocumentFilter(false);
+            }
         }
     }
 
@@ -281,7 +285,12 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
         // Get the string version of the alignment
         // Add component factory if needed
-        if (isAlignmentComponent() && alignmentTier.hasValue() && alignmentTier.getValue().getFullAlignment().getAlignmentLength() > 0) {
+        final PhoneAlignment alignment = alignmentTier.isBlind()
+                ? editor.getDataModel().getTranscriber() == Transcriber.VALIDATOR
+                    ? alignmentTier.getValue()
+                    : alignmentTier.getBlindTranscription(transcriber.getUsername())
+                : alignmentTier.getValue();
+        if (isAlignmentComponent() && alignmentTier.hasValue() && alignment.getFullAlignment().getAlignmentLength() > 0) {
             tierAttrs.addAttributes(getAlignmentAttributes());
         }
         batchBuilder.appendTierContent(record, alignmentTier, editor.getDataModel().getTranscriber(), tierAttrs);

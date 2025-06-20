@@ -184,9 +184,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             TranscriptStyleConstants.setNotTraversable(tierAttrs, false);
             TranscriptStyleConstants.setClickHandler(tierAttrs, null);
             if(isSyllabificationComponent()) {
-                if(ipaTier.hasValue() && ipaTier.getValue().length() > 0) {
+                if(ipa.length() > 0) {
                     tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
-                    builder.appendBatchString(" ", tierAttrs);
+                    builder.appendBatchString(ipa.toString(true), tierAttrs);
                 } else {
                     builder.appendBatchString("", tierAttrs);
                 }
@@ -197,36 +197,35 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             final SimpleAttributeSet finalAttrs = new SimpleAttributeSet(builder.getTrailingAttributes());
             TranscriptStyleConstants.setTier(finalAttrs, syllableTier);
             TranscriptStyleConstants.setNotEditable(finalAttrs, true);
-            TranscriptStyleConstants.setComponentFactory(finalAttrs, null);
-//            TranscriptStyleConstants.setNotTraversable(finalAttrs, true);
-//            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
-//                @Override
-//                public JComponent createComponent(AttributeSet attrs) {
-//                    final JPanel retVal = new JPanel();
-//                    retVal.setPreferredSize(new Dimension(0, 0));
-//                    return retVal;
-//                }
-//
-//                @Override
-//                public JComponent getComponent() {
-//                    return null;
-//                }
-//
-//                @Override
-//                public void requestFocusStart() {
-//
-//                }
-//
-//                @Override
-//                public void requestFocusEnd() {
-//
-//                }
-//
-//                @Override
-//                public void requestFocusAtOffset(int offset) {
-//
-//                }
-//            });
+            TranscriptStyleConstants.setNotTraversable(finalAttrs, ipa.length() != 0);
+            TranscriptStyleConstants.setComponentFactory(finalAttrs, new ComponentFactory() {
+                @Override
+                public JComponent createComponent(AttributeSet attrs) {
+                    final JPanel retVal = new JPanel();
+                    retVal.setPreferredSize(new Dimension(0, 0));
+                    return retVal;
+                }
+
+                @Override
+                public JComponent getComponent() {
+                    return null;
+                }
+
+                @Override
+                public void requestFocusStart() {
+
+                }
+
+                @Override
+                public void requestFocusEnd() {
+
+                }
+
+                @Override
+                public void requestFocusAtOffset(int offset) {
+
+                }
+            });
 
             builder.appendEOL(finalAttrs);
         }

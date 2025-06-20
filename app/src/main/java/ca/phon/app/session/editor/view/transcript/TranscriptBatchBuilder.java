@@ -696,7 +696,15 @@ public class TranscriptBatchBuilder {
                 if (phoneAlignment.getFullAlignment().getAlignmentLength() == 0) {
                     appendBatchString("", tierAttrsCopy);
                 } else {
-                    appendBatchString(" ", tierAttrsCopy);
+                    final StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < phoneAlignment.getAlignments().size(); i++) {
+                        PhoneMap pm = phoneAlignment.getAlignments().get(i);
+                        if (i > 0) {
+                            builder.append(" ");
+                        }
+                        builder.append(pm.toString());
+                    }
+                    appendBatchString(builder.toString(), tierAttrsCopy);
                 }
             } else {
                 appendBatchString(tier.toString(), tierAttrs);
