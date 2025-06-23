@@ -79,9 +79,7 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final TranscriptElementLocation location = editor.getTranscriptEditorCaret().getCurrentLocation();
 
         // clone transcript
-        IPATranscript origTranscript = tier.isBlind()
-                ? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
-                : tier.getValue();
+        IPATranscript origTranscript = tier.getValueForTranscriber(transcriber).orElse(tier.getValue());
         if(origTranscript == null) {
             origTranscript = new IPATranscript();
         }
@@ -142,9 +140,7 @@ public class SyllabificationComponentFactory implements ComponentFactory {
                 final int phoneIndex = currentIndex;
                 display.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, (e) -> {
                     final SyllabificationDisplay.SyllabificationChangeData data = (SyllabificationDisplay.SyllabificationChangeData) e.getNewValue();
-                    final IPATranscript transcript = tier.isBlind()
-                        ? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
-                        : tier.getValue();
+                    final IPATranscript transcript = tier.getValueForTranscriber(transcriber).orElse(tier.getValue());
                     final ScTypeEdit edit = new ScTypeEdit(this.session, this.eventManager, transcript, phoneIndex + data.position(), data.scType());
                     edit.setSource(display);
                     this.undoSupport.postEdit(edit);
@@ -154,7 +150,7 @@ public class SyllabificationComponentFactory implements ComponentFactory {
                     final SyllabificationDisplay.HiatusChangeData data = (SyllabificationDisplay.HiatusChangeData) e.getNewValue();
                     final int pIdx = phoneIndex + data.position1();
                     final int pIdx2 = phoneIndex + data.position2();
-                    final IPATranscript transcript = transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername());
+                    final IPATranscript transcript = tier.getValueForTranscriber(transcriber).orElse(tier.getValue());
                     final ToggleDiphthongEdit diphthongEdit1 = new ToggleDiphthongEdit(this.session, this.eventManager, transcript, pIdx);
                     diphthongEdit1.setSource(display);
                     final ToggleDiphthongEdit diphthongEdit2 = new ToggleDiphthongEdit(this.session, this.eventManager, transcript, pIdx2);

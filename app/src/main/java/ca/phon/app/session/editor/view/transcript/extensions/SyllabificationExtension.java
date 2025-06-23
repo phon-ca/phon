@@ -164,9 +164,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
 
             // Create a dummy tier for the syllabification
-            IPATranscript ipa = ipaTier.isBlind()
-                ? editor.getTranscriptDocument().getTranscriber() == Transcriber.VALIDATOR ? ipaTier.getValue() : ipaTier.getBlindTranscription(editor.getTranscriptDocument().getTranscriber().getUsername())
-                : ipaTier.getValue();
+            IPATranscript ipa = ipaTier.getValueForTranscriber(editor.getDataModel().getTranscriber()).orElse(ipaTier.getValue());
             if (ipa == null) {
                 ipa = new IPATranscript();
             }
@@ -453,15 +451,13 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
      *
      */
     public void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> event) {
-        final Tier<?> tier = event.data().tier();
-        if(tier.getDeclaredType().equals(IPATranscript.class) && !event.data().valueAdjusting()) {
+        final Tier<?> t = event.data().tier();
+        if(t.getDeclaredType().equals(IPATranscript.class) && !event.data().valueAdjusting()) {
+            final Tier<IPATranscript> tier = (Tier<IPATranscript>) t;
             if(isSyllabificationVisible()) {
-                final IPATranscript transcript = tier.isBlind()
-                    ? editor.getTranscriptDocument().getTranscriber() == Transcriber.VALIDATOR ? (IPATranscript)tier.getValue() : (IPATranscript) tier.getBlindTranscription(editor.getTranscriptDocument().getTranscriber().getUsername())
-                    : (IPATranscript)tier.getValue();
+                final IPATranscript transcript = tier.getValueForTranscriber(editor.getDataModel().getTranscriber()).orElse(tier.getValue());
                 final TranscriptDocument.StartEnd range = doc.getTierStartEnd(editor.getSession().getRecordIndex(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
                 if(!range.valid()) return;
-                LogUtil.info("Updating syllabification for " + tier.getName());
                 final TranscriptElementLocation currentLocation = editor.getTranscriptEditorCaret().getCurrentLocation();
                 editor.getTranscriptEditorCaret().freeze();
                 try {
