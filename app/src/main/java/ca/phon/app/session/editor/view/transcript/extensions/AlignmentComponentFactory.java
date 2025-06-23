@@ -125,8 +125,10 @@ public class AlignmentComponentFactory implements ComponentFactory {
                 final int wIdx = clonedMaps.indexOf(phoneMap);
                 display.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, (e) -> {
                     final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)e.getNewValue();
-                    final List<IPATranscript> targetWords = record.getIPATarget().words();
-                    final List<IPATranscript> actualWords = record.getIPAActual().words();
+                    final IPATranscript ipaT = record.getIPATargetTier().getValueForTranscriber(transcriber).orElse(record.getIPATarget());
+                    final List<IPATranscript> targetWords = ipaT.words();
+                    final IPATranscript ipaA = record.getIPAActualTier().getValueForTranscriber(transcriber).orElse(record.getIPAActual());
+                    final List<IPATranscript> actualWords = ipaA.words();
                     final IPATranscript ipaTarget = wIdx < targetWords.size() ? targetWords.get(wIdx) : new IPATranscript();
                     final IPATranscript ipaActual = wIdx < actualWords.size() ? actualWords.get(wIdx) : new IPATranscript();
                     final PhoneMap pm = new PhoneMap(ipaTarget, ipaActual);

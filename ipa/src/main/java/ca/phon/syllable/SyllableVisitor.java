@@ -178,7 +178,8 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		// pauses are syllable boundaries
 		breakSyllable();
 		currentSyllableBuilder.append(pause);
-		lastPhone = pause;
+		breakSyllable();
+		lastPhone = null;
 	}
 
 	/**
