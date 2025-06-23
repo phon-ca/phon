@@ -79,7 +79,6 @@ public class ViewIconStrip extends IconStrip {
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {
             @Override
             public void viewShown(String viewName) {
-                System.out.println("View shown: " + viewName);
                 if(viewButtons.containsKey(viewName)) {
                     viewButtons.get(viewName).setSelected(true);
                 }
@@ -88,7 +87,6 @@ public class ViewIconStrip extends IconStrip {
 
             @Override
             public void viewHidden(String viewName) {
-                System.out.println("View hidden: " + viewName);
                 if(viewButtons.containsKey(viewName)) {
                     viewButtons.get(viewName).setSelected(false);
                 }
