@@ -69,9 +69,7 @@ public class AlignmentComponentFactory implements ComponentFactory {
         final Record record = TranscriptStyleConstants.getRecord(attrs);
         if(record == null) return retVal;
 
-        final PhoneAlignment phoneAlignment = tier.isBlind() ?
-                transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
-                : tier.getValue();
+        final PhoneAlignment phoneAlignment = tier.getValueForTranscriber(transcriber).orElse(new PhoneAlignment());
         final List<PhoneMap> clonedMaps = new ArrayList<>();
         for(PhoneMap pm:phoneAlignment) {
             final PhoneMap clonedPm = PhoneMap.fromString(pm.getTargetRep(), pm.getActualRep(), pm.toString());
@@ -135,9 +133,7 @@ public class AlignmentComponentFactory implements ComponentFactory {
                     pm.setTopAlignment(newVal.alignment()[0]);
                     pm.setBottomAlignment(newVal.alignment()[1]);
 
-                    final PhoneAlignment origAlignment = record.getPhoneAlignmentTier().isBlind()
-                            ? transcriber == Transcriber.VALIDATOR ? record.getPhoneAlignment() : record.getPhoneAlignmentTier().getBlindTranscription(transcriber.getUsername())
-                            : record.getPhoneAlignment();
+                    final PhoneAlignment origAlignment = record.getPhoneAlignmentTier().getValueForTranscriber(transcriber).orElse(new PhoneAlignment());
                     final List<PhoneMap> modifiedAlignments = new ArrayList<>();
                     for(int i = 0; i < origAlignment.getAlignments().size(); i++) {
                         if(i == wIdx)

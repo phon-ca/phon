@@ -285,12 +285,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
         // Get the string version of the alignment
         // Add component factory if needed
-        final PhoneAlignment alignment = alignmentTier.isBlind()
-                ? editor.getDataModel().getTranscriber() == Transcriber.VALIDATOR
-                    ? alignmentTier.getValue()
-                    : alignmentTier.getBlindTranscription(transcriber.getUsername())
-                : alignmentTier.getValue();
-        if (isAlignmentComponent() && alignmentTier.hasValue() && alignment.getFullAlignment().getAlignmentLength() > 0) {
+        final PhoneAlignment alignment = alignmentTier.getValueForTranscriber(transcriber).orElse(new PhoneAlignment());
+        if (isAlignmentComponent() && alignment.getFullAlignment().getAlignmentLength() > 0) {
             tierAttrs.addAttributes(getAlignmentAttributes());
         }
         batchBuilder.appendTierContent(record, alignmentTier, editor.getDataModel().getTranscriber(), tierAttrs);

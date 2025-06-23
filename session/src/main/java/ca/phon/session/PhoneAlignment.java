@@ -53,14 +53,8 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
      * @return new PhoneAlignment object
      */
     public static PhoneAlignment fromTiers(Tier<IPATranscript> targetTier, Tier<IPATranscript> alignedTier, Transcriber transcriber) {
-        final IPATranscript targetIpa =
-                transcriber != Transcriber.VALIDATOR
-                        ? (targetTier.hasBlindTranscription(transcriber.getUsername()) ? targetTier.getBlindTranscription(transcriber.getUsername()) : new IPATranscript())
-                        : (targetTier.hasValue() ? targetTier.getValue() : new IPATranscript());
-        final IPATranscript alignedIpa =
-                transcriber != Transcriber.VALIDATOR
-                        ? (alignedTier.hasBlindTranscription(transcriber.getUsername()) ? alignedTier.getBlindTranscription(transcriber.getUsername()) : new IPATranscript())
-                        : (alignedTier.hasValue() ? alignedTier.getValue() : new IPATranscript());
+        final IPATranscript targetIpa = targetTier.getValueForTranscriber(transcriber).orElse(new IPATranscript());
+        final IPATranscript alignedIpa = alignedTier.getValueForTranscriber(transcriber).orElse(new IPATranscript());
         final List<IPATranscript> targetWords = targetIpa.words();
         final List<IPATranscript> alignedWords = alignedIpa.words();
         final int n = Math.max(targetWords.size(), alignedWords.size());

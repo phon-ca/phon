@@ -22,7 +22,10 @@ import ca.phon.ipa.*;
 import ca.phon.phonex.*;
 import ca.phon.util.PhonConstants;
 
+import java.text.ParseException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -164,8 +167,20 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		int btmPhoneIdx = 0;
 		Integer alignment[][] = new Integer[2][alignLen];
 		for(int i = 0; i < alignLen; i++) {
-			final IPATranscript alignedPhones =
-					(new IPATranscriptBuilder()).append(alignments[i]).toIPATranscript();
+			final Pattern regex = Pattern.compile(phonex);
+			final Matcher regexMatcher = regex.matcher(alignments[i]);
+			if(!regexMatcher.matches()) {
+				throw new IllegalArgumentException("Invalid syntax: " + align);
+			}
+			final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+			try {
+				builder.append(IPATranscript.parseIPATranscript(regexMatcher.group(1)));
+				builder.append(new AlignmentMarker());
+				builder.append(IPATranscript.parseIPATranscript(regexMatcher.group(2)));
+			} catch (ParseException e) {
+				throw new IllegalArgumentException("Invalid syntax: " + align, e);
+			}
+			final IPATranscript alignedPhones = builder.toIPATranscript();
 			final PhonexMatcher matcher = pattern.matcher(alignedPhones);
 			if(matcher.matches()) {
 				final IPAElement g1 = new IPATranscript(matcher.group(1)).elementAt(0);

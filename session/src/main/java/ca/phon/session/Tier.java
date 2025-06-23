@@ -19,6 +19,7 @@ import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.spi.TierSPI;
 
+import javax.swing.text.html.Option;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.*;
@@ -362,6 +363,70 @@ public final class Tier<T> implements IExtendable {
 //		} else if(isUnvalidated())
 //			buffer.append(getUnvalidatedValue().getValue());
 		return buffer.toString();
+	}
+
+	/**
+	 * Set value of the tier while also considering the transcriber.
+	 *
+	 * @param transcriber
+	 * @param value
+	 */
+	public void setValueForTranscriber(Transcriber transcriber, T value) {
+		setValueForTranscriber(transcriber.getUsername(), value);
+	}
+
+	/**
+	 * Set value of the tier while also considering the transcriber.
+	 *
+	 * @param transcriberId
+	 * @param value
+	 */
+	public void setValueForTranscriber(String transcriberId, T value) {
+		if(isBlind()) {
+			if(Transcriber.VALIDATOR.getUsername().equals(transcriberId)) {
+				setValue(value);
+			} else {
+				setBlindTranscription(transcriberId, value);
+			}
+		} else {
+			setValue(value);
+		}
+	}
+
+	/**
+	 * Get value of the tier while also considering the transcriber.
+	 *
+	 * @param transcriber
+	 *
+	 * @return value for the tier for the given transcriber if it is a blind tier, otherwise
+	 *  the value of the tier itself.
+	 */
+	public Optional<T> getValueForTranscriber(Transcriber transcriber) {
+		return getValueForTranscriber(transcriber.getUsername());
+	}
+
+	/**
+	 * Get value of the tier while also considering the transcriber.
+	 *
+	 * @param transcriberId
+	 *
+	 * @return value for the tier for the given transcriber if it is a blind tier, otherwise
+	 *  the value of the tier itself.
+	 */
+	public Optional<T> getValueForTranscriber(String transcriberId) {
+		T retVal = null;
+		if(isBlind()) {
+			retVal = Transcriber.VALIDATOR.getUsername().equals(transcriberId)
+				? getValue()
+				: getBlindTranscription(transcriberId);
+		} else {
+			retVal = getValue();
+		}
+		if(retVal != null) {
+			return Optional.of(retVal);
+		} else {
+			return Optional.empty();
+		}
 	}
 	
 	/*

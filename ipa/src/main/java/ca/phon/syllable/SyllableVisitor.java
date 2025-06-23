@@ -173,6 +173,14 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		lastPhone = p;
 	}
 
+	@Visits
+	public void visitPause(Pause pause) {
+		// pauses are syllable boundaries
+		breakSyllable();
+		currentSyllableBuilder.append(pause);
+		lastPhone = pause;
+	}
+
 	/**
 	 * Rest syllable list
 	 */

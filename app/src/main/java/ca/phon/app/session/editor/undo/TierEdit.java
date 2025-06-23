@@ -297,7 +297,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt = new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
 		getEditorEventManager().queueEvent(tierChangeEvt);
 		if(!isValueAdjusting()) {
-			final EditorEventType.TierChangeData tcdEnd = new EditorEventType.TierChangeData(getTranscriber(), getRecord(), tier, oldValue, newValue, false);
+			final EditorEventType.TierChangeData tcdEnd = new EditorEventType.TierChangeData(tier.isBlind() ? getTranscriber() : Transcriber.VALIDATOR, getRecord(), tier, oldValue, newValue, false);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt = new EditorEvent<>(EditorEventType.TierChange, getSource(), tcdEnd);
 			getEditorEventManager().queueEvent(tierChangedEvt);
 		}
