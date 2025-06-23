@@ -173,6 +173,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Set session but does not populate the document.
+     *
+     * @param session the session to set
+     */
+    public void setSessionNoPopulate(Session session) {
+        this.session = session;
+    }
+
+    /**
      * Set transcriber for the document, this will not reload the document
      *
      */

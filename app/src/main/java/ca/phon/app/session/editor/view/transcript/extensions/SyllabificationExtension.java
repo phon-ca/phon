@@ -104,7 +104,18 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
         editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(SyllabificationAlignmentEditorView.ScEdit, this::onScEdit, EditorEventManager.RunOn.AWTEventDispatchThread);
-        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+//        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
+            @Override
+            public void afterSetDot(int dot, int moveTo) {
+                final TranscriptElementLocation previousLocation = editor.charPosToSessionLocation(dot);
+                final TranscriptElementLocation currentLocation = editor.charPosToSessionLocation(moveTo);
+                if(currentLocation.valid() && !previousLocation.equals(currentLocation)) {
+                    onTranscriptLocationChanged(previousLocation, currentLocation);
+                }
+            }
+        });
 
         doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
     }
@@ -151,7 +162,13 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         }
     }
 
-    private void buildSyllabificationBatch(TranscriptBatchBuilder builder, MutableAttributeSet attrs) {
+    /**
+     * Builds a syllabification batch for the current session and attributes.
+     *
+     * @param builder the {@link TranscriptBatchBuilder} to build the syllabification batch into
+     * @param attrs the attributes to use for the syllabification tier - must be setup for syllabification
+     */
+    public void buildSyllabificationBatch(TranscriptBatchBuilder builder, MutableAttributeSet attrs) {
         // Begin syllabification edit mode
         PhonUIAction<Void> syllabificationEditModeAct = PhonUIAction.runnable(() -> {
             String tierName = editor.getCurrentSessionLocation().tier();
@@ -374,9 +391,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         }
     }
 
-    public void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> event) {
-        final TranscriptElementLocation oldLocation = event.data().oldLoc();
-        final TranscriptElementLocation newLocation = event.data().newLoc();
+    public void onTranscriptLocationChanged(TranscriptElementLocation oldLocation, TranscriptElementLocation newLocation) {
+//        final TranscriptElementLocation oldLocation = event.data().oldLoc();
+//        final TranscriptElementLocation newLocation = event.data().newLoc();
         if(syllabificationEditMode) {
             String tierName = newLocation.tier();
             if (!SystemTierType.TargetSyllables.getName().equals(tierName) && !SystemTierType.ActualSyllables.getName().equals(tierName)) {

@@ -63,7 +63,18 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             doc.putDocumentProperty(ALIGNMENT_PARENT, calculateAlignmentParent());
         }, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+//        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
+            @Override
+            public void afterSetDot(int dot, int moveTo) {
+                final TranscriptElementLocation previousLocation = editor.charPosToSessionLocation(dot);
+                final TranscriptElementLocation currentLocation = editor.charPosToSessionLocation(moveTo);
+                if(currentLocation.valid() && !previousLocation.equals(currentLocation)) {
+                    onTranscriptLocationChanged(previousLocation, currentLocation);
+                }
+            }
+        });
     }
 
     private void alignmentVisiblePropertyChangeHandler(PropertyChangeEvent evt) {
@@ -329,9 +340,9 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         }
     }
 
-    public void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> event) {
+    public void onTranscriptLocationChanged(TranscriptElementLocation oldLocation, TranscriptElementLocation newLocation) {
 //        final TranscriptElementLocation oldLocation = event.data().oldLoc();
-        final TranscriptElementLocation newLocation = event.data().newLoc();
+//        final TranscriptElementLocation newLocation = event.data().newLoc();
 
         // handle caret movements into syllabifier tiers
         if (newLocation.tier().equals(SystemTierType.PhoneAlignment.getName())) {

@@ -7,6 +7,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.Transcript;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
@@ -71,13 +72,13 @@ public class TranscriptScrollPaneGutter extends JComponent {
         Font font = FontPreferences.getTierFont();
         setFont(font);
 
-        editor.getEventManager().registerActionForEvent(
-                TranscriptEditor.transcriptLocationChanged,
-                (e) -> {
-                    repaint();
-                },
-                EditorEventManager.RunOn.AWTEventDispatchThread
-        );
+//        editor.getEventManager().registerActionForEvent(
+//                TranscriptEditor.transcriptLocationChanged,
+//                (e) -> {
+//                    repaint();
+//                },
+//                EditorEventManager.RunOn.AWTEventDispatchThread
+//        );
         editor.getTranscriptDocument().addDocumentPropertyChangeListener("processBatch", (e) -> {
             SwingUtilities.invokeLater(() -> {
                 revalidate();
@@ -89,6 +90,18 @@ public class TranscriptScrollPaneGutter extends JComponent {
                 revalidate();
                 repaint();
             });
+        });
+
+        editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
+            @Override
+            public void afterSetDot(int oldDot, int newDot) {
+                final TranscriptElementLocation previousLocation = editor.charPosToSessionLocation(oldDot);
+                final TranscriptElementLocation currentLocation = editor.charPosToSessionLocation(newDot);
+                if(previousLocation.transcriptElementIndex() != currentLocation.transcriptElementIndex()
+                        || !previousLocation.tier().equals(currentLocation.tier())) {
+                    repaint();
+                }
+            }
         });
 
         addMouseMotionListener(new MouseAdapter() {

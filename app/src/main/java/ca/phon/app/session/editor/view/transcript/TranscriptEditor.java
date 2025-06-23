@@ -120,6 +120,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      */
     private final TranscriptEditorCaret caret;
     private SessionMediaModel mediaModel;
+
+    /**
+     * Turn off automatic insertion of record elements when the editor record changes (single record view)
+     */
+    private boolean autoInsertRecordElements = true;
+
     /**
      * A reference to the current debug highlight object
      */
@@ -364,6 +370,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     // endregion
 
     // region getters/setters
+    public boolean isAutoInsertRecordElements() {
+        return autoInsertRecordElements;
+    }
+
+    public void setAutoInsertRecordElements(boolean autoInsertRecordElements) {
+        boolean oldValue = this.autoInsertRecordElements;
+        this.autoInsertRecordElements = autoInsertRecordElements;
+        firePropertyChange("autoInsertRecordElements", oldValue, autoInsertRecordElements);
+    }
+
     public void addTierChangeListener(TranscriptEditorTierChangeListener listener) {
         if (!tierChangeListeners.contains(listener)) {
             tierChangeListeners.add(listener);
@@ -1747,6 +1763,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param editorEvent the event that says the current record haas changed
      */
     private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> editorEvent) {
+        if(!isAutoInsertRecordElements()) return;
+
         TranscriptDocument doc = getTranscriptDocument();
 
         final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
