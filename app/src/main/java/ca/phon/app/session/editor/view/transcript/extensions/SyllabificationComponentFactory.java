@@ -79,7 +79,12 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final TranscriptElementLocation location = editor.getTranscriptEditorCaret().getCurrentLocation();
 
         // clone transcript
-        final IPATranscript origTranscript = transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername());
+        IPATranscript origTranscript = tier.isBlind()
+                ? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
+                : tier.getValue();
+        if(origTranscript == null) {
+            origTranscript = new IPATranscript();
+        }
         final IPATranscript clonedTranscript = (new IPATranscriptBuilder()).append(origTranscript.toString(true)).toIPATranscript();
         for(IPATranscript word:clonedTranscript.words()) {
             final SyllabificationDisplay display = new SyllabificationDisplay();

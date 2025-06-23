@@ -167,6 +167,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             IPATranscript ipa = ipaTier.isBlind()
                 ? editor.getTranscriptDocument().getTranscriber() == Transcriber.VALIDATOR ? ipaTier.getValue() : ipaTier.getBlindTranscription(editor.getTranscriptDocument().getTranscriber().getUsername())
                 : ipaTier.getValue();
+            if (ipa == null) {
+                ipa = new IPATranscript();
+            }
             Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(getSyllabifierTierNameForIPATier(tier.getName()), IPATranscript.class, new HashMap<>(), true, ipaTier.isBlind());
             syllableTier.setValue((new IPATranscriptBuilder()).append(ipa.toString(true)).toIPATranscript());
 

@@ -1109,8 +1109,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             return false; // no changes to syllabification tiers
         }
         if(tier == null) return false;
-        final String oldTierVal = tier.isUnvalidated() ? tier.getUnvalidatedValue().getValue() :
-                (tier.hasValue() ? tier.getValue().toString() : "");
+        final String oldTierVal = getTranscriptDocument().getTierText(tier, getDataModel().getTranscriber().getUsername());
         // get text in document for tier
         final Element parentElem = charElem.getParentElement();
         if(parentElem == null) return false;
