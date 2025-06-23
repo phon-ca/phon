@@ -46,6 +46,13 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 	protected int costSubstitute(IPAElement ele1, IPAElement ele2) {
 		int tally = 0;
 
+		// special case for pauses
+		if(ele1 instanceof Pause && ele2 instanceof Pause) {
+			return 2;
+		} else if(ele1 instanceof Pause || ele2 instanceof Pause) {
+			return 0;
+		}
+
 		if( (ele1.getFeatureSet().hasFeature("Consonant")
 				&& ele2.getFeatureSet().hasFeature("Consonant")) ) {
 			tally += 2;
