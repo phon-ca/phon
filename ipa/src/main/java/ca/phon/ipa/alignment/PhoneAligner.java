@@ -50,7 +50,7 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		if(ele1 instanceof Pause && ele2 instanceof Pause) {
 			return 2;
 		} else if(ele1 instanceof Pause || ele2 instanceof Pause) {
-			return 0;
+			return -1;
 		}
 
 		if( (ele1.getFeatureSet().hasFeature("Consonant")
