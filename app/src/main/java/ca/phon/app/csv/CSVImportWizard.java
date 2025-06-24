@@ -472,8 +472,8 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
             if (isImported(segmentStart) || isImported(segmentEnd) || isImported(segmentDuration)) {
                 retVal.add("Cannot import segment start, segment end or segment duration if segment is being imported");
             }
-        } else {
-            if (!isImported(segmentStart) || (isImported(segmentEnd) == isImported(segmentDuration))) {
+        } else if (isImported(segmentStart)) {
+            if (isImported(segmentEnd) == isImported(segmentDuration)) {
                 retVal.add(
                         "If segment is not being imported, segment start must be imported as well as either segment duration or segment end");
             }

@@ -824,6 +824,10 @@ public class CSVImporter {
                             e);
                 }
             }
+        } else {
+            segment.setStartValue(0.0f);
+            segment.setEndValue(0.0f);
+            validSegment = true;
         }
 
         return validSegment ? segment : null;
