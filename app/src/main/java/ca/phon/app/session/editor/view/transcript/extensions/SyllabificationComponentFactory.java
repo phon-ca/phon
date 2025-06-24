@@ -205,8 +205,8 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final TranscriptDocument.StartEnd syllabificationRange =
                 editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(syllabificationRange.valid()) {
-            editor.offsetInNextTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
             editor.requestFocus();
+            editor.offsetInNextTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
         }
     }
 
@@ -233,8 +233,8 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final TranscriptDocument.StartEnd syllabificationRange =
                 editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(syllabificationRange.valid()) {
-            editor.offsetInPrevTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
             editor.requestFocus();
+            editor.offsetInPrevTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
         }
     }
 

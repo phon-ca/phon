@@ -184,8 +184,8 @@ public class AlignmentComponentFactory implements ComponentFactory {
         final TranscriptDocument.StartEnd alignmentRange =
                 editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(alignmentRange.valid()) {
-            editor.offsetInNextTierOrElement(alignmentRange.start() + offset, offset);
             editor.requestFocus();
+            editor.offsetInNextTierOrElement(alignmentRange.start() + offset, offset);
         }
     }
 
@@ -212,8 +212,8 @@ public class AlignmentComponentFactory implements ComponentFactory {
         final TranscriptDocument.StartEnd alignmentRange =
                 editor.getTranscriptDocument().getTierContentStartEnd(recordIdx, tier.getName());
         if(alignmentRange.valid()) {
-            editor.offsetInPrevTierOrElement(alignmentRange.start() + offset, offset);
             editor.requestFocus();
+            editor.offsetInPrevTierOrElement(alignmentRange.start() + offset, offset);
         }
     }
 
