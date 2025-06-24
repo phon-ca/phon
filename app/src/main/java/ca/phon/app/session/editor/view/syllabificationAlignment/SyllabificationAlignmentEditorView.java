@@ -85,7 +85,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private final static boolean DEFAULT_SHOW_DIACRITICS = false;
 	private JCheckBox showDiacriticsBox;
 
-	private TranscriptScrollPane scrollPane;
+//	private TranscriptScrollPane scrollPane;
 	private TranscriptEditor editor;
 
 	private SyllabificationExtension syllabificationExtension;
@@ -161,7 +161,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			alignmentExtension.install(editor);
 		}
 
-		scrollPane = new TranscriptScrollPane(editor);
+		JScrollPane scrollPane = new JScrollPane(editor);
 		add(scrollPane, BorderLayout.CENTER);
 
 		update();
