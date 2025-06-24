@@ -126,11 +126,11 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         return retVal;
     }
 
-    private void buildAlignmentBatch(TranscriptBatchBuilder batchBuilder, AttributeSet attrs) {
+    public void buildAlignmentBatch(TranscriptBatchBuilder batchBuilder, AttributeSet attrs) {
         Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
         String alignmentParent = getAlignmentParent();
 
-        if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent)) {
+        if (tier != null && alignmentParent != null && tier.getName().equals(alignmentParent)) {
             Record record = TranscriptStyleConstants.getRecord(attrs);
             final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
             TranscriptStyleConstants.setElementType(tierAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);

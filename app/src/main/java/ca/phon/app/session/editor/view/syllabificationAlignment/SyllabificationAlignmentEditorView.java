@@ -21,6 +21,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.syllabificationAlignment.actions.*;
 import ca.phon.app.session.editor.view.transcript.*;
+import ca.phon.app.session.editor.view.transcript.extensions.AlignmentExtension;
 import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationComponentFactory;
 import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
 import ca.phon.ipa.IPATranscript;
@@ -40,6 +41,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 import com.jgoodies.forms.layout.*;
+import org.w3c.dom.Attr;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -87,6 +89,8 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private TranscriptEditor editor;
 
 	private SyllabificationExtension syllabificationExtension;
+
+	private AlignmentExtension alignmentExtension;
 
 	public SyllabificationAlignmentEditorView(SessionEditor editor) {
 		super(editor);
@@ -143,11 +147,18 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		editor.setAutoInsertRecordElements(false);
 		editor.getTranscriptDocument().setSessionNoPopulate(getEditor().getSession());
+		editor.getTranscriptDocument().putDocumentProperty(AlignmentExtension.ALIGNMENT_PARENT, SystemTierType.IPAActual.getName());
 
 		syllabificationExtension = editor.getExtension(SyllabificationExtension.class);
 		if(syllabificationExtension == null) {
 			syllabificationExtension = new SyllabificationExtension();
 			syllabificationExtension.install(editor);
+		}
+
+		alignmentExtension = editor.getExtension(AlignmentExtension.class);
+		if(alignmentExtension == null) {
+			alignmentExtension = new AlignmentExtension();
+			alignmentExtension.install(editor);
 		}
 
 		scrollPane = new TranscriptScrollPane(editor);
@@ -259,6 +270,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 //	};
 
 	public void update() {
+		LogUtil.info("Updating syllabification/alignment editor view for record: " + getEditor().getCurrentRecordIndex()+1);
 		final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
 
 		final Record record = getEditor().currentRecord();
@@ -272,9 +284,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		TranscriptStyleConstants.setRecord(ipaActualAttrs, record);
 		TranscriptStyleConstants.setTier(ipaActualAttrs, record.getIPAActualTier());
 
-
 		syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaTargetAttrs);
 		syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaActualAttrs);
+		alignmentExtension.buildAlignmentBatch(batchBuilder, ipaActualAttrs);
 
 		try {
 			editor.getTranscriptEditorCaret().freeze();
@@ -309,6 +321,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void updateActualSyllables() {
+		LogUtil.info("Updating actual syllables for record: " + getEditor().getCurrentRecordIndex()+1);
 		final Record r = getEditor().currentRecord();
 		if(r == null) return;
 
@@ -338,6 +351,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void updateTargetSyllables() {
+		LogUtil.info("Updating target syllables for record: " + getEditor().getCurrentRecordIndex()+1);
 		final Record r = getEditor().currentRecord();
 		if(r == null) return;
 
@@ -388,20 +402,27 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		if(r == null) return;
 
 		final Component source = ee.source();
-		if(SwingUtilities.isDescendingFrom(this, source)) {
-			return;
+		if(source instanceof SyllabificationDisplay syllabificationDisplay) {
+			TranscriptDocument.StartEnd syllableRange = new TranscriptDocument.StartEnd(-1, -1);
+			if(SystemTierType.IPATarget.getName().equals(ee.data().tier())) {
+				syllableRange = editor.getTranscriptDocument().getTierContentStartEnd(getEditor().getSession().getRecordIndex(r), SystemTierType.TargetSyllables.getName());
+			} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier())) {
+				syllableRange = editor.getTranscriptDocument().getTierContentStartEnd(getEditor().getSession().getRecordIndex(r), SystemTierType.ActualSyllables.getName());
+			}
+			if(syllableRange.valid()) {
+				final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(syllableRange.start()).getAttributes();
+				final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+				if(componentFactory instanceof SyllabificationComponentFactory syllabificationComponentFactory) {
+					if (componentFactory.getComponent() == source.getParent())
+						return;
+				}
+			}
 		}
 
 		if(SystemTierType.IPATarget.getName().equals(ee.data().tier)) {
 			updateTargetSyllables();
 		} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier)) {
 			updateActualSyllables();
-		} else if(SystemTierType.PhoneAlignment.getName().equals(ee.data().tier)) {
-//			final PhoneMapDisplay phoneMapDisplay = editor.getPhoneMapDisplay();
-//			if(phoneMapDisplay != null) {
-//				final AlignmentChangeData alignmentChangeData = new AlignmentChangeData(ee.data().transcriptElementIdx, ee.data().eleIdx, ipa, ee.data().oldType, ee.data().newType);
-//				phoneMapDisplay.setAlignmentChangeData(alignmentChangeData);
-//			}
 		}
 	}
 
