@@ -104,12 +104,10 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         final WizardStep step = new WizardStep();
         step.setTitle("Settings");
         final DialogHeader header = new DialogHeader(
-            WINDOW_TITLE,
-            "Choose whether to export the data as either a single file or one file per session"
-        );
+                WINDOW_TITLE,
+                "Choose whether to export the data as either a single file or one file per session");
         step.setLayout(new BorderLayout());
         step.add(header, BorderLayout.NORTH);
-
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 
@@ -127,29 +125,27 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
 
         contentPanel.add(sessionSelectorWrapper, BorderLayout.CENTER);
 
-
         return step;
     }
 
-    //region Select folder button
+    // region Select folder button
 
     private MultiActionButton createExportAsButton() {
         exportAsBtn = new MultiActionButton();
 
         exportAsAct = PhonUIAction.runnable(this::showExportAsMenu);
         exportAsAct.putValue(PhonUIAction.NAME, "Export as...");
-        var smallFolderIcn = IconManager.getInstance().getSystemStockIcon(OSInfo.isMacOs() ?
-                MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER, IconSize.SMALL);
-        var medFolderIcn = IconManager.getInstance().getSystemStockIcon(OSInfo.isMacOs() ?
-                MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER, IconSize.MEDIUM);
-        var lrgFolderIcn = IconManager.getInstance().getSystemStockIcon(OSInfo.isMacOs() ?
-                MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER, IconSize.LARGE);
+        var smallFolderIcn = IconManager.getInstance().getSystemStockIcon(
+                OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER, IconSize.SMALL);
+        var medFolderIcn = IconManager.getInstance().getSystemStockIcon(
+                OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER, IconSize.MEDIUM);
+        var lrgFolderIcn = IconManager.getInstance().getSystemStockIcon(
+                OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER, IconSize.LARGE);
         exportAsAct.putValue(PhonUIAction.SMALL_ICON, smallFolderIcn);
         exportAsAct.putValue(PhonUIAction.LARGE_ICON_KEY, lrgFolderIcn);
         exportAsAct.putValue(
-            PhonUIAction.SHORT_DESCRIPTION,
-            "Choose whether to export the data as either a single file or one file per session"
-        );
+                PhonUIAction.SHORT_DESCRIPTION,
+                "Choose whether to export the data as either a single file or one file per session");
         exportAsBtn.setDefaultAction(exportAsAct);
 
         createCSVSettingsWindow();
@@ -157,13 +153,11 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         PhonUIAction<Void> showCSVSettingsAct = PhonUIAction.runnable(this::showCSVSettingsWindow);
         showCSVSettingsAct.putValue(PhonUIAction.NAME, "Show CSV settings");
         showCSVSettingsAct.putValue(
-            Action.SMALL_ICON,
-            IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL)
-        );
+                Action.SMALL_ICON,
+                IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
         showCSVSettingsAct.putValue(
-            Action.LARGE_ICON_KEY,
-            IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL)
-        );
+                Action.LARGE_ICON_KEY,
+                IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
         showCSVSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "CSV settings");
         exportAsBtn.addAction(showCSVSettingsAct);
 
@@ -218,12 +212,11 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         props.setFileFilter(FileFilter.csvFilter);
         props.setListener(nativeDialogEvent -> {
             if (nativeDialogEvent.getDialogResult() == NativeDialogEvent.OK_OPTION) {
-                final String selectedFolder = (String)nativeDialogEvent.getDialogData();
+                final String selectedFolder = (String) nativeDialogEvent.getDialogData();
                 SwingUtilities.invokeLater(() -> {
                     try {
                         onSelectFolder(selectedFolder);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -264,12 +257,11 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         props.setFileFilter(FileFilter.csvFilter);
         props.setListener(nativeDialogEvent -> {
             if (nativeDialogEvent.getDialogResult() == NativeDialogEvent.OK_OPTION) {
-                final String filePath = (String)nativeDialogEvent.getDialogData();
+                final String filePath = (String) nativeDialogEvent.getDialogData();
                 SwingUtilities.invokeLater(() -> {
                     try {
                         onSaveAs(filePath);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -286,12 +278,13 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         exportAsBtn.setTopLabelText("Export as single file");
     }
 
-    //endregion Select folder button
+    // endregion Select folder button
 
     private void loadColumnSettingsCard(int index) {
-        if (index == -1) return;
+        if (index == -1)
+            return;
         CSVColumn column = selectedExportColumns.get(index);
-        String id = column.id;
+        String id = column.getId();
 
         if (Arrays.stream(tierStepRightPanel.getComponents()).noneMatch(c -> c.getName().equals(id))) {
             var card = new ColumnSettingsCard(column);
@@ -299,18 +292,17 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             System.out.println("Adding card for: " + column.getOption("name"));
         }
 
-        ((CardLayout)tierStepRightPanel.getLayout()).show(tierStepRightPanel, id);
+        ((CardLayout) tierStepRightPanel.getLayout()).show(tierStepRightPanel, id);
     }
 
     private void createCSVSettingsWindow() {
         csvSettingsWindow = new JDialog();
         csvSettingsWindow.setLayout(new BorderLayout());
         csvSettingsPanel = new CSVSettingsPanel(false, true);
-        csvSettingsPanel.setBorder(new EmptyBorder(8,8,0,8));
+        csvSettingsPanel.setBorder(new EmptyBorder(8, 8, 0, 8));
         csvSettingsWindow.add(
-            new DialogHeader("CSV Settings", "Settings for the exported CSV files"),
-            BorderLayout.NORTH
-        );
+                new DialogHeader("CSV Settings", "Settings for the exported CSV files"),
+                BorderLayout.NORTH);
         csvSettingsWindow.add(csvSettingsPanel, BorderLayout.CENTER);
 
         JCheckBox firstRowHeaderCheckBox = new JCheckBox("Use First Row as Header");
@@ -344,9 +336,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         final WizardStep step = new WizardStep();
         step.setTitle("Columns");
         final DialogHeader header = new DialogHeader(
-            WINDOW_TITLE,
-            "Map session data to CSV columns"
-        );
+                WINDOW_TITLE,
+                "Map session data to CSV columns");
         step.setLayout(new BorderLayout());
         step.add(header, BorderLayout.NORTH);
 
@@ -361,7 +352,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         selectedColumnTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectedColumnTable.setTransferHandler(new ReorderableTableTransferHandler());
         selectedColumnTable.getSelectionModel().addListSelectionListener(e -> {
-            if (e.getValueIsAdjusting()) return;
+            if (e.getValueIsAdjusting())
+                return;
             loadColumnSettingsCard(selectedColumnTable.getSelectedRow());
         });
         JScrollPane selectedColumnScrollPane = new JScrollPane(selectedColumnTable);
@@ -376,12 +368,10 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         c.gridy = 1;
         selectedColumnPanel.add(selectedColumnScrollPane, c);
 
-
         JPanel selectedColumnTopButtons = new JPanel(new BorderLayout());
 
         var addDropDownIcon = new DropDownIcon(
-            IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL)
-        );
+                IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
         JButton addDropDownButton = new JButton("Add column", addDropDownIcon);
         addDropDownButton.setToolTipText("Add column");
         addDropDownButton.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -397,8 +387,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             }
         });
         JButton downButton = new JButton(
-            IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL)
-        );
+                IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL));
         downButton.addActionListener(e -> {
             int selectedElementIndex = selectedColumnTable.getSelectedRow();
             if (selectedElementIndex != -1 && selectedElementIndex != selectedExportColumns.size() - 1) {
@@ -406,8 +395,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             }
         });
         JButton removeTierButton = new JButton(
-            IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL)
-        );
+                IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
         removeTierButton.addActionListener(e -> {
             int selectedElementIndex = selectedColumnTable.getSelectedRow();
             if (selectedElementIndex != -1) {
@@ -416,13 +404,14 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                 if (selectedExportColumns.size() <= selectedElementIndex) {
                     selectedElementIndex = selectedExportColumns.size() - 1;
                 }
-                var card = getColumnSettingsCard(tierColumn.id);
+                var card = getColumnSettingsCard(tierColumn.getId());
                 if (card.isPresent()) {
                     tierStepRightPanel.remove(card.get());
                 }
                 System.out.println(tierStepRightPanel.getComponents().length);
                 System.out.println(selectedElementIndex);
-                selectedColumnTable.getSelectionModel().setSelectionInterval(selectedElementIndex, selectedElementIndex);
+                selectedColumnTable.getSelectionModel().setSelectionInterval(selectedElementIndex,
+                        selectedElementIndex);
                 refreshExportColumnIndices();
             }
         });
@@ -442,12 +431,12 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         c.gridx = 1;
         c.gridy = 1;
         selectedColumnPanel.add(selectedColumnRightButtons, c);
-        selectedColumnPanel.setBorder(new EmptyBorder(6,6,6,6));
+        selectedColumnPanel.setBorder(new EmptyBorder(6, 6, 6, 6));
         TitledPanel selectedColumnWrapper = new TitledPanel("Selected Columns", selectedColumnPanel);
         contentPanel.add(selectedColumnWrapper, BorderLayout.WEST);
 
         tierStepRightPanel = new JPanel(new CardLayout());
-        ((CardLayout)tierStepRightPanel.getLayout()).first(tierStepRightPanel);
+        ((CardLayout) tierStepRightPanel.getLayout()).first(tierStepRightPanel);
         TitledPanel optionsWrapperPanel = new TitledPanel("Options", tierStepRightPanel);
 
         contentPanel.add(optionsWrapperPanel, BorderLayout.CENTER);
@@ -458,7 +447,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
     private void showAddTierPopupMenu(JButton addDropDownButton) {
 
         JPopupMenu menu = new JPopupMenu();
-
 
         addMenuOption(menu, CSVColumnType.CORPUS_NAME);
 
@@ -506,7 +494,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         menu.add(userTiersSubmenu);
         addUserTierMenuOption(userTiersSubmenu);
 
-
         menu.show(addDropDownButton, 0, addDropDownButton.getHeight());
     }
 
@@ -533,11 +520,10 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             try {
                 Session session = getProject().openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
                 StreamSupport
-                    .stream(session.getUserTiers().spliterator(), false)
-                    .map(td -> td.getName())
-                    .forEach(userTierName -> userTierNames.add(userTierName));
-            }
-            catch (IOException e) {
+                        .stream(session.getUserTiers().spliterator(), false)
+                        .map(td -> td.getName())
+                        .forEach(userTierName -> userTierNames.add(userTierName));
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -583,10 +569,9 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                     String corpusName = sessionPath.getFolder();
                     Session session = getProject().openSession(corpusName, sessionName);
                     String filePath = exportFolderPath + "/" + corpusName + "_" + sessionName + ".csv";
-                    csvExporter.exportCSV(new Session[]{session}, settings, filePath);
+                    csvExporter.exportCSV(new Session[] { session }, settings, filePath);
                 }
-            }
-            else {
+            } else {
                 System.out.println("Export one file per session");
                 List<Session> selectedSessionList = new ArrayList<>();
                 for (SessionPath sessionPath : sessionSelector.getSelectedSessions()) {
@@ -600,38 +585,39 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
 
             int selectedSessionCount = sessionSelector.getSelectedSessions().size();
             String sessionCountString = selectedSessionCount + " session";
-            if (selectedSessionCount != 1) sessionCountString += "s";
+            if (selectedSessionCount != 1)
+                sessionCountString += "s";
 
             String fileCountString;
             if (exportFilePath == null) {
                 fileCountString = selectedSessionCount + " file";
-                if (selectedSessionCount != 1) fileCountString += "s";
-            }
-            else {
+                if (selectedSessionCount != 1)
+                    fileCountString += "s";
+            } else {
                 fileCountString = "1 file";
             }
 
             String warningCountString = exporterListener.getWarningCount() + " warning";
-            if (exporterListener.getWarningCount() != 1) warningCountString += "s";
+            if (exporterListener.getWarningCount() != 1)
+                warningCountString += "s";
 
             int response = showMessage(
-                "Complete",
-                "Exported " + sessionCountString +
-                        " into " + fileCountString +
-                        " with " + warningCountString,
-                new String[]{"Ok", "Close"}
-            );
+                    "Complete",
+                    "Exported " + sessionCountString +
+                            " into " + fileCountString +
+                            " with " + warningCountString,
+                    new String[] { "Ok", "Close" });
 
-            if (response == 1) close();
-        }
-        catch (IOException e) {
+            if (response == 1)
+                close();
+        } catch (IOException e) {
             LogUtil.warning(e);
         }
     }
 
     @Override
     public void gotoStep(int stepIndex) {
-        if(getWizardStep(stepIndex) == execStep) {
+        if (getWizardStep(stepIndex) == execStep) {
 
             // Validate
 
@@ -646,8 +632,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                 if (columnNames.contains(name)) {
                     showMessage("Error", "All column names must be unique");
                     return;
-                }
-                else {
+                } else {
                     columnNames.add(name);
                 }
 
@@ -660,10 +645,12 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             if (currentTask == null || currentTask.getStatus() != PhonTask.TaskStatus.RUNNING) {
                 busyLabel.setBusy(true);
                 // start export thread
-                currentTask = PhonWorker.invokeOnNewWorker(() -> startExport(bufferPanel.getLogBuffer().getStdOutStream()));
+                currentTask = PhonWorker
+                        .invokeOnNewWorker(() -> startExport(bufferPanel.getLogBuffer().getStdOutStream()));
                 currentTask.addTaskListener(new PhonTaskListener() {
                     @Override
-                    public void statusChanged(PhonTask phonTask, PhonTask.TaskStatus oldStatus, PhonTask.TaskStatus newStatus) {
+                    public void statusChanged(PhonTask phonTask, PhonTask.TaskStatus oldStatus,
+                            PhonTask.TaskStatus newStatus) {
                         if (newStatus != PhonTask.TaskStatus.RUNNING) {
                             SwingUtilities.invokeLater(bufferPanel::showBuffer);
                             SwingUtilities.invokeLater(() -> busyLabel.setBusy(false));
@@ -676,13 +663,13 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                     }
                 });
             }
-        }
-        else if (getWizardStep(stepIndex) == tierStep) {
+        } else if (getWizardStep(stepIndex) == tierStep) {
 
             // Validate
 
             if (this.exportFolderPath == null && this.exportFilePath == null) {
-                showMessage("Error", "You must choose whether to export the data as either a single file or one file per session");
+                showMessage("Error",
+                        "You must choose whether to export the data as either a single file or one file per session");
                 return;
             }
             if (this.sessionSelector.getSelectedSessions().isEmpty()) {
@@ -693,7 +680,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                 showMessage("Error", "No separators have been selected");
                 return;
             }
-
 
             if (selectedExportColumns.isEmpty()) {
                 addExportColumn(CSVColumnType.ORTHOGRAPHY, false);
@@ -734,24 +720,24 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
 
     private Optional<ColumnSettingsCard> getColumnSettingsCard(String key) {
         return Arrays
-            .stream(tierStepRightPanel.getComponents())
-            .filter(c -> c.getName().equals(key))
-            .map(c -> (ColumnSettingsCard)c)
-            .findFirst();
+                .stream(tierStepRightPanel.getComponents())
+                .filter(c -> c.getName().equals(key))
+                .map(c -> (ColumnSettingsCard) c)
+                .findFirst();
     }
 
     private void addExportColumn(CSVColumnType type, boolean selectNewColumn) {
         CSVColumn tierColumn = new CSVColumn();
-        tierColumn.columnType = type;
-        tierColumn.csvColumnIndex = selectedExportColumns.size();
+        tierColumn.setColumnType(type);
+        tierColumn.setCsvColumnIndex(selectedExportColumns.size());
         initDefaultOptions(tierColumn);
 
         String name = tierColumn.getOption("name");
         final String nameFromColumnType = name;
         int duplicateCounter = 0;
         boolean nameIsAlreadyPresent = selectedExportColumns
-            .stream()
-            .anyMatch(column -> column.getOption("name").equals(nameFromColumnType));
+                .stream()
+                .anyMatch(column -> column.getOption("name").equals(nameFromColumnType));
         while (nameIsAlreadyPresent) {
             duplicateCounter++;
             name = nameFromColumnType + " " + duplicateCounter;
@@ -765,28 +751,28 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         tierColumn.setOption("name", name);
 
         selectedExportColumns.add(tierColumn);
-        selectedColumnTableModel.fireTableRowsInserted(selectedExportColumns.size() - 1, selectedExportColumns.size() - 1);
+        selectedColumnTableModel.fireTableRowsInserted(selectedExportColumns.size() - 1,
+                selectedExportColumns.size() - 1);
         if (selectNewColumn) {
             selectedColumnTable.getSelectionModel().setSelectionInterval(
-                selectedExportColumns.size() - 1,
-                selectedExportColumns.size() - 1
-            );
+                    selectedExportColumns.size() - 1,
+                    selectedExportColumns.size() - 1);
             tierStepRightPanel.revalidate();
         }
     }
 
     private void addExportUserTier(String name) {
         CSVColumn userTierColumn = new CSVColumn();
-        userTierColumn.columnType = CSVColumnType.USER_TIER;
-        userTierColumn.csvColumnIndex = selectedExportColumns.size();
+        userTierColumn.setColumnType(CSVColumnType.USER_TIER);
+        userTierColumn.setCsvColumnIndex(selectedExportColumns.size());
         initDefaultOptions(userTierColumn);
         final String userTierName = name;
         userTierColumn.setOption(CSVExportSettings.USER_TIER_NAME_KEY, userTierName);
 
         int duplicateCounter = 0;
         boolean nameIsAlreadyPresent = selectedExportColumns
-            .stream()
-            .anyMatch(column -> column.getOption("name").equals(userTierName));
+                .stream()
+                .anyMatch(column -> column.getOption("name").equals(userTierName));
         while (nameIsAlreadyPresent) {
             duplicateCounter++;
             name = userTierName + " " + duplicateCounter;
@@ -800,22 +786,21 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         userTierColumn.setOption("name", name);
 
         selectedExportColumns.add(userTierColumn);
-        selectedColumnTableModel.fireTableRowsInserted(selectedExportColumns.size() - 1, selectedExportColumns.size() - 1);
+        selectedColumnTableModel.fireTableRowsInserted(selectedExportColumns.size() - 1,
+                selectedExportColumns.size() - 1);
         selectedColumnTable.getSelectionModel().setSelectionInterval(
                 selectedExportColumns.size() - 1,
-                selectedExportColumns.size() - 1
-        );
+                selectedExportColumns.size() - 1);
         tierStepRightPanel.revalidate();
     }
 
     private void initDefaultOptions(CSVColumn column) {
-        column.setOption("name", column.columnType.getReadableName());
+        column.setOption("name", column.getColumnType().getReadableName());
         column.setOption("dateFormat", "ISO");
         column.setOption("locale", Locale.getDefault().getDisplayName());
         column.setOption(
                 "syllabifierLanguage",
-                SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString()
-        );
+                SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString());
         column.setOption("wordsOnly", "false");
         column.setOption("includeSyllabification", "false");
         column.setOption("stripDiacritics", "false");
@@ -825,12 +810,12 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
     private void refreshExportColumnIndices() {
         for (int i = 0; i < selectedExportColumns.size(); i++) {
             var column = selectedExportColumns.get(i);
-            column.csvColumnIndex = i;
+            column.setCsvColumnIndex(i);
             var settingsCard = Arrays
-                .stream(tierStepRightPanel.getComponents())
-                .filter(c -> c.getName().equals(column.id))
-                .map(c -> (ColumnSettingsCard)c)
-                .findFirst();
+                    .stream(tierStepRightPanel.getComponents())
+                    .filter(c -> c.getName().equals(column.getId()))
+                    .map(c -> (ColumnSettingsCard) c)
+                    .findFirst();
             if (settingsCard.isPresent()) {
                 settingsCard.get().refreshIndex();
             }
@@ -843,24 +828,24 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         private JLabel headerLabel;
         private JLabel indexLabel;
         private final List<CSVColumnType> columnTypeList;
-        private final String[] formatStyleArray = new String[]{
-            "Short",
-            "Medium",
-            "Long",
-            "Full"
+        private final String[] formatStyleArray = new String[] {
+                "Short",
+                "Medium",
+                "Long",
+                "Full"
         };
 
         public ColumnSettingsCard(CSVColumn column) {
             this.column = column;
             this.header = column.getOption("name");
             this.columnTypeList = Arrays.stream(CSVColumnType.values()).toList();
-            setName(column.id);
+            setName(column.getId());
             init();
         }
 
         private void init() {
             setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(4,4,4,4));
+            setBorder(new EmptyBorder(4, 4, 4, 4));
             add(createTopTextPanel(), BorderLayout.NORTH);
 
             JPanel centerPanel = new JPanel(new BorderLayout());
@@ -869,16 +854,15 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             settingsPanel.setBorder(BorderFactory.createTitledBorder("Options"));
 
             String[] readableColumnTypes = columnTypeList
-                .stream()
-                .map(type -> type.getReadableName())
-                .toArray(String[]::new);
+                    .stream()
+                    .map(type -> type.getReadableName())
+                    .toArray(String[]::new);
             JComboBox<String> columnTypeComboBox = new JComboBox(readableColumnTypes);
             columnTypeComboBox.addActionListener(e -> {
-                column.columnType = columnTypeList.get(columnTypeComboBox.getSelectedIndex());
-                ((CardLayout)settingsPanel.getLayout()).show(settingsPanel, column.columnType.toString());
+                column.setColumnType(columnTypeList.get(columnTypeComboBox.getSelectedIndex()));
+                ((CardLayout) settingsPanel.getLayout()).show(settingsPanel, column.getColumnType().toString());
             });
-            columnTypeComboBox.setSelectedIndex(columnTypeList.indexOf(column.columnType));
-
+            columnTypeComboBox.setSelectedIndex(columnTypeList.indexOf(column.getColumnType()));
 
             JPanel exportContainerPanel = new JPanel(new VerticalLayout());
 
@@ -886,7 +870,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             exportingTypePanel.add(new JLabel("Exporting type:"));
             exportingTypePanel.add(columnTypeComboBox);
             exportContainerPanel.add(exportingTypePanel);
-
 
             centerPanel.add(exportContainerPanel, BorderLayout.NORTH);
 
@@ -901,7 +884,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             var headerPanel = new JPanel(new HorizontalLayout());
 
             headerLabel = new JLabel(header);
-            headerLabel.setBorder(new EmptyBorder(0,0,0,6));
+            headerLabel.setBorder(new EmptyBorder(0, 0, 0, 6));
             var font = new Font(FontPreferences.getTitleFont().getFontName(), Font.PLAIN, 16);
             headerLabel.setFont(font);
             headerPanel.add(headerLabel);
@@ -911,15 +894,16 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             editHeaderButton.addActionListener(e -> {
                 JFrame f = new JFrame();
                 String newHeader = JOptionPane.showInputDialog(f, "Rename the column", header);
-                if (newHeader == null || newHeader.strip().equals("")) return;
+                if (newHeader == null || newHeader.strip().equals(""))
+                    return;
                 header = newHeader;
                 headerLabel.setText(newHeader);
                 column.setOption("name", newHeader);
-                selectedColumnTableModel.fireTableRowsUpdated(column.csvColumnIndex, column.csvColumnIndex);
+                selectedColumnTableModel.fireTableRowsUpdated(column.getCsvColumnIndex(), column.getCsvColumnIndex());
             });
 
             topTextPanel.add(headerPanel);
-            indexLabel = new JLabel("Column: " + (column.csvColumnIndex + 1));
+            indexLabel = new JLabel("Column: " + (column.getCsvColumnIndex() + 1));
             topTextPanel.add(indexLabel);
             topTextPanel.add(new JLabel("\n"));
             topTextPanel.add(new JLabel("\n"));
@@ -943,7 +927,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                         settingsCard = segmentSettings(false);
                     }
                     case USER_TIER -> settingsCard = userTierSettings();
-                    default -> {}
+                    default -> {
+                    }
                 }
 
                 settingsPanel.add(settingsCard, columnType.toString());
@@ -957,52 +942,48 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
 
             JPanel settingsCard = new JPanel(new VerticalLayout());
 
-
             JRadioButton defaultFormatButton = new JRadioButton("Default format (ISO)", true);
 
             JRadioButton localizedFormatButton = new JRadioButton("Localized", false);
-
 
             ButtonGroup formatGroup = new ButtonGroup();
             formatGroup.add(defaultFormatButton);
             formatGroup.add(localizedFormatButton);
 
-
-
             settingsCard.add(defaultFormatButton);
 
             JPanel localizedPanel = new JPanel(new HorizontalLayout());
 
-            final Locale[] selectedLocale = new Locale[]{Locale.getDefault()};
-            final String[] selectedFormatStyle = new String[]{"SHORT"};
+            final Locale[] selectedLocale = new Locale[] { Locale.getDefault() };
+            final String[] selectedFormatStyle = new String[] { "SHORT" };
 
             LocalDate today = LocalDate.now();
             JLabel exampleLabel = new JLabel("Example: " + DateTimeFormatter.ISO_LOCAL_DATE.format(today));
-            exampleLabel.setBorder(new EmptyBorder(0,8,0,0));
+            exampleLabel.setBorder(new EmptyBorder(0, 8, 0, 0));
 
             localizedPanel.add(localizedFormatButton);
             List<Locale> locales = Arrays
-                .stream(Locale.getAvailableLocales())
-                .sorted(Comparator.comparing(Locale::getDisplayName))
-                .toList();
+                    .stream(Locale.getAvailableLocales())
+                    .sorted(Comparator.comparing(Locale::getDisplayName))
+                    .toList();
             JComboBox<String> localeComboBox = new JComboBox<>(
-                locales.stream().map(locale -> locale.getDisplayName()).sorted().toArray(String[]::new)
-            );
+                    locales.stream().map(locale -> locale.getDisplayName()).sorted().toArray(String[]::new));
             localeComboBox.addActionListener(e -> {
-                if (localeComboBox.getSelectedIndex() == -1) return;
+                if (localeComboBox.getSelectedIndex() == -1)
+                    return;
                 column.setOption("locale", locales.get(localeComboBox.getSelectedIndex()).getDisplayName());
                 selectedLocale[0] = locales.get(localeComboBox.getSelectedIndex());
                 var formatStyle = Arrays
-                    .stream(FormatStyle.values())
-                    .filter(format -> format.name().toUpperCase().equals(selectedFormatStyle[0]))
-                    .findFirst();
+                        .stream(FormatStyle.values())
+                        .filter(format -> format.name().toUpperCase().equals(selectedFormatStyle[0]))
+                        .findFirst();
                 var formatter = DateTimeFormatter.ofLocalizedDate(formatStyle.get()).withLocale(selectedLocale[0]);
                 exampleLabel.setText("Example: " + formatter.format(today));
             });
             var localeFromOptions = Arrays
-                .stream(Locale.getAvailableLocales())
-                .filter(locale -> locale.getDisplayName().equals(column.getOption("locale")))
-                .findFirst();
+                    .stream(Locale.getAvailableLocales())
+                    .filter(locale -> locale.getDisplayName().equals(column.getOption("locale")))
+                    .findFirst();
             localeComboBox.setSelectedIndex(locales.indexOf(localeFromOptions.get()));
             localeComboBox.setEnabled(false);
             localizedPanel.add(localeComboBox);
@@ -1021,10 +1002,11 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                         selectedFormatStyle[0] = radioButton.getText().toUpperCase();
                         column.setOption("dateFormat", selectedFormatStyle[0]);
                         var formatStyle = Arrays
-                            .stream(FormatStyle.values())
-                            .filter(format -> format.name().toUpperCase().equals(selectedFormatStyle[0]))
-                            .findFirst();
-                        var formatter = DateTimeFormatter.ofLocalizedDate(formatStyle.get()).withLocale(selectedLocale[0]);
+                                .stream(FormatStyle.values())
+                                .filter(format -> format.name().toUpperCase().equals(selectedFormatStyle[0]))
+                                .findFirst();
+                        var formatter = DateTimeFormatter.ofLocalizedDate(formatStyle.get())
+                                .withLocale(selectedLocale[0]);
                         exampleLabel.setText("Example: " + formatter.format(today));
                     }
                 });
@@ -1037,7 +1019,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                     column.setOption("dateFormat", "ISO");
 
                     localeComboBox.setEnabled(false);
-                    for (Enumeration<AbstractButton> buttons = formatStyleGroup.getElements(); buttons.hasMoreElements();) {
+                    for (Enumeration<AbstractButton> buttons = formatStyleGroup.getElements(); buttons
+                            .hasMoreElements();) {
                         JRadioButton radioButton = (JRadioButton) buttons.nextElement();
                         radioButton.setEnabled(false);
                     }
@@ -1051,21 +1034,22 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                     column.setOption("dateFormat", selectedFormatStyle[0]);
 
                     localeComboBox.setEnabled(true);
-                    for (Enumeration<AbstractButton> buttons = formatStyleGroup.getElements(); buttons.hasMoreElements();) {
+                    for (Enumeration<AbstractButton> buttons = formatStyleGroup.getElements(); buttons
+                            .hasMoreElements();) {
                         JRadioButton radioButton = (JRadioButton) buttons.nextElement();
                         radioButton.setEnabled(true);
                     }
 
                     var formatStyle = Arrays
-                        .stream(FormatStyle.values())
-                        .filter(format -> format.toString().toUpperCase().equals(selectedFormatStyle[0]))
-                        .findFirst();
+                            .stream(FormatStyle.values())
+                            .filter(format -> format.toString().toUpperCase().equals(selectedFormatStyle[0]))
+                            .findFirst();
                     var formatter = DateTimeFormatter.ofLocalizedDate(formatStyle.get()).withLocale(selectedLocale[0]);
                     exampleLabel.setText("Example: " + formatter.format(today));
                 }
             });
 
-            formatStylePanel.setBorder(new EmptyBorder(0,16,0,0));
+            formatStylePanel.setBorder(new EmptyBorder(0, 16, 0, 0));
             settingsCard.add(formatStylePanel);
 
             settingsCard.add(exampleLabel);
@@ -1077,13 +1061,11 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             JPanel settingsCard = new JPanel(new VerticalLayout());
 
             Period period = Period.between(
-                LocalDate.of(2000, 1, 1),
-                LocalDate.of(2001, 3, 4)
-            );
+                    LocalDate.of(2000, 1, 1),
+                    LocalDate.of(2001, 3, 4));
 
             JLabel exampleLabel = new JLabel("Example: ");
-            exampleLabel.setBorder(new EmptyBorder(0,8,0,0));
-
+            exampleLabel.setBorder(new EmptyBorder(0, 8, 0, 0));
 
             ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -1104,7 +1086,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             settingsCard.add(isoFormatButton);
 
             buttonGroup.setSelected(phonFormatButton.getModel(), true);
-
 
             settingsCard.add(exampleLabel);
 
@@ -1131,9 +1112,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             settingsCard.add(includeSyllabificationCheckBox);
             includeSyllabificationCheckBox.addActionListener(e -> {
                 column.setOption(
-                    "includeSyllabification",
-                    includeSyllabificationCheckBox.isSelected() ? "true" : "false"
-                );
+                        "includeSyllabification",
+                        includeSyllabificationCheckBox.isSelected() ? "true" : "false");
             });
 
             JCheckBox wordsOnlyCheckBox = new JCheckBox("Strip diacritics");
@@ -1148,16 +1128,14 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         private JPanel segmentSettings(boolean fullSegment) {
             JPanel settingsCard = new JPanel(new VerticalLayout());
 
-
             SessionFactory sessionFactory = SessionFactory.newFactory();
             var segment = sessionFactory.createMediaSegment();
             segment.setStartValue(0);
             segment.setEndValue(83000);
             segment.setUnitType(MediaUnit.Millisecond);
 
-
             JLabel exampleLabel = new JLabel("Example: ");
-            exampleLabel.setBorder(new EmptyBorder(0,8,0,0));
+            exampleLabel.setBorder(new EmptyBorder(0, 8, 0, 0));
 
             ButtonGroup buttonGroup = new ButtonGroup();
             for (MediaTimeFormatStyle format : MediaTimeFormatStyle.values()) {
@@ -1168,11 +1146,9 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                     if (fullSegment) {
                         MediaSegmentFormatter formatter = new MediaSegmentFormatter(format);
                         exampleLabel.setText("Example: " + formatter.format(segment));
-                    }
-                    else {
+                    } else {
                         exampleLabel.setText(
-                            "Example: " + MediaTimeFormatter.timeToString((long)segment.getEndValue(), format)
-                        );
+                                "Example: " + MediaTimeFormatter.timeToString((long) segment.getEndValue(), format));
                     }
                 });
                 buttonGroup.add(radioButton);
@@ -1194,7 +1170,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             JLabel tierNameLabel = new JLabel();
             tierNameLabel.setText("Exporting user tier: " + column.getOption(CSVImportSettings.USER_TIER_NAME_KEY));
             JPanel tierNamePanel = new JPanel(new HorizontalLayout());
-            tierNamePanel.setBorder(new EmptyBorder(0,8,0,8));
+            tierNamePanel.setBorder(new EmptyBorder(0, 8, 0, 8));
             tierNamePanel.add(tierNameLabel, c);
 
             settingsCard.add(tierNamePanel);
@@ -1208,7 +1184,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         }
 
         public void refreshIndex() {
-            indexLabel.setText("Column: " + column.csvColumnIndex);
+            indexLabel.setText("Column: " + column.getCsvColumnIndex());
         }
     }
 
@@ -1244,7 +1220,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             String newVal = getValueAt(row, column).toString();
             var tierColumn = selectedExportColumns.get(row);
             tierColumn.setOption("name", newVal);
-            var settingsCard = getColumnSettingsCard(tierColumn.id);
+            var settingsCard = getColumnSettingsCard(tierColumn.getId());
             if (settingsCard.isPresent()) {
                 settingsCard.get().setHeader(newVal);
             }
@@ -1275,8 +1251,9 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                 return false;
             }
 
-            if(file != null) {
-                if(file.isFile()) return false;
+            if (file != null) {
+                if (file.isFile())
+                    return false;
                 onSelectFolder(file.getAbsolutePath());
                 return true;
             } else {
@@ -1287,7 +1264,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         @Override
         public File getFile(Transferable transferable) throws IOException {
             File retVal = super.getFile(transferable);
-            if(retVal.isFile()) {
+            if (retVal.isFile()) {
                 retVal = null;
             }
             return retVal;
@@ -1342,7 +1319,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
 
             try {
                 if (endRowIndex != startRowIndex && endRowIndex != startRowIndex + 1) {
-                    if (endRowIndex >= startRowIndex) endRowIndex--;
+                    if (endRowIndex >= startRowIndex)
+                        endRowIndex--;
                     moveSelectedColumn(startRowIndex, endRowIndex);
                 }
 
@@ -1368,8 +1346,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             try {
                 bufferedWriter.write(e.toString());
                 bufferedWriter.newLine();
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
             warningCount++;

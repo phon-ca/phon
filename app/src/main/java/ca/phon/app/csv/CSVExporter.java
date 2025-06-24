@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.phon.app.csv;
 
 import ca.phon.app.log.LogUtil;
@@ -21,11 +36,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
+/**
+ * Handles the export of session data to CSV format.
+ * Supports various column types and configurable formatting options.
+ */
 public class CSVExporter {
     private JLabel currentlyExportingLabel = null;
     private final List<CSVExporterListener> listenerList = new ArrayList<>();
 
-    public CSVExporter() {}
+    public CSVExporter() {
+    }
 
     public void addListener(CSVExporterListener csvExporterListener) {
         listenerList.add(csvExporterListener);
@@ -36,8 +56,7 @@ public class CSVExporter {
         FileWriter writer = null;
         try {
             writer = new FileWriter(filePath);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             fireWritingError(e);
             LogUtil.warning(e);
         }
@@ -59,15 +78,15 @@ public class CSVExporter {
 
             try {
                 csvWriter.writeNext(headerList.toArray(String[]::new));
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 fireWritingError(e);
                 LogUtil.warning(e);
             }
         }
 
         for (Session session : sessions) {
-            if (currentlyExportingLabel != null) currentlyExportingLabel.setText(session.getName());
+            if (currentlyExportingLabel != null)
+                currentlyExportingLabel.setText(session.getName());
             for (Record record : session.getRecords()) {
                 List<String> rowList = new ArrayList<>();
 
@@ -76,7 +95,7 @@ public class CSVExporter {
                 for (CSVColumn column : exportColumnList) {
                     String field = "";
 
-                    switch (column.columnType) {
+                    switch (column.getColumnType()) {
                         case NOTES -> field = getNotesTierValue(record);
                         case ORTHOGRAPHY -> field = getOrthographyTierValue(record, column);
                         case IPA_TARGET -> field = getIPATargetTierValue(record, column);
@@ -112,8 +131,7 @@ public class CSVExporter {
 
                 try {
                     csvWriter.writeNext(rowList.toArray(String[]::new));
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     fireWritingError(e);
                     LogUtil.warning(e);
                 }
@@ -122,8 +140,7 @@ public class CSVExporter {
 
         try {
             csvWriter.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             fireWritingError(e);
             LogUtil.warning(e);
         }
@@ -133,8 +150,7 @@ public class CSVExporter {
         var notesTier = record.getNotesTier();
         if (notesTier.isUnvalidated()) {
             return notesTier.getUnvalidatedValue().toString();
-        }
-        else if (notesTier.hasValue()) {
+        } else if (notesTier.hasValue()) {
             return notesTier.getValue().toString();
         }
         return "";
@@ -144,8 +160,7 @@ public class CSVExporter {
         var orthographyTier = record.getOrthographyTier();
         if (orthographyTier.isUnvalidated()) {
             return orthographyTier.getUnvalidatedValue().toString();
-        }
-        else if (orthographyTier.hasValue()) {
+        } else if (orthographyTier.hasValue()) {
             boolean wordsOnly = column.getOption("wordsOnly").equals("true");
             if (wordsOnly) {
                 var orthoWordExtractor = new OrthoWordExtractor();
@@ -204,9 +219,8 @@ public class CSVExporter {
         boolean isoFormat = ageFormatString != null && ageFormatString.equals("ISO");
 
         return PeriodFormatter.periodToString(
-            participant.getAgeTo(),
-            isoFormat ? PeriodFormatStyle.ISO : PeriodFormatStyle.PHON
-        );
+                participant.getAgeTo(),
+                isoFormat ? PeriodFormatStyle.ISO : PeriodFormatStyle.PHON);
     }
 
     private String getParticipantEducation(Participant participant) {
@@ -237,8 +251,7 @@ public class CSVExporter {
         var ipaTargetTier = record.getIPATargetTier();
         if (ipaTargetTier.isUnvalidated()) {
             return ipaTargetTier.getUnvalidatedValue().toString();
-        }
-        else if (ipaTargetTier.hasValue()) {
+        } else if (ipaTargetTier.hasValue()) {
             String includeSyllabificationString = column.getOption("includeSyllabification");
             boolean includeSyllabification = includeSyllabificationString.equals("true");
             String stripDiacriticsString = column.getOption("stripDiacritics");
@@ -253,8 +266,7 @@ public class CSVExporter {
         var ipaActualTier = record.getIPAActualTier();
         if (ipaActualTier.isUnvalidated()) {
             return ipaActualTier.getUnvalidatedValue().toString();
-        }
-        else if (ipaActualTier.hasValue()) {
+        } else if (ipaActualTier.hasValue()) {
             String includeSyllabificationString = column.getOption("includeSyllabification");
             boolean includeSyllabification = includeSyllabificationString.equals("true");
             String stripDiacriticsString = column.getOption("stripDiacritics");
@@ -276,13 +288,12 @@ public class CSVExporter {
             String formatString = column.getOption("segmentFormat");
 
             var formatStyle = Arrays
-                .stream(MediaTimeFormatStyle.values())
-                .filter(format -> format.toString().equals(formatString))
-                .findFirst();
+                    .stream(MediaTimeFormatStyle.values())
+                    .filter(format -> format.toString().equals(formatString))
+                    .findFirst();
 
             MediaSegmentFormatter mediaSegmentFormatter = new MediaSegmentFormatter(
-                formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS)
-            );
+                    formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
             return mediaSegmentFormatter.format(segmentTier.getValue());
         }
@@ -296,13 +307,12 @@ public class CSVExporter {
             String formatString = column.getOption("segmentFormat");
 
             var formatStyle = Arrays
-                .stream(MediaTimeFormatStyle.values())
-                .filter(format -> format.toString().equals(formatString))
-                .findFirst();
-            
+                    .stream(MediaTimeFormatStyle.values())
+                    .filter(format -> format.toString().equals(formatString))
+                    .findFirst();
+
             MediaTimeFormatter mediaTimeFormatter = new MediaTimeFormatter(
-                formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS)
-            );
+                    formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
             return mediaTimeFormatter.format(segmentTier.getValue().getStartValue());
         }
@@ -316,13 +326,12 @@ public class CSVExporter {
             String formatString = column.getOption("segmentFormat");
 
             var formatStyle = Arrays
-                .stream(MediaTimeFormatStyle.values())
-                .filter(format -> format.toString().equals(formatString))
-                .findFirst();
+                    .stream(MediaTimeFormatStyle.values())
+                    .filter(format -> format.toString().equals(formatString))
+                    .findFirst();
 
             MediaTimeFormatter mediaTimeFormatter = new MediaTimeFormatter(
-                formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS)
-            );
+                    formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
             return mediaTimeFormatter.format(segmentTier.getValue().getEndValue());
         }
@@ -336,13 +345,12 @@ public class CSVExporter {
             String formatString = column.getOption("segmentFormat");
 
             var formatStyle = Arrays
-                .stream(MediaTimeFormatStyle.values())
-                .filter(format -> format.toString().equals(formatString))
-                .findFirst();
-            
+                    .stream(MediaTimeFormatStyle.values())
+                    .filter(format -> format.toString().equals(formatString))
+                    .findFirst();
+
             MediaTimeFormatter mediaTimeFormatter = new MediaTimeFormatter(
-                formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS)
-            );
+                    formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
             float duration = segmentTier.getValue().getEndValue() - segmentTier.getValue().getStartValue();
             return mediaTimeFormatter.format(duration);
@@ -351,7 +359,7 @@ public class CSVExporter {
     }
 
     private String getUserTierValue(Record record, CSVColumn column) {
-//        String tierName = column.getOption(CSVExportSettings.USER_TIER_NAME_KEY);
+        // String tierName = column.getOption(CSVExportSettings.USER_TIER_NAME_KEY);
         String tierName = column.getOption("name");
         var tier = record.getTier(tierName);
         if (tier != null && tier.hasValue()) {
@@ -366,21 +374,20 @@ public class CSVExporter {
 
         if (formatString == null || formatString.equals("DEFAULT") || formatString.equals("ISO")) {
             return DateTimeFormatter.ISO_LOCAL_DATE.format(date);
-        }
-        else {
+        } else {
             var formatStyle = Arrays
-                .stream(FormatStyle.values())
-                .filter(fs -> fs.toString().equals(formatString))
-                .findFirst();
+                    .stream(FormatStyle.values())
+                    .filter(fs -> fs.toString().equals(formatString))
+                    .findFirst();
 
             var locale = Arrays
-                .stream(Locale.getAvailableLocales())
-                .filter(loc -> loc.getDisplayName().equals(localeString))
-                .findFirst();
+                    .stream(Locale.getAvailableLocales())
+                    .filter(loc -> loc.getDisplayName().equals(localeString))
+                    .findFirst();
 
             var formatter = DateTimeFormatter
-                .ofLocalizedDate(formatStyle.orElse(FormatStyle.SHORT))
-                .withLocale(locale.orElse(Locale.getDefault()));
+                    .ofLocalizedDate(formatStyle.orElse(FormatStyle.SHORT))
+                    .withLocale(locale.orElse(Locale.getDefault()));
 
             return formatter.format(date);
         }
