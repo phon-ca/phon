@@ -77,8 +77,12 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor<
 			public void propertyChange(PropertyChangeEvent evt) {
 				final SyllabificationDisplay.SyllabificationChangeData newVal = (SyllabificationDisplay.SyllabificationChangeData)evt.getNewValue();
 				final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+				final int transcriptElementIndex = editor.getSession().getRecordElementIndex(editor.getCurrentRecordIndex());
+
 				final ScTypeEdit edit = new ScTypeEdit(
-						editor.getSession(), editor.getEventManager(), display.getTranscript(), newVal.position(), newVal.scType());
+						editor.getSession(), editor.getEventManager(),
+						transcriptElementIndex, ipaTier.getName(),
+						display.getTranscript(), newVal.position(), newVal.scType());
 				editor.getUndoSupport().postEdit(edit);
 			}
 
@@ -89,7 +93,8 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor<
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-				final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(editor, display.getTranscript(), (Integer)evt.getNewValue());
+				final int transcriptElementIndex = editor.getSession().getRecordElementIndex(editor.getCurrentRecordIndex());
+				final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(editor, transcriptElementIndex, ipaTier.getName(), display.getTranscript(), (Integer)evt.getNewValue());
 				editor.getUndoSupport().postEdit(edit);
 			}
 

@@ -97,7 +97,12 @@ public class TranscriptScrollPaneGutter extends JComponent {
             public void afterSetDot(int oldDot, int newDot) {
                 final TranscriptElementLocation previousLocation = editor.charPosToSessionLocation(oldDot);
                 final TranscriptElementLocation currentLocation = editor.charPosToSessionLocation(newDot);
-                if(previousLocation.transcriptElementIndex() != currentLocation.transcriptElementIndex()
+                if(!previousLocation.valid() && !currentLocation.valid()) return;
+                if(!previousLocation.valid() && currentLocation.valid()) {
+                    repaint();
+                } else if(previousLocation.valid() && !currentLocation.valid()) {
+                    repaint();
+                } else if(previousLocation.transcriptElementIndex() != currentLocation.transcriptElementIndex()
                         || !previousLocation.tier().equals(currentLocation.tier())) {
                     repaint();
                 }

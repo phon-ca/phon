@@ -23,18 +23,24 @@ import ca.phon.syllable.SyllabificationInfo;
 
 public class ToggleDiphthongEdit extends SessionUndoableEdit {
 
+	private int transcriptElementIndex;
+
+	private String tier;
+
 	private final IPATranscript transcript;
 	
 	private final int index;
 
 
 
-	public ToggleDiphthongEdit(SessionEditor editor, IPATranscript transcript, int index) {
-		this(editor.getSession(), editor.getEventManager(), transcript, index);
+	public ToggleDiphthongEdit(SessionEditor editor, int transcriptElementIndex, String tier, IPATranscript transcript, int index) {
+		this(editor.getSession(), editor.getEventManager(), transcriptElementIndex, tier, transcript, index);
 	}
 
-	public ToggleDiphthongEdit(Session session, EditorEventManager editorEventManager, IPATranscript transcript, int index) {
+	public ToggleDiphthongEdit(Session session, EditorEventManager editorEventManager, int transcriptElementIndex, String tier, IPATranscript transcript, int index) {
 		super(session, editorEventManager);
+		this.transcriptElementIndex = transcriptElementIndex;
+		this.tier = tier;
 		this.transcript = transcript;
 		this.index = index;
 	}
@@ -53,7 +59,8 @@ public class ToggleDiphthongEdit extends SessionUndoableEdit {
 
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
 					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, info.getConstituentType(), info.getConstituentType()));
+							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier,
+									transcript, index, info.getConstituentType(), info.getConstituentType()));
 			getEditorEventManager().queueEvent(ee);
 		}
 	}

@@ -32,6 +32,8 @@ import java.text.ParseException;
  */
 public class SyllabifyEdit extends SessionUndoableEdit {
 
+	private int transcriptElementIndex;
+
 	private final Tier<IPATranscript> tier;
 	
 	private final Syllabifier syllabifier;
@@ -40,16 +42,17 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 
 	private Transcriber transcriber = Transcriber.VALIDATOR;
 	
-	public SyllabifyEdit(SessionEditor editor, Tier<IPATranscript> ipaTier, Syllabifier syllabifier) {
-		this(editor.getSession(), editor.getEventManager(), ipaTier, syllabifier, Transcriber.VALIDATOR);
+	public SyllabifyEdit(SessionEditor editor, int transcriptElementIndex, Tier<IPATranscript> ipaTier, Syllabifier syllabifier) {
+		this(editor.getSession(), editor.getEventManager(), transcriptElementIndex, ipaTier, syllabifier, Transcriber.VALIDATOR);
 	}
 
-	public SyllabifyEdit(SessionEditor editor, Tier<IPATranscript> ipaTier, Syllabifier syllabifier, Transcriber transcriber) {
-		this(editor.getSession(), editor.getEventManager(), ipaTier, syllabifier, transcriber);
+	public SyllabifyEdit(SessionEditor editor, int transcriptElementIndex, Tier<IPATranscript> ipaTier, Syllabifier syllabifier, Transcriber transcriber) {
+		this(editor.getSession(), editor.getEventManager(), transcriptElementIndex, ipaTier, syllabifier, transcriber);
 	}
 
-	public SyllabifyEdit(Session session, EditorEventManager eventManager, Tier<IPATranscript> ipaTier, Syllabifier syllabifier, Transcriber transcriber) {
+	public SyllabifyEdit(Session session, EditorEventManager eventManager, int transcriptElementIndex, Tier<IPATranscript> ipaTier, Syllabifier syllabifier, Transcriber transcriber) {
 		super(session, eventManager);
+		this.transcriptElementIndex = transcriptElementIndex;
 		this.tier = ipaTier;
 		this.syllabifier = syllabifier;
 		this.transcriber = transcriber;
@@ -72,7 +75,8 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
 					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(grp, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
+							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier.getName(),
+									grp, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
 			getEditorEventManager().queueEvent(ee);
 		} catch (ParseException e) {
 			LogUtil.severe( e.getLocalizedMessage(), e);
@@ -93,7 +97,8 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 
 		final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
 				new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-						new SyllabificationAlignmentEditorView.ScEditData(ipa, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
+						new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier.getName(),
+								ipa, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
 		getEditorEventManager().queueEvent(ee);
 	}
 	

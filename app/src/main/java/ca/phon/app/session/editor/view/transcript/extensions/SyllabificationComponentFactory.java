@@ -142,7 +142,9 @@ public class SyllabificationComponentFactory implements ComponentFactory {
                 display.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, (e) -> {
                     final SyllabificationDisplay.SyllabificationChangeData data = (SyllabificationDisplay.SyllabificationChangeData) e.getNewValue();
                     final IPATranscript transcript = parentTier.getValueForTranscriber(transcriber).orElse(parentTier.getValue());
-                    final ScTypeEdit edit = new ScTypeEdit(this.session, this.eventManager, transcript, phoneIndex + data.position(), data.scType());
+                    final ScTypeEdit edit = new ScTypeEdit(this.session, this.eventManager,
+                            transcriptIndex, parentTier.getName(),
+                            transcript, phoneIndex + data.position(), data.scType());
                     edit.setSource(display);
                     this.undoSupport.postEdit(edit);
                 });
@@ -152,9 +154,9 @@ public class SyllabificationComponentFactory implements ComponentFactory {
                     final int pIdx = phoneIndex + data.position1();
                     final int pIdx2 = phoneIndex + data.position2();
                     final IPATranscript transcript = parentTier.getValueForTranscriber(transcriber).orElse(parentTier.getValue());
-                    final ToggleDiphthongEdit diphthongEdit1 = new ToggleDiphthongEdit(this.session, this.eventManager, transcript, pIdx);
+                    final ToggleDiphthongEdit diphthongEdit1 = new ToggleDiphthongEdit(this.session, this.eventManager, transcriptIndex, parentTier.getName(), transcript, pIdx);
                     diphthongEdit1.setSource(display);
-                    final ToggleDiphthongEdit diphthongEdit2 = new ToggleDiphthongEdit(this.session, this.eventManager, transcript, pIdx2);
+                    final ToggleDiphthongEdit diphthongEdit2 = new ToggleDiphthongEdit(this.session, this.eventManager, transcriptIndex, parentTier.getName(), transcript, pIdx2);
                     diphthongEdit2.setSource(display);
                     this.undoSupport.beginUpdate();
                     this.undoSupport.postEdit(diphthongEdit1);

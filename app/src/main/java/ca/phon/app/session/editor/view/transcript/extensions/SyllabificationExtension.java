@@ -22,6 +22,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Language;
+import org.w3c.dom.Attr;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -307,8 +308,10 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         final Tier<IPATranscript> ipaTier = resetData.getData().ipaTier();
         final Tier<IPATranscript> syllabifierTier = resetData.getData().syllabifierTier();
         final Syllabifier syllabifier = syllabifierForTier(ipaTier);
+        final int transcriptElementIndex = editor.getSession().getRecordElementIndex(resetData.getData().record());
 
-        final SyllabifyEdit edit = new SyllabifyEdit(editor.getSession(), editor.getEventManager(), ipaTier, syllabifier, editor.getDataModel().getTranscriber());
+        final SyllabifyEdit edit = new SyllabifyEdit(editor.getSession(), editor.getEventManager(), transcriptElementIndex,
+                ipaTier, syllabifier, editor.getDataModel().getTranscriber());
 
         // find component to use as source for edit
         final int recordIndex = editor.getSession().getRecordIndex(resetData.getData().record());
@@ -445,20 +448,24 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
     }
 
     public void onScEdit(EditorEvent<SyllabificationAlignmentEditorView.ScEditData> event) {
-        if(event.source() instanceof SyllabificationDisplay display) {
+        if(event.source() instanceof SyllabificationDisplay display
+            && !SwingUtilities.isDescendingFrom(editor, event.source())) {
             final IPATranscript clonedTranscript = (new IPATranscriptBuilder()).append(event.data().ipa().toString(true)).toIPATranscript();
-            final Container parent = display.getParent();
-            final List<IPATranscript> words = clonedTranscript.words();
-            for(int i = 0 ; i < words.size() && i < parent.getComponentCount(); i++) {
-                if(parent.getComponent(i) instanceof SyllabificationDisplay wordDisplay) {
-                    wordDisplay.setTranscript(words.get(i));
+            final int recordIndex = editor.getSession().getTranscript().getRecordIndex(event.data().transcriptElementIdx());
+            String syllablesTierName = getSyllabifierTierNameForIPATier(event.data().tier());
+            final TranscriptDocument.StartEnd range = doc.getTierContentStartEnd(recordIndex, syllablesTierName);
+            if(!range.valid()) return;
+            final AttributeSet attrs = doc.getCharacterElement(range.start()).getAttributes();
+            final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+            if(componentFactory instanceof SyllabificationComponentFactory syllabificationComponentFactory) {
+                final Container parent = syllabificationComponentFactory.getComponent();
+                final List<IPATranscript> words = clonedTranscript.words();
+                for(int i = 0 ; i < words.size() && i < parent.getComponentCount(); i++) {
+                    if(parent.getComponent(i) instanceof SyllabificationDisplay wordDisplay) {
+                        wordDisplay.setTranscript(words.get(i));
+                        wordDisplay.repaint();
+                    }
                 }
-            }
-
-            // reset syllabification event
-            if(event.getData().get().eleIdx() < 0) {
-                display.setFocusedPhone(0);
-                display.requestFocus();
             }
         }
     }

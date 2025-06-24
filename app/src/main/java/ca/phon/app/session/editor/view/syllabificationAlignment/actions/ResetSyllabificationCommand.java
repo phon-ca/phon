@@ -43,6 +43,8 @@ public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand
 	public void hookableActionPerformed(ActionEvent e) {
 		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
 		final Record r = getEditor().currentRecord();
+		if(r == null) return;
+		final int transcriptElementIndex = getSession().getRecordElementIndex(r);
 		
 		final Tier<IPATranscript> tier = 
 				r.getTier(ipaTier, IPATranscript.class);
@@ -55,7 +57,7 @@ public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand
 		final Syllabifier syllabifier = library.getSyllabifierForLanguage(syllabifierLanguage);
 		
 		final CompoundEdit edit = new CompoundEdit();
-		final SyllabifyEdit ed = new SyllabifyEdit(getEditor(), tier, syllabifier);
+		final SyllabifyEdit ed = new SyllabifyEdit(getEditor(), transcriptElementIndex, tier, syllabifier);
 		ed.doIt();
 		edit.addEdit(ed);
 		edit.end();

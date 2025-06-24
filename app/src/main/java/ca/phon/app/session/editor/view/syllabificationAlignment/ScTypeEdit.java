@@ -24,6 +24,10 @@ import ca.phon.syllable.SyllableConstituentType;
 
 public class ScTypeEdit extends SessionUndoableEdit {
 
+	private int transcriptElementIndex;
+
+	private final String tier;
+
 	private final IPATranscript transcript;
 	
 	private final int index;
@@ -32,12 +36,14 @@ public class ScTypeEdit extends SessionUndoableEdit {
 	
 	private SyllableConstituentType prevScType;
 
-	public ScTypeEdit(SessionEditor editor, IPATranscript transcript, int index, SyllableConstituentType scType) {
-		this(editor.getSession(), editor.getEventManager(), transcript, index, scType);
+	public ScTypeEdit(SessionEditor editor, int transcriptIndex, String tier, IPATranscript transcript, int index, SyllableConstituentType scType) {
+		this(editor.getSession(), editor.getEventManager(), transcriptIndex, tier, transcript, index, scType);
 	}
 
-	public ScTypeEdit(Session session, EditorEventManager eventManager, IPATranscript transcript, int index, SyllableConstituentType scType) {
+	public ScTypeEdit(Session session, EditorEventManager eventManager, int transcriptIndex, String tier, IPATranscript transcript, int index, SyllableConstituentType scType) {
 		super(session, eventManager);
+		this.transcriptElementIndex = transcriptIndex;
+		this.tier = tier;
 		this.transcript = transcript;
 		this.index = index;
 		this.scType = scType;
@@ -50,7 +56,7 @@ public class ScTypeEdit extends SessionUndoableEdit {
 		
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
 					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, scType, prevScType));
+							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier, transcript, index, scType, prevScType));
 			getEditorEventManager().queueEvent(ee);
 		}
 	}
@@ -63,7 +69,7 @@ public class ScTypeEdit extends SessionUndoableEdit {
 
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
 					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, prevScType, scType));
+							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier, transcript, index, prevScType, scType));
 			getEditorEventManager().queueEvent(ee);
 		}
 	}

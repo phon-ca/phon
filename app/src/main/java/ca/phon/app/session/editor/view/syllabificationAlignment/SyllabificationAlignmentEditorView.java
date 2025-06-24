@@ -52,7 +52,7 @@ import java.util.*;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 
-	public record ScEditData(IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
+	public record ScEditData(int transcriptElementIdx, String tier, IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
 	public final static EditorEventType<ScEditData> ScEdit = new EditorEventType<>(EditorEventName.MODIFICATION_EVENT + "_SC_TYPE_", ScEditData.class);
 
 	public final static String VIEW_NAME = "Syllabification & Alignment";
@@ -197,28 +197,30 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		eventManager.registerActionForEvent(ScEdit, this::onScChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
-	private final PropertyChangeListener syllabificationDisplayListener = new PropertyChangeListener() {
+//	private final PropertyChangeListener syllabificationDisplayListener = new PropertyChangeListener() {
+//
+//		@Override
+//		public void propertyChange(PropertyChangeEvent evt) {
+//			final SyllabificationChangeData newVal = (SyllabificationChangeData)evt.getNewValue();
+//			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+//			final ScTypeEdit edit = new ScTypeEdit(getEditor(), display.getTranscript(),
+//					editor.getSession().getRecordElementIndex(editor.getCurrentRecordIndex()),
+//					newVal.position(), newVal.scType());
+//			getEditor().getUndoSupport().postEdit(edit);
+//		}
+//
+//	};
 
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			final SyllabificationChangeData newVal = (SyllabificationChangeData)evt.getNewValue();
-			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-			final ScTypeEdit edit = new ScTypeEdit(getEditor(), display.getTranscript(), newVal.position(), newVal.scType());
-			getEditor().getUndoSupport().postEdit(edit);
-		}
-
-	};
-
-	private final PropertyChangeListener hiatusChangeListener = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-			final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(getEditor(), display.getTranscript(), (Integer)evt.getNewValue());
-			getEditor().getUndoSupport().postEdit(edit);
-		}
-
-	};
+//	private final PropertyChangeListener hiatusChangeListener = new PropertyChangeListener() {
+//
+//		@Override
+//		public void propertyChange(PropertyChangeEvent evt) {
+//			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+//			final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(getEditor(), display.getTranscript(), (Integer)evt.getNewValue());
+//			getEditor().getUndoSupport().postEdit(edit);
+//		}
+//
+//	};
 
 //	private final PropertyChangeListener alignmentDisplayListener = new PropertyChangeListener() {
 //
@@ -369,21 +371,20 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void onScChange(EditorEvent<ScEditData> ee) {
-//		final IPATranscript ipa = ee.data().ipa();
-//		final Record r = getEditor().currentRecord();
-//		final SyllabificationDisplay targetDisplay = getIPATargetDisplay();
-//		final SyllabificationDisplay actualDisplay = getIPAActualDisplay();
-//		boolean found = false;
-//		if(targetDisplay.getTranscript() == ipa) {
-//			targetDisplay.repaint();
-//			found = true;
-//		} else if(actualDisplay.getTranscript() == ipa) {
-//			actualDisplay.repaint();
-//			found = true;
-//		}
-//		if(found) {
-//			getAlignmentDisplay().repaint();
-//		}
+		final IPATranscript ipa = ee.data().ipa();
+		final Record r = getEditor().currentRecord();
+		if(r == null) return;
+
+		final Component source = ee.source();
+		if(SwingUtilities.isDescendingFrom(this, source)) {
+			return;
+		}
+
+		if(r.getIPATarget() == ipa) {
+			updateTargetSyllables();
+		} else if(r.getIPAActual() == ipa) {
+			updateActualSyllables();
+		}
 	}
 
 	@Override
