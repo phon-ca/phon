@@ -59,7 +59,6 @@ public class SyllabificationComponentFactory implements ComponentFactory {
     @Override
     public JComponent createComponent(AttributeSet attrs) {
         Tier<IPATranscript> tier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(attrs);
-        LogUtil.info("Creating syllabification component for tier: " + tier.getName());
         Tier<IPATranscript> parentTier = (Tier<IPATranscript>) TranscriptStyleConstants.getParentTier(attrs);
         this.attrs = attrs;
 

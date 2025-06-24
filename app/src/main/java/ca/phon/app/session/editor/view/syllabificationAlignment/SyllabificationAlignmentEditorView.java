@@ -272,6 +272,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaActualAttrs);
 
 		try {
+			editor.getTranscriptEditorCaret().freeze();
 			editor.getTranscriptDocument().setBypassDocumentFilter(true);
 			editor.getTranscriptDocument().remove(0, editor.getTranscriptDocument().getLength());
 			editor.getTranscriptDocument().processBatchUpdates(0, batchBuilder.getBatch());
@@ -279,6 +280,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			LogUtil.warning(e);
 		} finally {
 			editor.getTranscriptDocument().setBypassDocumentFilter(false);
+			editor.getTranscriptEditorCaret().unfreeze();
 		}
 	}
 
@@ -317,6 +319,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			TranscriptStyleConstants.setTier(ipaActualAttrs, r.getIPAActualTier());
 			syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaActualAttrs);
 			try {
+				editor.getTranscriptEditorCaret().freeze();
 				editor.getTranscriptDocument().setBypassDocumentFilter(true);
 				editor.getTranscriptDocument().remove(actualSyllablesRange.start(), actualSyllablesRange.length());
 				editor.getTranscriptDocument().processBatchUpdates(actualSyllablesRange.start(), batchBuilder.getBatch());
@@ -324,6 +327,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				LogUtil.warning(e);
 			} finally {
 				editor.getTranscriptDocument().setBypassDocumentFilter(false);
+				editor.getTranscriptEditorCaret().unfreeze();
 			}
 		}
 	}
@@ -344,6 +348,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			TranscriptStyleConstants.setTier(ipaTargetAttrs, r.getIPATargetTier());
 			syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaTargetAttrs);
 			try {
+				editor.getTranscriptEditorCaret().freeze();
 				editor.getTranscriptDocument().setBypassDocumentFilter(true);
 				editor.getTranscriptDocument().remove(targetSyllablesRange.start(), targetSyllablesRange.length());
 				editor.getTranscriptDocument().processBatchUpdates(targetSyllablesRange.start(), batchBuilder.getBatch());
@@ -351,11 +356,13 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				LogUtil.warning(e);
 			} finally {
 				editor.getTranscriptDocument().setBypassDocumentFilter(false);
+				editor.getTranscriptEditorCaret().unfreeze();
 			}
 		}
 	}
 
 	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		if(ee.data().valueAdjusting()) return;
 		final String tierName = ee.data().tier().getName();
 		if(SystemTierType.IPATarget.getName().equals(tierName)) {
 			updateTargetSyllables();
@@ -380,10 +387,16 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			return;
 		}
 
-		if(r.getIPATarget() == ipa) {
+		if(SystemTierType.IPATarget.getName().equals(ee.data().tier)) {
 			updateTargetSyllables();
-		} else if(r.getIPAActual() == ipa) {
+		} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier)) {
 			updateActualSyllables();
+		} else if(SystemTierType.PhoneAlignment.getName().equals(ee.data().tier)) {
+//			final PhoneMapDisplay phoneMapDisplay = editor.getPhoneMapDisplay();
+//			if(phoneMapDisplay != null) {
+//				final AlignmentChangeData alignmentChangeData = new AlignmentChangeData(ee.data().transcriptElementIdx, ee.data().eleIdx, ipa, ee.data().oldType, ee.data().newType);
+//				phoneMapDisplay.setAlignmentChangeData(alignmentChangeData);
+//			}
 		}
 	}
 

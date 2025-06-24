@@ -31,14 +31,12 @@ public class TranscriptNavigationFilter extends NavigationFilter {
         }
         if(doc.isBypassDocumentFilter()) {
             fb.setDot(dot, bias);
-            LogUtil.info("Bypassing document filter");
             return;
         }
 
         Element elem = doc.getCharacterElement(dot);
         AttributeSet attrs = elem.getAttributes();
         if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) {
-            LogUtil.info("Not traversable");
             return;
         }
 
@@ -53,11 +51,9 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                 editor.getTranscriptEditorCaret().getCurrentLocation()
         );
         if(editor.getTranscriptEditorCaret().isFreezeCaret()) {
-            LogUtil.info("Not sending editor event - freeze caret is enabled");
             return;
         }
         if(transcriptLocationChangeData.newLoc().equals(transcriptLocationChangeData.oldLoc())) {
-            LogUtil.info("Not sending editor event - new location is the same as old location");
             return;
         }
 
