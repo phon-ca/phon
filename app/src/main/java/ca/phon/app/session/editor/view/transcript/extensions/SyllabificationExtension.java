@@ -50,17 +50,23 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
     private boolean syllabificationEditMode = false;
 
+    private int numExtension = -1;
+
+    private static int numExtensions = 0;
+
     /**
      * Constructor
      * */
     public SyllabificationExtension() {
         super();
+        this.numExtension = numExtensions++;
     }
 
     @Override
     public void install(TranscriptEditor editor) {
         this.editor = editor;
         this.doc = editor.getTranscriptDocument();
+
 
         // add syllabification tier at the end of the regular IPA tier content
         doc.addInsertionHook(new DefaultInsertionHook() {
@@ -119,6 +125,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         });
 
         doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
+
+        editor.putExtension(SyllabificationExtension.class, this);
     }
 
     private void setSyllabificationIsComponentPropertyChangeHandler(PropertyChangeEvent evt) {
@@ -448,8 +456,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
     }
 
     public void onScEdit(EditorEvent<SyllabificationAlignmentEditorView.ScEditData> event) {
-        if(event.source() instanceof SyllabificationDisplay display
-            && !SwingUtilities.isDescendingFrom(editor, event.source())) {
+        if(event.source() instanceof SyllabificationDisplay display) {
             final IPATranscript clonedTranscript = (new IPATranscriptBuilder()).append(event.data().ipa().toString(true)).toIPATranscript();
             final int recordIndex = editor.getSession().getTranscript().getRecordIndex(event.data().transcriptElementIdx());
             String syllablesTierName = getSyllabifierTierNameForIPATier(event.data().tier());
@@ -459,11 +466,14 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
             if(componentFactory instanceof SyllabificationComponentFactory syllabificationComponentFactory) {
                 final Container parent = syllabificationComponentFactory.getComponent();
-                final List<IPATranscript> words = clonedTranscript.words();
-                for(int i = 0 ; i < words.size() && i < parent.getComponentCount(); i++) {
-                    if(parent.getComponent(i) instanceof SyllabificationDisplay wordDisplay) {
-                        wordDisplay.setTranscript(words.get(i));
-                        wordDisplay.repaint();
+                if(event.source().getParent() != parent) {
+                    LogUtil.info(numExtension + ": Syllabification edit event from " + display + " - updating syllabification display");
+                    final List<IPATranscript> words = clonedTranscript.words();
+                    for (int i = 0; i < words.size() && i < parent.getComponentCount(); i++) {
+                        if (parent.getComponent(i) instanceof SyllabificationDisplay wordDisplay) {
+                            wordDisplay.setTranscript(words.get(i));
+                            wordDisplay.repaint();
+                        }
                     }
                 }
             }

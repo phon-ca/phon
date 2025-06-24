@@ -46,6 +46,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.beans.*;
 import java.util.List;
 import java.util.*;
@@ -142,8 +144,11 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		editor.setAutoInsertRecordElements(false);
 		editor.getTranscriptDocument().setSessionNoPopulate(getEditor().getSession());
 
-		syllabificationExtension = new SyllabificationExtension();
-		syllabificationExtension.install(editor);
+		syllabificationExtension = editor.getExtension(SyllabificationExtension.class);
+		if(syllabificationExtension == null) {
+			syllabificationExtension = new SyllabificationExtension();
+			syllabificationExtension.install(editor);
+		}
 
 		scrollPane = new TranscriptScrollPane(editor);
 		add(scrollPane, BorderLayout.CENTER);
