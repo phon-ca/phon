@@ -881,6 +881,7 @@ ca.phon.project
 ca.phon.project
 ca.phon.project
 ca.phon.project
+ca.phon.project
 ca.phon.xml
 ca.phon.xml
 ca.phon.xml
@@ -912,7 +913,6 @@ ca.phon.session
 ca.phon.session
 ca.phon.session
 ca.phon.session
-ca.phon.session
 ca.phon.session.tierdata
 ca.phon.session.tierdata
 ca.phon.session.tierdata
@@ -942,6 +942,8 @@ ca.phon.session.position
 ca.phon.session.io
 ca.phon.session.io
 ca.phon.session.io
+ca.phon.session.io.xml.v2_0
+ca.phon.session.io.xml.v2_0
 ca.phon.session.io.xml.v2_0
 ca.phon.session.io.xml.v2_0
 ca.phon.session.io.xml.v2_0
