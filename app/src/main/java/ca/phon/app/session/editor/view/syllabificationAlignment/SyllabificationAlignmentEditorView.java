@@ -62,7 +62,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	public final static String VIEW_NAME = "Syllabification & Alignment";
 
-	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":indeterminate_question_box";
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":flex_wrap";
 
 	private IconStrip toolbar;
 
@@ -469,7 +469,8 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("misc/syllabification", IconSize.SMALL);
+		final String[] iconData = VIEW_ICON.split(":");
+		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

@@ -175,9 +175,9 @@ public class EditorEventManager {
 				if(event != null) {
 //					synchronized (actionMap) {
 						if(PrefHelper.getBoolean("phon.debug", false)) {
-							LogUtil.log(Level.INFO, "Dispatching event: " + event.eventType());
+							LogUtil.log(Level.TRACE, "Dispatching event: " + event.eventType());
 							if(event.getData().isPresent())
-								LogUtil.log(Level.INFO, "\tdata: " + event.getData().get());
+								LogUtil.log(Level.TRACE, "\tdata: " + event.getData().get());
 						}
 						for (EditorEventHandler<?> action : getHandlersForEvent(event.eventType())) {
 							action.handleEvent(event);

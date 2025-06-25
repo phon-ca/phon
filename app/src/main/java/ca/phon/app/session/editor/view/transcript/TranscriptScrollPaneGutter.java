@@ -179,6 +179,20 @@ public class TranscriptScrollPaneGutter extends JComponent {
                 }
 
             }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (currentHoverPopup != null) {
+                    currentHoverPopup.hide();
+                    currentHoverPopup = null;
+                }
+                if (currentHoverMenu != null) {
+                    currentHoverMenu.setVisible(false);
+                    currentHoverMenu = null;
+                }
+                setCursor(Cursor.getDefaultCursor());
+                currentIconRect = null;
+            }
         });
         addMouseListener(new MouseAdapter() {
             @Override

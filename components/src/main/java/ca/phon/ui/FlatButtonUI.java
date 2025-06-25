@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ButtonUI;
 import java.awt.*;
+import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
 public class FlatButtonUI extends ButtonUI {
@@ -15,6 +16,8 @@ public class FlatButtonUI extends ButtonUI {
     private FlatButton button;
 
     private JFrame popupFrame;
+
+    private AWTEventListener globalMouseListener;
 
     private MouseHandler mouseHandler = new MouseHandler();
 
@@ -65,6 +68,17 @@ public class FlatButtonUI extends ButtonUI {
                 case SwingConstants.WEST -> location.translate(-(int)popupFrame.getPreferredSize().getWidth(), (int)(button.getPreferredSize().getHeight() - popupFrame.getPreferredSize().getHeight()) / 2);
                 default -> location.translate(0, button.getHeight());
             }
+            // Add global mouse listener to detect clicks outside the button
+            globalMouseListener = event -> {
+                if (event.getID() == MouseEvent.MOUSE_PRESSED) {
+                    Point mousePoint = ((MouseEvent) event).getLocationOnScreen();
+                    SwingUtilities.convertPointFromScreen(mousePoint, button);
+                    if (!button.getBounds().contains(mousePoint)) {
+                        hidePopup();
+                    }
+                }
+            };
+            Toolkit.getDefaultToolkit().addAWTEventListener(globalMouseListener, AWTEvent.MOUSE_EVENT_MASK);
 
             popupFrame.setLocation(location);
             popupFrame.setVisible(true);
@@ -73,6 +87,10 @@ public class FlatButtonUI extends ButtonUI {
 
     private void hidePopup() {
         if(popupFrame != null) {
+            if(globalMouseListener != null) {
+                Toolkit.getDefaultToolkit().removeAWTEventListener(globalMouseListener);
+                globalMouseListener = null;
+            }
             popupFrame.setVisible(false);
             popupFrame.dispose();
             popupFrame = null;
