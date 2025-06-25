@@ -71,7 +71,7 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 		super();
 		this.name = name;
 		this.declaredType = declaredType;
-		this.tierParams = new LinkedHashMap<>(tierParams);
+		this.tierParams = tierParams;
 		this.excludeFromAlignment = excludeFromAlignment;
 		this.blind = blind;
 		this.subtypeDelim = subtypeDelim;
