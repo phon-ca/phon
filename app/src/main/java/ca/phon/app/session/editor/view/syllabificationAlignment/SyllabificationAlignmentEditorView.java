@@ -66,25 +66,25 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	private IconStrip toolbar;
 
-	private final static String SHOW_TARGET_IPA = "SyllabificationAndAlignmentEditorView.showTargetIPA";
+	private final static String SHOW_TARGET_IPA = "showTargetIPA";
 	private final static boolean DEFAULT_SHOW_TARGET_IPA = true;
-	private JCheckBox targetIPABox;
+	private boolean showTargetIPA = DEFAULT_SHOW_TARGET_IPA;
 
-	private final static String SHOW_ACTUAL_IPA = "SyllabificationAndAlignmentEditorView.showActualIPA";
+	private final static String SHOW_ACTUAL_IPA = "showActualIPA";
 	private final static boolean DEFAULT_SHOW_ACTUAL_IPA = true;
-	private JCheckBox actualIPABox;
+	private boolean showActualIPA = DEFAULT_SHOW_ACTUAL_IPA;
 
-	private final static String SHOW_ALIGNMENT = "SyllabificationAndAlignmentEditorView.showAlignment";
+	private final static String SHOW_ALIGNMENT = "showAlignment";
 	private final static boolean DEFAULT_SHOW_ALIGNMENT = true;
-	private JCheckBox alignmentBox;
+	private boolean showAlignment = DEFAULT_SHOW_ALIGNMENT;
 
-	private final static String COLOR_IN_ALIGNMENT = "SyllabificationAndAlignmentEditorView.colorInAlignment";
+	private final static String COLOR_IN_ALIGNMENT = "colorInAlignment";
 	private final static boolean DEFAULT_COLOR_IN_ALIGNMENT = false;
-	private JCheckBox colorInAlignmentBox;
+	private boolean colorInAlignment = DEFAULT_COLOR_IN_ALIGNMENT;
 
-	private final static String SHOW_DIACRITICS = "SyllabificationAndAlignmentEditorView.showDiacritics";
+	private final static String SHOW_DIACRITICS = "showDiacritics";
 	private final static boolean DEFAULT_SHOW_DIACRITICS = false;
-	private JCheckBox showDiacriticsBox;
+	private boolean showDiacritics = DEFAULT_SHOW_DIACRITICS;
 
 //	private TranscriptScrollPane scrollPane;
 	private TranscriptEditor editor;
@@ -108,6 +108,8 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final PhonUIAction<Void> syllabifierSettingsAct = PhonUIAction.runnable(() -> {
 			final JPopupMenu settingsMenu = new JPopupMenu();
 			final MenuBuilder menuBuilder = new MenuBuilder(settingsMenu);
+			setupSettingsMenu(menuBuilder);
+			settingsMenu.show(toolbar, 0, toolbar.getHeight());
 		});
 		syllabifierSettingsAct.putValue(PhonUIAction.NAME, "Settings");
 		syllabifierSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select syllabifier settings for session");
@@ -169,35 +171,84 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void setupSettingsMenu(MenuBuilder menuBuilder) {
-		final PhonUIAction<Void> toggleTargetAct = PhonUIAction.runnable(this::toggleCheckbox);
+		final PhonUIAction<Void> toggleTargetAct = PhonUIAction.runnable(this::toggleShowIPATarget);
 		toggleTargetAct.putValue(PhonUIAction.NAME, SystemTierType.TargetSyllables.getName());
 		toggleTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle target syllables");
-		toggleTargetAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_TARGET_IPA, DEFAULT_SHOW_TARGET_IPA));
+		toggleTargetAct.putValue(PhonUIAction.SELECTED_KEY, showTargetIPA);
 		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleTargetAct));
 
-		final PhonUIAction<Void> toggleActualAct = PhonUIAction.runnable(this::toggleCheckbox);
+		final PhonUIAction<Void> toggleActualAct = PhonUIAction.runnable(this::toggleShowIPAActual);
 		toggleActualAct.putValue(PhonUIAction.NAME, SystemTierType.ActualSyllables.getName());
 		toggleActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle actual syllables");
-		toggleActualAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ACTUAL_IPA, DEFAULT_SHOW_ACTUAL_IPA));
+		toggleActualAct.putValue(PhonUIAction.SELECTED_KEY, showActualIPA);
 		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleActualAct));
 
-		final PhonUIAction<Void> toggleAlignmentAct = PhonUIAction.runnable(this::toggleCheckbox);
+		final PhonUIAction<Void> toggleAlignmentAct = PhonUIAction.runnable(this::toggleShowAlignment);
 		toggleAlignmentAct.putValue(PhonUIAction.NAME, SystemTierType.PhoneAlignment.getName());
 		toggleAlignmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle alignment");
-		toggleAlignmentAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ALIGNMENT, DEFAULT_SHOW_ALIGNMENT));
+		toggleAlignmentAct.putValue(PhonUIAction.SELECTED_KEY, showAlignment);
 		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleAlignmentAct));
 
-		final PhonUIAction<Void> toggleAlignmentColorAct = PhonUIAction.runnable(this::toggleCheckbox);
-		toggleAlignmentColorAct.putValue(PhonUIAction.NAME, "Color in alignment");
-		toggleAlignmentColorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle color in alignment");
-		toggleAlignmentColorAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(COLOR_IN_ALIGNMENT, DEFAULT_COLOR_IN_ALIGNMENT));
-		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleAlignmentColorAct));
+//		final PhonUIAction<Void> toggleAlignmentColorAct = PhonUIAction.runnable(this::toggleColorInAlignment);
+//		toggleAlignmentColorAct.putValue(PhonUIAction.NAME, "Color in alignment");
+//		toggleAlignmentColorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle color in alignment");
+//		toggleAlignmentColorAct.putValue(PhonUIAction.SELECTED_KEY, colorInAlignment);
+//		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleAlignmentColorAct));
+//
+//		final PhonUIAction<Void> toggleDiacriticsAct = PhonUIAction.runnable(this::toggleShowDiacritics);
+//		toggleDiacriticsAct.putValue(PhonUIAction.NAME, "Show diacritics");
+//		toggleDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle display of diacritics");
+//		toggleDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, showDiacritics);
+//		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleDiacriticsAct));
 
-		final PhonUIAction<Void> toggleDiacriticsAct = PhonUIAction.runnable(this::toggleCheckbox);
-		toggleDiacriticsAct.putValue(PhonUIAction.NAME, "Show diacritics");
-		toggleDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle display of diacritics");
-		toggleDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_DIACRITICS, DEFAULT_SHOW_DIACRITICS));
-		menuBuilder.addItem(".", new JCheckBoxMenuItem(toggleDiacriticsAct));
+		menuBuilder.addSeparator(".", "separator");
+
+		setupMenu(menuBuilder);
+	}
+
+	private boolean toggleShowIPATarget() {
+		showTargetIPA = !showTargetIPA;
+		if(showTargetIPA) {
+			editor.addAdditionalTierName(SystemTierType.TargetSyllables.getName());
+		} else {
+			editor.removeAdditionalTierName(SystemTierType.TargetSyllables.getName());
+		}
+		update();
+		return showTargetIPA;
+	}
+
+	private boolean toggleShowIPAActual() {
+		showActualIPA = !showActualIPA;
+		if(showActualIPA) {
+			editor.addAdditionalTierName(SystemTierType.ActualSyllables.getName());
+		} else {
+			editor.removeAdditionalTierName(SystemTierType.ActualSyllables.getName());
+		}
+		firePropertyChange(SHOW_TARGET_IPA, !showTargetIPA, showTargetIPA);
+		update();
+		return showActualIPA;
+	}
+
+	private boolean toggleShowAlignment() {
+		showAlignment = !showAlignment;
+		if(showAlignment) {
+			editor.addAdditionalTierName(SystemTierType.PhoneAlignment.getName());
+		} else {
+			editor.removeAdditionalTierName(SystemTierType.PhoneAlignment.getName());
+		}
+		firePropertyChange(SHOW_ALIGNMENT, !showAlignment, showAlignment);
+		update();
+		return showAlignment;
+	}
+
+	private boolean toggleColorInAlignment() {
+		// TODO
+		return colorInAlignment;
+	}
+
+	private boolean toggleShowDiacritics() {
+		// TODO
+		return showDiacritics;
 	}
 
 	private void setupEditorActions() {
@@ -214,64 +265,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		eventManager.registerActionForEvent(ScEdit, this::onScChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
-//	private final PropertyChangeListener syllabificationDisplayListener = new PropertyChangeListener() {
-//
-//		@Override
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			final SyllabificationChangeData newVal = (SyllabificationChangeData)evt.getNewValue();
-//			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-//			final ScTypeEdit edit = new ScTypeEdit(getEditor(), display.getTranscript(),
-//					editor.getSession().getRecordElementIndex(editor.getCurrentRecordIndex()),
-//					newVal.position(), newVal.scType());
-//			getEditor().getUndoSupport().postEdit(edit);
-//		}
-//
-//	};
-
-//	private final PropertyChangeListener hiatusChangeListener = new PropertyChangeListener() {
-//
-//		@Override
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-//			final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(getEditor(), display.getTranscript(), (Integer)evt.getNewValue());
-//			getEditor().getUndoSupport().postEdit(edit);
-//		}
-//
-//	};
-
-//	private final PropertyChangeListener alignmentDisplayListener = new PropertyChangeListener() {
-//
-//		@Override
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			final AlignmentChangeData newVal = (AlignmentChangeData)evt.getNewValue();
-//			final Record r = getEditor().currentRecord();
-//			final int wIdx = newVal.wordIndex();
-//			final List<IPATranscript> targetWords = targetDisplay.getTranscript().words();
-//			final List<IPATranscript> actualWords = actualDisplay.getTranscript().words();
-//			final IPATranscript ipaTarget = wIdx < targetWords.size() ? targetWords.get(wIdx) : new IPATranscript();
-//			final IPATranscript ipaActual = wIdx < actualWords.size() ? actualWords.get(wIdx) : new IPATranscript();
-//			final PhoneMap pm = new PhoneMap(ipaTarget, ipaActual);
-//			pm.setTopAlignment(newVal.alignment()[0]);
-//			pm.setBottomAlignment(newVal.alignment()[1]);
-//
-//			final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
-//			final List<PhoneMap> modifiedAlignments = new ArrayList<>();
-//			for(int i = 0; i < phoneAlignment.getAlignments().size(); i++) {
-//				if(i == wIdx)
-//					modifiedAlignments.add(pm);
-//				else
-//					modifiedAlignments.add(phoneAlignment.getAlignments().get(i));
-//			}
-//
-//			final TierEdit<PhoneAlignment> edit = new TierEdit<>(getEditor(), r.getPhoneAlignmentTier(),
-//					new PhoneAlignment(modifiedAlignments));
-//			getEditor().getUndoSupport().postEdit(edit);
-//		}
-//
-//	};
-
 	public void update() {
-		LogUtil.info("Updating syllabification/alignment editor view for record: " + getEditor().getCurrentRecordIndex()+1);
 		final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
 
 		final Record record = getEditor().currentRecord();
@@ -285,9 +279,12 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		TranscriptStyleConstants.setRecord(ipaActualAttrs, record);
 		TranscriptStyleConstants.setTier(ipaActualAttrs, record.getIPAActualTier());
 
-		syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaTargetAttrs);
-		syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaActualAttrs);
-		alignmentExtension.buildAlignmentBatch(batchBuilder, ipaActualAttrs);
+		if(showTargetIPA)
+			syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaTargetAttrs);
+		if(showActualIPA)
+			syllabificationExtension.buildSyllabificationBatch(batchBuilder, ipaActualAttrs);
+		if(showAlignment)
+			alignmentExtension.buildAlignmentBatch(batchBuilder, ipaActualAttrs);
 
 		try {
 			editor.getTranscriptEditorCaret().freeze();
@@ -473,23 +470,25 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
+	private void setupMenu(MenuBuilder menuBuilder) {
+		menuBuilder.addItem(".", new JMenuItem(new SyllabificationSettingsCommand(getEditor(), this)));
+
+		menuBuilder.addSeparator(".", "separator");
+
+		final ResetSyllabificationCommand resetIPATargetAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPATarget.getName());
+		menuBuilder.addItem(".", new JMenuItem(resetIPATargetAct));
+
+		final ResetSyllabificationCommand resetIPAActualAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPAActual.getName());
+		menuBuilder.addItem(".", new JMenuItem(resetIPAActualAct));
+
+		final ResetAlignmentCommand resetAlignmentAct = new ResetAlignmentCommand(getEditor(), this);
+		menuBuilder.addItem(".", new JMenuItem(resetAlignmentAct));
+	}
+
 	@Override
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
-
-		retVal.add(new SyllabificationSettingsCommand(getEditor(), this));
-
-		retVal.addSeparator();
-
-		final ResetSyllabificationCommand resetIPATargetAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPATarget.getName());
-		retVal.add(resetIPATargetAct);
-
-		final ResetSyllabificationCommand resetIPAActualAct = new ResetSyllabificationCommand(getEditor(), this, SystemTierType.IPAActual.getName());
-		retVal.add(resetIPAActualAct);
-
-		final ResetAlignmentCommand resetAlignmentAct = new ResetAlignmentCommand(getEditor(), this);
-		retVal.add(resetAlignmentAct);
-
+		setupMenu(new MenuBuilder(retVal));
 		return retVal;
 	}
 
