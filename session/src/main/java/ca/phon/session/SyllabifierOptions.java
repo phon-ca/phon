@@ -30,54 +30,90 @@ public final class SyllabifierOptions {
      * @return syllabifier based on rules
      */
     public static Syllabifier findSyllabifier(Session session, Record record, Tier<IPATranscript> tier) {
+        return findSyllabifier(session, record, tier != null ? tier.getName() : null);
+    }
+
+    /**
+     * Return syllabifier based on the following rules:
+     * <ul>
+     *     <ul>If tier parameters has a value for key TIER_SYLLABIFIER, use syllabifier for that language if found</ul>
+     *     <ul>If record language is set, attempt to find syllabifier for that language</ul>
+     *     <ul>If session language is set, attempt to find syllabifier for that language</ul>
+     *     <ul>Finally, return default syllabifier</ul>
+     * </ul>
+     *
+     * @param session session, may be null
+     * @param record record, may be null
+     * @param tierName tier name, may be null
+     * @return syllabifier based on rules
+     */
+    public static Syllabifier findSyllabifier(Session session, Record record, String tierName) {
         final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
         Syllabifier retVal = null;
-        if(tier != null && tier.getTierParameters().containsKey(TIER_SYLLABIFIER)) {
-            retVal = library.getSyllabifierForLanguage(tier.getTierParameters().get(TIER_SYLLABIFIER));
-        } else if(record != null && record.getLanguage() != null) {
-            retVal = library.getSyllabifierForLanguage(record.getLanguage());
-        } else if(session != null && !session.getLanguages().isEmpty()) {
-            retVal = library.getSyllabifierForLanguage(session.getLanguages().get(0));
-        } else {
+        final TierDescription td = session != null ? session.getTier(tierName) : null;
+        if(td != null && td.getTierParameters().containsKey(TIER_SYLLABIFIER)) {
+            retVal = library.getSyllabifierForLanguage(td.getTierParameters().get(TIER_SYLLABIFIER));
+        }
+        if(retVal == null) {
+            if (record != null && record.getLanguage() != null) {
+                retVal = library.getSyllabifierForLanguage(record.getLanguage());
+            }
+        }
+        if(retVal == null) {
+            if(session != null && !session.getLanguages().isEmpty()) {
+                retVal = library.getSyllabifierForLanguage(session.getLanguages().get(0));
+            }
+        }
+        if(retVal == null) {
             retVal = library.defaultSyllabifier();
         }
         return retVal;
     }
 
-    /* Old method */
-//    /**
-//     * Get the correct syllabifier (or default) for given ipa transcript tier.
-//     * @param tier
-//     * @return tier syllabifier
-//     */
-//    private Syllabifier getSyllabifier(Session session, Tier<IPATranscript> tier) {
-//        Syllabifier retVal = null;
-//        // new method
-//        // TODO move this key somewhere sensible, currently unused
-//        if(tier.getTierParameters().containsKey("syllabifier")) {
-//            try {
-//                final Language lang = Language.parseLanguage(tier.getTierParameters().get("syllabifier"));
-//                if(lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
-//                    retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
-//                }
-//            } catch (IllegalArgumentException e) {
-//                LogUtil.warning(e);
-//            }
-//        }
-//        if(retVal == null) {
-//            // old method
-//            final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
-//            if (info != null) {
-//                final Language lang = info.getSyllabifierLanguageForTier(tier.getName());
-//                if (lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
-//                    retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
-//                }
-//            }
-//        }
-//        if(retVal == null) {
-//            retVal = SyllabifierLibrary.getInstance().defaultSyllabifier();
-//        }
-//        return retVal;
-//    }
+    /**
+     * Gets the custom syllabifier language for the given tier in the provided session.
+     * If the tier does not have a custom syllabifier set, this will return null.
+     *
+     * @param session session to get syllabifier for
+     * @param tierName name of tier to get syllabifier for
+     *
+     * @return syllabifier language for tier, or null if not set
+     */
+    public static String getSyllabifierForTier(Session session, String tierName) {
+        if (session == null || tierName == null) return null;
+        final TierDescription td = session.getTier(tierName);
+        if (td != null && td.getTierParameters().containsKey(TIER_SYLLABIFIER)) {
+            return td.getTierParameters().get(TIER_SYLLABIFIER);
+        }
+        return null;
+    }
+
+    /**
+     * Set syllabifier language for tier in the provided session.  This will set the TIER_SYLLABIFIER
+     * property in the tier parameters for the session.
+     *
+     * @param session session to set syllabifier for
+     * @param tierName name of tier to set syllabifier for
+     * @param syllabifier language of syllabifier to set (may be null)
+     */
+    public static void setSyllabifierForTier(Session session, String tierName, Syllabifier syllabifier) {
+        setSyllabifierForTier(session, tierName, syllabifier != null ? syllabifier.getLanguage().toString() : null);
+    }
+
+    /**
+     * Set syllabifier language for tier in the provided session.  This will set the TIER_SYLLABIFIER
+     * property in the tier parameters for the session.
+     *
+     * @param session session to set syllabifier for
+     * @param tierName name of tier to set syllabifier for
+     * @param syllabifierLanguage language of syllabifier to set (may be null)
+     */
+    public static void setSyllabifierForTier(Session session, String tierName, String syllabifierLanguage) {
+        if (session == null || tierName == null) return;
+        final TierDescription td = session.getTier(tierName);
+        if (td != null) {
+            td.getTierParameters().put(TIER_SYLLABIFIER, syllabifierLanguage);
+        }
+    }
 
 }

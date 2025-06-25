@@ -294,21 +294,12 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
     private record SyllabifierChangeData(String tierName, Language language) {}
     private void setSyllabifierForTier(PhonActionEvent<SyllabifierChangeData> event) {
-        SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
-        if (info == null) {
-            info = new SyllabifierInfo();
-            editor.getSession().putExtension(SyllabifierInfo.class, info);
-        }
-        info.setSyllabifierLanguageForTier(event.getData().tierName(), event.getData().language());
+        SyllabifierOptions.setSyllabifierForTier(editor.getSession(), event.getData().tierName(),
+                event.getData().language() != null ? event.getData().language().toString() : null);
     }
 
     private Syllabifier syllabifierForTier(Tier<IPATranscript> tier) {
-        final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-        final SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
-        Language syllabifierLanguage = info.getSyllabifierLanguageForTier(tier.getName());
-        if(syllabifierLanguage == null)
-            syllabifierLanguage = library.defaultSyllabifierLanguage();
-        return library.getSyllabifierForLanguage(syllabifierLanguage);
+        return SyllabifierOptions.findSyllabifier(editor.getSession(), null, tier);
     }
 
     private record ResetSyllabificationData(Record record, Tier<IPATranscript> ipaTier, Tier<IPATranscript> syllabifierTier) {}

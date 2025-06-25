@@ -29,42 +29,40 @@ public class SyllabificationSettingsPanel extends JPanel {
 
 	public final static String IPA_ACTUAL_SYLLABIFIER_PROP = "_ipa_actual_syllabifier_";
 
+	private final Session session;
+
 	private SyllabifierSelector ipaTargetSelector;
 	private SyllabifierSelector ipaActualSelector;
 
-	private final SyllabifierInfo syllabifierInfo;
-
-	public SyllabificationSettingsPanel(SyllabifierInfo info) {
+	public SyllabificationSettingsPanel(Session session) {
 		super();
-		this.syllabifierInfo = info;
+		this.session = session;
 		
 		init();
 	}
 
 	private void init() {
-		SyllabifierInfo info = getSyllabifierInfo();
-
-		Language ipaTargetLang = info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName());
+		String ipaTargetLang = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPATarget.getName());
 		if(ipaTargetLang == null)
-			ipaTargetLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
-		Language ipaActualLang = info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName());
+			ipaTargetLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
+		String ipaActualLang = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPAActual.getName());
 		if(ipaActualLang == null)
-			ipaActualLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
+			ipaActualLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
 
 		ipaTargetSelector = new SyllabifierSelector();
-		ipaTargetSelector.setSelectedLanguage(ipaTargetLang);
+		ipaTargetSelector.setSelectedLanguage(Language.parseLanguage(ipaTargetLang));
 		ipaTargetSelector.addListSelectionListener( (e) -> {
-			Language currentSyllabifier = info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName());
-			info.setSyllabifierLanguageForTier(SystemTierType.IPATarget.getName(), ipaTargetSelector.getSelectedSyllabifier().getLanguage());
-			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier, ipaTargetSelector.getSelectedSyllabifier().getLanguage() );
+			String currentSyllabifier = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPATarget.getName());
+			SyllabifierOptions.setSyllabifierForTier(session, SystemTierType.IPATarget.getName(), ipaTargetSelector.getSelectedSyllabifier().getLanguage().toString());
+			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier != null ? Language.parseLanguage(currentSyllabifier) : null, ipaTargetSelector.getSelectedSyllabifier().getLanguage() );
 		});
 
 		ipaActualSelector = new SyllabifierSelector();
-		ipaActualSelector.setSelectedLanguage(ipaActualLang);
+		ipaActualSelector.setSelectedLanguage(Language.parseLanguage(ipaActualLang));
 		ipaActualSelector.addListSelectionListener( (e) -> {
-			Language currentSyllabifier = info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName());
-			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), ipaActualSelector.getSelectedSyllabifier().getLanguage());
-			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier, ipaActualSelector.getSelectedSyllabifier().getLanguage() );
+			String currentSyllabifier = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPAActual.getName());
+			SyllabifierOptions.setSyllabifierForTier(session, SystemTierType.IPAActual.getName(), ipaActualSelector.getSelectedSyllabifier().getLanguage().toString());
+			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier != null ? Language.parseLanguage(currentSyllabifier) : null, ipaActualSelector.getSelectedSyllabifier().getLanguage() );
 		});
 
 		SwingUtilities.invokeLater( () -> {
@@ -81,10 +79,6 @@ public class SyllabificationSettingsPanel extends JPanel {
 		setLayout(new GridLayout(2, 1));
 		add(ipaTargetScroller);
 		add(ipaActualScroller);
-	}
-
-	public SyllabifierInfo getSyllabifierInfo() {
-		return this.syllabifierInfo;
 	}
 
 	public Language getSelectedTargetSyllabifier() {
@@ -104,3 +98,4 @@ public class SyllabificationSettingsPanel extends JPanel {
 	}
 
 }
+

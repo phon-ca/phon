@@ -218,15 +218,6 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		putExtension(UndoManager.class, undoManager);
 		putExtension(UndoableEditSupport.class, undoSupport);
 
-		// setup syllabification info
-		final SyllabifierInfo info = new SyllabifierInfo(session);
-		final Language defaultSyllabifierLanguage = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
-		if(info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()) == null)
-			info.setSyllabifierLanguageForTier(SystemTierType.IPATarget.getName(), defaultSyllabifierLanguage);
-		if(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()) == null)
-			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), defaultSyllabifierLanguage);
-		session.putExtension(SyllabifierInfo.class, info);
-
 		init();
 	}
 

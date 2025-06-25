@@ -49,19 +49,17 @@ public class SyllabificationSettingsCommand extends SyllabificationAlignmentComm
 		final DialogHeader header = new DialogHeader("Syllabifier settings", "Select syllabifier for IPA tiers.");
 		settingsDialog.add(header, BorderLayout.NORTH);
 		
-		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
-		final SyllabificationSettingsPanel settingsPanel = new SyllabificationSettingsPanel(info);
+		final SyllabificationSettingsPanel settingsPanel = new SyllabificationSettingsPanel(getSession());
 		settingsDialog.add(settingsPanel, BorderLayout.CENTER);
 		
-		final AtomicBoolean wasCanceled = new AtomicBoolean(true);
 		final JPanel btmPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		final JButton okBtn = new JButton("Ok");
 		okBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				wasCanceled.getAndSet(false);
 				settingsDialog.setVisible(false);
+				settingsDialog.dispose();
 			}
 			
 		});
@@ -72,15 +70,6 @@ public class SyllabificationSettingsCommand extends SyllabificationAlignmentComm
 		settingsDialog.pack();
 		settingsDialog.setLocationRelativeTo(getView());
 		settingsDialog.setVisible(true);
-		
-		// wait
-		
-		if(!wasCanceled.get()) {
-			info.setSyllabifierLanguageForTier(SystemTierType.IPATarget.getName(), settingsPanel.getSelectedTargetSyllabifier());
-			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), settingsPanel.getSelectedActualSyllabifier());
-			
-			info.saveInfo(getEditor().getSession());
-		}
 	}
 
 }

@@ -59,13 +59,7 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor<
 		final Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
 		final PhoneAlignment alignment = alignmentTier.getValue();
 
-		Syllabifier syllabifier = null;
-		final SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
-		if(info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null) {
-			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
-					info.getSyllabifierLanguageForTier(tier.getName()));
-		}
-
+		Syllabifier syllabifier = SyllabifierOptions.findSyllabifier(editor.getSession(), record, ipaTier.getName());
 		IPAGroupField retVal = new IPAGroupField(ipaTier, editor.getDataModel().getTranscriber(), syllabifier);
 
 		final IPAFieldTooltip tooltip = new IPAFieldTooltip();
