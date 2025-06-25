@@ -413,6 +413,13 @@ public class CSVImporter {
             return;
 
         String tierName = importColumn.getOption(CSVImportSettings.USER_TIER_NAME_KEY);
+
+        final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+        Class<?> tierType = TierData.class;
+        if (userTierType != null) {
+            tierType = userTierType.getType();
+        }
+
         var optionalTierDescription = StreamSupport
                 .stream(session.getUserTiers().spliterator(), false)
                 .filter(td -> td.getName().equals(tierName))
@@ -423,7 +430,7 @@ public class CSVImporter {
         } else {
             tierDescription = sessionFactory.createTierDescription(
                     tierName,
-                    TierData.class,
+                    tierType,
                     new HashMap<>());
             session.addUserTier(tierDescription);
         }
