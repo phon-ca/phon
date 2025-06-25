@@ -1125,7 +1125,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             return false; // no changes to syllabification tiers
         }
         if(tier == null) return false;
-        final String oldTierVal = getTranscriptDocument().getTierText(tier, getDataModel().getTranscriber().getUsername());
         // get text in document for tier
         final Element parentElem = charElem.getParentElement();
         if(parentElem == null) return false;
@@ -1144,10 +1143,26 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 LogUtil.severe(e);
             }
         }
-        if(oldTierVal == null && sb.length() == 0) {
+        final String newTierVal = sb.toString().trim();
+        LogUtil.info("newTierVal: " + newTierVal);
+        boolean currentTextIsFromValidatedBlindTier =
+                getDataModel().getTranscriber() != Transcriber.VALIDATOR
+                    && tier.isBlind()
+                    && StyleConstants.isItalic(attrs);
+        if(currentTextIsFromValidatedBlindTier) {
+            String validatedValue = getTranscriptDocument().getTierText(tier, Transcriber.VALIDATOR.getUsername());
+            if(!validatedValue.equals(newTierVal)) {
+                currentTextIsFromValidatedBlindTier = false;
+            }
+        }
+        final String oldTierVal = getTranscriptDocument().getTierText(tier,
+                currentTextIsFromValidatedBlindTier ? Transcriber.VALIDATOR.getUsername() : getDataModel().getTranscriber().getUsername());
+        LogUtil.info("currentTextIsFromValidatedBlindTier: " + currentTextIsFromValidatedBlindTier);
+        LogUtil.info("oldTierVal: " + oldTierVal);
+        if(oldTierVal == null && newTierVal.isEmpty()) {
             return false; // no changes
         }
-        return !Objects.equals(oldTierVal, sb.toString().trim());
+        return !Objects.equals(oldTierVal, newTierVal);
     }
 
     // endregion

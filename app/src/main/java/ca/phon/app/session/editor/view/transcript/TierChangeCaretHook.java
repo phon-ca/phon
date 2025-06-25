@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcript;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
@@ -32,6 +33,7 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         if(oldLocation.tier() == null) return true;
         if(oldLocation.tier().equals(newLocation.tier())) return true;
         if(editor.tierHasUncommittedChanges(oldDot)) {
+            LogUtil.info("Changing tier from " + oldLocation + " to " + newLocation);
             editor.commitChanges(oldDot);
             this.savedTierName = oldLocation.tier();
             this.gotoLocation = newLocation;
