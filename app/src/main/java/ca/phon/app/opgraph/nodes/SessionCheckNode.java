@@ -39,6 +39,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+/**
+ * Node for checking a session for errors.
+ *
+ * This node will check the session for errors and warnings
+ * and return a table of warnings/changes if any.
+ */
 @OpNodeInfo(name="Session Check", description="Check session for errors", category="Session", showInLibrary=true)
 public class SessionCheckNode extends OpNode implements NodeSettings {
 
@@ -143,7 +149,8 @@ public class SessionCheckNode extends OpNode implements NodeSettings {
 			row[c++] = ve.getElementIndex() + 1;
 			row[c++] = ve.getTierName();
 
-			var groupVal = ve.getSession().getRecord(ve.getElementIndex()).getTier(ve.getTierName()).getValue();
+			final int recordIndex = ve.getSession().getTranscript().getRecordIndex(ve.getElementIndex());
+			var groupVal = ve.getSession().getRecord(recordIndex).getTier(ve.getTierName()).getValue();
 			if(groupVal instanceof IExtendable) {
 				if(((IExtendable)groupVal).getExtension(UnvalidatedValue.class) != null) {
 					groupVal = ((IExtendable)groupVal).getExtension(UnvalidatedValue.class).getValue();
