@@ -51,10 +51,20 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
         editor.getTranscriptDocument().addInsertionHook(new MediaSegmentInsertionHook());
 
-        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged,
-                this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+//        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged,
+//                this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.TierChange,
                 this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
+            @Override
+            public void afterSetDot(int oldDot, int newDot) {
+                final TranscriptElementLocation oldLocation = editor.charPosToSessionLocation(oldDot);
+                final TranscriptElementLocation newLocation = editor.charPosToSessionLocation(newDot);
+                if(newLocation.valid() && !newLocation.equals(oldLocation)) {
+                    onTranscriptLocationChanged(oldLocation, newLocation);
+                }
+            }
+        });
     }
 
     private void onTierChange(EditorEvent<EditorEventType.TierChangeData> event) {
@@ -79,9 +89,9 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         segmentEditor.setMediaSegment(segment.getStartTime(), segment.getEndTime());
     }
 
-    private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
-        final TranscriptElementLocation loc = evt.getData().get().newLoc();
-        final TranscriptElementLocation oldLoc = evt.getData().get().oldLoc();
+    private void onTranscriptLocationChanged(TranscriptElementLocation oldLoc, TranscriptElementLocation loc) {
+//        final TranscriptElementLocation loc = evt.getData().get().newLoc();
+//        final TranscriptElementLocation oldLoc = evt.getData().get().oldLoc();
 
         if(calloutTimer != null && calloutTimer.isRunning()) {
             calloutTimer.stop();
