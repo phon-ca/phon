@@ -460,6 +460,55 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	@Override
+	public Properties getStateProperties() {
+		final Properties props = super.getStateProperties();
+		props.put(SHOW_TARGET_IPA, String.valueOf(showTargetIPA));
+		props.put(SHOW_ACTUAL_IPA, String.valueOf(showActualIPA));
+		props.put(SHOW_ALIGNMENT, String.valueOf(showAlignment));
+		props.put(COLOR_IN_ALIGNMENT, String.valueOf(colorInAlignment));
+		props.put(SHOW_DIACRITICS, String.valueOf(showDiacritics));
+		return props;
+	}
+
+	@Override
+	public void loadStateProperties(Properties props) {
+		super.loadStateProperties(props);
+		if(props.containsKey(SHOW_TARGET_IPA)) {
+			showTargetIPA = Boolean.parseBoolean(props.getProperty(SHOW_TARGET_IPA, String.valueOf(DEFAULT_SHOW_TARGET_IPA)));
+			if(showTargetIPA) {
+				editor.addAdditionalTierName(SystemTierType.TargetSyllables.getName());
+			} else {
+				editor.removeAdditionalTierName(SystemTierType.TargetSyllables.getName());
+			}
+		}
+		if(props.containsKey(SHOW_ACTUAL_IPA)) {
+			showActualIPA = Boolean.parseBoolean(props.getProperty(SHOW_ACTUAL_IPA, String.valueOf(DEFAULT_SHOW_ACTUAL_IPA)));
+			if(showActualIPA) {
+				editor.addAdditionalTierName(SystemTierType.ActualSyllables.getName());
+			} else {
+				editor.removeAdditionalTierName(SystemTierType.ActualSyllables.getName());
+			}
+		}
+		if(props.containsKey(SHOW_ALIGNMENT)) {
+			showAlignment = Boolean.parseBoolean(props.getProperty(SHOW_ALIGNMENT, String.valueOf(DEFAULT_SHOW_ALIGNMENT)));
+			if(showAlignment) {
+				editor.addAdditionalTierName(SystemTierType.PhoneAlignment.getName());
+			} else {
+				editor.removeAdditionalTierName(SystemTierType.PhoneAlignment.getName());
+			}
+		}
+		if(props.containsKey(COLOR_IN_ALIGNMENT)) {
+			colorInAlignment = Boolean.parseBoolean(props.getProperty(COLOR_IN_ALIGNMENT, String.valueOf(DEFAULT_COLOR_IN_ALIGNMENT)));
+		}
+		if(props.containsKey(SHOW_DIACRITICS)) {
+			showDiacritics = Boolean.parseBoolean(props.getProperty(SHOW_DIACRITICS, String.valueOf(DEFAULT_SHOW_DIACRITICS)));
+		}
+		if(editor.getText().length() > 0) {
+			update();
+		}
+	}
+
+	@Override
 	public String getName() {
 		return VIEW_NAME;
 	}
