@@ -21,6 +21,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.syllabificationAlignment.actions.*;
 import ca.phon.app.session.editor.view.transcript.*;
+import ca.phon.app.session.editor.view.transcript.extensions.AlignmentComponentFactory;
 import ca.phon.app.session.editor.view.transcript.extensions.AlignmentExtension;
 import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationComponentFactory;
 import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
@@ -321,7 +322,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void updateActualSyllables() {
-		LogUtil.info("Updating actual syllables for record: " + getEditor().getCurrentRecordIndex()+1);
 		final Record r = getEditor().currentRecord();
 		if(r == null) return;
 
@@ -351,7 +351,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void updateTargetSyllables() {
-		LogUtil.info("Updating target syllables for record: " + getEditor().getCurrentRecordIndex()+1);
 		final Record r = getEditor().currentRecord();
 		if(r == null) return;
 
@@ -380,6 +379,35 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		}
 	}
 
+	private void updateAlignment() {
+		final Record r = getEditor().currentRecord();
+		if(r == null) return;
+
+		final int recordIndex = getEditor().getDataModel().getSession().getRecordIndex(r);
+		if(recordIndex < 0) return;
+
+		final TranscriptDocument.StartEnd alignRange =
+				editor.getTranscriptDocument().getTierStartEnd(recordIndex, SystemTierType.PhoneAlignment.getName());
+		if(alignRange.valid()) {
+			final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
+			final SimpleAttributeSet ipaActualAttrs = new SimpleAttributeSet();
+			TranscriptStyleConstants.setRecord(ipaActualAttrs, r);
+			TranscriptStyleConstants.setTier(ipaActualAttrs, r.getIPAActualTier());
+			alignmentExtension.buildAlignmentBatch(batchBuilder, ipaActualAttrs);
+			try {
+				editor.getTranscriptEditorCaret().freeze();
+				editor.getTranscriptDocument().setBypassDocumentFilter(true);
+				editor.getTranscriptDocument().remove(alignRange.start(), alignRange.length());
+				editor.getTranscriptDocument().processBatchUpdates(alignRange.start(), batchBuilder.getBatch());
+			} catch (BadLocationException e) {
+				LogUtil.warning(e);
+			} finally {
+				editor.getTranscriptDocument().setBypassDocumentFilter(false);
+				editor.getTranscriptEditorCaret().unfreeze();
+			}
+		}
+	}
+
 	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
 		if(ee.data().valueAdjusting()) return;
 		final String tierName = ee.data().tier().getName();
@@ -388,11 +416,19 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		} else if(SystemTierType.IPAActual.getName().equals(tierName)) {
 			updateActualSyllables();
 		} else if(SystemTierType.PhoneAlignment.getName().equals(tierName)) {
-//			final Record r = getEditor().currentRecord();
-//			if(r != null) {
-//				final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
-//				r.setPhoneAlignment(phoneAlignment);
-//			}
+			if(ee.source() != null) {
+				final TranscriptDocument.StartEnd alignmentRange = editor.getTranscriptDocument().getTierContentStartEnd(
+						getEditor().getSession().getRecordIndex(getEditor().currentRecord()), SystemTierType.PhoneAlignment.getName());
+				if(alignmentRange.valid()) {
+					final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(alignmentRange.start()).getAttributes();
+					final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+					if(componentFactory instanceof AlignmentComponentFactory) {
+						if (componentFactory.getComponent() == ee.source().getParent())
+							return;
+					}
+				}
+			}
+			updateAlignment();
 		}
 	}
 
@@ -412,7 +448,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			if(syllableRange.valid()) {
 				final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(syllableRange.start()).getAttributes();
 				final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
-				if(componentFactory instanceof SyllabificationComponentFactory syllabificationComponentFactory) {
+				if(componentFactory instanceof SyllabificationComponentFactory) {
 					if (componentFactory.getComponent() == source.getParent())
 						return;
 				}
