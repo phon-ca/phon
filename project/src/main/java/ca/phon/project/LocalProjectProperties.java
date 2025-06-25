@@ -69,7 +69,7 @@ public final class LocalProjectProperties implements ProjectProperties {
     public JSONObject getProjectJson() {
         lock.readLock().lock();
         try {
-            return projectJson != null ? new JSONObject(projectJson.toString()) : new JSONObject();
+            return projectJson != null ? new ImmutableProjectJSON(projectJson) : new JSONObject();
         } finally {
             lock.readLock().unlock();
         }

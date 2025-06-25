@@ -99,6 +99,7 @@
             </xs:element>
             <xs:element ref="metadata" minOccurs="0"/>
             <xs:element ref="participants" minOccurs="0"/>
+            <xs:element ref="systemTiers" minOccurs="0"/>
             <xs:element ref="userTiers" minOccurs="0"/>
             <xs:element ref="tierOrder" minOccurs="0"/>
             <xs:element ref="blindMode" minOccurs="0"/>
@@ -349,6 +350,24 @@
         <xs:attribute name="tierName" type="nonemptyStringType"/>
         <xs:attribute name="type" type="userTierTypeType" default="default"/>
         <xs:attribute name="excludeFromAlignment" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:element name="systemTiers" type="systemTiersType"/>
+    <xs:complexType name="systemTiersType">
+        <xs:annotation>
+            <xs:documentation>System tier parameters</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="std" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="std" type="systemTierParamsType"/>
+    <xs:complexType name="systemTierParamsType">
+        <xs:sequence>
+            <xs:element ref="tierParameters" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="tierName" type="nonemptyStringType" use="required"/>
     </xs:complexType>
     
     <xs:simpleType name="userTierTypeType">

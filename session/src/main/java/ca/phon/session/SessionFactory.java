@@ -651,8 +651,12 @@ public final class SessionFactory extends ExtendableObject {
 	}
 
 	public TierDescription createTierDescription(SystemTierType systemTier, boolean blind) {
+		return createTierDescription(systemTier, blind, new HashMap<>());
+	}
+
+	public TierDescription createTierDescription(SystemTierType systemTier, boolean blind, Map<String, String> tierParameters) {
 		boolean excludeFromAlignment = SystemTierType.Notes == systemTier;
-		return createTierDescription(systemTier.getName(), systemTier.getDeclaredType(), new HashMap<>(), excludeFromAlignment, blind, new ArrayList<>(), null);
+		return createTierDescription(systemTier.getName(), systemTier.getDeclaredType(), tierParameters, excludeFromAlignment, blind, new ArrayList<>(), null);
 	}
 
 	public TierDescription createTierDescription(TierDescriptionSPI tierDescriptionImpl) {

@@ -163,6 +163,25 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			}
 		}
 
+		// copy system tier parameters
+		final XmlSystemTiersType systemTiers = xmlSessionType.getSystemTiers();
+		if(systemTiers != null) {
+			for(XmlSystemTierParamsType st:systemTiers.getStd()) {
+				final SystemTierType systemTier = SystemTierType.tierFromString(st.getTierName());
+				if(systemTier != null) {
+					final TierDescription systemTierDescription = retVal.getTier(st.getTierName());
+					if(systemTierDescription != null) {
+						for(XmlTierParameterType tp:st.getTierParameters().getParam()) {
+							systemTierDescription.getTierParameters().put(tp.getName(), tp.getContent());
+						}
+					} else {
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, st.getTierName() + " not found");
+					}
+				} else {
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unknown system tier: " + st.getTierName());
+				}
+			}
+		}
 
 		// copy tier information
 		final XmlUserTiersType userTiers = xmlSessionType.getUserTiers();

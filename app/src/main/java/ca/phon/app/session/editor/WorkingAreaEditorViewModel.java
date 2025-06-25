@@ -50,6 +50,7 @@ import ca.phon.util.Base64;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -506,7 +507,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public void cleanup() {
 		for(int i = 0; i < dockControl.getCDockableCount(); i++) {
 			final CDockable dockable = dockControl.getCDockable(i);
-			dockable.removeCDockableLocationListener(dockableLocationListener);
+//			dockable.removeCDockableLocationListener(dockableLocationListener);
 		}
 
 		dockControl.getController().kill();
@@ -549,7 +550,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				dockControl.addDockable(dockable);
 			}
 			dockable.setVisible(true);
-			savePreviousPerspective();
+
+//			PhonWorker.getInstance().invokeLater(this::savePreviousPerspective);
 
 			Window parentWin = SwingUtilities.getWindowAncestor(getEditor());
 			if(parentWin instanceof CommonModuleFrame commonModuleFrame) {
@@ -934,7 +936,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			final EditorView editorView = getView(id);
 			if(editorView != null) {
 				retVal = new EditorViewDockable(editorView.getName(), editorView, new CAction[0]);
-				retVal.addCDockableLocationListener(dockableLocationListener);
+//				retVal.addCDockableLocationListener(dockableLocationListener);
 			}
 			return retVal;
 		}
@@ -1410,21 +1412,21 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 	}
 
-	private final WindowListener windowChangeListener = new WindowAdapter() {
-		@Override
-		public void windowClosing(WindowEvent e) {
-			savePreviousPerspective();
-		}
-	};
-
-	private final CDockableLocationListener dockableLocationListener = new CDockableLocationListener() {
-
-		@Override
-		public void changed(CDockableLocationEvent event) {
-			savePreviousPerspective();
-		}
-
-	};
+//	private final WindowListener windowChangeListener = new WindowAdapter() {
+//		@Override
+//		public void windowClosing(WindowEvent e) {
+//			savePreviousPerspective();
+//		}
+//	};
+//
+//	private final CDockableLocationListener dockableLocationListener = new CDockableLocationListener() {
+//
+//		@Override
+//		public void changed(CDockableLocationEvent event) {
+//			savePreviousPerspective();
+//		}
+//
+//	};
 
 	public CommonModuleFrame createAccessoryWindow(UUID uuid) {
 		final AccessoryWindow retVal = new AccessoryWindow(uuid);

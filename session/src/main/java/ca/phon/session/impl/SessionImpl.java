@@ -65,6 +65,9 @@ public class SessionImpl implements SessionSPI {
 
 	private final List<TierAlignmentRules> tierAlignmentRules =
 			Collections.synchronizedList(new ArrayList<>());
+
+	private final Map<SystemTierType, Map<String, String>> systemTierParameters =
+			Collections.synchronizedMap(new HashMap<>());
 	
 	private final Transcript transcript;
 
@@ -76,6 +79,10 @@ public class SessionImpl implements SessionSPI {
 		metadata = new LinkedHashMap<>();
 		transcript = factory.createTranscript();
 		intervalTiers = factory.createTimeline();
+
+		for(SystemTierType systemTierType : SystemTierType.values()) {
+			systemTierParameters.put(systemTierType, new LinkedHashMap<>());
+		}
 	}
 
 	@Override
@@ -206,12 +213,24 @@ public class SessionImpl implements SessionSPI {
 	public List<TierDescription> getTiers() {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final List<TierDescription> retVal = new ArrayList<>();
-		retVal.add(factory.createTierDescription(SystemTierType.Orthography, blindTiers.contains(SystemTierType.Orthography.getName())));
-		retVal.add(factory.createTierDescription(SystemTierType.IPATarget, blindTiers.contains(SystemTierType.IPATarget.getName())));
-		retVal.add(factory.createTierDescription(SystemTierType.IPAActual, blindTiers.contains(SystemTierType.IPAActual.getName())));
-		retVal.add(factory.createTierDescription(SystemTierType.PhoneAlignment, blindTiers.contains(SystemTierType.PhoneAlignment.getName())));
-		retVal.add(factory.createTierDescription(SystemTierType.Segment, blindTiers.contains(SystemTierType.Segment.getName())));
-		retVal.add(factory.createTierDescription(SystemTierType.Notes, blindTiers.contains(SystemTierType.Notes.getName())));
+		retVal.add(factory.createTierDescription(SystemTierType.Orthography,
+				blindTiers.contains(SystemTierType.Orthography.getName()),
+				systemTierParameters.get(SystemTierType.Orthography)));
+		retVal.add(factory.createTierDescription(SystemTierType.IPATarget,
+				blindTiers.contains(SystemTierType.IPATarget.getName()),
+				systemTierParameters.get(SystemTierType.IPATarget)));
+		retVal.add(factory.createTierDescription(SystemTierType.IPAActual,
+				blindTiers.contains(SystemTierType.IPAActual.getName()),
+				systemTierParameters.get(SystemTierType.IPAActual)));
+		retVal.add(factory.createTierDescription(SystemTierType.PhoneAlignment,
+				blindTiers.contains(SystemTierType.PhoneAlignment.getName()),
+				systemTierParameters.get(SystemTierType.PhoneAlignment)));
+		retVal.add(factory.createTierDescription(SystemTierType.Segment,
+				blindTiers.contains(SystemTierType.Segment.getName()),
+				systemTierParameters.get(SystemTierType.Segment)));
+		retVal.add(factory.createTierDescription(SystemTierType.Notes,
+				blindTiers.contains(SystemTierType.Notes.getName()),
+				systemTierParameters.get(SystemTierType.Notes)));
 		for(int i = 0; i < getUserTierCount(); i++) {
 			retVal.add(getUserTier(i));
 		}

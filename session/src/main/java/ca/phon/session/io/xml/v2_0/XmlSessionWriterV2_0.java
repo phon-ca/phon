@@ -155,6 +155,29 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			retVal.setBlindMode(tt);
 		}
 
+		final XmlSystemTiersType systemTiers = factory.createXmlSystemTiersType();
+		boolean hasSystemTierProps = false;
+		for(SystemTierType systemTier: SystemTierType.values()) {
+			final TierDescription std = session.getTier(systemTier.getName());
+			if(std != null && !std.getTierParameters().isEmpty()) {
+				hasSystemTierProps = true;
+				final XmlSystemTierParamsType stp = factory.createXmlSystemTierParamsType();
+				stp.setTierName(systemTier.getName());
+				final XmlTierParametersType ttp = factory.createXmlTierParametersType();
+				for(String key:std.getTierParameters().keySet()) {
+					final XmlTierParameterType param = factory.createXmlTierParameterType();
+					param.setName(key);
+					param.setContent(std.getTierParameters().get(key));
+					ttp.getParam().add(param);
+				}
+				stp.setTierParameters(ttp);
+				systemTiers.getStd().add(stp);
+			}
+		}
+		if(hasSystemTierProps) {
+			retVal.setSystemTiers(systemTiers);
+		}
+
 		// tier info/ordering
 		final XmlUserTiersType utt = factory.createXmlUserTiersType();
 		for(int i = 0; i < session.getUserTierCount(); i++) {
