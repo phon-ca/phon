@@ -137,13 +137,29 @@ public class CSVImporter {
 
         var importColumnList = settings.getImportColumnList();
         String currentCorpus = this.selectedCorpus == null ? "imported" : this.selectedCorpus;
+
         if (sessionPathTier.isEmpty() && corpusNameTier.isEmpty()) {
+            // If no session path and no corpus name columns, use "." as corpus name
+            currentCorpus = ".";
             if (!project.hasCorpus(currentCorpus)) {
                 mutableProject.addCorpus(currentCorpus);
             }
         }
 
-        String currentSessionName = "";
+        // Default session name from CSV file name (without path and extension)
+        String defaultSessionName = "";
+        if (sessionPathTier.isEmpty() && sessionNameTier.isEmpty()) {
+            // Extract file name from full path
+            String csvFileName = new File(fileName).getName();
+            // Remove .csv extension if present
+            if (csvFileName.toLowerCase().endsWith(".csv")) {
+                defaultSessionName = csvFileName.substring(0, csvFileName.length() - 4);
+            } else {
+                defaultSessionName = csvFileName;
+            }
+        }
+
+        String currentSessionName = defaultSessionName;
         Optional<Session> currentSession = Optional.empty();
         Map<String, Session> importedSessions = new HashMap<>();
 
@@ -188,12 +204,29 @@ public class CSVImporter {
                             mutableProject.addCorpus(currentCorpus);
                         }
                     }
+                } else if (sessionPathTier.isEmpty()) {
+                    // If no session path and no corpus name column, use "." as corpus name
+                    if (!currentCorpus.equals(".")) {
+                        currentCorpus = ".";
+                        corpusChanged = true;
+                        if (!project.hasCorpus(currentCorpus)) {
+                            mutableProject.addCorpus(currentCorpus);
+                        }
+                    }
                 }
 
                 if (isImported(sessionNameTier)) {
                     String sessionNameFromRow = row[sessionNameTier.get().getCsvColumnIndex()];
                     if (!currentSessionName.equals(sessionNameFromRow)) {
                         currentSessionName = sessionNameFromRow;
+                        sessionChanged = true;
+                    }
+                } else if (sessionPathTier.isEmpty()) {
+                    // If no session path and no session name column, keep using the default file
+                    // name
+                    // (currentSessionName is already set to defaultSessionName above)
+                    // Mark as changed on first row to ensure session gets created
+                    if (csvRowIndex == 0 || (settings.isUseFirstRowAsHeader() && csvRowIndex == 1)) {
                         sessionChanged = true;
                     }
                 }
@@ -364,6 +397,8 @@ public class CSVImporter {
             csvRowIndex++;
             row = csvReader.readNext();
         }
+
+        csvReader.close();
 
         saveSession(currentSession.get());
 

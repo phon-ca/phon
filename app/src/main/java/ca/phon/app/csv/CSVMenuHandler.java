@@ -22,7 +22,6 @@ import javax.swing.JMenuBar;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 

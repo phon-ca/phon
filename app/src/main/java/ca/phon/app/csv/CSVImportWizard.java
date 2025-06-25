@@ -64,7 +64,7 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
     private List<String> selectedFiles = new ArrayList<>();
     private MultiActionButton selectFileBtn;
     private PhonUIAction<Void> selectFileAct;
-    private JList tierStepHeaderList;
+    private JList<String> tierStepHeaderList;
     private int selectedHeaderColumn = -1;
     private JPanel tierStepRightPanel;
     private JCheckBox firstRowHeaderCheckBox;
@@ -458,8 +458,13 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
                 retVal.add("Cannot import corpus name or session name if session path is being imported");
             }
         } else {
-            if (!isImported(corpusName) || !isImported(sessionName)) {
-                retVal.add("If session path is not being imported, corpus name and session name must be imported");
+            // If session path is not being imported, check if we have corpus name and
+            // session name
+            // If not, we'll use defaults: corpus name = "." and session name = CSV file
+            // name
+            if (!isImported(corpusName) && !isImported(sessionName)) {
+                // This is now allowed - we'll use default values
+                // No error to add here
             }
         }
 
@@ -646,7 +651,7 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
         super.gotoStep(stepIndex);
     }
 
-    private static final class HeaderListModel extends AbstractListModel {
+    private static final class HeaderListModel extends AbstractListModel<String> {
 
         private final List<String> list;
 
@@ -660,7 +665,7 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
         }
 
         @Override
-        public Object getElementAt(int index) {
+        public String getElementAt(int index) {
             return list.get(index);
         }
     }
@@ -793,8 +798,6 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
         }
 
         private JPanel dateSettings() {
-            GridBagConstraints c = new GridBagConstraints();
-
             JPanel settingsCard = new JPanel(new VerticalLayout());
 
             JRadioButton defaultFormatButton = new JRadioButton("Default format (ISO)", true);

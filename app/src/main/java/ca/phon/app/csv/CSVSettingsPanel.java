@@ -2,7 +2,6 @@ package ca.phon.app.csv;
 
 import ca.phon.csv.CSVQuoteType;
 import ca.phon.csv.CSVReader;
-import ca.phon.csv.CSVWriter;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXTable;
 
