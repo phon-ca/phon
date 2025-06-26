@@ -22,18 +22,15 @@ import javax.swing.JMenuBar;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 
 /**
  * Add CSV import/export menu items to the 'Tools' menu
  */
-@PhonPlugin(name="phon-csv-plugin",
-	version="1",
-	minPhonVersion="4.0.0")
+@PhonPlugin(name = "phon-csv-plugin", version = "1", minPhonVersion = "4.0.0")
 public class CSVMenuHandler
-	implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
+		implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -47,11 +44,12 @@ public class CSVMenuHandler
 
 	@Override
 	public void filterWindowMenu(Window owner, JMenuBar menuBar) {
-		if(!(owner instanceof ProjectWindow pw)) return;
+		if (!(owner instanceof ProjectWindow pw))
+			return;
 
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		builder.addSeparator("./Tools", "phon-csv-plugin");
-		
+
 		final PhonUIAction<ProjectWindow> importAct = PhonUIAction.eventConsumer(CSVMenuHandler::showImportWizard, pw);
 		importAct.putValue(PhonUIAction.NAME, "Import from CSV...");
 		importAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Import CSV files as new Sessions in the current project.");
@@ -62,12 +60,13 @@ public class CSVMenuHandler
 		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export Sessions from the current project as CSV files.");
 		builder.addItem("./Tools@phon-csv-plugin", exportAct);
 	}
-	
+
 	public static void showImportWizard(PhonActionEvent<ProjectWindow> pae) {
 		final ProjectWindow pw = pae.getData();
 		final Project project = pw.getProject();
-		if(project == null) return;
-		
+		if (project == null)
+			return;
+
 		final CSVImportWizard wizard = new CSVImportWizard(project, pw.getSelectedCorpus());
 		wizard.pack();
 		wizard.setSize(new Dimension(640, wizard.getPreferredSize().height));
@@ -78,7 +77,8 @@ public class CSVMenuHandler
 	public static void showExportWizard(PhonActionEvent<ProjectWindow> pae) {
 		final ProjectWindow pw = pae.getData();
 		final Project project = pw.getProject();
-		if(project == null) return;
+		if (project == null)
+			return;
 
 		final CSVExportWizard wizard = new CSVExportWizard(project);
 		wizard.pack();

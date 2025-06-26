@@ -2,7 +2,6 @@ package ca.phon.app.csv;
 
 import ca.phon.csv.CSVQuoteType;
 import ca.phon.csv.CSVReader;
-import ca.phon.csv.CSVWriter;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXTable;
 
@@ -28,7 +27,7 @@ public class CSVSettingsPanel extends JPanel {
     private JXTable previewTable;
     private final HashSet<Character> separators = new HashSet<>();
     private Character otherSeparator;
-    //private JCheckBox otherSeparatorCheckbox;
+    // private JCheckBox otherSeparatorCheckbox;
     private boolean trimSpaces = false;
     private String encoding;
     private CSVQuoteType quoteChar = CSVQuoteType.DOUBLE_QUOTE;
@@ -40,13 +39,13 @@ public class CSVSettingsPanel extends JPanel {
     private final boolean multipleSeparators;
     private final boolean hidePreview;
 
-    public CSVSettingsPanel(boolean multipleSeparators, boolean hidePreview)  {
+    public CSVSettingsPanel(boolean multipleSeparators, boolean hidePreview) {
         this.hidePreview = hidePreview;
         this.multipleSeparators = multipleSeparators;
         init();
     }
 
-    public CSVSettingsPanel(boolean multipleSeparators)  {
+    public CSVSettingsPanel(boolean multipleSeparators) {
         this(multipleSeparators, false);
     }
 
@@ -56,11 +55,10 @@ public class CSVSettingsPanel extends JPanel {
         CSVSettingsPanel csvSettingsPanel = new CSVSettingsPanel(true);
         try {
             csvSettingsPanel.loadPreviewTableData("src/test/resources/ca/phon/csv/test-tab.csv");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println(e);
         }
-        csvSettingsPanel.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
+        csvSettingsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         frame.add(csvSettingsPanel, BorderLayout.CENTER);
         frame.pack();
         frame.setLocationByPlatform(true);
@@ -70,9 +68,9 @@ public class CSVSettingsPanel extends JPanel {
 
     private ArrayList<String[]> generate2DArrayFromCSV(String fileName) throws IOException {
         char[] separators = this.separators.stream()
-            .map(ch -> ch.toString())
-            .collect(Collectors.joining())
-            .toCharArray();
+                .map(ch -> ch.toString())
+                .collect(Collectors.joining())
+                .toCharArray();
         InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(fileName), encoding);
         CSVReader csvReader = new CSVReader(inputStreamReader, separators, this.quoteChar, this.trimSpaces);
 
@@ -85,6 +83,8 @@ public class CSVSettingsPanel extends JPanel {
             line = csvReader.readNext();
         }
 
+        csvReader.close();
+
         return outputList;
     }
 
@@ -92,10 +92,9 @@ public class CSVSettingsPanel extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
         setLayout(new GridBagLayout());
 
-        Font boldFont = new Font("LucidaGrande", Font.BOLD,13);
+        Font boldFont = new Font("LucidaGrande", Font.BOLD, 13);
 
-
-        //region Encoding Panel
+        // region Encoding Panel
 
         JPanel encodingPanel = new JPanel();
         encodingPanel.setLayout(new GridBagLayout());
@@ -108,8 +107,7 @@ public class CSVSettingsPanel extends JPanel {
         c.gridy = 0;
         encodingPanel.add(encodingLabel, c);
 
-
-        //region Encoding Selector Panel
+        // region Encoding Selector Panel
 
         JPanel encodingSelectorPanel = new JPanel();
         encodingSelectorPanel.setLayout(new GridBagLayout());
@@ -122,17 +120,17 @@ public class CSVSettingsPanel extends JPanel {
         encodingSelectorPanel.add(charSetLabel, c);
 
         String[] encodings = Charset
-            .availableCharsets()
-            .keySet()
-            .stream()
-            .map(key -> key.toString())
-            .toArray(String[]::new);
+                .availableCharsets()
+                .keySet()
+                .stream()
+                .map(key -> key.toString())
+                .toArray(String[]::new);
 
         JComboBox<String> encodingComboBox = new JComboBox<>(encodings);
         int utf8Index = List.of(encodings).indexOf("UTF-8");
         encodingComboBox.setSelectedIndex(utf8Index);
         this.encoding = encodings[utf8Index];
-        encodingComboBox.addActionListener((e)->{
+        encodingComboBox.addActionListener((e) -> {
             this.encoding = encodingComboBox.getSelectedItem().toString();
             System.out.println(this.encoding);
             loadPreviewTableData();
@@ -155,22 +153,21 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(8,8,8,0);
+        c.insets = new Insets(8, 8, 8, 0);
         encodingPanel.add(encodingSelectorPanel, c);
 
-        //endregion
+        // endregion
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0, 0, 0, 0);
         add(encodingPanel, c);
 
-        //endregion
+        // endregion
 
-
-        //region Separator Options Panel
+        // region Separator Options Panel
 
         JPanel separatorOptionsPanel = new JPanel();
         separatorOptionsPanel.setLayout(new GridBagLayout());
@@ -181,27 +178,24 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0, 0, 0, 0);
         separatorOptionsPanel.add(separatorOptionsLabel, c);
 
-        //region Separator Checkboxes
+        // region Separator Checkboxes
 
         JPanel separatorCheckboxPanel = new JPanel(new GridBagLayout());
 
         if (this.multipleSeparators) {
             setupSeparatorCheckboxes(separatorCheckboxPanel);
-        }
-        else {
+        } else {
             setupSeparatorRadioButtons(separatorCheckboxPanel);
         }
-
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridx = 6;
         c.gridy = 0;
         separatorCheckboxPanel.add(new JPanel(), c);
-
 
         JLabel stringDelimiterLabel = new JLabel("String Delimiter: ");
         c.fill = GridBagConstraints.REMAINDER;
@@ -210,10 +204,10 @@ public class CSVSettingsPanel extends JPanel {
         c.gridy = 0;
         separatorCheckboxPanel.add(stringDelimiterLabel, c);
 
-        String[] stringDelimiterComboBoxOptions = {"\"", "'"};
-        CSVQuoteType[] stringDelimiterComboBoxValues = {CSVQuoteType.DOUBLE_QUOTE, CSVQuoteType.SINGLE_QUOTE};
+        String[] stringDelimiterComboBoxOptions = { "\"", "'" };
+        CSVQuoteType[] stringDelimiterComboBoxValues = { CSVQuoteType.DOUBLE_QUOTE, CSVQuoteType.SINGLE_QUOTE };
         JComboBox<String> stringDelimiterComboBox = new JComboBox<>(stringDelimiterComboBoxOptions);
-        stringDelimiterComboBox.addActionListener((e)->{
+        stringDelimiterComboBox.addActionListener((e) -> {
             int selectedIndex = stringDelimiterComboBox.getSelectedIndex();
             this.quoteChar = stringDelimiterComboBoxValues[selectedIndex];
             loadPreviewTableData();
@@ -222,45 +216,43 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 0;
         c.gridx = 8;
         c.gridy = 0;
-        c.insets = new Insets(4,0,0,0);
+        c.insets = new Insets(4, 0, 0, 0);
         separatorCheckboxPanel.add(stringDelimiterComboBox, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(8,0,0,0);
+        c.insets = new Insets(8, 0, 0, 0);
         separatorOptionsPanel.add(separatorCheckboxPanel, c);
 
-        //endregion
+        // endregion
 
-        //region More Separator Options
+        // region More Separator Options
 
         JPanel moreSeparatorOptionsPanel = new JPanel();
         moreSeparatorOptionsPanel.setLayout(new HorizontalLayout());
-        moreSeparatorOptionsPanel.setBorder(new EmptyBorder(0,10,0,0));
-
-
+        moreSeparatorOptionsPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 5;
         c.gridx = 0;
         c.gridy = 2;
-        c.insets = new Insets(0, 0,8,0);
+        c.insets = new Insets(0, 0, 8, 0);
         separatorOptionsPanel.add(moreSeparatorOptionsPanel, c);
 
-        //endregion
+        // endregion
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0, 0, 0, 0);
         add(separatorOptionsPanel, c);
 
-        //endregion
+        // endregion
 
-        //region Other Options Panel
+        // region Other Options Panel
 
         otherOptionsPanel = new JPanel();
         otherOptionsPanel.setLayout(new GridBagLayout());
@@ -280,21 +272,22 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(8,0,8,0);
+        c.insets = new Insets(8, 0, 8, 0);
         otherOptionsPanel.add(otherOptionsContentPanel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 2;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0, 0, 0, 0);
         add(otherOptionsPanel, c);
 
-        //endregion
+        // endregion
 
-        if (hidePreview) return;
+        if (hidePreview)
+            return;
 
-        //region Preview Panel
+        // region Preview Panel
 
         JPanel previewPanel = new JPanel();
         previewPanel.setLayout(new GridBagLayout());
@@ -305,7 +298,7 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0, 0, 0, 0);
         previewPanel.add(previewLabel, c);
 
         this.previewTable = new JXTable(new PreviewTableModel(new ArrayList<>()));
@@ -317,17 +310,17 @@ public class CSVSettingsPanel extends JPanel {
         c.weighty = 1;
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(8,8,0,0);
+        c.insets = new Insets(8, 8, 0, 0);
         previewPanel.add(previewTableScrollPane, c);
 
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
         c.gridx = 0;
         c.gridy = 3;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0, 0, 0, 0);
         add(previewPanel, c);
 
-        //endregion
+        // endregion
     }
 
     private String getFileNameFromPath(String filePath) {
@@ -336,7 +329,8 @@ public class CSVSettingsPanel extends JPanel {
     }
 
     public void loadPreviewTableData() {
-        if (fileName == null) return;
+        if (fileName == null)
+            return;
         try {
             // Get the data from the CSV with updated settings
             ArrayList<String[]> previewTableData = generate2DArrayFromCSV(fileName);
@@ -345,8 +339,7 @@ public class CSVSettingsPanel extends JPanel {
             this.previewTableModel.setFirstRowHeader(this.firstRowHeader);
             this.previewTable.setModel(this.previewTableModel);
             this.previewLabel.setText("Preview (" + getFileNameFromPath(fileName) + ")");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -402,33 +395,31 @@ public class CSVSettingsPanel extends JPanel {
 
     public CSVImportSettings getImportSettings() {
         char[] separatorsArray = this.separators.stream()
-            .map(ch -> ch.toString())
-            .collect(Collectors.joining())
-            .toCharArray();
+                .map(ch -> ch.toString())
+                .collect(Collectors.joining())
+                .toCharArray();
         return new CSVImportSettings(
-            separatorsArray,
-            this.quoteChar,
-            this.trimSpaces,
-            this.encoding
-        );
+                separatorsArray,
+                this.quoteChar,
+                this.trimSpaces,
+                this.encoding);
     }
 
     public CSVExportSettings getExportSettings() {
         char separator = this.separators.stream().toArray(Character[]::new)[0];
         return new CSVExportSettings(
-            separator,
-            this.quoteChar,
-            this.encoding,
-            this.firstRowHeader
-        );
+                separator,
+                this.quoteChar,
+                this.encoding,
+                this.firstRowHeader);
     }
 
     private void setupSeparatorCheckboxes(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
 
-        String[] checkBoxOptionNames = {"Tab", "Comma", "Semicolon", "Space"};
-        char[] checkBoxOptionValues = {'\t', ',', ';', ' '};
+        String[] checkBoxOptionNames = { "Tab", "Comma", "Semicolon", "Space" };
+        char[] checkBoxOptionValues = { '\t', ',', ';', ' ' };
 
         JCheckBox[] separatorCheckboxes = new JCheckBox[5];
         for (int i = 0; i < checkBoxOptionNames.length; i++) {
@@ -441,8 +432,7 @@ public class CSVSettingsPanel extends JPanel {
             separatorCheckboxes[i].addActionListener((e) -> {
                 if (((AbstractButton) e.getSource()).isSelected()) {
                     this.separators.add(checkBoxOptionValues[finalI]);
-                }
-                else {
+                } else {
                     this.separators.remove(checkBoxOptionValues[finalI]);
                 }
                 System.out.println(this.separators);
@@ -458,13 +448,12 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 0;
         c.gridx = checkBoxOptionNames.length;
         c.gridy = 0;
-        otherSeparatorCheckbox.addActionListener((e)->{
+        otherSeparatorCheckbox.addActionListener((e) -> {
             if (((AbstractButton) e.getSource()).isSelected()) {
                 if (this.otherSeparator != null) {
                     this.separators.add(this.otherSeparator);
                 }
-            }
-            else {
+            } else {
                 if (this.otherSeparator != null) {
                     this.separators.remove(this.otherSeparator);
                 }
@@ -499,8 +488,7 @@ public class CSVSettingsPanel extends JPanel {
                     otherSeparator = text.charAt(0);
                     separators.add(otherSeparator);
                     otherSeparatorCheckbox.setSelected(true);
-                }
-                else {
+                } else {
                     separators.remove(otherSeparator);
                     otherSeparator = null;
                     otherSeparatorCheckbox.setSelected(false);
@@ -520,8 +508,8 @@ public class CSVSettingsPanel extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
 
-        String[] checkBoxOptionNames = {"Tab", "Comma", "Semicolon", "Space"};
-        char[] checkBoxOptionValues = {'\t', ',', ';', ' '};
+        String[] checkBoxOptionNames = { "Tab", "Comma", "Semicolon", "Space" };
+        char[] checkBoxOptionValues = { '\t', ',', ';', ' ' };
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -553,7 +541,7 @@ public class CSVSettingsPanel extends JPanel {
         c.weightx = 0;
         c.gridx = checkBoxOptionNames.length;
         c.gridy = 0;
-        otherSeparatorRadioButton.addActionListener((e)->{
+        otherSeparatorRadioButton.addActionListener((e) -> {
             if (((AbstractButton) e.getSource()).isSelected()) {
                 this.separators.clear();
                 if (this.otherSeparator != null) {
@@ -590,8 +578,7 @@ public class CSVSettingsPanel extends JPanel {
                     otherSeparator = text.charAt(0);
                     separators.add(otherSeparator);
                     otherSeparatorRadioButton.setSelected(true);
-                }
-                else {
+                } else {
                     separators.remove(otherSeparator);
                     otherSeparator = null;
                     otherSeparatorRadioButton.setSelected(false);
@@ -643,9 +630,9 @@ public class CSVSettingsPanel extends JPanel {
         trimSpaces = Boolean.valueOf(props.getProperty(prefix + "trimSpaces"));
         String finalPrefix = prefix;
         Optional<CSVQuoteType> potentialQuoteChar = Arrays
-            .stream(CSVQuoteType.values())
-            .filter(quoteChar -> quoteChar.name().equals(props.getProperty(finalPrefix + "quoteChar")))
-            .findFirst();
+                .stream(CSVQuoteType.values())
+                .filter(quoteChar -> quoteChar.name().equals(props.getProperty(finalPrefix + "quoteChar")))
+                .findFirst();
         if (potentialQuoteChar.isPresent()) {
             quoteChar = potentialQuoteChar.get();
         }
@@ -688,8 +675,7 @@ public class CSVSettingsPanel extends JPanel {
         public Object getValueAt(int rowIndex, int columnIndex) {
             if (data.get(rowIndex).length <= columnIndex) {
                 return "";
-            }
-            else {
+            } else {
                 int startingRow = this.firstRowHeader ? 1 : 0;
                 return data.subList(startingRow, data.size()).get(rowIndex)[columnIndex];
             }
@@ -730,6 +716,3 @@ public class CSVSettingsPanel extends JPanel {
         }
     }
 }
-
-
-

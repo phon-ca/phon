@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.phon.app.csv;
 
 import ca.phon.csv.CSVReader;
@@ -24,8 +39,10 @@ import java.util.*;
 import java.util.stream.StreamSupport;
 
 /**
- * Class to import CSV files into a Phon project as one or more sessions.  All sessions
- * will be imported into the same corpus.  If no corpus is specified, a new corpus
+ * Class to import CSV files into a Phon project as one or more sessions. All
+ * sessions
+ * will be imported into the same corpus. If no corpus is specified, a new
+ * corpus
  * named "imported" will be created.
  */
 public class CSVImporter {
@@ -47,7 +64,7 @@ public class CSVImporter {
 
     private void saveSession(Session session) throws IOException {
         final MutableProject mutableProject = project.getExtension(MutableProject.class);
-        if(mutableProject == null) {
+        if (mutableProject == null) {
             throw new IOException("Project is not mutable");
         }
         var writeLock = mutableProject.getSessionWriteLock(session);
@@ -59,11 +76,14 @@ public class CSVImporter {
     }
 
     /**
-     * Reformat the tier data from the CSV file.  Older versions of Phon used '[ ]' to divide data into
-     * phonetic groups.  This method removes the brackets and returns the data as a single tier string.
+     * Reformat the tier data from the CSV file. Older versions of Phon used '[ ]'
+     * to divide data into
+     * phonetic groups. This method removes the brackets and returns the data as a
+     * single tier string.
      *
      * @param currentTierData the current tier data
-     * @return the reformatted tier data or the original data if it doesn't match the old format
+     * @return the reformatted tier data or the original data if it doesn't match
+     *         the old format
      */
     private String reformatTierData(String currentTierData) {
         if (currentTierData.matches("\\[.*?\\](\\s\\[.*?\\])*")) {
@@ -72,18 +92,20 @@ public class CSVImporter {
         return currentTierData;
     }
 
-    /**&
-     * Import a CSV file into the project.  The CSV file must be in the format
+    /**
+     * &
+     * Import a CSV file into the project. The CSV file must be in the format
      * specified by the {@link CSVImportSettings} object.
      *
      *
      * @param filePath csv file path
      * @param settings csv import settings
-     * @throws IOException if an error occurs while reading the file or writing the session
+     * @throws IOException if an error occurs while reading the file or writing the
+     *                     session
      */
     public void importCSV(String filePath, CSVImportSettings settings) throws IOException {
         final MutableProject mutableProject = project.getExtension(MutableProject.class);
-        if(mutableProject == null) {
+        if (mutableProject == null) {
             throw new IOException("Project is not mutable");
         }
 
@@ -91,11 +113,10 @@ public class CSVImporter {
 
         var inputStreamReader = new InputStreamReader(new FileInputStream(filePath), settings.getEncoding());
         var csvReader = new CSVReader(
-            inputStreamReader,
-            settings.getSeparators(),
-            settings.getQuoteType(),
-            settings.getTrimSpaces()
-        );
+                inputStreamReader,
+                settings.getSeparators(),
+                settings.getQuoteType(),
+                settings.getTrimSpaces());
 
         // Session Path
         var sessionPathTier = settings.getColumnByType(CSVColumnType.SESSION_PATH);
@@ -116,16 +137,31 @@ public class CSVImporter {
 
         var importColumnList = settings.getImportColumnList();
         String currentCorpus = this.selectedCorpus == null ? "imported" : this.selectedCorpus;
+
         if (sessionPathTier.isEmpty() && corpusNameTier.isEmpty()) {
+            // If no session path and no corpus name columns, use "." as corpus name
+            currentCorpus = ".";
             if (!project.hasCorpus(currentCorpus)) {
                 mutableProject.addCorpus(currentCorpus);
             }
         }
 
-        String currentSessionName = "";
+        // Default session name from CSV file name (without path and extension)
+        String defaultSessionName = "";
+        if (sessionPathTier.isEmpty() && sessionNameTier.isEmpty()) {
+            // Extract file name from full path
+            String csvFileName = new File(fileName).getName();
+            // Remove .csv extension if present
+            if (csvFileName.toLowerCase().endsWith(".csv")) {
+                defaultSessionName = csvFileName.substring(0, csvFileName.length() - 4);
+            } else {
+                defaultSessionName = csvFileName;
+            }
+        }
+
+        String currentSessionName = defaultSessionName;
         Optional<Session> currentSession = Optional.empty();
         Map<String, Session> importedSessions = new HashMap<>();
-
 
         // Start iterating
 
@@ -144,7 +180,7 @@ public class CSVImporter {
             boolean sessionChanged = false;
 
             if (isImported(sessionPathTier)) {
-                final SessionPath sp = sessionFactory.createSessionPath(row[sessionPathTier.get().csvColumnIndex]);
+                final SessionPath sp = sessionFactory.createSessionPath(row[sessionPathTier.get().getCsvColumnIndex()]);
 
                 if (!currentCorpus.equals(sp.getFolder())) {
                     currentCorpus = sp.getFolder();
@@ -158,12 +194,20 @@ public class CSVImporter {
                     currentSessionName = sp.getSessionName();
                     sessionChanged = true;
                 }
-            }
-            else {
+            } else {
                 if (isImported(corpusNameTier)) {
-                    String corpusNameFromRow = row[corpusNameTier.get().csvColumnIndex];
+                    String corpusNameFromRow = row[corpusNameTier.get().getCsvColumnIndex()];
                     if (!currentCorpus.equals(corpusNameFromRow)) {
                         currentCorpus = corpusNameFromRow;
+                        corpusChanged = true;
+                        if (!project.hasCorpus(currentCorpus)) {
+                            mutableProject.addCorpus(currentCorpus);
+                        }
+                    }
+                } else if (sessionPathTier.isEmpty()) {
+                    // If no session path and no corpus name column, use "." as corpus name
+                    if (!currentCorpus.equals(".")) {
+                        currentCorpus = ".";
                         corpusChanged = true;
                         if (!project.hasCorpus(currentCorpus)) {
                             mutableProject.addCorpus(currentCorpus);
@@ -172,9 +216,17 @@ public class CSVImporter {
                 }
 
                 if (isImported(sessionNameTier)) {
-                    String sessionNameFromRow = row[sessionNameTier.get().csvColumnIndex];
+                    String sessionNameFromRow = row[sessionNameTier.get().getCsvColumnIndex()];
                     if (!currentSessionName.equals(sessionNameFromRow)) {
                         currentSessionName = sessionNameFromRow;
+                        sessionChanged = true;
+                    }
+                } else if (sessionPathTier.isEmpty()) {
+                    // If no session path and no session name column, keep using the default file
+                    // name
+                    // (currentSessionName is already set to defaultSessionName above)
+                    // Mark as changed on first row to ensure session gets created
+                    if (csvRowIndex == 0 || (settings.isUseFirstRowAsHeader() && csvRowIndex == 1)) {
                         sessionChanged = true;
                     }
                 }
@@ -203,23 +255,22 @@ public class CSVImporter {
                     newSession.setName(currentSessionName);
                     // Set the session media location if there is one
                     if (isImported(sessionMediaTier)) {
-                        String sessionMediaString = row[sessionMediaTier.get().csvColumnIndex];
+                        String sessionMediaString = row[sessionMediaTier.get().getCsvColumnIndex()];
                         if (sessionMediaString.length() > 0) {
                             newSession.setMediaLocation(sessionMediaString);
                         }
                     }
                     // Set the session date if there is one
                     if (isImported(sessionDateTier)) {
-                        String sessionDateString = row[sessionDateTier.get().csvColumnIndex];
+                        String sessionDateString = row[sessionDateTier.get().getCsvColumnIndex()];
                         if (sessionDateString.length() > 0) {
                             newSession.setDate(getDateFromTier(
-                                sessionDateTier.get(),
-                                sessionDateString,
-                                fileName,
-                                csvRowIndex,
-                                newSession,
-                                newSession.getRecordCount()
-                            ));
+                                    sessionDateTier.get(),
+                                    sessionDateString,
+                                    fileName,
+                                    csvRowIndex,
+                                    newSession,
+                                    newSession.getRecordCount()));
                         }
                     }
                     // Add the new session to the map
@@ -244,27 +295,24 @@ public class CSVImporter {
             var participant = Participant.UNKNOWN;
             if (!participantMap.get(sessionPath).containsKey(participantKey)) {
                 participant = createParticipant(
-                    settings,
-                    row,
-                    currentSession.get(),
-                    csvRowIndex,
-                    currentSession.get().getRecordCount()
-                );
+                        settings,
+                        row,
+                        currentSession.get(),
+                        csvRowIndex,
+                        currentSession.get().getRecordCount());
                 currentSession.get().addParticipant(participant);
                 participantMap.get(sessionPath).put(participantKey, participant);
-            }
-            else {
+            } else {
                 participant = participantMap.get(sessionPath).get(participantKey);
             }
 
             // Segment
             MediaSegment segment = setupSegment(
-                settings,
-                row,
-                currentSession.get(),
-                csvRowIndex,
-                currentSession.get().getRecordCount()
-            );
+                    settings,
+                    row,
+                    currentSession.get(),
+                    csvRowIndex,
+                    currentSession.get().getRecordCount());
 
             // Record
             Record record = sessionFactory.createRecord(currentSession.get());
@@ -277,75 +325,70 @@ public class CSVImporter {
             boolean firstIPAImported = false;
 
             for (CSVColumn importColumn : importColumnList) {
-                String field = reformatTierData(row[importColumn.csvColumnIndex]);
-                switch (importColumn.columnType) {
+                String field = reformatTierData(row[importColumn.getCsvColumnIndex()]);
+                switch (importColumn.getColumnType()) {
                     case USER_TIER -> {
                         importUserTier(currentSession.get(), record, importColumn, field);
                     }
                     case ORTHOGRAPHY -> {
                         importOrthographyTier(
-                            record,
-                            field,
-                            importColumn,
-                            currentSession.get(),
-                            csvRowIndex,
-                            currentSession.get().getRecordCount()
-                        );
+                                record,
+                                field,
+                                importColumn,
+                                currentSession.get(),
+                                csvRowIndex,
+                                currentSession.get().getRecordCount());
                     }
                     case IPA_TARGET -> {
                         firstIPAImported = importIPATargetTier(
-                            record,
-                            field,
-                            firstIPAImported,
-                            importColumn,
-                            currentSession.get(),
-                            csvRowIndex,
-                            currentSession.get().getRecordCount()
-                        );
+                                record,
+                                field,
+                                firstIPAImported,
+                                importColumn,
+                                currentSession.get(),
+                                csvRowIndex,
+                                currentSession.get().getRecordCount());
                     }
                     case IPA_ACTUAL -> {
                         firstIPAImported = importIPAActualTier(
-                            record,
-                            field,
-                            firstIPAImported,
-                            importColumn,
-                            currentSession.get(),
-                            csvRowIndex,
-                            currentSession.get().getRecordCount()
-                        );
+                                record,
+                                field,
+                                firstIPAImported,
+                                importColumn,
+                                currentSession.get(),
+                                csvRowIndex,
+                                currentSession.get().getRecordCount());
                     }
                     case NOTES -> {
                         importNotesTier(
-                            record,
-                            field,
-                            importColumn,
-                            currentSession.get(),
-                            csvRowIndex,
-                            currentSession.get().getRecordCount()
-                        );
+                                record,
+                                field,
+                                importColumn,
+                                currentSession.get(),
+                                csvRowIndex,
+                                currentSession.get().getRecordCount());
                     }
-                    default -> {}
+                    default -> {
+                    }
                 }
             }
 
             if (isImported(recordLanguageTier)) {
-                String recordLanguageString = row[recordLanguageTier.get().csvColumnIndex];
+                String recordLanguageString = row[recordLanguageTier.get().getCsvColumnIndex()];
 
                 if (recordLanguageString.length() > 0) {
                     try {
                         record.setLanguage(Language.parseLanguage(recordLanguageString));
-                    }
-                    catch (IllegalArgumentException e) {
+                    } catch (IllegalArgumentException e) {
                         fireParsingError(
-                            fileName,
-                            csvRowIndex,
-                            recordLanguageTier.get().csvColumnIndex,
-                            0,
-                            recordLanguageTier.get().columnType,
-                            currentSession.get(),
-                            currentSession.get().getRecordCount(),
-                            e
-                        );
+                                fileName,
+                                csvRowIndex,
+                                recordLanguageTier.get().getCsvColumnIndex(),
+                                0,
+                                recordLanguageTier.get().getColumnType(),
+                                currentSession.get(),
+                                currentSession.get().getRecordCount(),
+                                e);
                     }
                 }
             }
@@ -354,6 +397,8 @@ public class CSVImporter {
             csvRowIndex++;
             row = csvReader.readNext();
         }
+
+        csvReader.close();
 
         saveSession(currentSession.get());
 
@@ -364,214 +409,200 @@ public class CSVImporter {
     }
 
     private void importUserTier(Session session, Record record, CSVColumn importColumn, String field) {
-        if (!importColumn.importThisColumn) return;
+        if (!importColumn.shouldImportThisColumn())
+            return;
 
-        String tierName = importColumn.options.get(CSVImportSettings.USER_TIER_NAME_KEY);
+        String tierName = importColumn.getOption(CSVImportSettings.USER_TIER_NAME_KEY);
+
+        final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+        Class<?> tierType = TierData.class;
+        if (userTierType != null) {
+            tierType = userTierType.getType();
+        }
 
         var optionalTierDescription = StreamSupport
-            .stream(session.getUserTiers().spliterator(), false)
-            .filter(td -> td.getName().equals(tierName))
-            .findFirst();
+                .stream(session.getUserTiers().spliterator(), false)
+                .filter(td -> td.getName().equals(tierName))
+                .findFirst();
         TierDescription tierDescription;
         if (optionalTierDescription.isPresent()) {
             tierDescription = optionalTierDescription.get();
-        }
-        else {
+        } else {
             tierDescription = sessionFactory.createTierDescription(
-                tierName,
-                TierData.class,
-                new HashMap<>()
-            );
+                    tierName,
+                    tierType,
+                    new HashMap<>());
             session.addUserTier(tierDescription);
         }
 
         var userTier = sessionFactory.createTier(
-            tierDescription.getName(),
-            tierDescription.getDeclaredType()
-        );
+                tierDescription.getName(),
+                tierDescription.getDeclaredType());
         userTier.setText(field);
         record.putTier(userTier);
     }
 
     private void importOrthographyTier(
-        Record record,
-        String field,
-        CSVColumn column,
-        Session session,
-        int csvRecordIndex,
-        int sessionRecordIndex
-    ) {
+            Record record,
+            String field,
+            CSVColumn column,
+            Session session,
+            int csvRecordIndex,
+            int sessionRecordIndex) {
         var orthographyTier = record.getOrthographyTier();
         orthographyTier.setText(field);
         if (orthographyTier.isUnvalidated()) {
             var e = orthographyTier.getUnvalidatedValue().getParseError();
             fireParsingError(
-                fileName,
-                csvRecordIndex,
-                column.csvColumnIndex,
-                e.getErrorOffset(),
-                column.columnType,
-                session,
-                sessionRecordIndex,
-                e
-            );
+                    fileName,
+                    csvRecordIndex,
+                    column.getCsvColumnIndex(),
+                    e.getErrorOffset(),
+                    column.getColumnType(),
+                    session,
+                    sessionRecordIndex,
+                    e);
         }
     }
 
     private boolean importIPATargetTier(
-        Record record,
-        String field,
-        boolean firstIPAImported,
-        CSVColumn column,
-        Session session,
-        int csvRecordIndex,
-        int sessionRecordIndex
-    ) {
+            Record record,
+            String field,
+            boolean firstIPAImported,
+            CSVColumn column,
+            Session session,
+            int csvRecordIndex,
+            int sessionRecordIndex) {
         var ipaTargetTier = record.getIPATargetTier();
         ipaTargetTier.setText(field);
         if (ipaTargetTier.isUnvalidated()) {
             var e = ipaTargetTier.getUnvalidatedValue().getParseError();
             fireParsingError(
-                fileName,
-                csvRecordIndex,
-                column.csvColumnIndex,
-                e.getErrorOffset(),
-                column.columnType,
-                session,
-                sessionRecordIndex,
-                e
-            );
+                    fileName,
+                    csvRecordIndex,
+                    column.getCsvColumnIndex(),
+                    e.getErrorOffset(),
+                    column.getColumnType(),
+                    session,
+                    sessionRecordIndex,
+                    e);
             return false;
         }
 
         var ipaElementStream = StreamSupport.stream(
-            ipaTargetTier.getValue().spliterator(),
-            false
-        );
+                ipaTargetTier.getValue().spliterator(),
+                false);
         ipaElementStream = ipaElementStream.filter(element -> element instanceof Phone);
         boolean syllabificationRequired = ipaElementStream.allMatch(
-            ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN
-        );
+                ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN);
         if (syllabificationRequired) {
             var syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
-                    column.getOption("syllabifierLanguage")
-            );
+                    column.getOption("syllabifierLanguage"));
             syllabifier.syllabify(ipaTargetTier.getValue().toList());
         }
 
         if (firstIPAImported) {
             // Calculate and set the phone alignment
             record.setPhoneAlignment(PhoneAlignment.fromTiers(
-                record.getIPATargetTier(),
-                record.getIPAActualTier()
-            ));
+                    record.getIPATargetTier(),
+                    record.getIPAActualTier()));
         }
 
         return true;
     }
 
     private boolean importIPAActualTier(
-        Record record,
-        String field,
-        boolean firstIPAImported,
-        CSVColumn column,
-        Session session,
-        int csvRecordIndex,
-        int sessionRecordIndex
-    ) {
+            Record record,
+            String field,
+            boolean firstIPAImported,
+            CSVColumn column,
+            Session session,
+            int csvRecordIndex,
+            int sessionRecordIndex) {
         var ipaActualTier = record.getIPAActualTier();
         ipaActualTier.setText(field);
         if (ipaActualTier.isUnvalidated()) {
             var e = ipaActualTier.getUnvalidatedValue().getParseError();
             fireParsingError(
-                fileName,
-                csvRecordIndex,
-                column.csvColumnIndex,
-                e.getErrorOffset(),
-                column.columnType,
-                session,
-                sessionRecordIndex,
-                e
-            );
+                    fileName,
+                    csvRecordIndex,
+                    column.getCsvColumnIndex(),
+                    e.getErrorOffset(),
+                    column.getColumnType(),
+                    session,
+                    sessionRecordIndex,
+                    e);
 
             return false;
         }
         var ipaElementStream = StreamSupport.stream(
                 ipaActualTier.getValue().spliterator(),
-                false
-        );
+                false);
         ipaElementStream = ipaElementStream.filter(element -> element instanceof Phone);
         boolean syllabificationRequired = ipaElementStream.allMatch(
-                ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN
-        );
+                ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN);
         if (syllabificationRequired) {
             var syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
-                    column.getOption("syllabifierLanguage")
-            );
+                    column.getOption("syllabifierLanguage"));
             syllabifier.syllabify(ipaActualTier.getValue().toList());
         }
 
         if (firstIPAImported) {
             // Calculate and set the phone alignment
             record.setPhoneAlignment(PhoneAlignment.fromTiers(
-                record.getIPATargetTier(),
-                record.getIPAActualTier()
-            ));
+                    record.getIPATargetTier(),
+                    record.getIPAActualTier()));
         }
 
         return true;
     }
 
     private void importNotesTier(
-        Record record,
-        String field,
-        CSVColumn column,
-        Session session,
-        int csvRecordIndex,
-        int sessionRecordIndex
-    ) {
+            Record record,
+            String field,
+            CSVColumn column,
+            Session session,
+            int csvRecordIndex,
+            int sessionRecordIndex) {
         var notesTier = record.getNotesTier();
         notesTier.setText(field);
         if (notesTier.isUnvalidated()) {
             var e = notesTier.getUnvalidatedValue().getParseError();
             fireParsingError(
-                fileName,
-                csvRecordIndex,
-                column.csvColumnIndex,
-                e.getErrorOffset(),
-                column.columnType,
-                session,
-                sessionRecordIndex,
-                e
-            );
+                    fileName,
+                    csvRecordIndex,
+                    column.getCsvColumnIndex(),
+                    e.getErrorOffset(),
+                    column.getColumnType(),
+                    session,
+                    sessionRecordIndex,
+                    e);
         }
     }
 
     private boolean isImported(Optional<CSVColumn> column) {
-        return column.isPresent() ? column.get().importThisColumn : false;
+        return column.isPresent() ? column.get().shouldImportThisColumn() : false;
     }
 
     private void fireParsingError(
-        String fileName,
-        int csvRecordIndex,
-        int fieldIndex,
-        int charPosInField,
-        CSVColumnType columnType,
-        Session session,
-        int recordIndexInSession,
-        Exception e
-    ) {
+            String fileName,
+            int csvRecordIndex,
+            int fieldIndex,
+            int charPosInField,
+            CSVColumnType columnType,
+            Session session,
+            int recordIndexInSession,
+            Exception e) {
         for (CSVImporterListener listener : this.listenerList) {
             listener.parsingError(
-                fileName,
-                csvRecordIndex,
-                fieldIndex,
-                charPosInField,
-                columnType,
-                session,
-                recordIndexInSession,
-                e
-            );
+                    fileName,
+                    csvRecordIndex,
+                    fieldIndex,
+                    charPosInField,
+                    columnType,
+                    session,
+                    recordIndexInSession,
+                    e);
         }
     }
 
@@ -589,47 +620,46 @@ public class CSVImporter {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (isImported(participantRoleTier)) {
-            stringBuilder.append(row[participantRoleTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantRoleTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantNameTier)) {
-            stringBuilder.append(row[participantNameTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantNameTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantSexTier)) {
-            stringBuilder.append(row[participantSexTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantSexTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantBirthdayTier)) {
-            stringBuilder.append(row[participantBirthdayTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantBirthdayTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantAgeTier)) {
-            stringBuilder.append(row[participantAgeTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantAgeTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantLanguageTier)) {
-            stringBuilder.append(row[participantLanguageTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantLanguageTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantEducationTier)) {
-            stringBuilder.append(row[participantEducationTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantEducationTier.get().getCsvColumnIndex()]);
         }
         stringBuilder.append(".");
         if (isImported(participantSESTier)) {
-            stringBuilder.append(row[participantSESTier.get().csvColumnIndex]);
+            stringBuilder.append(row[participantSESTier.get().getCsvColumnIndex()]);
         }
 
         return stringBuilder.toString();
     }
 
     private Participant createParticipant(
-        CSVImportSettings settings,
-        String[] row,
-        Session session,
-        int csvRecordIndex,
-        int sessionRecordIndex
-    ) {
+            CSVImportSettings settings,
+            String[] row,
+            Session session,
+            int csvRecordIndex,
+            int sessionRecordIndex) {
 
         var participantRoleTier = settings.getColumnByType(CSVColumnType.PARTICIPANT_ROLE);
         var participantNameTier = settings.getColumnByType(CSVColumnType.PARTICIPANT_NAME);
@@ -640,14 +670,13 @@ public class CSVImporter {
         var participantEducationTier = settings.getColumnByType(CSVColumnType.PARTICIPANT_EDUCATION);
         var participantSESTier = settings.getColumnByType(CSVColumnType.PARTICIPANT_SES);
 
-
         Participant createdParticipant = sessionFactory.createParticipant();
         boolean allFieldsEmpty = true;
 
         // Role
         var role = ParticipantRole.PARTICIPANT;
         if (isImported(participantRoleTier)) {
-            String roleString = row[participantRoleTier.get().csvColumnIndex];
+            String roleString = row[participantRoleTier.get().getCsvColumnIndex()];
             if (ParticipantRole.fromString(roleString) == ParticipantRole.UNIDENTIFIED) {
                 return Participant.UNKNOWN;
             }
@@ -665,7 +694,7 @@ public class CSVImporter {
 
         // Name
         if (isImported(participantNameTier)) {
-            String nameString = row[participantNameTier.get().csvColumnIndex];
+            String nameString = row[participantNameTier.get().getCsvColumnIndex()];
 
             if (nameString.length() > 0) {
                 createdParticipant.setName(nameString);
@@ -675,62 +704,57 @@ public class CSVImporter {
 
         // Sex
         if (isImported(participantSexTier)) {
-            String participantSexString = row[participantSexTier.get().csvColumnIndex];
+            String participantSexString = row[participantSexTier.get().getCsvColumnIndex()];
 
             if (participantSexString.length() > 0) {
                 createdParticipant.setSex(Sex.valueOf(participantSexString));
-            }
-            else {
+            } else {
                 createdParticipant.setSex(Sex.UNSPECIFIED);
             }
-        }
-        else {
+        } else {
             createdParticipant.setSex(Sex.UNSPECIFIED);
         }
 
         // Age
         if (isImported(participantAgeTier)) {
-            String participantAgeString = row[participantAgeTier.get().csvColumnIndex];
+            String participantAgeString = row[participantAgeTier.get().getCsvColumnIndex()];
 
             if (participantAgeString.length() > 0) {
                 try {
                     createdParticipant.setAge(PeriodFormatter.stringToPeriod(participantAgeString));
-                }
-                catch (ParseException e) {
+                } catch (ParseException e) {
                     fireParsingError(
-                        fileName,
-                        csvRecordIndex,
-                        participantAgeTier.get().csvColumnIndex,
-                        e.getErrorOffset(),
-                        participantAgeTier.get().columnType,
-                        session,
-                        sessionRecordIndex,
-                        e
-                    );
+                            fileName,
+                            csvRecordIndex,
+                            participantAgeTier.get().getCsvColumnIndex(),
+                            e.getErrorOffset(),
+                            participantAgeTier.get().getColumnType(),
+                            session,
+                            sessionRecordIndex,
+                            e);
                 }
             }
         }
 
         // Birthday
         if (isImported(participantBirthdayTier)) {
-            String participantBirthdayString = row[participantBirthdayTier.get().csvColumnIndex];
+            String participantBirthdayString = row[participantBirthdayTier.get().getCsvColumnIndex()];
 
             if (participantBirthdayString.length() > 0) {
 
                 createdParticipant.setBirthDate(getDateFromTier(
-                    participantBirthdayTier.get(),
-                    participantBirthdayString,
-                    fileName,
-                    csvRecordIndex,
-                    session,
-                    session.getRecordCount()
-                ));
+                        participantBirthdayTier.get(),
+                        participantBirthdayString,
+                        fileName,
+                        csvRecordIndex,
+                        session,
+                        session.getRecordCount()));
             }
         }
 
         // Language
         if (isImported(participantLanguageTier)) {
-            String participantLanguageString = row[participantLanguageTier.get().csvColumnIndex];
+            String participantLanguageString = row[participantLanguageTier.get().getCsvColumnIndex()];
 
             if (participantLanguageString.length() > 0) {
                 createdParticipant.setLanguage(participantLanguageString);
@@ -739,7 +763,7 @@ public class CSVImporter {
 
         // Education
         if (isImported(participantEducationTier)) {
-            String participantEducationString = row[participantEducationTier.get().csvColumnIndex];
+            String participantEducationString = row[participantEducationTier.get().getCsvColumnIndex()];
 
             if (participantEducationString.length() > 0) {
                 createdParticipant.setEducation(participantEducationString);
@@ -748,7 +772,7 @@ public class CSVImporter {
 
         // SES
         if (isImported(participantSESTier)) {
-            String participantSESString = row[participantSESTier.get().csvColumnIndex];
+            String participantSESString = row[participantSESTier.get().getCsvColumnIndex()];
 
             if (participantSESString.length() > 0) {
                 createdParticipant.setSES(participantSESString);
@@ -762,12 +786,11 @@ public class CSVImporter {
     }
 
     private MediaSegment setupSegment(
-        CSVImportSettings settings,
-        String[] row,
-        Session session,
-        int csvRecordIndex,
-        int sessionRecordIndex
-    ) {
+            CSVImportSettings settings,
+            String[] row,
+            Session session,
+            int csvRecordIndex,
+            int sessionRecordIndex) {
 
         var segment = sessionFactory.createMediaSegment();
 
@@ -778,144 +801,132 @@ public class CSVImporter {
 
         boolean validSegment = false;
         if (isImported(segmentTier)) {
-            var segmentString = row[segmentTier.get().csvColumnIndex];
+            var segmentString = row[segmentTier.get().getCsvColumnIndex()];
             MediaSegmentFormatter mediaSegmentFormatter = new MediaSegmentFormatter();
             try {
                 segment.setSegment(mediaSegmentFormatter.parse(segmentString));
                 validSegment = true;
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 fireParsingError(
-                    fileName,
-                    csvRecordIndex,
-                    segmentTier.get().csvColumnIndex,
-                    e.getErrorOffset(),
-                    segmentTier.get().columnType,
-                    session,
-                    sessionRecordIndex,
-                    e
-                );
+                        fileName,
+                        csvRecordIndex,
+                        segmentTier.get().getCsvColumnIndex(),
+                        e.getErrorOffset(),
+                        segmentTier.get().getColumnType(),
+                        session,
+                        sessionRecordIndex,
+                        e);
             }
-        }
-        else if (isImported(segmentStartTier)) {
-            String segmentStartString = row[segmentStartTier.get().csvColumnIndex];
+        } else if (isImported(segmentStartTier)) {
+            String segmentStartString = row[segmentStartTier.get().getCsvColumnIndex()];
             try {
                 segment.setStartValue(MediaTimeFormatter.parseTimeToMilliseconds(segmentStartString));
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 fireParsingError(
-                    fileName,
-                    csvRecordIndex,
-                    segmentStartTier.get().csvColumnIndex,
-                    e.getErrorOffset(),
-                    segmentStartTier.get().columnType,
-                    session,
-                    sessionRecordIndex,
-                    e
-                );
+                        fileName,
+                        csvRecordIndex,
+                        segmentStartTier.get().getCsvColumnIndex(),
+                        e.getErrorOffset(),
+                        segmentStartTier.get().getColumnType(),
+                        session,
+                        sessionRecordIndex,
+                        e);
             }
             if (isImported(segmentEndTier)) {
-                String segmentEndString = row[segmentEndTier.get().csvColumnIndex];
+                String segmentEndString = row[segmentEndTier.get().getCsvColumnIndex()];
                 try {
                     segment.setEndValue(MediaTimeFormatter.parseTimeToMilliseconds(segmentEndString));
                     validSegment = true;
-                }
-                catch (ParseException e) {
+                } catch (ParseException e) {
                     fireParsingError(
-                        fileName,
-                        csvRecordIndex,
-                        segmentEndTier.get().csvColumnIndex,
-                        e.getErrorOffset(),
-                        segmentEndTier.get().columnType,
-                        session,
-                        sessionRecordIndex,
-                        e
-                    );
+                            fileName,
+                            csvRecordIndex,
+                            segmentEndTier.get().getCsvColumnIndex(),
+                            e.getErrorOffset(),
+                            segmentEndTier.get().getColumnType(),
+                            session,
+                            sessionRecordIndex,
+                            e);
                 }
-            }
-            else if (isImported(segmentDurationTier)) {
-                String segmentDurationString = row[segmentDurationTier.get().csvColumnIndex];
+            } else if (isImported(segmentDurationTier)) {
+                String segmentDurationString = row[segmentDurationTier.get().getCsvColumnIndex()];
                 try {
                     segment.setEndValue(
-                            segment.getStartValue() + MediaTimeFormatter.parseTimeToMilliseconds(segmentDurationString)
-                    );
-                }
-                catch (ParseException e) {
+                            segment.getStartValue()
+                                    + MediaTimeFormatter.parseTimeToMilliseconds(segmentDurationString));
+                } catch (ParseException e) {
                     fireParsingError(
-                        fileName,
-                        csvRecordIndex,
-                        segmentDurationTier.get().csvColumnIndex,
-                        e.getErrorOffset(),
-                        segmentDurationTier.get().columnType,
-                        session,
-                        sessionRecordIndex,
-                        e
-                    );
+                            fileName,
+                            csvRecordIndex,
+                            segmentDurationTier.get().getCsvColumnIndex(),
+                            e.getErrorOffset(),
+                            segmentDurationTier.get().getColumnType(),
+                            session,
+                            sessionRecordIndex,
+                            e);
                 }
             }
+        } else {
+            segment.setStartValue(0.0f);
+            segment.setEndValue(0.0f);
+            validSegment = true;
         }
 
         return validSegment ? segment : null;
     }
 
     private LocalDate getDateFromTier(
-        CSVColumn dateTier,
-        String dateString,
-        String fileName,
-        int csvRecordIndex,
-        Session session,
-        int sessionRecordIndex
-    ) {
+            CSVColumn dateTier,
+            String dateString,
+            String fileName,
+            int csvRecordIndex,
+            Session session,
+            int sessionRecordIndex) {
         String formatString = dateTier.getOption("dateFormat");
         String localeString = dateTier.getOption("locale");
 
         if (formatString == null || formatString.equals("DEFAULT") || formatString.equals("ISO")) {
             try {
                 return LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
-            }
-            catch (DateTimeParseException e) {
+            } catch (DateTimeParseException e) {
                 fireParsingError(
-                    fileName,
-                    csvRecordIndex,
-                    dateTier.csvColumnIndex,
-                    e.getErrorIndex(),
-                    dateTier.columnType,
-                    session,
-                    sessionRecordIndex,
-                    e
-                );
+                        fileName,
+                        csvRecordIndex,
+                        dateTier.getCsvColumnIndex(),
+                        e.getErrorIndex(),
+                        dateTier.getColumnType(),
+                        session,
+                        sessionRecordIndex,
+                        e);
                 return null;
             }
-        }
-        else {
+        } else {
             var formatStyle = Arrays
-                .stream(FormatStyle.values())
-                .filter(fs -> fs.toString().equals(formatString))
-                .findFirst();
+                    .stream(FormatStyle.values())
+                    .filter(fs -> fs.toString().equals(formatString))
+                    .findFirst();
 
             var locale = Arrays
-                .stream(Locale.getAvailableLocales())
-                .filter(loc -> loc.getDisplayName().equals(localeString))
-                .findFirst();
+                    .stream(Locale.getAvailableLocales())
+                    .filter(loc -> loc.getDisplayName().equals(localeString))
+                    .findFirst();
 
             var formatter = DateTimeFormatter
-                .ofLocalizedDate(formatStyle.orElse(FormatStyle.SHORT))
-                .withLocale(locale.orElse(Locale.getDefault()));
+                    .ofLocalizedDate(formatStyle.orElse(FormatStyle.SHORT))
+                    .withLocale(locale.orElse(Locale.getDefault()));
 
             try {
                 return LocalDate.from(formatter.parse(dateString));
-            }
-            catch (DateTimeParseException e) {
+            } catch (DateTimeParseException e) {
                 fireParsingError(
-                    fileName,
-                    csvRecordIndex,
-                    dateTier.csvColumnIndex,
-                    e.getErrorIndex(),
-                    dateTier.columnType,
-                    session,
-                    sessionRecordIndex,
-                    e
-                );
+                        fileName,
+                        csvRecordIndex,
+                        dateTier.getCsvColumnIndex(),
+                        e.getErrorIndex(),
+                        dateTier.getColumnType(),
+                        session,
+                        sessionRecordIndex,
+                        e);
                 return null;
             }
         }
