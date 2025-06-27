@@ -31,6 +31,11 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<Void> EditorClosing =
 			new EditorEventType<>(EditorEventName.EDITOR_CLOSING.getEventName(), Void.class);
 
+	/**
+	 * Called when the editor layout changes
+	 */
+	public final static EditorEventType<Void> EditorLayoutChanged =
+			new EditorEventType<>(EditorEventName.EDITOR_LAYOUT_CHANGED.getEventName(), Void.class);
 
 	/**
 	 * Editor has saved the session

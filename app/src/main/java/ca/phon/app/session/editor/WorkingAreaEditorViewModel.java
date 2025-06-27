@@ -36,6 +36,7 @@ import bibliothek.util.Path;
 import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.ViewPosition;
+import ca.phon.app.session.editor.undo.ShowHideViewEdit;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
@@ -50,7 +51,6 @@ import ca.phon.util.Base64;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.*;
-import ca.phon.worker.PhonWorker;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -375,7 +375,17 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			final CloseActionFactory factory = dockControl.getController().getProperties().get( CControl.CLOSE_ACTION_FACTORY );
 			final CAction closeAct = factory.create(dockControl, dockable);
 
-			final CActionWrapper wrapper = new CActionWrapper(dockable, closeAct);
+			final CActionWrapper wrapper = new CActionWrapper(dockable, closeAct) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					final ShowHideViewEdit hideViewEdit = new ShowHideViewEdit(
+							getEditor().getSession(),
+							getEditor().getEventManager(),
+							getEditor().getViewModel(),
+							viewName, false);
+					getEditor().getUndoSupport().postEdit(hideViewEdit);
+				}
+			};
 			wrapper.putValue(CActionWrapper.NAME, "Close");
 			return wrapper;
 		}
@@ -517,6 +527,15 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockables.clear();
 
 		windows.remove(SwingUtilities.getWindowAncestor(getEditor()));
+	}
+
+	private void showViewWithEdit(String viewName) {
+		final ShowHideViewEdit showViewEdit = new ShowHideViewEdit(
+				getEditor().getSession(),
+				getEditor().getEventManager(),
+				getEditor().getViewModel(),
+				viewName, true);
+		getEditor().getUndoSupport().postEdit(showViewEdit);
 	}
 
 	@Override
@@ -1172,7 +1191,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			}
 
 			for(String view:viewsByCategory.get(category)) {
-				final PhonUIAction<String> toggleViewAct = PhonUIAction.consumer(this::showView, view);
+				final PhonUIAction<String> toggleViewAct = PhonUIAction.consumer(this::showViewWithEdit, view);
 				toggleViewAct.putValue(PhonUIAction.NAME, view);
 				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewIcon(view));
 

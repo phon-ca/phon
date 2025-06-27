@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor;
 
+import ca.phon.app.session.editor.undo.ShowHideViewEdit;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
@@ -12,6 +13,7 @@ import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.session.Session;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonActionEvent;
@@ -20,6 +22,7 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
+import javax.swing.undo.UndoableEditSupport;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,18 +34,27 @@ public class ViewIconStrip extends IconStrip {
 
     private int side = SwingConstants.LEFT;
 
+    private final Session session;
+
+    private final UndoableEditSupport undoSupport;
+
+    private final EditorEventManager editorEventManager;
+
     private final EditorViewModel viewModel;
 
     private Map<String, FlatButton> viewButtons = new HashMap<>();
 
-    public ViewIconStrip(EditorViewModel viewModel) {
-        this(SwingConstants.LEFT, viewModel);
+    public ViewIconStrip(Session session, EditorEventManager editorEventManager, UndoableEditSupport undoableEditSupport, EditorViewModel viewModel) {
+        this(SwingConstants.LEFT, session, editorEventManager, undoableEditSupport, viewModel);
     }
 
-    public ViewIconStrip(int side, EditorViewModel viewModel) {
+    public ViewIconStrip(int side, Session session, EditorEventManager editorEventManager, UndoableEditSupport undoableEditSupport, EditorViewModel viewModel) {
         super(SwingConstants.VERTICAL);
         this.viewModel = viewModel;
         this.side = side;
+        this.editorEventManager = editorEventManager;
+        this.undoSupport= undoableEditSupport;
+        this.session = session;
         initButtons();
     }
 
@@ -158,11 +170,10 @@ public class ViewIconStrip extends IconStrip {
             for (String viewName : pluginViews) {
                 final IconData iconData = getViewIcon(viewName);
                 final Action showHideAct = PhonUIAction.runnable(() -> {
-                    if (viewModel.isShowing(viewName)) {
-                        viewModel.hideView(viewName);
-                    } else {
-                        viewModel.showView(viewName);
-                    }
+                    final ShowHideViewEdit showHideEdit =
+                            new ShowHideViewEdit(session, editorEventManager, viewModel, viewName,
+                                    !viewModel.isShowing(viewName));
+                    undoSupport.postEdit(showHideEdit);
                 });
                 showHideAct.putValue(Action.SMALL_ICON,
                         IconManager.getInstance().getFontIcon(iconData.fontName(), iconData.iconName(), IconSize.SMALL, UIManager.getColor("MenuItem.foreground")));
@@ -182,11 +193,10 @@ public class ViewIconStrip extends IconStrip {
     public FlatButton createViewButton(String viewName) {
         final IconData iconData = getViewIcon(viewName);
         final Action showHideAct = PhonUIAction.runnable(() -> {
-            if(viewModel.isShowing(viewName)) {
-                viewModel.hideView(viewName);
-            } else {
-                viewModel.showView(viewName);
-            }
+            final ShowHideViewEdit showHideEdit =
+                    new ShowHideViewEdit(session, editorEventManager, viewModel, viewName,
+                            !viewModel.isShowing(viewName));
+            undoSupport.postEdit(showHideEdit);
         });
         showHideAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
         showHideAct.putValue(FlatButton.ICON_FONT_NAME_PROP, iconData.fontName());

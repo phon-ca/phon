@@ -15,8 +15,8 @@
  */
 package ca.phon.app.session.editor.view.check;
 
-import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.ShowHideViewEdit;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
@@ -39,7 +39,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class SessionCheckView extends EditorView {
 	
@@ -271,7 +270,9 @@ public class SessionCheckView extends EditorView {
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					getEditor().getViewModel().showView(VIEW_NAME);
+					final ShowHideViewEdit edit = new ShowHideViewEdit(getEditor().getDataModel().getSession(),
+							getEditor().getEventManager(), getEditor().getViewModel(), VIEW_NAME, true);
+					getEditor().getUndoSupport().postEdit(edit);
 				}
 
 			});

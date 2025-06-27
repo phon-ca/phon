@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor;
 
+import ca.phon.app.menu.edit.EditMenuModifier;
 import ca.phon.app.project.ProjectFrame;
+import ca.phon.app.session.editor.actions.FindAndReplaceAction;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
@@ -17,7 +19,7 @@ import java.io.IOException;
  * Session editor window
  *
  */
-public class SessionEditorWindow extends ProjectFrame  {
+public class SessionEditorWindow extends ProjectFrame implements EditMenuModifier  {
 
     private final SessionEditor sessionEditor;
 
@@ -45,6 +47,7 @@ public class SessionEditorWindow extends ProjectFrame  {
 
         super.setWindowName(sessionEditor.generateTitle());
         putExtension(UndoManager.class, sessionEditor.getUndoManager());
+        putExtension(EditMenuModifier.class, this);
     }
 
     private void onParticipantListChanged(EditorEvent<Participant> ee) {
@@ -105,4 +108,12 @@ public class SessionEditorWindow extends ProjectFrame  {
         return getSessionEditor().saveData();
     }
 
+    @Override
+    public void modfiyEditMenu(JMenu editMenu) {
+        final FindAndReplaceAction findAction = new FindAndReplaceAction(sessionEditor, false);
+        editMenu.add(new JMenuItem(findAction), 3);
+        final FindAndReplaceAction replaceAction = new FindAndReplaceAction(sessionEditor, true);
+        editMenu.add(new JMenuItem(replaceAction), 4);
+        editMenu.add(new JSeparator(), 5);
+    }
 }

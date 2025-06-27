@@ -27,21 +27,29 @@ public class FindAndReplaceAction extends SessionEditorAction {
 
 	private static final long serialVersionUID = -548370051934852629L;
 
-	private final static String TXT = "Find & Replace";
+//	private final static String TXT = "Find & Replace";
 	
-	private final static String DESC = "Show Record Data view with Find & Replace UI visible";
+//	private final static String DESC = "Show Record Data view with Find & Replace UI visible";
+
+//	private final static String ICON_NAME = "find_replace";
 	
-	private final static String ICON_NAME = "actions/edit-find-replace";
+//	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+
+	private final boolean showReplace;
 	
-	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
-	
-	public FindAndReplaceAction(SessionEditor editor) {
+	public FindAndReplaceAction(SessionEditor editor, boolean showReplace) {
 		super(editor);
+		this.showReplace = showReplace;
 		
-		putValue(NAME, TXT);
-		putValue(SHORT_DESCRIPTION, DESC);
-		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON_NAME, IconSize.SMALL));
-		putValue(ACCELERATOR_KEY, KS);
+		putValue(NAME, (showReplace ? "Find & Replace" : "Find"));
+		putValue(SHORT_DESCRIPTION, (showReplace ? "Show Record Data view with Find & Replace UI visible" : "Show Record Data view with Find UI visible"));
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+			(showReplace ? "find_replace" : "search"), IconSize.SMALL, Color.darkGray));
+		if(showReplace) {
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		} else {
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		}
 	}
 
 	@Override
@@ -52,8 +60,7 @@ public class FindAndReplaceAction extends SessionEditorAction {
 		}
 
 		TranscriptView transcriptView = (TranscriptView) editor.getViewModel().getView(TranscriptView.VIEW_NAME);
-		boolean isVisible = transcriptView.isFindAndReplaceVisible();
-		transcriptView.setFindAndReplaceVisible(!isVisible, false);
+		transcriptView.setFindAndReplaceVisible(true, showReplace);
 	}
 
 }

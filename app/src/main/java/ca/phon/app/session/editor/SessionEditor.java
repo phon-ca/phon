@@ -266,7 +266,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		add(dock, BorderLayout.CENTER);
 
 		// setup view icon strip
-		leftIconStrip = new ViewIconStrip(viewModel) {
+		leftIconStrip = new ViewIconStrip(getSession(), getEventManager(), getUndoSupport(), getViewModel()) {
 			@Override
 			protected void initButtons() {
 				add(saveButton, IconStripPosition.LEFT);
@@ -277,7 +277,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		leftIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 0));
 		add(leftIconStrip, BorderLayout.WEST);
 
-		rightIconStrip = new ViewIconStrip(SwingConstants.RIGHT, viewModel);
+		rightIconStrip = new ViewIconStrip(SwingConstants.RIGHT, getSession(), getEventManager(), getUndoSupport(), getViewModel());
 		rightIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 2));
 		add(rightIconStrip, BorderLayout.EAST);
 
@@ -633,11 +633,6 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		fileMenu.add(new JSeparator(), 2);
 
 		fileMenu.add(new JMenuItem(new ExportAsHTMLAction(this)), 3);
-
-		putExtension(EditMenuModifier.class, (editMenu) -> {
-			editMenu.add(new JMenuItem(new FindAndReplaceAction(this)), 3);
-			editMenu.add(new JSeparator(), 4);
-		});
 
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");

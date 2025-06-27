@@ -8,7 +8,6 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisViewColors;
 import ca.phon.app.session.editor.view.tierManagement.TierMenuBuilder;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcript.actions.*;
@@ -579,7 +578,16 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showSessionInfoViewItem = new JMenuItem();
         PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-            () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_NAME)
+            () -> {
+                final ShowHideViewEdit edit = new ShowHideViewEdit(
+                    getEditor().getSession(),
+                    getEditor().getEventManager(),
+                    getEditor().getViewModel(),
+                    ParticipantsView.VIEW_NAME,
+                    true
+                );
+                getEditor().getUndoSupport().postEdit(edit);
+            }
         );
         showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
         showSessionInfoViewItem.setAction(showSessionInfoViewAct);
@@ -622,19 +630,46 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", showMediaPlayerItem);
 
         JMenuItem showTimelineViewItem = new JMenuItem();
-        PhonUIAction<Void> showTimelineViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TimelineView.VIEW_NAME));
+        PhonUIAction<Void> showTimelineViewAct = PhonUIAction.runnable(() -> {
+            final ShowHideViewEdit edit = new ShowHideViewEdit(
+                getEditor().getSession(),
+                getEditor().getEventManager(),
+                getEditor().getViewModel(),
+                TimelineView.VIEW_NAME,
+                true
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
         showTimelineViewAct.putValue(PhonUIAction.NAME, "Show IntervalTiers view");
         showTimelineViewItem.setAction(showTimelineViewAct);
         menuBuilder.addItem(".", showTimelineViewItem);
 
         JMenuItem showMediaPlayerViewItem = new JMenuItem();
-        PhonUIAction<Void> showMediaPlayerViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(MediaPlayerEditorView.VIEW_NAME));
+        PhonUIAction<Void> showMediaPlayerViewAct = PhonUIAction.runnable(() -> {
+            final ShowHideViewEdit edit = new ShowHideViewEdit(
+                getEditor().getSession(),
+                getEditor().getEventManager(),
+                getEditor().getViewModel(),
+                MediaPlayerEditorView.VIEW_NAME,
+                true
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
         showMediaPlayerViewAct.putValue(PhonUIAction.NAME, "Show Media Player view");
         showMediaPlayerViewItem.setAction(showMediaPlayerViewAct);
         menuBuilder.addItem(".", showMediaPlayerViewItem);
 
         JMenuItem showSpeechAnalysisViewItem = new JMenuItem();
-        PhonUIAction<Void> showSpeechAnalysisViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(SpeechAnalysisEditorView.VIEW_NAME));
+        PhonUIAction<Void> showSpeechAnalysisViewAct = PhonUIAction.runnable(() -> {
+            final ShowHideViewEdit edit = new ShowHideViewEdit(
+                getEditor().getSession(),
+                getEditor().getEventManager(),
+                getEditor().getViewModel(),
+                SpeechAnalysisEditorView.VIEW_NAME,
+                true
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
         showSpeechAnalysisViewAct.putValue(PhonUIAction.NAME, "Show Speech Analysis view");
         showSpeechAnalysisViewItem.setAction(showSpeechAnalysisViewAct);
         menuBuilder.addItem(".", showSpeechAnalysisViewItem);
