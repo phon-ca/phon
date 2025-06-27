@@ -271,7 +271,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         // reset syllabification for ipa tier
         final PhonUIAction<ResetSyllabificationData> resetSyllabificationAct = PhonUIAction.eventConsumer(this::resetSyllabification,
                 new ResetSyllabificationData(TranscriptStyleConstants.getRecord(attrs), ipaTier, syllabifierTier));
-        final Syllabifier tierSyllabifier = syllabifierForTier(ipaTier);
+        final Syllabifier tierSyllabifier = SyllabifierOptions.findSyllabifier(editor.getSession(), record, ipaTierName);
         resetSyllabificationAct.putValue(PhonUIAction.NAME, "Reset syllabification (" + tierSyllabifier.getName() + ")");
         builder.addItem(".", resetSyllabificationAct);
 
