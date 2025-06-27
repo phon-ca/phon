@@ -42,12 +42,10 @@ public class SyllabificationSettingsPanel extends JPanel {
 	}
 
 	private void init() {
-		String ipaTargetLang = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPATarget.getName());
-		if(ipaTargetLang == null)
-			ipaTargetLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
-		String ipaActualLang = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPAActual.getName());
-		if(ipaActualLang == null)
-			ipaActualLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
+		final Syllabifier ipaTargetSyllabifier = SyllabifierOptions.findSyllabifier(session, null, SystemTierType.IPATarget.getName());
+		final String ipaTargetLang = ipaTargetSyllabifier != null ? ipaTargetSyllabifier.getLanguage().toString() : SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
+		final Syllabifier ipaActualSyllabifier = SyllabifierOptions.findSyllabifier(session, null, SystemTierType.IPAActual.getName());
+		final String ipaActualLang = ipaActualSyllabifier != null ? ipaActualSyllabifier.getLanguage().toString() : SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
 
 		ipaTargetSelector = new SyllabifierSelector();
 		ipaTargetSelector.setSelectedLanguage(Language.parseLanguage(ipaTargetLang));
