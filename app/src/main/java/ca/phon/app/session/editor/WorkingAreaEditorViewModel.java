@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import bibliothek.extension.gui.dock.theme.FlatTheme;
 import bibliothek.gui.DockStation;
 import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.action.*;
@@ -83,7 +84,7 @@ import java.util.function.Consumer;
 public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	/* Since there is not one but many main-Frames, it is hard to specify which one is the root-window. The
-     * FocusedWindowProvider always assumes that the window that is or was focused is the root-window. */
+	 * FocusedWindowProvider always assumes that the window that is or was focused is the root-window. */
 	private FocusedWindowProvider windows = new FocusedWindowProvider();
 
 	/**
@@ -157,8 +158,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	// region Dockable control setup
 	private CControl getDockControl() {
-		if(dockControl == null) {
-			dockControl = new CControl( windows );
+		if (dockControl == null) {
+			dockControl = new CControl(windows);
 			//windows.add(SwingUtilities.getWindowAncestor(getEditor()));
 			setupDockControl();
 		}
@@ -184,9 +185,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void opened(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
-				if(viewName.trim().length() > 0) {
+				if (viewName.trim().length() > 0) {
 					EditorView view = getView(viewName);
-					if(view != null) {
+					if (view != null) {
 						view.onOpen();
 					}
 				}
@@ -195,9 +196,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void closed(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
-				if(viewName.trim().length() > 0) {
+				if (viewName.trim().length() > 0) {
 					EditorView view = getView(viewName);
-					if(view != null) {
+					if (view != null) {
 						view.onClose();
 					}
 				}
@@ -220,7 +221,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void focusGained(CDockable arg0) {
 				EditorView focusedView = getFocusedView();
-				if(focusedView != null) {
+				if (focusedView != null) {
 					focusedView.onFocused();
 				}
 			}
@@ -228,11 +229,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		});
 
 		// fix accelerators on non-mac systems
-		if(!OSInfo.isMacOs()) {
+		if (!OSInfo.isMacOs()) {
 			// fix accelerators for non-mac systems
-			dockControl.putProperty( CControl.KEY_MAXIMIZE_CHANGE, KeyStroke.getKeyStroke( KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK ) );
-			dockControl.putProperty( CControl.KEY_GOTO_EXTERNALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK ) );
-			dockControl.putProperty( CControl.KEY_GOTO_NORMALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK ) );
+			dockControl.putProperty(CControl.KEY_MAXIMIZE_CHANGE, KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+			dockControl.putProperty(CControl.KEY_GOTO_EXTERNALIZED, KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+			dockControl.putProperty(CControl.KEY_GOTO_NORMALIZED, KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		}
 
 		// setup factory
@@ -254,7 +255,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	private List<IPluginExtensionPoint<EditorView>> getExtensionPoints() {
-		if(extPts == null) {
+		if (extPts == null) {
 			extPts = PluginManager.getInstance().getExtensionPoints(EditorView.class);
 		}
 		return extPts;
@@ -269,19 +270,19 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockPositions = new LinkedHashMap<>();
 
 		// first add all ViewPosition placeholders
-		for(ViewPosition pos:ViewPosition.values()) {
+		for (ViewPosition pos : ViewPosition.values()) {
 			final SingleCDockablePerspective dockable =
 					new SingleCDockablePerspective(pos.getName());
 			dockables.put(pos.getName(), dockable);
 			dockPositions.put(pos.getName(), pos);
 		}
 
-		for(IPluginExtensionPoint<EditorView> extPt:getExtensionPoints()) {
+		for (IPluginExtensionPoint<EditorView> extPt : getExtensionPoints()) {
 			final EditorViewInfo viewInfo = extPt.getClass().getAnnotation(EditorViewInfo.class);
-			if(viewInfo == null) continue; // should never happen
+			if (viewInfo == null) continue; // should never happen
 			final String dockableName = viewInfo.name();
 			List<String> categoryDockables = viewsByCategory.get(viewInfo.category());
-			if(categoryDockables == null) {
+			if (categoryDockables == null) {
 				categoryDockables = new ArrayList<String>();
 				viewsByCategory.put(viewInfo.category(), categoryDockables);
 			}
@@ -297,8 +298,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	private CDockable getViewDockable(String viewName) {
 		CDockable retVal = null;
 		final CControlRegister register = dockControl.getRegister();
-		for(CDockable currentDockable:register.getDockables()) {
-			if(currentDockable.intern().getTitleText().equals(viewName)) {
+		for (CDockable currentDockable : register.getDockables()) {
+			if (currentDockable.intern().getTitleText().equals(viewName)) {
 				retVal = currentDockable;
 				break;
 			}
@@ -320,9 +321,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	@Override
 	public EditorView getFocusedView() {
 		CDockable focusedDockable = getDockControl().getFocusedCDockable();
-		if(focusedDockable != null) {
+		if (focusedDockable != null) {
 			String viewName = focusedDockable.intern().getTitleText();
-			if(viewName.trim().length() > 0) {
+			if (viewName.trim().length() > 0) {
 				return getView(viewName);
 			}
 		}
@@ -333,11 +334,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public EditorView getView(String viewName) {
 
 		EditorView retVal = registeredViews.get(viewName);
-		if(retVal == null) {
+		if (retVal == null) {
 			// attempt to load editor view
-			for(IPluginExtensionPoint<EditorView> extPt:extPts) {
+			for (IPluginExtensionPoint<EditorView> extPt : extPts) {
 				final EditorViewInfo pluginAnnotation = extPt.getClass().getAnnotation(EditorViewInfo.class);
-				if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
+				if (pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
 					final IPluginExtensionFactory<EditorView> viewFactory = extPt.getFactory();
 					try {
 						retVal = viewFactory.createObject(getEditor());
@@ -345,11 +346,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 						// load state properties if available
 						final Properties viewProps = viewStateProperties.get(viewName);
-						if(viewProps != null) {
+						if (viewProps != null) {
 							retVal.loadStateProperties(viewProps);
 						}
 					} catch (Exception e) {
-						LogUtil.severe( e.getLocalizedMessage(),
+						LogUtil.severe(e.getLocalizedMessage(),
 								e);
 					}
 					break;
@@ -362,7 +363,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	@Override
 	public JComponent getDynamicView(String viewName) {
 		JComponent retVal = null;
-		if(dynamicViews.containsKey(viewName)) {
+		if (dynamicViews.containsKey(viewName)) {
 			retVal = dynamicViews.get(viewName);
 		}
 		return retVal;
@@ -370,36 +371,21 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public Action getCloseAction(String viewName) {
-		final CDockable dockable = getViewDockable(viewName);
-		if(dockable != null) {
-			final CloseActionFactory factory = dockControl.getController().getProperties().get( CControl.CLOSE_ACTION_FACTORY );
-			final CAction closeAct = factory.create(dockControl, dockable);
-
-			final CActionWrapper wrapper = new CActionWrapper(dockable, closeAct) {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					final ShowHideViewEdit hideViewEdit = new ShowHideViewEdit(
-							getEditor().getSession(),
-							getEditor().getEventManager(),
-							getEditor().getViewModel(),
-							viewName, false);
-					getEditor().getUndoSupport().postEdit(hideViewEdit);
-				}
-			};
-			wrapper.putValue(CActionWrapper.NAME, "Close");
-			return wrapper;
-		}
-		return null;
+		final PhonUIAction closeAct = PhonUIAction.consumer(this::hideViewWithEdit, viewName);
+		closeAct.putValue(Action.NAME, "Close");
+		closeAct.putValue(Action.SHORT_DESCRIPTION, "Close view '" + viewName + "'");
+		closeAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.SMALL, Color.darkGray));
+		return closeAct;
 	}
 
 	@Override
 	public ImageIcon getViewIcon(String viewName) {
-		for(IPluginExtensionPoint<EditorView> extPt:extPts) {
+		for (IPluginExtensionPoint<EditorView> extPt : extPts) {
 			final EditorViewInfo pluginAnnotation = extPt.getClass().getAnnotation(EditorViewInfo.class);
-			if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
+			if (pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
 				final String iconName = pluginAnnotation.icon();
 				final String[] iconData = iconName.split(":");
-				if(iconData.length == 1) {
+				if (iconData.length == 1) {
 					return IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
 				} else {
 					// setup colour as defined by system theme (dark/light)
@@ -417,7 +403,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public Map<EditorViewCategory, List<String>> getViewsByCategory() {
-		if(this.dockables == null) {
+		if (this.dockables == null) {
 			getDockables();
 		}
 		return this.viewsByCategory;
@@ -427,8 +413,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public boolean isShowing(String viewName) {
 		boolean retVal = false;
 		final CControlRegister register = dockControl.getRegister();
-		for(CDockable currentDockable:register.getDockables()) {
-			if(currentDockable.intern().getTitleText().equals(viewName)) {
+		for (CDockable currentDockable : register.getDockables()) {
+			if (currentDockable.intern().getTitleText().equals(viewName)) {
 				retVal = currentDockable.isVisible();
 			}
 		}
@@ -439,13 +425,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public boolean isShowingInStack(String viewName) {
 		boolean retVal = false;
 		final CControlRegister register = dockControl.getRegister();
-		for(CDockable currentDockable:register.getDockables()) {
-			if(currentDockable.intern().getTitleText().equals(viewName)) {
+		for (CDockable currentDockable : register.getDockables()) {
+			if (currentDockable.intern().getTitleText().equals(viewName)) {
 				retVal = currentDockable.isVisible();
 
 				DockStation station = currentDockable.intern().getDockParent();
-				if(station instanceof StackDockStation) {
-					retVal = ((StackDockStation)station).isChildShowing(currentDockable.intern());
+				if (station instanceof StackDockStation) {
+					retVal = ((StackDockStation) station).isChildShowing(currentDockable.intern());
 				}
 			}
 		}
@@ -471,43 +457,43 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	public void fireViewShown(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewShown(viewName);
 		}
 	}
 
 	public void fireViewHidden(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewHidden(viewName);
 		}
 	}
 
 	public void fireViewMinimized(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewMinimized(viewName);
 		}
 	}
 
 	public void fireViewMaximized(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewMaximized(viewName);
 		}
 	}
 
 	public void fireViewNormalized(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewNormalized(viewName);
 		}
 	}
 
 	public void fireViewExternalized(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewExternalized(viewName);
 		}
 	}
 
 	public void fireViewFocused(String viewName) {
-		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+		for (EditorViewModelListener listener : getEditorViewModelListeners()) {
 			listener.viewFocused(viewName);
 		}
 	}
@@ -515,7 +501,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void cleanup() {
-		for(int i = 0; i < dockControl.getCDockableCount(); i++) {
+		for (int i = 0; i < dockControl.getCDockableCount(); i++) {
 			final CDockable dockable = dockControl.getCDockable(i);
 //			dockable.removeCDockableLocationListener(dockableLocationListener);
 		}
@@ -538,31 +524,40 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		getEditor().getUndoSupport().postEdit(showViewEdit);
 	}
 
+	private void hideViewWithEdit(String viewName) {
+		final ShowHideViewEdit hideViewEdit = new ShowHideViewEdit(
+				getEditor().getSession(),
+				getEditor().getEventManager(),
+				getEditor().getViewModel(),
+				viewName, false);
+		getEditor().getUndoSupport().postEdit(hideViewEdit);
+	}
+
 	@Override
 	public void showView(String viewName) {
-		if(isShowing(viewName)) {
+		if (isShowing(viewName)) {
 			CDockable dockable = getViewDockable(viewName);
-			if(dockable != null) {
+			if (dockable != null) {
 				dockControl.getController().setAtLeastFocusedDockable(dockable.intern(), null);
 			}
 			return;
 		}
 
 		EditorViewDockable dockable = (EditorViewDockable) dockControl.getSingleDockable(viewName);
-		if(dockable == null) {
+		if (dockable == null) {
 			final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
 			dockable = (EditorViewDockable) factory.createBackup(viewName);
 
 			// load cached state properties if available
 			final Properties viewProps = viewStateProperties.get(viewName);
-			if(viewProps != null) {
+			if (viewProps != null) {
 				dockable.getView().loadStateProperties(viewProps);
 			}
 		}
 
-		if(dockable != null) {
+		if (dockable != null) {
 			ViewPosition dockPosition = dockPositions.get(viewName);
-			if(dockPosition == ViewPosition.WORK) {
+			if (dockPosition == ViewPosition.WORK) {
 				workingArea.show(dockable);
 			} else {
 				dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", dockPosition.getName())));
@@ -573,7 +568,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 //			PhonWorker.getInstance().invokeLater(this::savePreviousPerspective);
 
 			Window parentWin = SwingUtilities.getWindowAncestor(getEditor());
-			if(parentWin instanceof CommonModuleFrame commonModuleFrame) {
+			if (parentWin instanceof CommonModuleFrame commonModuleFrame) {
 				commonModuleFrame.setJMenuBar(MenuManager.createWindowMenuBar(commonModuleFrame));
 				for (AccessoryWindow accWin : accessoryWindows) {
 					accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
@@ -584,22 +579,22 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void hideView(String viewName) {
-		if(!isShowing(viewName)) return;
-		if(!dockControl.getSingleDockable(viewName).isCloseable()) return;
+		if (!isShowing(viewName)) return;
+//		if (!dockControl.getSingleDockable(viewName).isCloseable()) return;
 
 		dockControl.removeDockable(dockControl.getSingleDockable(viewName));
 	}
 
 	@Override
 	public void showDynamicFloatingDockable(String title, JComponent comp,
-			int x, int y, int w, int h) {
+											int x, int y, int w, int h) {
 		throw new UnsupportedOperationException("Dynamic floating dockables not supported by this view model");
 	}
 
 	@Override
 	public void showDynamicDockable(String title, JComponent comp, ViewPosition position) {
 		final WorkingAreaEditorViewModel.DynamicViewFactory factory = new WorkingAreaEditorViewModel.DynamicViewFactory(comp);
-		final DefaultSingleCDockable dockable =  (DefaultSingleCDockable) factory.createBackup(title);
+		final DefaultSingleCDockable dockable = (DefaultSingleCDockable) factory.createBackup(title);
 		dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", position.getName())));
 		dockControl.addDockable(dockable);
 		dockable.setVisible(true);
@@ -608,14 +603,14 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	@Override
 	public void setupWindows(RecordEditorPerspective editorPerspective) {
 		final AccessoryWindow[] windows = accessoryWindows.toArray(new AccessoryWindow[0]);
-		for(AccessoryWindow window:windows) {
+		for (AccessoryWindow window : windows) {
 			window.setVisible(false);
 			accessoryWindows.remove(window);
 			dockControl.removeStationContainer(window.getArea());
 			window.dispose();
 		}
 
-		if(editorPerspective != null) {
+		if (editorPerspective != null) {
 			try (InputStream is = editorPerspective.getInputStream()) {
 				if (is != null) {
 					final XElement xele = XIO.readUTF(is);
@@ -689,7 +684,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 							}
 							viewStateProperties.put(viewName, viewProps);
 							// if view is already registered, load state properties
-							if(view != null)
+							if (view != null)
 								view.loadStateProperties(viewProps);
 						}
 					}
@@ -701,7 +696,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			// default window layout
 			final CommonModuleFrame cmf = getFrameForEditor();
 			cmf.setSize(1024, 768);
-			if(cmf != null) {
+			if (cmf != null) {
 				cmf.cascadeWindow(CommonModuleFrame.getCurrentFrame());
 			}
 		}
@@ -715,12 +710,12 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		CGridPerspective center = perspective.getContentArea().getCenter();
 
 		CWorkingPerspective workingPerspective = (CWorkingPerspective) perspective.getStation("work");
-		center.gridAdd( ViewPosition.WORK.getX(), ViewPosition.WORK.getY(), ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), workingPerspective );
+		center.gridAdd(ViewPosition.WORK.getX(), ViewPosition.WORK.getY(), ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), workingPerspective);
 
-		for(String viewName:dockables.keySet()) {
+		for (String viewName : dockables.keySet()) {
 			final ViewPosition dockPosition = dockPositions.get(viewName);
 			if (dockPosition == ViewPosition.WORK) {
-				if(TranscriptView.VIEW_NAME.equals(viewName)) {
+				if (TranscriptView.VIEW_NAME.equals(viewName)) {
 					workingPerspective.gridAdd(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), dockables.get(viewName));
 				} else {
 					workingPerspective.gridPlaceholder(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), new Path("dock", "single", dockPosition.getName()));
@@ -738,7 +733,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	@Override
 	public void applyPerspective(RecordEditorPerspective editorPerspective) {
 		CPerspective perspective = editorPerspective.getPerspective(dockControl.getPerspectives());
-		if(perspective != null) {
+		if (perspective != null) {
 			dockControl.getPerspectives().setPerspective(editorPerspective.getName(), perspective, true);
 			perspective.storeLocations();
 			dockControl.load(editorPerspective.getName(), true);
@@ -755,9 +750,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void savePerspective(RecordEditorPerspective editorPerspective) {
-		if(dockControl == null) return;
+		if (dockControl == null) return;
 		final CPerspective perspective = dockControl.getPerspectives().getPerspective(true);
-		if(perspective != null) {
+		if (perspective != null) {
 			try {
 				final XElement root = new XElement("root");
 
@@ -765,11 +760,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				final XElement rootBoundsEle = root.addElement("bounds");
 
 				final CommonModuleFrame cmf = getFrameForEditor();
-				if(cmf != null)
+				if (cmf != null)
 					writeBoundsInfo(rootBoundsEle, cmf);
 
 				final XElement accessoryWindowsEle = root.addElement("windows");
-				for(AccessoryWindow window:accessoryWindows) {
+				for (AccessoryWindow window : accessoryWindows) {
 					final XElement winEle = accessoryWindowsEle.addElement("window");
 					final XAttribute uuid = new XAttribute("uid");
 					uuid.setString(window.uuid.toString());
@@ -780,20 +775,20 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 				// view states
 				final XElement viewsEle = root.addElement("views");
-                // flatten list of view names from the viewsByCategory map
-                final List<String> viewNames = new ArrayList<>();
-                for (List<String> viewList : viewsByCategory.values()) {
-                    viewNames.addAll(viewList);
-                }
-				for(String viewName:viewNames) {
+				// flatten list of view names from the viewsByCategory map
+				final List<String> viewNames = new ArrayList<>();
+				for (List<String> viewList : viewsByCategory.values()) {
+					viewNames.addAll(viewList);
+				}
+				for (String viewName : viewNames) {
 					final EditorView view = registeredViews.get(viewName);
 					final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
-					if(viewProps != null && !viewProps.isEmpty()) {
-                        final XElement viewEle = viewsEle.addElement("view");
-                        final XAttribute nameAttr = new XAttribute("name");
-                        nameAttr.setString(viewName);
-                        viewEle.addAttribute(nameAttr);
-						for(String propName:viewProps.stringPropertyNames()) {
+					if (viewProps != null && !viewProps.isEmpty()) {
+						final XElement viewEle = viewsEle.addElement("view");
+						final XAttribute nameAttr = new XAttribute("name");
+						nameAttr.setString(viewName);
+						viewEle.addAttribute(nameAttr);
+						for (String propName : viewProps.stringPropertyNames()) {
 							final String propValue = viewProps.getProperty(propName);
 							final XElement propEle = viewEle.addElement("property");
 							final XAttribute propNameAttr = new XAttribute("name");
@@ -833,7 +828,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		props.setRunAsync(false);
 
 		final int retVal = NativeDialogs.showMessageDialog(props);
-		if(retVal == 0) {
+		if (retVal == 0) {
 			RecordEditorPerspective.deletePerspective(perspective);
 			removePrespective(perspective);
 		}
@@ -846,7 +841,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	private CommonModuleFrame getFrameForEditor() {
 		final Window window = SwingUtilities.getWindowAncestor(getEditor());
-		if(window instanceof  CommonModuleFrame commonModuleFrame)
+		if (window instanceof CommonModuleFrame commonModuleFrame)
 			return commonModuleFrame;
 		else
 			return null;
@@ -876,17 +871,16 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	/**
 	 * Save pervious perspective for the current session.
-	 *
 	 */
 	public void savePreviousPerspective() {
 		// XXX Only save previous perspective when running as
 		// a 'Session Editor' window
-		if(!getEditor().getTitle().startsWith("Session Editor")) return;
-		if(!perspectiveFinishedLoading) return;
+		if (!getEditor().getTitle().startsWith("Session Editor")) return;
+		if (!perspectiveFinishedLoading) return;
 
 		final File prevPerspetiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER,
 				RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME + ".xml");
-		if(!prevPerspetiveFile.getParentFile().exists()) {
+		if (!prevPerspetiveFile.getParentFile().exists()) {
 			prevPerspetiveFile.getParentFile().mkdirs();
 		}
 		try {
@@ -895,37 +889,37 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 							prevPerspetiveFile.toURI().toURL());
 			savePerspective(prevPerspective);
 
-            // save perspective to project properties
-            final ProjectProperties projectProperties = getEditor().getProject().getExtension(ProjectProperties.class);
-            if(projectProperties != null) {
-                // get xml string from perspective url
-                try(BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(prevPerspetiveFile.toURI().toURL().openStream(), "UTF-8"))) {
-                    final StringBuilder sb = new StringBuilder();
-                    String line;
-                    while((line = reader.readLine()) != null) {
-                        sb.append(line).append("\n");
-                    }
+			// save perspective to project properties
+			final ProjectProperties projectProperties = getEditor().getProject().getExtension(ProjectProperties.class);
+			if (projectProperties != null) {
+				// get xml string from perspective url
+				try (BufferedReader reader = new BufferedReader(
+						new InputStreamReader(prevPerspetiveFile.toURI().toURL().openStream(), "UTF-8"))) {
+					final StringBuilder sb = new StringBuilder();
+					String line;
+					while ((line = reader.readLine()) != null) {
+						sb.append(line).append("\n");
+					}
 
 					// update project properties with last used perspective for this session
-                    projectProperties.modifyProjectJson((json) -> {
-                        JSONObject retVal = new JSONObject(json.toString());
-                        JSONObject perspectivesJson = retVal.has("perspectives") ?
-                                retVal.getJSONObject("perspectives") : null;
-                        if(perspectivesJson == null) {
-                            perspectivesJson = new JSONObject();
-                            retVal.put("perspectives", perspectivesJson);
-                        }
-                        // set the last used perspective for the session
-                        final SessionPath sessionPath = getEditor().getSession().getSessionPath();
-                        final String xmlBase64 = Base64.encodeBytes(sb.toString().getBytes(StandardCharsets.UTF_8));
-                        perspectivesJson.put(sessionPath.toString(), xmlBase64);
-                        return retVal;
-                    });
-                } catch (IOException e) {
-                    LogUtil.warning(e);
-                }
-            }
+					projectProperties.modifyProjectJson((json) -> {
+						JSONObject retVal = new JSONObject(json.toString());
+						JSONObject perspectivesJson = retVal.has("perspectives") ?
+								retVal.getJSONObject("perspectives") : null;
+						if (perspectivesJson == null) {
+							perspectivesJson = new JSONObject();
+							retVal.put("perspectives", perspectivesJson);
+						}
+						// set the last used perspective for the session
+						final SessionPath sessionPath = getEditor().getSession().getSessionPath();
+						final String xmlBase64 = Base64.encodeBytes(sb.toString().getBytes(StandardCharsets.UTF_8));
+						perspectivesJson.put(sessionPath.toString(), xmlBase64);
+						return retVal;
+					});
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
+			}
 		} catch (MalformedURLException e1) {
 			LogUtil.severe(e1.getLocalizedMessage(), e1);
 		}
@@ -953,7 +947,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		public SingleCDockable createBackup(String id) {
 			SingleCDockable retVal = null;
 			final EditorView editorView = getView(id);
-			if(editorView != null) {
+			if (editorView != null) {
 				retVal = new EditorViewDockable(editorView.getName(), editorView, new CAction[0]);
 //				retVal.addCDockableLocationListener(dockableLocationListener);
 			}
@@ -977,12 +971,14 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		public SingleCDockable createBackup(String arg0) {
 			final String title = arg0;
 			final DefaultSingleCDockable retVal = new DefaultSingleCDockable(title, null, title, content, new CAction[0]);
-			retVal.setCloseable(true);
+			retVal.setCloseable(false);
+			retVal.setExternalizable(false);
+			retVal.setMinimizable(false);
 			retVal.addCDockableStateListener(new CDockableStateListener() {
 
 				@Override
 				public void visibilityChanged(CDockable arg0) {
-					if(!arg0.isVisible()) {
+					if (!arg0.isVisible()) {
 						dockControl.removeDockable(retVal);
 						dynamicViews.remove(title);
 					}
@@ -1004,17 +1000,15 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		public EditorViewDockable(String id, EditorView editorView, CAction[] actions) {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
-			super.setCloseable(true);
+			// turn off all default actions, we will add our own
+			super.setCloseable(false);
 			super.setExternalizable(false);
 			super.setMinimizable(false);
-			if(TranscriptView.VIEW_NAME.equals(id)) {
-				super.setCloseable(false);
-			}
 
 			addCDockableStateListener(new CDockableStateListener() {
 				@Override
 				public void visibilityChanged(CDockable cDockable) {
-					if(cDockable.isVisible()) {
+					if (cDockable.isVisible()) {
 						fireViewShown(id);
 					} else {
 						fireViewHidden(id);
@@ -1023,16 +1017,19 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 				@Override
 				public void extendedModeChanged(CDockable cDockable, ExtendedMode extendedMode) {
-					if(extendedMode == ExtendedMode.MAXIMIZED) {
+					if (extendedMode == ExtendedMode.MAXIMIZED) {
 						fireViewMaximized(id);
-					} else if(extendedMode == ExtendedMode.MINIMIZED) {
+					} else if (extendedMode == ExtendedMode.MINIMIZED) {
 						fireViewMinimized(id);
-					} else if(extendedMode == ExtendedMode.NORMALIZED) {
+					} else if (extendedMode == ExtendedMode.NORMALIZED) {
 						fireViewNormalized(id);
 					}
 				}
 			});
 
+
+			final DefaultDockActionSource actionSource = new DefaultDockActionSource(
+					new LocationHint(LocationHint.DOCKABLE, LocationHint.RIGHT));
 			final SimpleButtonAction menuAct = new SimpleButtonAction();
 			menuAct.setText("View menu");
 			menuAct.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "MORE_VERT", IconSize.SMALL, Color.darkGray));
@@ -1041,18 +1038,14 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					final JMenu viewMenu = editorView.getMenu();
-					if(viewMenu == null) return;
+					if (viewMenu == null) return;
 					final JPopupMenu popupMenu = viewMenu.getPopupMenu();
 					popupMenu.show(editorView, editorView.getWidth() - popupMenu.getPreferredSize().width, 0);
 				}
 
 			});
 
-			final DefaultDockActionSource actionSource = new DefaultDockActionSource(
-					new LocationHint(LocationHint.DOCKABLE, LocationHint.LEFT));
-			actionSource.add(menuAct);
-
-			if(!TranscriptView.VIEW_NAME.equals(id)) {
+			if (!TranscriptView.VIEW_NAME.equals(id)) {
 				final SimpleButtonAction externalizeAct = new SimpleButtonAction();
 				externalizeAct.setText("Open view in new window");
 				externalizeAct.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_new", IconSize.SMALL, Color.darkGray));
@@ -1068,8 +1061,22 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					}
 
 				});
-
 				actionSource.add(externalizeAct);
+			}
+			actionSource.add(menuAct);
+			if(!TranscriptView.VIEW_NAME.equals(id)) {
+				final SimpleButtonAction closeAct = new SimpleButtonAction();
+				closeAct.setText("Close view");
+				closeAct.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.SMALL, Color.darkGray));
+				closeAct.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						hideViewWithEdit(id);
+					}
+
+				});
+				actionSource.add(closeAct);
 			}
 			super.intern().setActionOffers(actionSource);
 
@@ -1098,8 +1105,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			this.dockable = dockable;
 			this.action = action;
 
-			if(action instanceof CDecorateableAction) {
-				final CDecorateableAction<?> decAct = (CDecorateableAction<?>)action;
+			if (action instanceof CDecorateableAction) {
+				final CDecorateableAction<?> decAct = (CDecorateableAction<?>) action;
 				putValue(NAME, decAct.getText());
 				putValue(SMALL_ICON, decAct.getIcon());
 				putValue(ACCELERATOR_KEY, decAct.getAccelerator());
@@ -1125,52 +1132,52 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		@Override
 		public void set(String id, Color value, DockColor uiValue) {
-			switch(id) {
-			case "title.flap.active.text":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_TEXT));
-				break;
+			switch (id) {
+				case "title.flap.active.text":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_TEXT));
+					break;
 
-			case "title.active.text":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_TEXT));
-				break;
+				case "title.active.text":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_TEXT));
+					break;
 
-			case "title.flap.inactive.text":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_TITLE_FLAP_INACTIVE_TEXT));
-				break;
+				case "title.flap.inactive.text":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_TITLE_FLAP_INACTIVE_TEXT));
+					break;
 
-			case "title.inactive.text":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_TEXT));
-				break;
+				case "title.inactive.text":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_TEXT));
+					break;
 
-			case "title.flap.active.left":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_LEFT));
-				break;
+				case "title.flap.active.left":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_LEFT));
+					break;
 
-			case "title.active.left":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_LEFT));
-				break;
+				case "title.active.left":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_LEFT));
+					break;
 
-			case "title.flap.active.right":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_RIGHT));
-				break;
+				case "title.flap.active.right":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_RIGHT));
+					break;
 
-			case "title.active.right":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_RIGHT));
-				break;
+				case "title.active.right":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_RIGHT));
+					break;
 
-			case "title.flap.inactive.left":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_INACTIVE_LEFT));
+				case "title.flap.inactive.left":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_INACTIVE_LEFT));
 
-			case "title.inactive.left":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_LEFT));
-				break;
+				case "title.inactive.left":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_LEFT));
+					break;
 
-			case "title.flap.inactive.right":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_INACTIVE_RIGHT));
+				case "title.flap.inactive.right":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_INACTIVE_RIGHT));
 
-			case "title.inactive.right":
-				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_RIGHT));
-				break;
+				case "title.inactive.right":
+					uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_RIGHT));
+					break;
 			}
 		}
 	}
@@ -1179,27 +1186,27 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public void setupViewMenu(MenuElement ele) {
 		final Map<EditorViewCategory, List<String>> viewsByCategory =
 				getViewsByCategory();
-		for(EditorViewCategory category:viewsByCategory.keySet()) {
+		for (EditorViewCategory category : viewsByCategory.keySet()) {
 			final JMenuItem categoryItem = new JMenuItem("-- " + category.title + " --");
 			categoryItem.setEnabled(false);
-			if(ele.getComponent() instanceof JMenu) {
-				final JMenu menu = (JMenu)ele;
+			if (ele.getComponent() instanceof JMenu) {
+				final JMenu menu = (JMenu) ele;
 				menu.add(categoryItem);
-			} else if(ele.getComponent() instanceof JPopupMenu) {
-				final JPopupMenu menu = (JPopupMenu)ele;
+			} else if (ele.getComponent() instanceof JPopupMenu) {
+				final JPopupMenu menu = (JPopupMenu) ele;
 				menu.add(categoryItem);
 			}
 
-			for(String view:viewsByCategory.get(category)) {
+			for (String view : viewsByCategory.get(category)) {
 				final PhonUIAction<String> toggleViewAct = PhonUIAction.consumer(this::showViewWithEdit, view);
 				toggleViewAct.putValue(PhonUIAction.NAME, view);
 				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewIcon(view));
 
 				JComponent viewItem = new JMenuItem(toggleViewAct);
 
-				if(isShowing(view)) {
+				if (isShowing(view)) {
 					JMenu menu = getView(view).getMenu();
-					if(menu != null) {
+					if (menu != null) {
 						menu.addSeparator();
 					} else {
 						menu = new JMenu();
@@ -1212,11 +1219,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					viewItem = menu;
 				}
 
-				if(ele.getComponent() instanceof JMenu) {
-					final JMenu menu = (JMenu)ele;
+				if (ele.getComponent() instanceof JMenu) {
+					final JMenu menu = (JMenu) ele;
 					menu.add(viewItem);
-				} else if(ele.getComponent() instanceof JPopupMenu) {
-					final JPopupMenu menu = (JPopupMenu)ele;
+				} else if (ele.getComponent() instanceof JPopupMenu) {
+					final JPopupMenu menu = (JPopupMenu) ele;
 					menu.add(viewItem);
 				}
 			}
@@ -1231,10 +1238,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		resetLayoutAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
 				"restore_page", IconSize.SMALL, UIManager.getColor("MenuItem.foreground")));
 		final JMenuItem resetLayoutItem = new JMenuItem(resetLayoutAct);
-		if(menuElement instanceof JPopupMenu)
-			((JPopupMenu)menuElement).add(resetLayoutItem);
-		else if(menuElement instanceof JMenu)
-			((JMenu)menuElement).add(resetLayoutItem);
+		if (menuElement instanceof JPopupMenu)
+			((JPopupMenu) menuElement).add(resetLayoutItem);
+		else if (menuElement instanceof JMenu)
+			((JMenu) menuElement).add(resetLayoutItem);
 
 		final JMenu layoutMenu = new JMenu("Load layout");
 		ImageIcon loadLayoutIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
@@ -1257,10 +1264,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			}
 		});
 
-		if(menuElement instanceof JPopupMenu)
-			((JPopupMenu)menuElement).add(layoutMenu);
-		else if(menuElement instanceof JMenu)
-			((JMenu)menuElement).add(layoutMenu);
+		if (menuElement instanceof JPopupMenu)
+			((JPopupMenu) menuElement).add(layoutMenu);
+		else if (menuElement instanceof JMenu)
+			((JMenu) menuElement).add(layoutMenu);
 
 		final JMenu deleteMenu = new JMenu("Delete layout");
 		ImageIcon deleteLayoutIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
@@ -1282,10 +1289,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			}
 		});
 
-		if(menuElement instanceof JPopupMenu)
-			((JPopupMenu)menuElement).add(deleteMenu);
-		else if(menuElement instanceof JMenu)
-			((JMenu)menuElement).add(deleteMenu);
+		if (menuElement instanceof JPopupMenu)
+			((JPopupMenu) menuElement).add(deleteMenu);
+		else if (menuElement instanceof JMenu)
+			((JMenu) menuElement).add(deleteMenu);
 
 		// save current layout
 		final PhonUIAction<Void> saveLayoutAct = PhonUIAction.runnable(this::onSaveLayout);
@@ -1296,10 +1303,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		saveLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current layout as a preset.");
 		final JMenuItem saveLayoutItem = new JMenuItem(saveLayoutAct);
 
-		if(menuElement instanceof JPopupMenu)
-			((JPopupMenu)menuElement).add(saveLayoutItem);
-		else if(menuElement instanceof JMenu)
-			((JMenu)menuElement).add(saveLayoutItem);
+		if (menuElement instanceof JPopupMenu)
+			((JPopupMenu) menuElement).add(saveLayoutItem);
+		else if (menuElement instanceof JMenu)
+			((JMenu) menuElement).add(saveLayoutItem);
 	}
 
 	/**
@@ -1309,10 +1316,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	 */
 	@Override
 	public void setupLayoutMenu(MenuElement menu) {
-		if(menu.getComponent() instanceof JMenu) {
-			((JMenu)menu).removeAll();
-		} else if(menu.getComponent() instanceof JPopupMenu) {
-			((JPopupMenu)menu).removeAll();
+		if (menu.getComponent() instanceof JMenu) {
+			((JMenu) menu).removeAll();
+		} else if (menu.getComponent() instanceof JPopupMenu) {
+			((JPopupMenu) menu).removeAll();
 		}
 
 		final Consumer<RecordEditorPerspective> addPerspectiveToMenu = (editorPerspective) -> {
@@ -1321,17 +1328,17 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			showPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Load perspective: " + editorPerspective.getName());
 			final JMenuItem showPerspectiveItem = new JMenuItem(showPerspectiveAct);
 
-			if(menu.getComponent() instanceof JMenu) {
-				final JMenu m = (JMenu)menu;
+			if (menu.getComponent() instanceof JMenu) {
+				final JMenu m = (JMenu) menu;
 				m.add(showPerspectiveItem);
-			} else if(menu.getComponent() instanceof JPopupMenu) {
-				final JPopupMenu m = (JPopupMenu)menu;
+			} else if (menu.getComponent() instanceof JPopupMenu) {
+				final JPopupMenu m = (JPopupMenu) menu;
 				m.add(showPerspectiveItem);
 			}
 		};
 
 		final Iterator<RecordEditorPerspective> stockItr = RecordEditorPerspective.getStockPerspectives().iterator();
-		while(stockItr.hasNext()) {
+		while (stockItr.hasNext()) {
 			addPerspectiveToMenu.accept(stockItr.next());
 		}
 
@@ -1340,22 +1347,22 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		showPerspectivesFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, RecordEditorPerspective.PERSPECTIVES_FOLDER.getAbsolutePath());
 		final JMenuItem showFolderItem = new JMenuItem(showPerspectivesFolderAct);
 		showFolderItem.setFont(showFolderItem.getFont().deriveFont(Font.BOLD));
-		if(menu.getComponent() instanceof JMenu) {
-			((JMenu)menu).addSeparator();
-			((JMenu)menu).add(showFolderItem);
-		} else if(menu.getComponent() instanceof JPopupMenu) {
-			((JPopupMenu)menu).addSeparator();
-			((JPopupMenu)menu).add(showFolderItem);
+		if (menu.getComponent() instanceof JMenu) {
+			((JMenu) menu).addSeparator();
+			((JMenu) menu).add(showFolderItem);
+		} else if (menu.getComponent() instanceof JPopupMenu) {
+			((JPopupMenu) menu).addSeparator();
+			((JPopupMenu) menu).add(showFolderItem);
 		}
 
 		final Iterator<RecordEditorPerspective> userItr = RecordEditorPerspective.getUserPerspectives().iterator();
-		while(userItr.hasNext()) {
+		while (userItr.hasNext()) {
 			addPerspectiveToMenu.accept(userItr.next());
 		}
 	}
 
 	public void onShowLayoutFolder() {
-		if(Desktop.isDesktopSupported()) {
+		if (Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().open(RecordEditorPerspective.PERSPECTIVES_FOLDER);
 			} catch (IOException e) {
@@ -1371,26 +1378,26 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	 * @param ele
 	 */
 	private void setupDeleteLayoutMenu(MenuElement ele) {
-		if(ele.getComponent() instanceof JMenu) {
-			((JMenu)ele).removeAll();
-		} else if(ele.getComponent() instanceof JPopupMenu) {
-			((JPopupMenu)ele).removeAll();
+		if (ele.getComponent() instanceof JMenu) {
+			((JMenu) ele).removeAll();
+		} else if (ele.getComponent() instanceof JPopupMenu) {
+			((JPopupMenu) ele).removeAll();
 		}
-		for(RecordEditorPerspective editorPerspective:RecordEditorPerspective.availablePerspectives()) {
+		for (RecordEditorPerspective editorPerspective : RecordEditorPerspective.availablePerspectives()) {
 			try {
 				final File perspectiveFile = new File(editorPerspective.getLocation().toURI());
-				if(perspectiveFile.canWrite()) {
+				if (perspectiveFile.canWrite()) {
 					// add delete item
-					final PhonUIAction<RecordEditorPerspective> delPerspectiveAct =  PhonUIAction.consumer(this::onDeletePerspective, editorPerspective);
+					final PhonUIAction<RecordEditorPerspective> delPerspectiveAct = PhonUIAction.consumer(this::onDeletePerspective, editorPerspective);
 					delPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
 					delPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete layout " + editorPerspective.getName());
 					final JMenuItem delPerspectiveItem = new JMenuItem(delPerspectiveAct);
 
-					if(ele.getComponent() instanceof JMenu) {
-						final JMenu menu = (JMenu)ele;
+					if (ele.getComponent() instanceof JMenu) {
+						final JMenu menu = (JMenu) ele;
 						menu.add(delPerspectiveItem);
-					} else if(ele.getComponent() instanceof JPopupMenu) {
-						final JPopupMenu menu = (JPopupMenu)ele;
+					} else if (ele.getComponent() instanceof JPopupMenu) {
+						final JPopupMenu menu = (JPopupMenu) ele;
 						menu.add(delPerspectiveItem);
 					}
 				}
@@ -1411,12 +1418,12 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		props.setHeader("Unable to save layout");
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setOptions(MessageDialogProperties.okOptions);
-		if(layoutName == null || layoutName.trim().length() == 0) {
+		if (layoutName == null || layoutName.trim().length() == 0) {
 			props.setMessage("You must enter a layout name");
 			NativeDialogs.showMessageDialog(props);
 			return;
 		}
-		if(RecordEditorPerspective.getPerspective(layoutName) != null) {
+		if (RecordEditorPerspective.getPerspective(layoutName) != null) {
 			props.setMessage("Layout named " + layoutName + " already exists");
 			NativeDialogs.showMessageDialog(props);
 			return;
@@ -1427,7 +1434,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			final RecordEditorPerspective perspective = new RecordEditorPerspective(layoutName, perspectiveFile.toURI().toURL());
 			savePerspective(perspective);
 		} catch (MalformedURLException e) {
-			LogUtil.severe( e.getLocalizedMessage(), e);
+			LogUtil.severe(e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -1472,7 +1479,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 			this.uuid = uuid;
 
-			setWindowName("(" + (accessoryWindows.size()+1) + ") " + getEditor().getTitle());
+			setWindowName("(" + (accessoryWindows.size() + 1) + ") " + getEditor().getTitle());
 
 			setShowInWindowMenu(false);
 			setParentFrame(getFrameForEditor());
@@ -1509,7 +1516,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				@Override
 				public void windowClosed(WindowEvent e) {
 					accessoryWindows.remove(AccessoryWindow.this);
-					if(dockControl != null)
+					if (dockControl != null)
 						dockControl.removeStationContainer(getArea());
 				}
 
@@ -1530,10 +1537,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		@Override
 		public String getTitle() {
 			final Session session = getEditor().getSession();
-			String retVal = "(" + (accessoryWindows.indexOf(this)+1) + ") Session Editor";
-			if(session != null) {
+			String retVal = "(" + (accessoryWindows.indexOf(this) + 1) + ") Session Editor";
+			if (session != null) {
 				retVal += " : " + session.getCorpus() + "." + session.getName();
-				if(getEditor().isModified())
+				if (getEditor().isModified())
 					retVal += "*";
 			}
 			return retVal;
@@ -1551,5 +1558,4 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 
 	}
-
 }
