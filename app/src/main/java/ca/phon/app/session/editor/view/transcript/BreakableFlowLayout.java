@@ -354,7 +354,7 @@ public class BreakableFlowLayout implements LayoutManager, Serializable {
                     } else {
                         x += hgap;
                     }
-                    if(x + d.width > maxWidth) {
+                    if(x + d.width >= maxWidth) {
                         y += maxHeight + vgap;
                         maxHeight = d.height;
                         ++numRows;
@@ -415,7 +415,7 @@ public class BreakableFlowLayout implements LayoutManager, Serializable {
                     } else {
                         x += hgap;
                     }
-                    if(x + d.width > maxWidth) {
+                    if(x + d.width >= maxWidth) {
                         y += maxHeight + vgap;
                         maxHeight = d.height;
                         ++numRows;
