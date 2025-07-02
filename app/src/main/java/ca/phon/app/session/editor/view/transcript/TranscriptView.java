@@ -62,16 +62,11 @@ public class TranscriptView extends EditorView {
     private FindAndReplacePanel findAndReplacePanel;
     private JPanel centerPanel;
 
-    /* Preferences stuff */
-
-    public final static String FONT_SIZE_DELTA_PROP = TranscriptView.class.getName() + ".fontSizeDelta";
-    public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
-
     /* State */
 
     private final static int FONT_SIZE_DELTA_MIN = -8;
     private final static int FONT_SIZE_DELTA_MAX = 8;
-    public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
+    public float fontSizeDelta = FontPreferences.getFontSizeDelta();
     private boolean findAndReplaceVisible = false;
 
     /** Transcript tree view (debug mode) */
@@ -110,7 +105,7 @@ public class TranscriptView extends EditorView {
         );
 
         addPropertyChangeListener("fontSizeDelta", e -> {
-            PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, getFontSizeDelta());
+            FontPreferences.setFontSizeDelta((Float)e.getNewValue());
             transcriptEditor.recalculateTierLabelWidth();
         });
         setupKeyboardShortcuts();
@@ -465,16 +460,9 @@ public class TranscriptView extends EditorView {
         fontScaleMenu.add(defaultSizeButton, BorderLayout.SOUTH);
 
         JComponent source = (JComponent) pae.getActionEvent().getSource();
-        Point point = source.getLocationOnScreen();
-        point.translate(source.getWidth() / 2, source.getHeight());
-
-        CalloutWindow.showCallout(
-            CommonModuleFrame.getCurrentFrame(),
-            true,
-            fontScaleMenu,
-            SwingConstants.TOP,
-            point
-        );
+        JPopupMenu fontScalePopup = new JPopupMenu();
+        fontScalePopup.add(fontScaleMenu);
+        fontScalePopup.show(source, 0, source.getHeight());
     }
 
     /**

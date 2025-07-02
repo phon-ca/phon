@@ -2292,13 +2292,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         for(var ipaGrid: ChatGrids.getInstance().loadGrids().getGrid()) {
             chatMap.addGrid(ipaGrid);
         }
-        chatMap.setFont(FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() +
-                PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f)));
+        chatMap.setFont(FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() + FontPreferences.getFontSizeDelta()));
 
         final IPAMapGridContainer ipaMap = new IPAMapGridContainer();
         ipaMap.addDefaultGrids();
-        final Font ipaFont = FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() +
-                PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f));
+        final Font ipaFont = FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() + FontPreferences.getFontSizeDelta());
         ipaMap.setFont(ipaFont);
 
         final AtomicReference<URL> currentDocUrl = new AtomicReference<>();
@@ -2942,12 +2940,19 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
             try {
                 Rectangle2D firstCharRect = c.modelToView2D(p0);
-                FontMetrics fm = c.getFontMetrics(c.getFont());
-                int baseline = (int) (firstCharRect.getY() + fm.getAscent() + fm.getMaxDescent());
-
-                // Example: draw a line at the baseline
+                final AttributeSet attrs = getTranscriptDocument().getCharacterElement(p0).getAttributes();
+                float fontSize = StyleConstants.getFontSize(attrs) + FontPreferences.getFontSizeDelta();
+                if (fontSize <= 0) {
+                    fontSize = c.getFont().getSize();
+                }
+                boolean isBold = StyleConstants.isBold(attrs);
+                Font font = c.getFont().deriveFont((float)fontSize).deriveFont(isBold ? Font.BOLD : Font.PLAIN);
+                FontMetrics fm = c.getFontMetrics(font);
+                String text = c.getText(p0, p1 - p0);
+                final Rectangle2D boundsRect =  fm.getStringBounds(text, g);
+                int baseline = (int) (firstCharRect.getY() + boundsRect.getHeight());
                 Rectangle2D lastCharRect = c.modelToView2D(p1);
-                g.setColor(Color.RED);
+                g.setColor(UIManager.getColor(TranscriptEditorUIProps.CLICKABLE_HOVER_UNDERLINE));
                 g.drawLine((int) firstCharRect.getX(), baseline, (int) lastCharRect.getX(), baseline);
             } catch (BadLocationException e) {
                 LogUtil.warning(e);

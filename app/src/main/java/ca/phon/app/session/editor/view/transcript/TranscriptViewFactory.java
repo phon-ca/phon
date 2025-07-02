@@ -98,7 +98,7 @@ public class TranscriptViewFactory implements ViewFactory {
     }
 
     private static int calculateLabelTextWidth(Graphics g, String lblText) {
-        final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+        final float fontSizeDelta = FontPreferences.getFontSizeDelta();
         return g.getFontMetrics(FontPreferences.getTierFont().deriveFont(
                 Font.BOLD, FontPreferences.getTierFont().getSize() + fontSizeDelta
         )).stringWidth(lblText);
@@ -335,7 +335,7 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public Font getFont() {
             final Font font = super.getFont();
-            final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+            final float fontSizeDelta = FontPreferences.getFontSizeDelta();
             final float newFontSize = Math.max(Math.min(font.getSize() + fontSizeDelta, 72.0f), 6.0f);
             return font.deriveFont(newFontSize);
         }
@@ -439,7 +439,7 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public Font getFont() {
             final Font font = super.getFont();
-            final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+            final float fontSizeDelta = FontPreferences.getFontSizeDelta();
             final float newFontSize = Math.max(Math.min(font.getSize() + fontSizeDelta, 72.0f), 6.0f);
             return font.deriveFont(newFontSize);
         }
@@ -457,7 +457,7 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public Font getFont() {
             final Font font = super.getFont();
-            final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+            final float fontSizeDelta = FontPreferences.getFontSizeDelta();
             final float newFontSize = Math.max(Math.min(font.getSize() + fontSizeDelta, 72.0f), 6.0f);
             return font.deriveFont(newFontSize);
         }

@@ -28,6 +28,7 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 
@@ -674,8 +675,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                     }
                     optionsList = new JList<>(optionStrings);
                     Font optionsFont = optionsList.getFont();
-                    optionsList.setFont(optionsFont.deriveFont((float)optionsFont.getSize() +
-                                    (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0)));
+                    optionsList.setFont(optionsFont.deriveFont((float)optionsFont.getSize() + FontPreferences.getFontSizeDelta()));
                     optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                     optionsList.setSelectedIndex(autoTranscription.getSelectedTranscriptionIndex(firstWord));
                     add(new JScrollPane(optionsList), BorderLayout.CENTER);

@@ -318,7 +318,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
         g.setColor(Color.BLACK);
 
         Font font = g.getFont();
-        font = font.deriveFont((float)font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+        font = font.deriveFont((float)font.getSize() + FontPreferences.getFontSizeDelta());
 
         var doc = editor.getTranscriptDocument();
         var root = doc.getDefaultRootElement();

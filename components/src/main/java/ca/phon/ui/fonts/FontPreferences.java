@@ -244,16 +244,27 @@ public class FontPreferences {
 	/**
 	 * Font size increase
 	 */
-	public final static String FONT_SIZE_INCREASE = FontPreferences.class.getName() + ".fontSizeIncrease";
+//	public final static String FONT_SIZE_INCREASE = FontPreferences.class.getName() + ".fontSizeIncrease";
+//
+//	public final static Integer DEFAULT_FONT_SIZE_INCREASE = 0;
+//
+//	public static Integer getFontSizeIncrease() {
+//		return PrefHelper.getInt(FONT_SIZE_INCREASE, DEFAULT_FONT_SIZE_INCREASE);
+//	}
+//
+//	public static void setFontSizeIncrease(Integer v) {
+//		PrefHelper.getUserPreferences().putInt(FONT_SIZE_INCREASE, v);
+//	}
 
-	public final static Integer DEFAULT_FONT_SIZE_INCREASE = 0;
+	public final static String FONT_SIZE_DELTA_PROP = "fonts.sizeDelta";
+	public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
 
-	public static Integer getFontSizeIncrease() {
-		return PrefHelper.getInt(FONT_SIZE_INCREASE, DEFAULT_FONT_SIZE_INCREASE);
+	public static float getFontSizeDelta() {
+		return PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
 	}
 
-	public static void setFontSizeIncrease(Integer v) {
-		PrefHelper.getUserPreferences().putInt(FONT_SIZE_INCREASE, v);
+	public static void setFontSizeDelta(float delta) {
+		PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, delta);
 	}
 
 	private static String fontToString(Font font) {
