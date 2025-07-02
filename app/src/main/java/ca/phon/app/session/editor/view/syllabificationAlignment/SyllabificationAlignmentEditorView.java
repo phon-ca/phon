@@ -153,6 +153,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		editor.setAutoInsertRecordElements(false);
 		editor.getTranscriptDocument().setSessionNoPopulate(getEditor().getSession());
 		editor.getTranscriptDocument().putDocumentProperty(AlignmentExtension.ALIGNMENT_PARENT, SystemTierType.IPAActual.getName());
+		editor.getTranscriptDocument().setSingleRecordIndex(0);
 
 		syllabificationExtension = editor.getExtension(SyllabificationExtension.class);
 		if(syllabificationExtension == null) {
@@ -321,6 +322,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
+		editor.getTranscriptDocument().setSingleRecordIndex(ee.data().recordIndex());
 		onDataChanged(ee);
 	}
 

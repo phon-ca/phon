@@ -19,9 +19,11 @@ import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import org.w3c.dom.Attr;
 
 import javax.swing.*;
@@ -31,6 +33,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.*;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 /**
  * An extension that provides syllabification support to the {@link TranscriptEditor}
@@ -66,7 +70,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
     public void install(TranscriptEditor editor) {
         this.editor = editor;
         this.doc = editor.getTranscriptDocument();
-
 
         // add syllabification tier at the end of the regular IPA tier content
         doc.addInsertionHook(new DefaultInsertionHook() {
@@ -105,7 +108,49 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
         doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
 
+        PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+            @Override
+            public void preferenceChange(PreferenceChangeEvent evt) {
+                if(FontPreferences.FONT_SIZE_DELTA_PROP.equals(evt.getKey())) {
+                    if(isSyllabificationComponent()) {
+                        updateSyllabificationDisplayFont(SystemTierType.TargetSyllables.getName());
+                        updateSyllabificationDisplayFont(SystemTierType.ActualSyllables.getName());
+                        for(TierDescription td:editor.getSession().getTiers()) {
+                            if(td.getDeclaredType() == IPATranscript.class) {
+                                updateSyllabificationDisplayFont(td.getName() + " Syllables");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         editor.putExtension(SyllabificationExtension.class, this);
+    }
+
+    private void updateSyllabificationDisplayFont(String tierName) {
+        final int currentRecordIndex = editor.getTranscriptDocument().getSingleRecordIndex();
+        final TranscriptDocument.StartEnd tierRange = editor.getTranscriptDocument().getTierContentStartEnd(currentRecordIndex, tierName);
+        if(!tierRange.valid()) return;
+        final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(tierRange.start()).getAttributes();
+        final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+        if(componentFactory instanceof SyllabificationComponentFactory syllabificationComponentFactory) {
+            final JComponent parent = syllabificationComponentFactory.getComponent();
+            Font font = TranscriptStyleConstants.getFont(attrs);
+            font = font.deriveFont(font.getSize() + FontPreferences.getFontSizeDelta());
+            for(int i = 0; i < parent.getComponentCount(); i++) {
+                if(parent.getComponent(i) instanceof SyllabificationDisplay display) {
+                    display.setFont(font);
+
+                }
+            }
+            parent.revalidate();
+            final Dimension prefSize = parent.getPreferredSize();
+            if(prefSize.getHeight() > 0) {
+                int baseline = parent.getComponent(0).getBaseline(prefSize.width, prefSize.height);
+                parent.setAlignmentY((float)baseline / (float)prefSize.height);
+            }
+        }
     }
 
     private void setSyllabificationIsComponentPropertyChangeHandler(PropertyChangeEvent evt) {

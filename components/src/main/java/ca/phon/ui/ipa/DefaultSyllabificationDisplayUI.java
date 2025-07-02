@@ -80,7 +80,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	}
 
 	private Dimension getPhoneBoxSize() {
-		final int defaultFontSize = 12;
+		final int defaultFontSize = 14;
 		final int fontSize = display.getFont().getSize();
 		final int delta = fontSize - defaultFontSize;
 		int width = DEFAULT_PHONE_BOX_SIZE.width + delta;

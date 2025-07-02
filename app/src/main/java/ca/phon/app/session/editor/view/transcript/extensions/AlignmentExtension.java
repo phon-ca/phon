@@ -13,8 +13,11 @@ import ca.phon.session.Record;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -22,6 +25,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 /**
  * An extension that provides phone alignment support to the {@link TranscriptEditor}
@@ -75,6 +80,39 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                 }
             }
         });
+
+        PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+            @Override
+            public void preferenceChange(PreferenceChangeEvent evt) {
+                if(FontPreferences.FONT_SIZE_DELTA_PROP.equals(evt.getKey())) {
+                    updateAlignmentDisplayFont(SystemTierType.PhoneAlignment.getName());
+                }
+            }
+        });
+    }
+
+    private void updateAlignmentDisplayFont(String tierName) {
+        final int currentRecordIndex = editor.getTranscriptDocument().getSingleRecordIndex();
+        final TranscriptDocument.StartEnd tierRange = editor.getTranscriptDocument().getTierContentStartEnd(currentRecordIndex, tierName);
+        if(!tierRange.valid()) return;
+        final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(tierRange.start()).getAttributes();
+        final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+        if(componentFactory instanceof AlignmentComponentFactory alignmentComponentFactory) {
+            final JComponent parent = alignmentComponentFactory.getComponent();
+            Font font = TranscriptStyleConstants.getFont(attrs);
+            font = font.deriveFont(font.getSize() + FontPreferences.getFontSizeDelta());
+            for(int i = 0; i < parent.getComponentCount(); i++) {
+                if(parent.getComponent(i) instanceof PhoneMapDisplay display) {
+                    display.setFont(font);
+                }
+            }
+            parent.revalidate();
+            final Dimension prefSize = parent.getPreferredSize();
+            if(prefSize.getHeight() > 0) {
+                int baseline = parent.getComponent(0).getBaseline(prefSize.width, prefSize.height);
+                parent.setAlignmentY((float)baseline / (float)prefSize.height);
+            }
+        }
     }
 
     private void alignmentVisiblePropertyChangeHandler(PropertyChangeEvent evt) {
