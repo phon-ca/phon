@@ -54,6 +54,8 @@ import java.awt.event.FocusListener;
 import java.beans.*;
 import java.util.List;
 import java.util.*;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 
@@ -166,6 +168,15 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		JScrollPane scrollPane = new JScrollPane(editor);
 		add(scrollPane, BorderLayout.CENTER);
+
+		PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+			@Override
+			public void preferenceChange(PreferenceChangeEvent evt) {
+				if(FontPreferences.FONT_SIZE_DELTA_PROP.equals(evt.getKey())) {
+					editor.recalculateTierLabelWidth();
+				}
+			}
+		});
 
 		update();
 	}

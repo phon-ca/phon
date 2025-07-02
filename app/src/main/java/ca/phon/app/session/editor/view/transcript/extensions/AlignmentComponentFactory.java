@@ -12,6 +12,7 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
@@ -69,6 +70,12 @@ public class AlignmentComponentFactory implements ComponentFactory {
         final Record record = TranscriptStyleConstants.getRecord(attrs);
         if(record == null) return retVal;
 
+        // create font from attributes
+        Font font = TranscriptStyleConstants.getFont(attrs);
+        if(FontPreferences.getFontSizeDelta() != 0) {
+            font = font.deriveFont(font.getSize() + FontPreferences.getFontSizeDelta());
+        }
+
         final PhoneAlignment phoneAlignment = tier.getValueForTranscriber(transcriber).orElse(new PhoneAlignment());
         final List<PhoneMap> clonedMaps = new ArrayList<>();
         for(PhoneMap pm:phoneAlignment) {
@@ -78,6 +85,7 @@ public class AlignmentComponentFactory implements ComponentFactory {
         for (PhoneMap phoneMap:clonedMaps) {
             final PhoneMapDisplay display = new PhoneMapDisplay();
             display.setPhoneMapForWord(0, phoneMap);
+            display.setFont(font);
             display.setFocusTraversalKeysEnabled(false);
             retVal.add(display);
 

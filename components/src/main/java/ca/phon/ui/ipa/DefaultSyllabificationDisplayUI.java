@@ -44,7 +44,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	private static final int insetSize = 2;
 	private Insets phoneBoxInsets = new Insets(insetSize, insetSize, insetSize,
 			insetSize);
-	private Dimension phoneBoxSize = new Dimension(18, 20);
+	private final Dimension DEFAULT_PHONE_BOX_SIZE = new Dimension(18, 20);
 
 	/** Display we are installed on */
 	private SyllabificationDisplay display;
@@ -77,6 +77,15 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		display.addPropertyChangeListener("showDiacritics", (e) -> display.repaint() );
 		display.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, (e) -> display.repaint() );
 		display.setRequestFocusEnabled(true);
+	}
+
+	private Dimension getPhoneBoxSize() {
+		final int defaultFontSize = 12;
+		final int fontSize = display.getFont().getSize();
+		final int delta = fontSize - defaultFontSize;
+		int width = DEFAULT_PHONE_BOX_SIZE.width + delta;
+		int height = DEFAULT_PHONE_BOX_SIZE.height + delta;
+		return new Dimension(width, height);
 	}
 
 	/** Setup actions for component */
@@ -328,6 +337,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 	@Override
 	public int getBaseline(JComponent c, int width, int height) {
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		// baseline is bottom of the phone text
 		int baseline = display.getInsets().top + insetSize
 				+ phoneBoxInsets.top + phoneBoxSize.height
@@ -355,6 +365,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			g2d.fillRect(0, 0, size.width, size.height);
 		}
 
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		// setup phone rect
 		int pX = c.getInsets().left + insetSize;
 		int pY = c.getInsets().top + insetSize;
@@ -547,6 +558,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	public Dimension getPreferredSize(JComponent c) {
 		Dimension retVal = new Dimension(0, 0);
 
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		int widthPerPhone = phoneBoxInsets.right + phoneBoxInsets.left
 				+ phoneBoxSize.width;
 		int height = phoneBoxInsets.top + phoneBoxInsets.bottom
@@ -564,6 +576,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	
 	@Override
 	public Rectangle rectForPhone(int pidx) {
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		int pX = display.getInsets().left + insetSize;
 		int pY = display.getInsets().top + insetSize;
 		int pW = phoneBoxInsets.left + phoneBoxInsets.right
@@ -578,6 +591,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 	@Override
 	public int locationToPhoneIndex(Point p) {
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		int widthPerPhone = phoneBoxInsets.right + phoneBoxInsets.left
 				+ phoneBoxSize.width;
 		int currentX = display.getInsets().left + insetSize;

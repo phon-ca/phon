@@ -51,7 +51,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 	private static final int insetSize = 2;
 	private Insets phoneBoxInsets = new Insets(insetSize, insetSize, insetSize, insetSize);
-	private Dimension phoneBoxSize = new Dimension(18, 20);
+	private final Dimension DEFAULT_PHONE_BOX_SIZE = new Dimension(18, 20);
 	private static final int groupSpace = 5;
 
 	private boolean drawPhoneLock = false;
@@ -91,6 +91,15 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		});
 		display.addPropertyChangeListener("showDiacritics", (e) -> display.repaint() );
 		display.setRequestFocusEnabled(true);
+	}
+
+	private Dimension getPhoneBoxSize() {
+		final int defaultFontSize = 12;
+		final int fontSize = display.getFont().getSize();
+		final int delta = fontSize - defaultFontSize;
+		int width = DEFAULT_PHONE_BOX_SIZE.width + delta;
+		int height = DEFAULT_PHONE_BOX_SIZE.height + delta;
+		return new Dimension(width, height);
 	}
 
 	/** Setup actions for component */
@@ -217,16 +226,17 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					new GradientPaint(
 						new Point(pRect.x, pRect.y), grad_top,
 						new Point(pRect.x, pRect.y+pRect.height), grad_btm);
-			Paint oldPaiont = g2d.getPaint();
+			Paint oldPaint = g2d.getPaint();
 			g2d.setPaint(gp);
 //					g2d.setColor(p.getScType().getColor());
 			g2d.fill(pArea);
-			g2d.setPaint(oldPaiont);
+			g2d.setPaint(oldPaint);
 		} else {
 			g2d.setColor(display.getBackground());
 			g2d.fill(pArea);
 		}
 
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		// draw phone string
 		Rectangle pBox =
 			new Rectangle(pRect.x + phoneBoxInsets.left,
@@ -277,7 +287,8 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 			g2d.setColor(display.getBackground());
 			g2d.fillRect(0, 0, size.width, size.height);
 		}
-		
+
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		// setup phone rect
 		int pX = c.getInsets().left + insetSize;
 		int pY = c.getInsets().top + insetSize;
@@ -657,6 +668,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToWordIndex(pos);
 
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		int currentX = display.getInsets().left + insetSize;
 		int widthPerPhone =
 				phoneBoxInsets.right + phoneBoxInsets.left +
@@ -674,6 +686,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	}
 
 	public int locationToAlignmentPosition(Point p) {
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		int widthPerPhone =
 				phoneBoxInsets.right + phoneBoxInsets.left +
 				phoneBoxSize.width;
@@ -703,6 +716,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	public Dimension getPreferredSize(JComponent c) {
 		Dimension retVal = new Dimension(0, 0);
 
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		int widthPerPhone =
 				phoneBoxInsets.right + phoneBoxInsets.left +
 				phoneBoxSize.width;
@@ -724,6 +738,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 	@Override
 	public int getBaseline(JComponent c, int width, int height) {
+		final Dimension phoneBoxSize = getPhoneBoxSize();
 		// baseline is the bottom of the top phone text
 		int baseline = c.getInsets().top + insetSize
 				+ phoneBoxInsets.top + phoneBoxSize.height
@@ -773,8 +788,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 			display.requestFocusInWindow();
 			int pIdx = locationToAlignmentPosition(me.getPoint());
 			if(pIdx >= 0) {
-				
-
+				final Dimension phoneBoxSize = getPhoneBoxSize();
 				drawPhoneLock = true;
 				if(me.getPoint().getY() > (phoneBoxSize.height
 						+ (2 * insetSize)) ) {

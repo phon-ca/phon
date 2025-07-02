@@ -18,6 +18,7 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
 import javax.swing.*;
@@ -78,6 +79,12 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final int transcriptIndex = record != null ? editor.getSession().getRecordElementIndex(record) : -1;
         final TranscriptElementLocation location = editor.getTranscriptEditorCaret().getCurrentLocation();
 
+        // create font from attributes
+        Font font = TranscriptStyleConstants.getFont(attrs);
+        if(FontPreferences.getFontSizeDelta() != 0) {
+            font = font.deriveFont(font.getSize() + FontPreferences.getFontSizeDelta());
+        }
+
         // clone transcript
         IPATranscript origTranscript = tier.getValueForTranscriber(transcriber).orElse(tier.getValue());
         if(origTranscript == null) {
@@ -86,15 +93,10 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final IPATranscript clonedTranscript = (new IPATranscriptBuilder()).append(origTranscript.toString(true)).toIPATranscript();
         for(IPATranscript word:clonedTranscript.words()) {
             final SyllabificationDisplay display = new SyllabificationDisplay();
+            display.setFont(font);
             display.setTranscript(word);
             display.setFocusTraversalKeysEnabled(false);
             retVal.add(display);
-
-//            if(record != null && location.tier() == tier.getName() && location.transcriptElementIndex() == transcriptIndex
-//             && location.charPosition() >= currentIndex && location.charPosition() < currentIndex + word.length()) {
-//                display.setFocusedPhone(location.charPosition() - currentIndex);
-//                SwingUtilities.invokeLater(display::requestFocusInWindow);
-//            }
 
             // setup tab, shift+tab, up/down key actions
             final InputMap inputMap = display.getInputMap(JComponent.WHEN_FOCUSED);

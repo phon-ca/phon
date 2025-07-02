@@ -3,11 +3,14 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.ui.fonts.FontPreferences;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.function.BiConsumer;
 
@@ -504,6 +507,15 @@ public class TranscriptStyleConstants {
         attrs.removeAttribute(ATTR_KEY_BORDER);
         if(border != null)
             attrs.addAttribute(ATTR_KEY_BORDER, border);
+    }
+
+    public static Font getFont(AttributeSet attrs) {
+        final int fontSize = StyleConstants.getFontSize(attrs);
+        final String fontFamily = StyleConstants.getFontFamily(attrs);
+        final boolean isBold = StyleConstants.isBold(attrs);
+        final boolean isItalic = StyleConstants.isItalic(attrs);
+        final int style = (isBold ? Font.BOLD : 0) | (isItalic ? Font.ITALIC : 0);
+        return new Font(fontFamily, style, fontSize);
     }
 
 //    public static final String ATTR_KEY_FIRST_SEGMENT_DASH = "firstSegmentDash";
