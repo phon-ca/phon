@@ -2938,15 +2938,17 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * The {@link Highlighter.HighlightPainter} that paints the "clickable" underlines
      */
     private class HoverUnderlinePainter implements Highlighter.HighlightPainter {
-
         @Override
         public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
             try {
-                var firstCharRect = modelToView2D(p0);
-                var lastCharRect = modelToView2D(p1);
-                g.setColor(UIManager.getColor(TranscriptEditorUIProps.CLICKABLE_HOVER_UNDERLINE));
-                int lineY = ((int) firstCharRect.getMaxY()) - 9;
-                g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
+                Rectangle2D firstCharRect = c.modelToView2D(p0);
+                FontMetrics fm = c.getFontMetrics(c.getFont());
+                int baseline = (int) (firstCharRect.getY() + fm.getAscent() + fm.getMaxDescent());
+
+                // Example: draw a line at the baseline
+                Rectangle2D lastCharRect = c.modelToView2D(p1);
+                g.setColor(Color.RED);
+                g.drawLine((int) firstCharRect.getX(), baseline, (int) lastCharRect.getX(), baseline);
             } catch (BadLocationException e) {
                 LogUtil.warning(e);
             }
@@ -3207,9 +3209,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                     return false;
                 }
 
-                if(TranscriptStyleConstants.isNotEditable(attrs)) {
+                if (TranscriptStyleConstants.isNotEditable(attrs)) {
                     final DocumentFilter customFilter = TranscriptDocumentFilter.getCustomFilter(attrs);
-                    if(customFilter != null) {
+                    if (customFilter != null) {
                         customFilter.replace(null, getCaretPosition(), 0, data, attrs);
                         return true;
                     } else {
@@ -3239,12 +3241,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         public boolean canImport(TransferSupport support) {
             return support.isDataFlavorSupported(DataFlavor.stringFlavor);
         }
-
     }
-
-    /**
-     * Caret adapter to handle commiting changes before the caret is moved.
-     * The caret will be allowed to move only when the changes have been committed.
-     */
 
 }

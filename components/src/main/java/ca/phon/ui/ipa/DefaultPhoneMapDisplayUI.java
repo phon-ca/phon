@@ -722,6 +722,15 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		return retVal;
 	}
 
+	@Override
+	public int getBaseline(JComponent c, int width, int height) {
+		// baseline is the bottom of the top phone text
+		int baseline = c.getInsets().top + insetSize
+				+ phoneBoxInsets.top + phoneBoxSize.height
+				- display.getFontMetrics(display.getFont()).getDescent();
+		return baseline;
+	}
+
 	/**
 	 * Key listener for cmd/ctrl key press/release
 	 */

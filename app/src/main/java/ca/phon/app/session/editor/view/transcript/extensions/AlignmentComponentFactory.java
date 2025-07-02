@@ -18,6 +18,7 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.undo.UndoableEditSupport;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +65,6 @@ public class AlignmentComponentFactory implements ComponentFactory {
         layout.setBreakWidth(breakWidth);
         final JPanel retVal = new JPanel(layout);
         retVal.setBackground(UIManager.getColor("text"));
-        retVal.putClientProperty(Y_AXIS_ALIGNMENT, Y_AXIS_ALIGNMENT_VALUE);
 
         final Record record = TranscriptStyleConstants.getRecord(attrs);
         if(record == null) return retVal;
@@ -154,6 +154,12 @@ public class AlignmentComponentFactory implements ComponentFactory {
         }
 
         previousComponent = retVal;
+
+        final Dimension prefSize = retVal.getPreferredSize();
+        if(prefSize.getHeight() > 0) {
+            int baseline = retVal.getComponent(0).getBaseline(prefSize.width, prefSize.height);
+            retVal.setAlignmentY((float)baseline / (float)prefSize.height);
+        }
 
         return retVal;
     }

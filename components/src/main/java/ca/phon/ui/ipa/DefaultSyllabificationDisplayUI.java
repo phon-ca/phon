@@ -326,6 +326,15 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		display.addMouseListener(mouseListener);
 	}
 
+	@Override
+	public int getBaseline(JComponent c, int width, int height) {
+		// baseline is bottom of the phone text
+		int baseline = display.getInsets().top + insetSize
+				+ phoneBoxInsets.top + phoneBoxSize.height
+				- display.getFontMetrics(display.getFont()).getDescent();
+		return baseline;
+	}
+
 	/**
 	 * Paint phones
 	 */

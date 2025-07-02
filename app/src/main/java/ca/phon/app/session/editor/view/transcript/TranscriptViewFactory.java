@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 import org.apache.commons.logging.Log;
@@ -306,13 +307,11 @@ public class TranscriptViewFactory implements ViewFactory {
             Font font = getFont();
             final Graphics2D g2 = (Graphics2D)getGraphics();
             if(g2 == null) return 0;
-            Rectangle2D textBounds = g2.getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
+            Rectangle2D textBounds = g2.getFontMetrics(font).getStringBounds(str, getGraphics());
             return (int)textBounds.getWidth();
         }
 
         private int labelEndWidth() {
-            int p0 = getStartOffset();
-            int p1 = getEndOffset();
             String text = ": ";
             Font font = getFont();
             final Graphics2D g2 = (Graphics2D)getGraphics();
@@ -343,25 +342,8 @@ public class TranscriptViewFactory implements ViewFactory {
 
         @Override
         public void paint(Graphics g, Shape a) {
-//            Graphics2D g2 = (Graphics2D)g;
-//            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//            g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-
-//            int p0 = getStartOffset();
-//            int p1 = getEndOffset();
-//            Segment text = getText(p0, p1);
-//            final String tierName = text.toString().trim();
-//            final String labelText = tierName;
-//            final Font font = getFont();
-//            final FontMetrics fm = g.getFontMetrics(font);
-//            final int x = a.getBounds().x + a.getBounds().width - fm.stringWidth(labelText);
-//            final int y = a.getBounds().y + fm.getAscent();
-
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
             super.paint(g, a);
-//            g.setColor(getForeground());
-//            g.setFont(font);
-//            g.drawString(labelText, x, y);
         }
 
     }
@@ -370,8 +352,6 @@ public class TranscriptViewFactory implements ViewFactory {
      * A {@link ParagraphView} that is used to display tier paragraphs including label and content
      */
     private class TierParagraphView extends ParagraphView {
-
-//        private Border border = BorderFactory.createMatteBorder(0, 0, 0, 0, Color.LIGHT_GRAY);
 
         public TierParagraphView(Element elem) {
             super(elem);

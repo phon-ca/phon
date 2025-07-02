@@ -89,29 +89,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_VISIBLE, this::syllabificationVisiblePropertyChangeHandler);
         doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_COMPONENT, this::setSyllabificationIsComponentPropertyChangeHandler);
 
-        // XXX remove due to complications with other key bindings
-//        InputMap inputMap = editor.getInputMap();
-//        ActionMap actionMap = editor.getActionMap();
-//
-//        KeyStroke esc = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-//        inputMap.put(esc, "pressedEsc");
-//        PhonUIAction<Void> escAct = PhonUIAction.runnable(() -> {
-//            if (syllabificationEditMode) setSyllabificationEditMode(false);
-//        });
-//        actionMap.put("pressedEsc", escAct);
-
-//        editor.addCaretListener(e -> {
-//            if (!syllabificationEditMode) return;
-//            TranscriptElementLocation location = editor.charPosToSessionLocation(e.getDot());
-//            String tierName = location.tier();
-//            if (!SystemTierType.TargetSyllables.getName().equals(tierName) && !SystemTierType.ActualSyllables.getName().equals(tierName)) {
-//                setSyllabificationEditMode(false);
-//            }
-//        });
-
         editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(SyllabificationAlignmentEditorView.ScEdit, this::onScEdit, EditorEventManager.RunOn.AWTEventDispatchThread);
-//        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
             @Override

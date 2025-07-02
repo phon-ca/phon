@@ -23,6 +23,7 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.undo.UndoableEditSupport;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
@@ -69,7 +70,6 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         final BreakableFlowLayout layout = new BreakableFlowLayout();
         layout.setBreakWidth(breakWidth);
         final JPanel retVal = new JPanel(layout);
-        retVal.putClientProperty(Y_AXIS_ALIGNMENT, Y_AXIS_ALIGNMENT_VALUE);
         retVal.setBackground(UIManager.getColor("text"));
 
         int currentIndex = 0;
@@ -167,6 +167,12 @@ public class SyllabificationComponentFactory implements ComponentFactory {
         }
 
         previousComponent = retVal;
+
+        final Dimension prefSize = retVal.getPreferredSize();
+        if(prefSize.getHeight() > 0) {
+            int baseline = retVal.getComponent(0).getBaseline(prefSize.width, prefSize.height);
+            retVal.setAlignmentY((float)baseline / (float)prefSize.height);
+        }
 
         return retVal;
     }
