@@ -1024,7 +1024,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh, Ses
         if (sessionFile.exists() && sessionFile.getName().endsWith(".xml")) {
             // it's faster to use an xpath expression
             // to determine the number of records.
-            String xpathPattern = "//u";
+            String xpathPattern = "//r";
             // open as dom file first
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(false);
