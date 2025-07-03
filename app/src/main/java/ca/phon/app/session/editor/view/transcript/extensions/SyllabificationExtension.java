@@ -443,7 +443,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
     }
 
     public void onScEdit(EditorEvent<SyllabificationAlignmentEditorView.ScEditData> event) {
-        if(event.source() instanceof SyllabificationDisplay display) {
+        if(event.source() instanceof SyllabificationDisplay) {
             final IPATranscript clonedTranscript = (new IPATranscriptBuilder()).append(event.data().ipa().toString(true)).toIPATranscript();
             final int recordIndex = editor.getSession().getTranscript().getRecordIndex(event.data().transcriptElementIdx());
             String syllablesTierName = getSyllabifierTierNameForIPATier(event.data().tier());
@@ -453,14 +453,11 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
             if(componentFactory instanceof SyllabificationComponentFactory syllabificationComponentFactory) {
                 final Container parent = syllabificationComponentFactory.getComponent();
-                if(event.source().getParent() != parent) {
-                    LogUtil.info(numExtension + ": Syllabification edit event from " + display + " - updating syllabification display");
-                    final List<IPATranscript> words = clonedTranscript.words();
-                    for (int i = 0; i < words.size() && i < parent.getComponentCount(); i++) {
-                        if (parent.getComponent(i) instanceof SyllabificationDisplay wordDisplay) {
-                            wordDisplay.setTranscript(words.get(i));
-                            wordDisplay.repaint();
-                        }
+                final List<IPATranscript> words = clonedTranscript.words();
+                for (int i = 0; i < words.size() && i < parent.getComponentCount(); i++) {
+                    if (parent.getComponent(i) instanceof SyllabificationDisplay wordDisplay) {
+                        wordDisplay.setTranscript(words.get(i));
+                        wordDisplay.repaint();
                     }
                 }
             }
