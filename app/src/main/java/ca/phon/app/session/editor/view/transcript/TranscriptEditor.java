@@ -1144,7 +1144,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             }
         }
         final String newTierVal = sb.toString().trim();
-        LogUtil.info("newTierVal: " + newTierVal);
         boolean currentTextIsFromValidatedBlindTier =
                 getDataModel().getTranscriber() != Transcriber.VALIDATOR
                     && tier.isBlind()
@@ -1157,8 +1156,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         }
         final String oldTierVal = getTranscriptDocument().getTierText(tier,
                 currentTextIsFromValidatedBlindTier ? Transcriber.VALIDATOR.getUsername() : getDataModel().getTranscriber().getUsername());
-        LogUtil.info("currentTextIsFromValidatedBlindTier: " + currentTextIsFromValidatedBlindTier);
-        LogUtil.info("oldTierVal: " + oldTierVal);
         if(oldTierVal == null && newTierVal.isEmpty()) {
             return false; // no changes
         }

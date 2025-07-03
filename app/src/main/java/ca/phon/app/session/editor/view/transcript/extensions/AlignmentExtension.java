@@ -68,7 +68,6 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             doc.putDocumentProperty(ALIGNMENT_PARENT, calculateAlignmentParent());
         }, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-//        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
             @Override
