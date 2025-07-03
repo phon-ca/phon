@@ -17,9 +17,12 @@ package ca.phon.app.session.editor.view.syllabificationAlignment.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabificationAlignment.*;
+import ca.phon.app.session.editor.view.transcript.extensions.SyllabifierChangeEdit;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.Language;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,21 +55,43 @@ public class SyllabificationSettingsCommand extends SyllabificationAlignmentComm
 		final SyllabificationSettingsPanel settingsPanel = new SyllabificationSettingsPanel(getSession());
 		settingsDialog.add(settingsPanel, BorderLayout.CENTER);
 		
-		final JPanel btmPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		final JButton okBtn = new JButton("Ok");
 		okBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				getUndoSupport().beginUpdate("Change syllabifier settings");
+				// set syllabifiers for session based on selected syllabifiers
+				final Language ipaTargetLang = settingsPanel.getSelectedTargetSyllabifier();
+				final SyllabifierChangeEdit ipaTargetEdit = new SyllabifierChangeEdit(getSession(), getEditor().getEventManager(),
+						SystemTierType.IPATarget.getName(), ipaTargetLang.toString());
+				getUndoSupport().postEdit(ipaTargetEdit);
+
+				final Language ipaActualLang = settingsPanel.getSelectedActualSyllabifier();
+				final SyllabifierChangeEdit ipaActualEdit = new SyllabifierChangeEdit(getSession(), getEditor().getEventManager(),
+						SystemTierType.IPAActual.getName(), ipaActualLang.toString());
+				getUndoSupport().postEdit(ipaActualEdit);
+				getUndoSupport().endUpdate();
+
 				settingsDialog.setVisible(false);
 				settingsDialog.dispose();
 			}
 			
 		});
-		btmPanel.add(okBtn);
+		final JButton cancelBtn = new JButton("Cancel");
+		cancelBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				settingsDialog.setVisible(false);
+				settingsDialog.dispose();
+			}
+
+		});
+		final JComponent btnPanel = ButtonBarBuilder.buildOkCancelBar(okBtn, cancelBtn);
 		settingsDialog.getRootPane().setDefaultButton(okBtn);
 		
-		settingsDialog.add(btmPanel, BorderLayout.SOUTH);
+		settingsDialog.add(btnPanel, BorderLayout.SOUTH);
 		settingsDialog.pack();
 		settingsDialog.setLocationRelativeTo(getView());
 		settingsDialog.setVisible(true);

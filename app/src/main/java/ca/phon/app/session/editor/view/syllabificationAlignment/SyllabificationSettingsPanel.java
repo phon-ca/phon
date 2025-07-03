@@ -51,7 +51,7 @@ public class SyllabificationSettingsPanel extends JPanel {
 		ipaTargetSelector.setSelectedLanguage(Language.parseLanguage(ipaTargetLang));
 		ipaTargetSelector.addListSelectionListener( (e) -> {
 			String currentSyllabifier = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPATarget.getName());
-			SyllabifierOptions.setSyllabifierForTier(session, SystemTierType.IPATarget.getName(), ipaTargetSelector.getSelectedSyllabifier().getLanguage().toString());
+//			SyllabifierOptions.setSyllabifierForTier(session, SystemTierType.IPATarget.getName(), ipaTargetSelector.getSelectedSyllabifier().getLanguage().toString());
 			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier != null ? Language.parseLanguage(currentSyllabifier) : null, ipaTargetSelector.getSelectedSyllabifier().getLanguage() );
 		});
 
@@ -59,7 +59,7 @@ public class SyllabificationSettingsPanel extends JPanel {
 		ipaActualSelector.setSelectedLanguage(Language.parseLanguage(ipaActualLang));
 		ipaActualSelector.addListSelectionListener( (e) -> {
 			String currentSyllabifier = SyllabifierOptions.getSyllabifierForTier(session, SystemTierType.IPAActual.getName());
-			SyllabifierOptions.setSyllabifierForTier(session, SystemTierType.IPAActual.getName(), ipaActualSelector.getSelectedSyllabifier().getLanguage().toString());
+//			SyllabifierOptions.setSyllabifierForTier(session, SystemTierType.IPAActual.getName(), ipaActualSelector.getSelectedSyllabifier().getLanguage().toString());
 			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier != null ? Language.parseLanguage(currentSyllabifier) : null, ipaActualSelector.getSelectedSyllabifier().getLanguage() );
 		});
 

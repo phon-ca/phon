@@ -38,7 +38,9 @@ import java.util.prefs.PreferenceChangeListener;
 
 /**
  * An extension that provides syllabification support to the {@link TranscriptEditor}
- * */
+ *
+ * This extension will add syllabification tiers to the end of IPA tiers.
+ */
 public class SyllabificationExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
     private TranscriptDocument doc;
@@ -303,7 +305,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         final JMenu changeSyllabifierMenu = new JMenu("Change syllabifier for " + ipaTier.getName());
         for(String syllabifierName : SyllabifierLibrary.getInstance().availableSyllabifierNames()) {
             final Language syllabifierLang = SyllabifierLibrary.getInstance().getSyllabifierByName(syllabifierName).getLanguage();
-            final PhonUIAction<SyllabifierChangeData> changeSyllabifierAct = PhonUIAction.eventConsumer(this::setSyllabifierForTier, new SyllabifierChangeData(ipaTier.getName(), syllabifierLang));
+            final PhonUIAction<EditorEventType.SyllabifierChangeData> changeSyllabifierAct = PhonUIAction.eventConsumer(this::setSyllabifierForTier, new EditorEventType.SyllabifierChangeData(ipaTier.getName(), syllabifierLang));
             changeSyllabifierAct.putValue(PhonUIAction.NAME, syllabifierName);
             changeSyllabifierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Change syllabifier for " + ipaTier.getName() + " to " + syllabifierName);
             if(syllabifierLang == tierSyllabifier.getLanguage()) {
@@ -316,10 +318,10 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         popup.show(e.getComponent(), e.getX(), e.getY());
     }
 
-    private record SyllabifierChangeData(String tierName, Language language) {}
-    private void setSyllabifierForTier(PhonActionEvent<SyllabifierChangeData> event) {
-        SyllabifierOptions.setSyllabifierForTier(editor.getSession(), event.getData().tierName(),
-                event.getData().language() != null ? event.getData().language().toString() : null);
+    private void setSyllabifierForTier(PhonActionEvent<EditorEventType.SyllabifierChangeData> event) {
+        final SyllabifierChangeEdit edit = new SyllabifierChangeEdit(editor.getSession(), editor.getEventManager(),
+                event.getData().tierName(), event.getData().language() != null ? event.getData().language().toString() : null);
+        editor.getUndoSupport().postEdit(edit);
     }
 
     private Syllabifier syllabifierForTier(Tier<IPATranscript> tier) {

@@ -51,7 +51,7 @@ public final class SyllabifierOptions {
         final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
         Syllabifier retVal = null;
         final TierDescription td = session != null ? session.getTier(tierName) : null;
-        if(td != null && td.getTierParameters().containsKey(TIER_SYLLABIFIER)) {
+        if(td != null && td.getTierParameters().get(TIER_SYLLABIFIER) != null) {
             retVal = library.getSyllabifierForLanguage(td.getTierParameters().get(TIER_SYLLABIFIER));
         }
         if(retVal == null) {
@@ -82,7 +82,7 @@ public final class SyllabifierOptions {
     public static String getSyllabifierForTier(Session session, String tierName) {
         if (session == null || tierName == null) return null;
         final TierDescription td = session.getTier(tierName);
-        if (td != null && td.getTierParameters().containsKey(TIER_SYLLABIFIER)) {
+        if (td != null && td.getTierParameters().get(TIER_SYLLABIFIER) != null) {
             return td.getTierParameters().get(TIER_SYLLABIFIER);
         }
         return null;

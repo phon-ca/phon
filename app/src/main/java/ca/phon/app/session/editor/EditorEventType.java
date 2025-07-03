@@ -363,4 +363,10 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<TimelineTierRemoveData> RecordTimelineTierRemove =
 			new EditorEventType<>(EditorEventName.RECORD_TIMELINE_TIER_REMOVED_EVT.getEventName(), TimelineTierRemoveData.class);
 
+	/**
+	 * Syllabifier changes
+	 */
+ 	public static final EditorEventType<SyllabifierChangeData> SyllabifierChange = new EditorEventType<>("SyllabifierChange", SyllabifierChangeData.class);
+	public record SyllabifierChangeData(String tierName, Language language) {}
+
 }
