@@ -420,8 +420,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
     }
 
     public void onTranscriptLocationChanged(TranscriptElementLocation oldLocation, TranscriptElementLocation newLocation) {
-//        final TranscriptElementLocation oldLocation = event.data().oldLoc();
-//        final TranscriptElementLocation newLocation = event.data().newLoc();
         if(syllabificationEditMode) {
             String tierName = newLocation.tier();
             if (!SystemTierType.TargetSyllables.getName().equals(tierName) && !SystemTierType.ActualSyllables.getName().equals(tierName)) {
@@ -441,35 +439,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                     componentFactory.requestFocusAtOffset(newLocation.charPosition());
                 }
             }
-            return;
         }
-
-        // single record view is already handled
-        if(!isSyllabificationVisible() || editor.isSingleRecordView()) return;
-        if(oldLocation.transcriptElementIndex() == newLocation.transcriptElementIndex()) return;
-
-        // remove syllabification tiers from previous record (if any)
-        editor.getTranscriptEditorCaret().freeze();
-        if(oldLocation.transcriptElementIndex() >= 0) {
-            final Transcript.Element prevElement = editor.getSession().getTranscript().getElementAt(oldLocation.transcriptElementIndex());
-            if (prevElement.isRecord()) {
-                removeSyllabificationTiersForRecord(oldLocation.transcriptElementIndex());
-            }
-        }
-
-        if(newLocation.transcriptElementIndex() >= 0) {
-            final Transcript.Element newElement = editor.getSession().getTranscript().getElementAt(newLocation.transcriptElementIndex());
-            if (newElement.isRecord()) {
-                addSyllabificationTiersForRecord(newLocation.transcriptElementIndex());
-            }
-        }
-
-        // force update dot to new location without issuing a new location changed event by keeping caret frozen
-        final int newCaretLoc = editor.sessionLocationToCharPos(newLocation);
-        if(newCaretLoc >= 0) {
-            editor.getTranscriptEditorCaret().setDot(newCaretLoc, true);
-        }
-        editor.getTranscriptEditorCaret().unfreeze();
     }
 
     public void onScEdit(EditorEvent<SyllabificationAlignmentEditorView.ScEditData> event) {

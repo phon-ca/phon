@@ -379,9 +379,6 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     }
 
     public void onTranscriptLocationChanged(TranscriptElementLocation oldLocation, TranscriptElementLocation newLocation) {
-//        final TranscriptElementLocation oldLocation = event.data().oldLoc();
-//        final TranscriptElementLocation newLocation = event.data().newLoc();
-
         // handle caret movements into syllabifier tiers
         if (newLocation.tier().equals(SystemTierType.PhoneAlignment.getName())) {
             final TranscriptDocument.StartEnd tierStartEnd = doc.getTierContentStartEnd(
@@ -393,37 +390,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                     componentFactory.requestFocusAtOffset(newLocation.charPosition());
                 }
             }
-            return;
         }
-
-        // XXX this was an attempt to handle alignment tiers when moving between records but it doesn't work well
-        // keep it here for now in case we want to revisit this later
-        // single record view is already handled
-//        if(!isAlignmentVisible() || editor.isSingleRecordView()) return;
-//        if(oldLocation.transcriptElementIndex() == newLocation.transcriptElementIndex()) return;
-//
-//        // remove syllabification tiers from previous record (if any)
-//        editor.getTranscriptEditorCaret().freeze();
-//        if(oldLocation.transcriptElementIndex() >= 0) {
-//            final Transcript.Element prevElement = editor.getSession().getTranscript().getElementAt(oldLocation.transcriptElementIndex());
-//            if (prevElement.isRecord()) {
-//                removeAlignmentTiersForRecord(oldLocation.transcriptElementIndex());
-//            }
-//        }
-//
-//        if(newLocation.transcriptElementIndex() >= 0) {
-//            final Transcript.Element newElement = editor.getSession().getTranscript().getElementAt(newLocation.transcriptElementIndex());
-//            if (newElement.isRecord()) {
-//                addAlignmentTiersForRecord(newLocation.transcriptElementIndex());
-//            }
-//        }
-//
-//        // force update dot to new location without issuing a new location changed event by keeping caret frozen
-//        final int newCaretLoc = editor.sessionLocationToCharPos(newLocation);
-//        if(newCaretLoc >= 0) {
-//            editor.getTranscriptEditorCaret().setDot(newCaretLoc, true);
-//        }
-//        editor.getTranscriptEditorCaret().unfreeze();
     }
 
     /**
