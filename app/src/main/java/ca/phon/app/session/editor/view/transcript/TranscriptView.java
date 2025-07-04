@@ -64,8 +64,8 @@ public class TranscriptView extends EditorView {
 
     /* State */
 
-    private final static int FONT_SIZE_DELTA_MIN = -8;
-    private final static int FONT_SIZE_DELTA_MAX = 8;
+    private final static int FONT_SIZE_DELTA_MIN = 0;
+    private final static int FONT_SIZE_DELTA_MAX = 16;
     public float fontSizeDelta = FontPreferences.getFontSizeDelta();
     private boolean findAndReplaceVisible = false;
 
@@ -401,9 +401,7 @@ public class TranscriptView extends EditorView {
      * @param pae the event from the action that called the function
      **/
     private void showFontScaleMenu(PhonActionEvent<Void> pae) {
-        JPanel fontScaleMenu = new JPanel(new BorderLayout());
-        fontScaleMenu.setOpaque(false);
-        fontScaleMenu.setBorder(new EmptyBorder(0,8,0,8));
+        JPopupMenu fontScalePopup = new JPopupMenu();
 
         // Setup font scale slider
         final JLabel smallLbl = new JLabel("A");
@@ -444,24 +442,20 @@ public class TranscriptView extends EditorView {
         fontComp.add(scaleSlider);
         fontComp.add(largeLbl);
 
-        fontScaleMenu.add(fontComp, BorderLayout.CENTER);
+        fontScalePopup.add(fontComp, BorderLayout.CENTER);
 
-        JButton defaultSizeButton = new JButton();
         final PhonUIAction<Void> useDefaultFontSizeAct = PhonUIAction.runnable(() -> {
             scaleSlider.setValue(0);
             if (fontSizeDelta != scaleSlider.getValue()) {
                 setFontSizeDelta(0);
-//                transcriptEditor.getTranscriptDocument().reload();
             }
         });
         useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
         useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
-        defaultSizeButton.setAction(useDefaultFontSizeAct);
-        fontScaleMenu.add(defaultSizeButton, BorderLayout.SOUTH);
+        fontScalePopup.addSeparator();
+        fontScalePopup.add(new JMenuItem(useDefaultFontSizeAct), BorderLayout.SOUTH);
 
         JComponent source = (JComponent) pae.getActionEvent().getSource();
-        JPopupMenu fontScalePopup = new JPopupMenu();
-        fontScalePopup.add(fontScaleMenu);
         fontScalePopup.show(source, 0, source.getHeight());
     }
 

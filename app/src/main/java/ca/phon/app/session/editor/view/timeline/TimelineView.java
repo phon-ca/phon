@@ -446,7 +446,7 @@ public final class TimelineView extends EditorView {
 				largeLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()*2));
 				largeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-				final JSlider scaleSlider = new JSlider(-8, 24);
+				final JSlider scaleSlider = new JSlider(0, 16);
 				scaleSlider.setValue((int)recordGrid.getRecordGrid().getFontSizeDelta());
 				scaleSlider.setMajorTickSpacing(8);
 				scaleSlider.setMinorTickSpacing(2);
@@ -458,6 +458,7 @@ public final class TimelineView extends EditorView {
 				});
 
 				JComponent fontComp = new JPanel(new HorizontalLayout());
+				fontComp.setOpaque(false);
 				fontComp.add(smallLbl);
 				fontComp.add(scaleSlider);
 				fontComp.add(largeLbl);
@@ -1151,7 +1152,27 @@ public final class TimelineView extends EditorView {
 		getWaveformTier().getWaveformDisplay().repaint(tn, startTime, endTime);
 		getRecordTier().getRecordGrid().repaint(tn, startTime, endTime);
 	}
-	
+
+	@Override
+	public Properties getStateProperties() {
+		Properties props = super.getStateProperties();
+		props.setProperty("fontSizeDelta", Float.toString(recordGrid.getRecordGrid().getFontSizeDelta()));
+		return props;
+	}
+
+	@Override
+	public void loadStateProperties(Properties props) {
+		super.loadStateProperties(props);
+		if(props.containsKey("fontSizeDelta")) {
+			try {
+				float fontSizeDelta = Float.parseFloat(props.getProperty("fontSizeDelta"));
+				recordGrid.getRecordGrid().setFontSizeDelta(fontSizeDelta);
+			} catch (NumberFormatException e) {
+				LogUtil.warning(e);
+			}
+		}
+	}
+
 	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {
 
 		@Override
