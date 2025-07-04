@@ -232,6 +232,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
+    public void setSingleRecordIndexNoUpdate(int singleRecordIndex) {
+        var oldIndex = this.singleRecordIndex;
+        this.singleRecordIndex = singleRecordIndex;
+    }
+
     public void updateSingleRecord() {
         final AttributeSet finalElementAttrs = getParagraphAttributes(getDefaultRootElement().getElementCount() - 1);
         // remove content after any header information

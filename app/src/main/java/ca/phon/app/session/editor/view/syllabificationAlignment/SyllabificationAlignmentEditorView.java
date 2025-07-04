@@ -21,10 +21,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.syllabificationAlignment.actions.*;
 import ca.phon.app.session.editor.view.transcript.*;
-import ca.phon.app.session.editor.view.transcript.extensions.AlignmentComponentFactory;
-import ca.phon.app.session.editor.view.transcript.extensions.AlignmentExtension;
-import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationComponentFactory;
-import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
+import ca.phon.app.session.editor.view.transcript.extensions.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Record;
@@ -42,6 +39,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.JXTree;
 import org.w3c.dom.Attr;
 
 import javax.swing.*;
@@ -57,6 +55,10 @@ import java.util.*;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
+/**
+ * Editor view for displaying and editing syllabification and alignment
+ * for the current record.
+ */
 public class SyllabificationAlignmentEditorView extends EditorView {
 
 	public record ScEditData(int transcriptElementIdx, String tier, IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
@@ -94,6 +96,10 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private SyllabificationExtension syllabificationExtension;
 
 	private AlignmentExtension alignmentExtension;
+
+	/** Transcript tree view (debug mode) */
+	private JPanel transcriptTreePanel = null;
+	private JXTree transcriptTree = null;
 
 	public SyllabificationAlignmentEditorView(SessionEditor editor) {
 		super(editor);
@@ -153,7 +159,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		editor.setAutoInsertRecordElements(false);
 		editor.getTranscriptDocument().setSessionNoPopulate(getEditor().getSession());
 		editor.getTranscriptDocument().putDocumentProperty(AlignmentExtension.ALIGNMENT_PARENT, SystemTierType.IPAActual.getName());
-		editor.getTranscriptDocument().setSingleRecordIndex(0);
+		editor.getTranscriptDocument().setSingleRecordIndexNoUpdate(0);
 
 		syllabificationExtension = editor.getExtension(SyllabificationExtension.class);
 		if(syllabificationExtension == null) {
@@ -322,7 +328,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
-		editor.getTranscriptDocument().setSingleRecordIndex(ee.data().recordIndex());
+		editor.getTranscriptDocument().setSingleRecordIndexNoUpdate(ee.data().recordIndex());
 		onDataChanged(ee);
 	}
 
@@ -545,6 +551,56 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		final ResetAlignmentCommand resetAlignmentAct = new ResetAlignmentCommand(getEditor(), this);
 		menuBuilder.addItem(".", new JMenuItem(resetAlignmentAct));
+
+		if(PrefHelper.isDebugMode()) {
+			final PhonUIAction<Void> showTranscriptTreeAct = PhonUIAction.runnable(this::onToggleTranscriptTree);
+			showTranscriptTreeAct.putValue(PhonUIAction.NAME, "Toggle transcript tree");
+			menuBuilder.addSeparator(".", "separator");
+			menuBuilder.addItem(".", showTranscriptTreeAct);
+		}
+	}
+
+	public TranscriptEditor getTranscriptEditor() {
+		return editor;
+	}
+
+	private void onToggleTranscriptTree() {
+		if (transcriptTree == null) {
+			final TranscriptDocumentTreeModel treeModel = new TranscriptDocumentTreeModel(getTranscriptEditor().getTranscriptDocument());
+			transcriptTree = new JXTree(treeModel);
+			transcriptTree.setRootVisible(false);
+		}
+		if(transcriptTreePanel == null) {
+			transcriptTreePanel = new JPanel(new BorderLayout());
+			IconStrip iconStrip = new IconStrip();
+			transcriptTreePanel.add(iconStrip, BorderLayout.NORTH);
+			final PhonUIAction rebuildTreeAct = PhonUIAction.runnable(() -> {
+				transcriptTree.setModel(new TranscriptDocumentTreeModel(getTranscriptEditor().getTranscriptDocument()));
+				SwingUtilities.invokeLater(() -> {
+					transcriptTree.expandRow(0);
+				});
+			});
+			rebuildTreeAct.putValue(PhonUIAction.NAME, "Rebuild tree");
+			rebuildTreeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+			rebuildTreeAct.putValue(FlatButton.ICON_NAME_PROP, "refresh");
+			rebuildTreeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+			iconStrip.add(rebuildTreeAct, IconStrip.IconStripPosition.LEFT);
+
+			transcriptTreePanel.add(new JScrollPane(transcriptTree), BorderLayout.CENTER);
+			transcriptTreePanel.setPreferredSize(new Dimension(500, 0));
+			add(transcriptTreePanel, BorderLayout.EAST);
+			revalidate();
+
+			SwingUtilities.invokeLater(() -> {
+				transcriptTree.expandRow(0);
+			});
+		} else {
+			if(transcriptTreePanel.isVisible()) {
+				transcriptTreePanel.setVisible(false);
+			} else {
+				transcriptTreePanel.setVisible(true);
+			}
+		}
 	}
 
 	@Override
