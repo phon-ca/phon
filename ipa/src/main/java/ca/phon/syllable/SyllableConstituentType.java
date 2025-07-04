@@ -16,8 +16,6 @@
 
 package ca.phon.syllable;
 
-import java.awt.*;
-
 /**
  * Parts of a syllable. Every phone may have one of these
  * types associated with it.
