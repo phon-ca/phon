@@ -19,9 +19,7 @@ import ca.phon.formatter.Formatter;
 import ca.phon.util.Language;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class DefaultLanguageListFormatter implements Formatter<List<Language>> {

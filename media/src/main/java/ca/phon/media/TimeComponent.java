@@ -15,14 +15,12 @@
  */
 package ca.phon.media;
 
-import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.*;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 /**
  * Base class for components which display information on a horizontal timeline

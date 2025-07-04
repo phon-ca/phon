@@ -16,20 +16,12 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSetManager;
-import ca.phon.query.db.xml.io.query.ObjectFactory;
-import ca.phon.query.db.xml.io.query.QueryType;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.io.query.*;
 import jakarta.xml.bind.*;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.stream.*;
+import java.io.*;
 
 /**
  * XML-based implementation of {@link QueryManager}.

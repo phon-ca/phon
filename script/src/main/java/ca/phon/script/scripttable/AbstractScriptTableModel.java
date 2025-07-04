@@ -15,27 +15,16 @@
  */
 package ca.phon.script.scripttable;
 
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.scripttable.io.ObjectFactory;
-import ca.phon.script.scripttable.io.ScriptTable;
-import ca.phon.script.scripttable.io.ScriptTableColumn;
+import ca.phon.script.*;
+import ca.phon.script.scripttable.io.*;
 import jakarta.xml.bind.*;
 import org.mozilla.javascript.*;
 
 import javax.script.ScriptException;
 import javax.swing.table.AbstractTableModel;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.stream.*;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;

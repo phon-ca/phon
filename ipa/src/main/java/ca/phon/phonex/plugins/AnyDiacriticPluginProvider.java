@@ -15,9 +15,7 @@
  */
 package ca.phon.phonex.plugins;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PluginProvider;
+import ca.phon.phonex.*;
 
 import java.util.List;
 

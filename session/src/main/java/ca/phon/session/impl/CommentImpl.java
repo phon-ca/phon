@@ -16,8 +16,8 @@
 package ca.phon.session.impl;
 
 import ca.phon.session.CommentType;
-import ca.phon.session.spi.CommentSPI;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.session.spi.CommentSPI;
 
 /**
  * Default implementation for comment elements.

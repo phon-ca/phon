@@ -15,8 +15,7 @@
  */
 package ca.phon.stresspattern.fsa;
 
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.SimpleFSA;
+import ca.phon.fsa.*;
 import ca.phon.stresspattern.StressMatcherType;
 
 import java.text.ParseException;

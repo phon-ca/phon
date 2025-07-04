@@ -18,8 +18,7 @@ package ca.phon.script.params.ui;
 import ca.phon.script.params.ScriptParam;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.lang.ref.WeakReference;
 
 public class ScriptParamComponentListener implements PropertyChangeListener {

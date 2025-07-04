@@ -20,12 +20,10 @@ import ca.phon.query.report.datasource.ResultListingDataSource;
 import ca.phon.query.report.io.ResultListingFormatType;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 

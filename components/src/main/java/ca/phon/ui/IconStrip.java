@@ -1,6 +1,9 @@
 package ca.phon.ui;
 
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;

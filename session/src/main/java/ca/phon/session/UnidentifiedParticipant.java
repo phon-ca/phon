@@ -17,8 +17,7 @@ package ca.phon.session;
 
 import ca.phon.session.spi.ParticipantSPI;
 
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.*;
 
 /**
  * A participant implementation for 'unidentified' or unknown participants.

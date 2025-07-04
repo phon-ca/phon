@@ -17,8 +17,7 @@ package ca.phon.phonex;
 
 import ca.phon.ipa.IPAElement;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * Match phone string against a regular expression.

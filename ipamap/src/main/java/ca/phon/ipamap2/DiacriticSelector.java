@@ -15,12 +15,10 @@
  */
 package ca.phon.ipamap2;
 
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElementFactory;
+import ca.phon.ipa.*;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DiacriticSelector extends IPAMapSelector {

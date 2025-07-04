@@ -15,15 +15,11 @@
  */
 package ca.phon.query.detectors;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.PhoneticProfile;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MetathesisDetectorResult extends DetectorResult {
 	

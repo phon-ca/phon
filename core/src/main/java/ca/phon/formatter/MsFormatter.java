@@ -15,8 +15,7 @@
  */
 package ca.phon.formatter;
 
-import java.text.Format;
-import java.text.ParseException;
+import java.text.*;
 
 
 /**

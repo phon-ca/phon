@@ -18,9 +18,7 @@ package ca.phon.media.export;
 
 import ca.phon.media.exceptions.PhonMediaException;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 

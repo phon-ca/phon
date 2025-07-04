@@ -16,17 +16,12 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.db.xml.io.resultset.MetaKeyList;
-import ca.phon.query.db.xml.io.resultset.ObjectFactory;
-import ca.phon.query.db.xml.io.resultset.ResultSetType;
-import ca.phon.query.db.xml.io.resultset.ResultType;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.io.resultset.*;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * XML-based implementation of {@link ResultSet}. 

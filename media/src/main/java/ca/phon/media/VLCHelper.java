@@ -20,8 +20,7 @@ import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import com.sun.jna.NativeLibrary;
-import uk.co.caprica.vlcj.binding.LibC;
-import uk.co.caprica.vlcj.binding.RuntimeUtil;
+import uk.co.caprica.vlcj.binding.*;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.support.Info;
 

@@ -17,6 +17,7 @@ package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.tierdata.TierData;
 

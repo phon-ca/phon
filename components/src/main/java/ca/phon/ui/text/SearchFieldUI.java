@@ -19,8 +19,7 @@ import ca.phon.util.icons.IconSize;
 
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
+import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 
 /**

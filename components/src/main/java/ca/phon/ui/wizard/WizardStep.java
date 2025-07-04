@@ -15,8 +15,7 @@
  */
 package ca.phon.ui.wizard;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 
 import javax.swing.*;
 import java.util.Set;

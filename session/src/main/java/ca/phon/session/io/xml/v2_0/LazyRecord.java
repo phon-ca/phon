@@ -17,10 +17,12 @@ package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.spi.RecordSPI;
+import ca.phon.session.*;
+import ca.phon.session.io.xml.v2_0.XmlParticipantType;
+import ca.phon.session.io.xml.v2_0.XmlRecordType;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.session.spi.RecordSPI;
 
 import java.util.List;
 import java.util.Set;

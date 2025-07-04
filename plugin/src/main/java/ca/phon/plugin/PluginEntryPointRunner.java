@@ -16,11 +16,9 @@
 package ca.phon.plugin;
 
 import ca.phon.util.StackTraceInfo;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.worker.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

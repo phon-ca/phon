@@ -16,23 +16,14 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.query.db.Script;
-import ca.phon.query.db.ScriptLibrary;
-import ca.phon.query.db.ScriptURL;
+import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.query.*;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.query.script.*;
 import ca.phon.util.resources.ResourceLoader;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

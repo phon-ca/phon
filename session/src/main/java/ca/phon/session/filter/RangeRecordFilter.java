@@ -16,13 +16,12 @@
 package ca.phon.session.filter;
 
 import ca.phon.session.Record;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 import ca.phon.util.Range;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Filters utterances based on their position in the list.

@@ -2,7 +2,7 @@ package ca.phon.session.alignment;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.Terminator;
+import ca.phon.orthography.Word;
 import ca.phon.session.Tier;
 import ca.phon.visitor.annotation.Visits;
 

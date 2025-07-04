@@ -15,15 +15,12 @@
  */
 package ca.phon.query.detectors;
 
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.PhoneticProfile;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.query.detectors.MetathesisDetectorResult.Type;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * <div id='metathesis'><h2>Metathesis</h2>

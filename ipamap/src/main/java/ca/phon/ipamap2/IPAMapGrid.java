@@ -15,8 +15,7 @@
  */
 package ca.phon.ipamap2;
 
-import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.ipamap.io.Grid;
+import ca.phon.ui.ipamap.io.*;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;

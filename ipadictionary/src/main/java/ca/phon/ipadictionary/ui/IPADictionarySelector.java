@@ -1,7 +1,6 @@
 package ca.phon.ipadictionary.ui;
 
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.ipadictionary.*;
 import ca.phon.util.Language;
 
 import javax.swing.*;

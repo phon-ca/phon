@@ -17,8 +17,8 @@ package ca.phon.media;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Basic waveform display

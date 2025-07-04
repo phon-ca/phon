@@ -15,16 +15,12 @@
  */
 package ca.phon.query.script.params;
 
-import ca.phon.ipamap2.DiacriticSelector;
-import ca.phon.ipamap2.IPAMapCellSelectionListener;
-import ca.phon.ipamap2.IPAMapGrid;
-import ca.phon.ipamap2.IPAMapGridContainer;
+import ca.phon.ipamap2.*;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;

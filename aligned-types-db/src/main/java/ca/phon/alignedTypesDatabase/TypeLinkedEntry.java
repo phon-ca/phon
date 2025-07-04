@@ -14,14 +14,9 @@
 
 package ca.phon.alignedTypesDatabase;
 
-import ca.hedlund.tst.TernaryTree;
-import ca.hedlund.tst.TernaryTreeNode;
-import ca.hedlund.tst.TernaryTreeNodePath;
+import ca.hedlund.tst.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 final class TypeLinkedEntry implements Serializable {

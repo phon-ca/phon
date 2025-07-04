@@ -15,9 +15,7 @@
  */
 package ca.phon.ui.text;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.JTextComponent;
+import javax.swing.text.*;
 import java.awt.*;
 
 public class OverwriteCaret extends DefaultCaret {

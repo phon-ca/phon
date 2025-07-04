@@ -15,8 +15,7 @@
  */
 package ca.phon.syllable;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IntraWordPause;
+import ca.phon.ipa.*;
 
 /**
  * Extension which is added an {@link IPATranscript} object

@@ -15,11 +15,10 @@
  */
 package ca.phon.orthography;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 import ca.phon.orthography.parser.*;
-import ca.phon.visitor.Visitable;
-import ca.phon.visitor.Visitor;
+import ca.phon.orthography.parser.OrthoParserException;
+import ca.phon.visitor.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.RecognitionException;
 

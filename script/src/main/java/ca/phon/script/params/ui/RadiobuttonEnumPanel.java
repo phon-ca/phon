@@ -20,12 +20,10 @@ import ca.phon.script.params.EnumScriptParam.ReturnValue;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import java.awt.event.*;
+import java.beans.*;
 import java.util.List;
+import java.util.*;
 
 public class RadiobuttonEnumPanel extends JPanel {
 

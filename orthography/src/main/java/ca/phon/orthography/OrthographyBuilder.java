@@ -19,9 +19,7 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.extensions.UnvalidatedValue;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class for building {@link Orthography} from various sources.  This class

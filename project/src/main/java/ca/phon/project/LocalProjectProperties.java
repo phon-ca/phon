@@ -1,16 +1,16 @@
 package ca.phon.project;
 
+import ca.phon.extensions.Extension;
+import ca.phon.extensions.ExtensionProvider;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.project.io.CorpusType;
+import ca.phon.project.io.ProjectType;
+import ca.phon.worker.PhonWorker;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;

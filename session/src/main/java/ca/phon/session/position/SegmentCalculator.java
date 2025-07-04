@@ -15,8 +15,8 @@
  */
 package ca.phon.session.position;
 
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 
 /**
  * Used to calculate the start/end time values for

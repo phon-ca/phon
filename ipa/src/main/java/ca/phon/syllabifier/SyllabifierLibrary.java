@@ -15,10 +15,8 @@
  */
 package ca.phon.syllabifier;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.util.Language;
-import ca.phon.util.PrefHelper;
+import ca.phon.extensions.*;
+import ca.phon.util.*;
 import ca.phon.util.resources.ResourceLoader;
 
 import java.util.*;

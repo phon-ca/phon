@@ -16,9 +16,7 @@
 package ca.phon.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class RecentFiles implements Iterable<File> {
 	

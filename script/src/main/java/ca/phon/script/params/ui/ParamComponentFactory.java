@@ -17,21 +17,17 @@ package ca.phon.script.params.ui;
 
 import ca.phon.script.params.*;
 import ca.phon.script.params.EnumScriptParam.ReturnValue;
-import ca.phon.ui.text.PatternEditor;
-import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
-import org.jdesktop.swingx.VerticalLayout;
-import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
+import org.jdesktop.swingx.painter.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 /**
  * Factory responsible for creating components for script parameter

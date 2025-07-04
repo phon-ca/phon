@@ -15,9 +15,7 @@
  */
 package ca.phon.syllable.phonex;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PluginProvider;
+import ca.phon.phonex.*;
 import ca.phon.syllable.SyllableConstituentType;
 
 import java.util.List;

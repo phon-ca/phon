@@ -18,12 +18,10 @@ package ca.phon.ipadictionary.impl;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 import ca.phon.ipadictionary.spi.*;
-import ca.phon.util.Language;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * Perform lookups on multiple dictionaries at once.

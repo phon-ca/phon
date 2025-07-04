@@ -16,12 +16,9 @@
 package ca.phon.query.report.util;
 
 import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.io.ObjectFactory;
-import ca.phon.query.report.io.ResultListingField;
-import ca.phon.query.report.io.ScriptParameter;
+import ca.phon.query.report.io.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Scripts for adding values to (now deprecated) reports.

@@ -16,6 +16,8 @@
 package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.ipa.*;
+import ca.phon.ipa.Linker;
+import ca.phon.ipa.Pause;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;

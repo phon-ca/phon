@@ -15,33 +15,22 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.*;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryException;
-import ca.phon.ipadictionary.spi.IPADictionarySPI;
-import ca.phon.ipadictionary.spi.LanguageInfo;
-import ca.phon.ipadictionary.spi.Metadata;
-import ca.phon.ipadictionary.spi.NameInfo;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.util.Language;
-import ca.phon.util.Tuple;
+import ca.phon.ipadictionary.spi.*;
+import ca.phon.phonex.*;
+import ca.phon.syllabifier.*;
+import ca.phon.util.*;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * An IPADictionary implementation that uses a tokenizer and lookup

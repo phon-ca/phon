@@ -19,8 +19,7 @@ import ca.phon.csv.CSVWriter;
 import ca.phon.query.report.datasource.TableDataSource;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 /**
  * Write the data for the tabular data sources
  * to the given csv writer.

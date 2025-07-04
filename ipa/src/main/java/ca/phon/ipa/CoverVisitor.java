@@ -15,15 +15,13 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.syllable.Segregated;
-import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.phonex.*;
+import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * Performs the cover operation on a {@link IPATranscript}

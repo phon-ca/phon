@@ -15,14 +15,10 @@
  */
 package ca.phon.session.check;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 import ca.phon.session.Session;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Session validator with plug-in support.  This class maintains the

@@ -17,8 +17,7 @@ package ca.phon.media;
 
 import ca.phon.audio.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Save a segment of sampled audio to given file using fileType and encoding

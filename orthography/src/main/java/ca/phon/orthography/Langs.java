@@ -2,7 +2,6 @@ package ca.phon.orthography;
 
 import ca.phon.util.Documentation;
 import ca.phon.util.Language;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

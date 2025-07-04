@@ -16,23 +16,18 @@
 
 package ca.phon.ui.ipa;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.*;
 import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
-import java.util.ArrayList;
+import java.awt.geom.*;
 import java.util.List;
+import java.util.*;
 
 /**
  *

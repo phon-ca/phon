@@ -17,8 +17,10 @@ package ca.phon.ipa;
 
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A factory for creating various types of {@link IPAElement}

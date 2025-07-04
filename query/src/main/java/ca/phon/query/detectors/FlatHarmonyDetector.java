@@ -15,16 +15,11 @@
  */
 package ca.phon.query.detectors;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.PhoneticProfile;
+import ca.phon.ipa.*;
 import ca.phon.util.Tuple;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Detects harmony on single {@link IPATranscript}s. This is useful for

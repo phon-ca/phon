@@ -16,15 +16,10 @@
 package ca.phon.script;
 
 import ca.phon.script.js.ExtendableWrapFactory;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.*;
 import org.mozilla.javascript.*;
-import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
-import org.mozilla.javascript.commonjs.module.Require;
-import org.mozilla.javascript.commonjs.module.RequireBuilder;
-import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
-import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
-import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
+import org.mozilla.javascript.commonjs.module.*;
+import org.mozilla.javascript.commonjs.module.provider.*;
 
 import java.io.PrintStream;
 import java.net.URI;

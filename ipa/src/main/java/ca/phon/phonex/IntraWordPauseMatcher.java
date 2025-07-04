@@ -15,8 +15,7 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IntraWordPause;
+import ca.phon.ipa.*;
 
 public class IntraWordPauseMatcher implements PhoneMatcher {
 

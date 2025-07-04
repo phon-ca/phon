@@ -17,7 +17,8 @@ package ca.phon.project;
 
 import ca.phon.project.exceptions.ProjectConfigurationException;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 
 /**
  * Create or open projects from a given location.

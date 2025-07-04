@@ -15,28 +15,16 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.cvseq.CVSeqPattern;
-import ca.phon.cvseq.CVSeqType;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.features.IPAElementComparator;
-import ca.phon.ipa.parser.UnicodeIPAParserErrorListener;
-import ca.phon.ipa.parser.UnicodeIPAParserErrorStrategy;
-import ca.phon.ipa.parser.UnicodeIPAParserListener;
+import ca.phon.cvseq.*;
+import ca.phon.extensions.*;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.parser.*;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.phonex.*;
-import ca.phon.stresspattern.StressMatcherType;
-import ca.phon.stresspattern.StressPattern;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableAndPausesVisitor;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.syllable.SyllableVisitor;
-import ca.phon.util.Range;
-import ca.phon.visitor.Visitable;
-import ca.phon.visitor.Visitor;
-import ca.phon.visitor.VisitorAdapter;
+import ca.phon.stresspattern.*;
+import ca.phon.syllable.*;
+import ca.phon.util.*;
+import ca.phon.visitor.*;
 import ca.phon.visitor.annotation.Visits;
 import org.antlr.v4.runtime.CharStreams;
 

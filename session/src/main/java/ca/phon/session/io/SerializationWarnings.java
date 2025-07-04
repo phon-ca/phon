@@ -18,10 +18,7 @@ package ca.phon.session.io;
 import ca.phon.extensions.Extension;
 import ca.phon.session.Session;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Extension(Session.class)
 public class SerializationWarnings {

@@ -15,22 +15,18 @@
  */
 package ca.phon.ui.text;
 
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
+import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.util.ArrayList;
 import java.util.List;
 

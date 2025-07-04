@@ -15,12 +15,11 @@
  */
 package ca.phon.session;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.spi.TierSPI;
 
+import javax.swing.text.html.Option;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.*;

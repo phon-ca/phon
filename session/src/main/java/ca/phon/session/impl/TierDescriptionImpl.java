@@ -15,8 +15,8 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.spi.TierDescriptionSPI;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.session.spi.TierDescriptionSPI;
 
 import java.util.*;
 

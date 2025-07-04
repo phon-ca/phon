@@ -21,14 +21,10 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import org.fife.ui.rsyntaxtextarea.ErrorStrip;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import com.jgoodies.forms.layout.*;
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import java.awt.*;

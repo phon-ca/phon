@@ -15,9 +15,7 @@
  */
 package ca.phon.util.resources;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Load resources of the parameterized type

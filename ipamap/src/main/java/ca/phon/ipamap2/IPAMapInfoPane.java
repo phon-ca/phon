@@ -15,14 +15,12 @@
  */
 package ca.phon.ipamap2;
 
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.IPATokens;
 import ca.phon.ui.ipamap.io.Cell;
 import org.apache.commons.lang3.StringUtils;
-import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
-import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import javax.swing.*;

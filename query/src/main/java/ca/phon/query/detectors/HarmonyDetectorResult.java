@@ -15,8 +15,7 @@
  */
 package ca.phon.query.detectors;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.PhoneticProfile;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 

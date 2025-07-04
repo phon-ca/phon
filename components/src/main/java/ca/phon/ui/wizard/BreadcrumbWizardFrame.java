@@ -16,9 +16,7 @@
 package ca.phon.ui.wizard;
 
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.jbreadcrumb.Breadcrumb;
-import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
-import ca.phon.ui.jbreadcrumb.JBreadcrumb;
+import ca.phon.ui.jbreadcrumb.*;
 
 import javax.swing.*;
 import java.awt.*;

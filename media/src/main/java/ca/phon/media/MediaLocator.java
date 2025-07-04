@@ -20,17 +20,14 @@ import ca.phon.project.ProjectMediaFolders;
 import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.EmptyQueueException;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.Queue;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Helper methods for locating and handling paths for media files.

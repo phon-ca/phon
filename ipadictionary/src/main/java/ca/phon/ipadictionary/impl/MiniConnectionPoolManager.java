@@ -26,16 +26,11 @@
 
 package ca.phon.ipadictionary.impl;
 
-import javax.sql.ConnectionEvent;
-import javax.sql.ConnectionEventListener;
-import javax.sql.ConnectionPoolDataSource;
-import javax.sql.PooledConnection;
+import javax.sql.*;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Stack;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * A simple standalone JDBC connection pool manager.

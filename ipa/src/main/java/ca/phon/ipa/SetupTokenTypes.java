@@ -16,11 +16,9 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.parser.IPATokenType;
-import ca.phon.ipa.parser.IPATokens;
+import ca.phon.ipa.parser.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SetupTokenTypes {
 	

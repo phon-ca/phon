@@ -20,8 +20,8 @@ import ca.phon.util.Tuple;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * <p>Helper class for building menus.  Menus items are 'addressed' using paths.  Paths are

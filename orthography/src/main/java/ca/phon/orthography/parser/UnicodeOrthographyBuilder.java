@@ -2,10 +2,9 @@ package ca.phon.orthography.parser;
 
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.Terminator;
-import ca.phon.orthography.mor.Pos;
 import ca.phon.util.Language;
 
 import java.text.ParseException;

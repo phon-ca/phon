@@ -15,10 +15,9 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
+import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;

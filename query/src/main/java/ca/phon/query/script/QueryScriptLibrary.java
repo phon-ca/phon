@@ -15,10 +15,8 @@
  */
 package ca.phon.query.script;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.extensions.*;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectResources;
 import ca.phon.query.db.*;

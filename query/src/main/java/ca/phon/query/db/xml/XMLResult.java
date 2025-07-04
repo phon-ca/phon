@@ -16,11 +16,8 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.query.db.ReportHelper;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.db.xml.io.resultset.MetaType;
-import ca.phon.query.db.xml.io.resultset.ResultType;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.io.resultset.*;
 
 import java.util.*;
 

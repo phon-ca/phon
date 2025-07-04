@@ -16,8 +16,7 @@
 package ca.phon.media;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Audio channels

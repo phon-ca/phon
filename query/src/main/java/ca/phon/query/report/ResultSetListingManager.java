@@ -17,17 +17,12 @@ package ca.phon.query.report;
 
 import ca.phon.project.Project;
 import ca.phon.project.ProjectResources;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.io.ObjectFactory;
-import ca.phon.query.report.io.ReportDesign;
-import ca.phon.query.report.io.ResultListing;
-import ca.phon.query.report.io.Section;
+import ca.phon.query.db.*;
+import ca.phon.query.report.io.*;
 import ca.phon.util.PrefHelper;
 import jakarta.xml.bind.JAXBElement;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Handles storage of result listing formats

@@ -15,13 +15,10 @@
  */
 package ca.phon.ipadictionary;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.ipadictionary.exceptions.CapabilityNotImplemented;
-import ca.phon.ipadictionary.exceptions.IPADictionaryException;
+import ca.phon.extensions.*;
+import ca.phon.ipadictionary.exceptions.*;
 import ca.phon.ipadictionary.spi.*;
-import ca.phon.util.Language;
-import ca.phon.util.LanguageEntry;
+import ca.phon.util.*;
 
 import java.util.*;
 import java.util.logging.Level;

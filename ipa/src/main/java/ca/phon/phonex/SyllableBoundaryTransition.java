@@ -15,13 +15,8 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.fsa.FSAState;
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.OffsetType;
-import ca.phon.ipa.CompoundPhone;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
+import ca.phon.fsa.*;
+import ca.phon.ipa.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

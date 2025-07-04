@@ -15,11 +15,9 @@
  */
 package ca.phon.media;
 
-import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.*;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.util.EventListener;
 
 public interface TimeUIModelListener extends EventListener {

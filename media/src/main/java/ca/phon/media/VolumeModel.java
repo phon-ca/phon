@@ -1,7 +1,6 @@
 package ca.phon.media;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.beans.*;
 
 /**
  * Volume model used by all media playback elements in the session editor.

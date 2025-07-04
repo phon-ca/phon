@@ -1,7 +1,7 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.IntervalTier;
 import ca.phon.session.MediaUnit;
+import ca.phon.session.IntervalTier;
 
 import java.util.List;
 

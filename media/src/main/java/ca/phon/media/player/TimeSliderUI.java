@@ -15,20 +15,15 @@
  */
 package ca.phon.media.player;
 
-import ca.phon.formatter.MsFormatter;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.formatter.MsFormatter;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.*;
 import javax.swing.plaf.SliderUI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.*;
 
 public class TimeSliderUI extends SliderUI {
 	

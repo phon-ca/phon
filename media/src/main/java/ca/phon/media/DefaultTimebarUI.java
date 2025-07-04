@@ -16,21 +16,17 @@
 package ca.phon.media;
 
 import ca.phon.formatter.MediaTimeFormatter;
-import ca.phon.formatter.MsFormatter;
 import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.formatter.MsFormatter;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.geom.*;
+import java.beans.*;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DefaultTimebarUI extends TimebarUI {
 	

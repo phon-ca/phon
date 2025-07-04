@@ -19,9 +19,7 @@ import ca.phon.session.Sex;
 import ca.phon.ui.DateTimeDocument;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
+import javax.swing.text.*;
 import java.awt.*;
 import java.time.LocalDate;
 

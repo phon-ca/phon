@@ -16,13 +16,11 @@
 package ca.phon.phonex;
 
 import ca.phon.ipa.*;
-import ca.phon.ipa.parser.IPATokenType;
-import ca.phon.ipa.parser.IPATokens;
+import ca.phon.ipa.parser.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 

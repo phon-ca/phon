@@ -15,37 +15,29 @@
  */
 package ca.phon.ui.participant;
 
-import ca.phon.session.Participant;
-import ca.phon.session.ParticipantRole;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Sex;
+import ca.phon.session.*;
 import ca.phon.session.format.AgeFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.ComponentWithMessage;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.text.DatePicker;
-import ca.phon.ui.text.FormatterTextField;
-import ca.phon.ui.text.LanguageField;
+import ca.phon.ui.text.*;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.time.LocalDate;
-import java.time.Period;
+import java.beans.*;
+import java.time.*;
 import java.util.List;
 import java.util.function.Consumer;
 

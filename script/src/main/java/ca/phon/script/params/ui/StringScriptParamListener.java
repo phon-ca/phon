@@ -19,8 +19,7 @@ import ca.phon.script.params.ScriptParam;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import java.awt.event.ActionEvent;
 import java.lang.ref.WeakReference;
 

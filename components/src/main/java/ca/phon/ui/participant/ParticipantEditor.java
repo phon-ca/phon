@@ -16,6 +16,7 @@
 package ca.phon.ui.participant;
 
 import ca.phon.session.Participant;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
@@ -24,8 +25,7 @@ import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.util.List;
 

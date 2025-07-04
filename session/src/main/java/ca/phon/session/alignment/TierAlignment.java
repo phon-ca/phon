@@ -3,6 +3,7 @@ package ca.phon.session.alignment;
 import ca.phon.session.Tier;
 import ca.phon.util.Tuple;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

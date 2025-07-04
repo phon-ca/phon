@@ -17,11 +17,8 @@ package ca.phon.ui.text;
 
 import ca.hedlund.tst.TernaryTree;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class TreeTextCompleterModel<T> implements TextCompleterModel<T> {
 	

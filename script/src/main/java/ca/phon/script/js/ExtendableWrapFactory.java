@@ -16,9 +16,7 @@
 package ca.phon.script.js;
 
 import ca.phon.extensions.IExtendable;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.WrapFactory;
+import org.mozilla.javascript.*;
 
 public class ExtendableWrapFactory extends WrapFactory {
 

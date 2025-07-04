@@ -15,8 +15,7 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 

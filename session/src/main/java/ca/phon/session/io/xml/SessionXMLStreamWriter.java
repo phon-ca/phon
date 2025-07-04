@@ -1,6 +1,7 @@
 package ca.phon.session.io.xml;
 
 import ca.phon.xml.DelegatingXMLStreamWriter;
+import ca.phon.xml.EmptyTagXMLStreamWriter;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;

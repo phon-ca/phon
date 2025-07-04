@@ -19,8 +19,7 @@ import ca.phon.script.params.MultiboolScriptParam;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 /**
  *

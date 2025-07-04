@@ -15,14 +15,10 @@
  */
 package ca.phon.query.script.params;
 
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElementFactory;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.*;
 import ca.phon.script.params.ScriptParam;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

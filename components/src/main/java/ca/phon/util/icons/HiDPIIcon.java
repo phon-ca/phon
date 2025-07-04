@@ -17,8 +17,7 @@ package ca.phon.util.icons;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
+import java.awt.image.*;
 
 public class HiDPIIcon extends ImageIcon {
 

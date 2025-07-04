@@ -8,10 +8,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.UserTierType;
 import ca.phon.util.Tuple;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class TierAligner {
 

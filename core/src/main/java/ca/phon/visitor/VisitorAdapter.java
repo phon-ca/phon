@@ -17,10 +17,8 @@ package ca.phon.visitor;
 
 import ca.phon.visitor.annotation.Visits;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

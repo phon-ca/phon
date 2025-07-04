@@ -1,9 +1,30 @@
 package ca.phon.session.io.xml.v2_0;
 
-import ca.phon.orthography.*;
-import ca.phon.orthography.Error;
-import ca.phon.orthography.Terminator;
 import ca.phon.orthography.mor.Pos;
+import ca.phon.orthography.*;
+import ca.phon.orthography.Action;
+import ca.phon.orthography.Error;
+import ca.phon.orthography.Freecode;
+import ca.phon.orthography.Italic;
+import ca.phon.orthography.Linker;
+import ca.phon.orthography.LinkerType;
+import ca.phon.orthography.LongFeature;
+import ca.phon.orthography.Nonvocal;
+import ca.phon.orthography.OtherSpokenEvent;
+import ca.phon.orthography.OverlapPoint;
+import ca.phon.orthography.Pause;
+import ca.phon.orthography.Postcode;
+import ca.phon.orthography.Quotation;
+import ca.phon.orthography.SeparatorType;
+import ca.phon.orthography.TagMarker;
+import ca.phon.orthography.TagMarkerType;
+import ca.phon.orthography.TerminatorType;
+import ca.phon.orthography.ToneMarker;
+import ca.phon.orthography.ToneMarkerType;
+import ca.phon.orthography.Underline;
+import ca.phon.orthography.UntranscribedType;
+import ca.phon.orthography.WordFormType;
+import ca.phon.orthography.WordType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

@@ -15,22 +15,15 @@
  */
 package ca.phon.media;
 
-import ca.phon.audio.AudioFileEncoding;
-import ca.phon.audio.AudioIO;
-import ca.phon.audio.AudioIOException;
-import ca.phon.audio.Sampled;
+import ca.phon.audio.*;
 
 import javax.sound.sampled.*;
 import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.Mixer.Info;
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.beans.*;
+import java.io.*;
+import java.util.*;
 
 public class SampledPlaySegment extends PlaySegment {
 	

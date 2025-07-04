@@ -15,10 +15,7 @@
  */
 package ca.phon.ui.menu;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.IPluginMenuFilter;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 import javax.swing.*;
 import java.awt.*;

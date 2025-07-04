@@ -15,18 +15,12 @@
  */
 package ca.phon.ui;
 
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
+import ca.phon.ui.action.*;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
-import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-import org.jdesktop.swingx.painter.RectanglePainter;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.painter.*;
 
 import javax.swing.*;
 import java.awt.*;

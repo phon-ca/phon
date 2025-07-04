@@ -17,8 +17,7 @@ package ca.phon.media;
 
 import ca.phon.audio.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class AudioFileLongSound extends LongSound {
 	

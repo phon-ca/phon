@@ -15,15 +15,14 @@
  */
 package ca.phon.ipadictionary;
 
-import ca.phon.ipadictionary.impl.CompoundDictionary;
-import ca.phon.ipadictionary.impl.ImmutablePlainTextDictionary;
+import ca.phon.ipadictionary.impl.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.util.Language;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.*;
 
 public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary> 
 	implements DictionaryProvider {

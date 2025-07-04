@@ -15,12 +15,10 @@
  */
 package ca.phon.ipamap;
 
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Map;
 
 @PhonPlugin(name="default")

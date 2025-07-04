@@ -15,6 +15,7 @@
  */
 package ca.phon.ui.text;
 
+import ca.phon.orthography.InternalMedia;
 import ca.phon.project.Project;
 
 import javax.swing.*;

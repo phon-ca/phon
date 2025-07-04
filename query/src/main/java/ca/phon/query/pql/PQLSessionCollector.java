@@ -4,10 +4,7 @@ import ca.phon.project.Project;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.util.Range;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PQLSessionCollector extends PQLBaseVisitor<Void> {
 
