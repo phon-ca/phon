@@ -20,30 +20,21 @@ import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.text.DefaultTextCompleterModel;
-import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.FieldState;
-import ca.phon.ui.text.TextCompleter;
 import ca.phon.util.Tuple;
 import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
 import java.lang.ref.WeakReference;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Iterator;
+import java.nio.file.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Media selection field for {@link SessionEditor}

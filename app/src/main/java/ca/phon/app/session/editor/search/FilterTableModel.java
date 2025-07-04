@@ -19,14 +19,9 @@ import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import javax.swing.RowFilter.Entry;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 /**

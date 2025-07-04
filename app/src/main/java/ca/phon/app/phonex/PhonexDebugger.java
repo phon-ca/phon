@@ -16,49 +16,33 @@
 package ca.phon.app.phonex;
 
 import ca.phon.app.syllabifier.SyllabifierComboBox;
-import ca.phon.fsa.FSAState;
+import ca.phon.fsa.*;
 import ca.phon.fsa.FSAState.RunningState;
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.SimpleFSA;
 import ca.phon.fsa.SimpleFSA.DecisionTracker;
-import ca.phon.fsa.SimpleFSADebugContext;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.phonex.PhonexFSA;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
+import ca.phon.ipa.*;
+import ca.phon.phonex.*;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.PatternEditor;
 import ca.phon.ui.text.PatternEditor.SyntaxStyle;
 import guru.nidi.graphviz.attribute.Color;
-import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.engine.Renderer;
+import guru.nidi.graphviz.engine.*;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.VerticalLayout;
-import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import org.jdesktop.swingx.treetable.TreeTableNode;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.treetable.*;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.*;
 
 public class PhonexDebugger extends JComponent {
 

@@ -17,8 +17,7 @@
 package ca.phon.app.session.editor.view.timeline;
 
 import ca.phon.formatter.MsFormatter;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;

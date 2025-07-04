@@ -15,8 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
-import ca.phon.app.project.AnonymizeParticipantInfoWizard;
-import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.*;
 
 import java.awt.event.ActionEvent;
 

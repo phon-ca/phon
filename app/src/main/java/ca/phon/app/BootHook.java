@@ -17,16 +17,12 @@ package ca.phon.app;
 
 import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 import ca.phon.util.OSInfo;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Setup appliation environment using resource files

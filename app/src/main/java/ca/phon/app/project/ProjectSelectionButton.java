@@ -3,16 +3,15 @@ package ca.phon.app.project;
 import ca.phon.app.workspace.Workspace;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.FileSelectionButton;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A button for selecting {@link Project} folders.

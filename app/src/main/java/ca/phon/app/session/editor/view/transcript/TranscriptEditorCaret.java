@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
+import org.apache.logging.log4j.Level;
 
 import javax.swing.plaf.TextUI;
 import javax.swing.text.*;

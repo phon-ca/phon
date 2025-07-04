@@ -15,17 +15,16 @@
  */
 package ca.phon.app.project;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.LocalProjectButton;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.FlatButtonUIProps;
 import ca.phon.ui.PhonGuiConstants;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.util.OSInfo;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
@@ -33,8 +32,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class RecentProjectsList extends JPanel {
 

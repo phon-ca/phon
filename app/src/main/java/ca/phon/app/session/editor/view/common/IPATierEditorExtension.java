@@ -17,22 +17,16 @@ package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.syllabificationAlignment.ScTypeEdit;
-import ca.phon.app.session.editor.view.syllabificationAlignment.ToggleDiphthongEdit;
+import ca.phon.app.session.editor.view.syllabificationAlignment.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.session.PhoneAlignment;
+import ca.phon.plugin.*;
 import ca.phon.session.Record;
-import ca.phon.session.SyllabifierOptions;
-import ca.phon.session.Tier;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.ipa.*;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 /**
  * Editor for IPATranscript tiers 

@@ -1,23 +1,14 @@
 package ca.phon.app;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
-import me.friwi.jcefmaven.CefAppBuilder;
-import me.friwi.jcefmaven.CefInitializationException;
-import me.friwi.jcefmaven.MavenCefAppHandlerAdapter;
-import me.friwi.jcefmaven.UnsupportedPlatformException;
+import ca.phon.plugin.*;
+import ca.phon.util.*;
+import me.friwi.jcefmaven.*;
 import me.friwi.jcefmaven.impl.progress.ConsoleProgressHandler;
-import org.cef.CefApp;
-import org.cef.CefClient;
-import org.cef.browser.CefBrowser;
-import org.cef.browser.CefMessageRouter;
+import org.cef.*;
+import org.cef.browser.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public final class JCefHelper {
 

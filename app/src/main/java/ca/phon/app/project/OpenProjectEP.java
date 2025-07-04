@@ -19,27 +19,19 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.app.welcome.WelcomeWindow;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.LocalProjectProperties;
-import ca.phon.project.Project;
-import ca.phon.project.ProjectPaths;
-import ca.phon.project.ProjectProperties;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {

@@ -19,15 +19,13 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.ui.ipa.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;

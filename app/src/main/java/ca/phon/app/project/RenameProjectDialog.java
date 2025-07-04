@@ -7,14 +7,12 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.ToastFactory;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class RenameProjectDialog extends JDialog {
 

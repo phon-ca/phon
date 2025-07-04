@@ -1,5 +1,6 @@
 package ca.phon.app.project;
 
+import bibliothek.gui.dock.common.CControl;
 import ca.phon.project.Project;
 
 import javax.swing.*;

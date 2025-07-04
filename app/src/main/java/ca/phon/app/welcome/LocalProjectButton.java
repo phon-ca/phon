@@ -18,6 +18,7 @@ package ca.phon.app.welcome;
 import ca.phon.app.log.LogUtil;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.worker.*;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
@@ -26,17 +27,13 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
+import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.locks.*;
 
 public class LocalProjectButton extends MultiActionButton {
 

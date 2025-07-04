@@ -20,16 +20,13 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.query.report.datasource.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.*;
+import java.io.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @OpNodeInfo(category = "Table", description = "Create a new table with specified columns", name = "Create Table", showInLibrary = true)

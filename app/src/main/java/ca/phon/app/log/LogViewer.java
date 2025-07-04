@@ -19,16 +19,16 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
-import org.cef.browser.CefBrowser;
+import org.cef.browser.*;
 import org.cef.handler.CefLoadHandlerAdapter;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**

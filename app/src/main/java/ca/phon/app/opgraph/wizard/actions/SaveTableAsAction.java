@@ -4,6 +4,7 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.TableExporter;
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;

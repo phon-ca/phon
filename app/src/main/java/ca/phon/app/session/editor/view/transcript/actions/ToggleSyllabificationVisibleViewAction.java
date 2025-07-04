@@ -7,9 +7,12 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
+import com.kitfox.svg.A;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**

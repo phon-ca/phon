@@ -16,25 +16,21 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
-import ca.phon.query.script.params.DiacriticOptionsPanel;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam;
+import ca.phon.query.script.params.*;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

@@ -16,28 +16,23 @@
 package ca.phon.app.welcome;
 
 import ca.phon.ui.MultiActionButton;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXPanel;
+import ca.phon.worker.*;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.text.*;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.concurrent.locks.*;
+import java.util.regex.*;
 
 /**
  * Displays a project button for the start dialog.

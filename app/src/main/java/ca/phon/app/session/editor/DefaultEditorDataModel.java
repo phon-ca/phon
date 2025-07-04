@@ -17,8 +17,8 @@ package ca.phon.app.session.editor;
 
 import ca.phon.project.Project;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
+import ca.phon.session.*;
+import com.kitfox.svg.A;
 
 import java.util.concurrent.atomic.AtomicReference;
 

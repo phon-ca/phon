@@ -1,8 +1,11 @@
 package ca.phon.app.opgraph.report;
 
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableNodeTableModel extends AbstractTableModel {
 

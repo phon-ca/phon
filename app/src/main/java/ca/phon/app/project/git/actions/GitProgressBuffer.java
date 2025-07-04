@@ -15,8 +15,7 @@
  */
 package ca.phon.app.project.git.actions;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogBuffer;
+import ca.phon.app.log.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

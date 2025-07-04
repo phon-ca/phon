@@ -16,23 +16,19 @@
 package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
 
 public class NewSessionPanel extends JPanel {
 

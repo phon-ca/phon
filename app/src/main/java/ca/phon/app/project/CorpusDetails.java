@@ -15,21 +15,21 @@
  */
 package ca.phon.app.project;
 
+import ca.hedlund.desktopicons.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
+import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.OSInfo;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.awt.event.*;
+import java.io.*;
+import java.nio.file.*;
 import java.util.Iterator;
 
 /**

@@ -18,8 +18,7 @@ package ca.phon.app.session.editor.actions;
 import ca.phon.app.hooks.ActionHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.*;
 import ca.phon.project.LocalProject;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -27,13 +26,10 @@ import ca.phon.util.PrefHelper;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.model.enums.CompressionLevel;
-import net.lingala.zip4j.model.enums.CompressionMethod;
+import net.lingala.zip4j.model.enums.*;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 

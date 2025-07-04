@@ -24,6 +24,7 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
+import ca.phon.util.PrefHelper;
 import org.jdesktop.swingx.JXMonthView;
 
 import javax.swing.*;

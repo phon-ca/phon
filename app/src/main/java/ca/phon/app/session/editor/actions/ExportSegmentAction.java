@@ -16,27 +16,21 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.CustomSegmentDialog;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionMediaModel;
+import ca.phon.app.session.editor.*;
 import ca.phon.audio.AudioFileType;
-import ca.phon.media.ExportSegment;
-import ca.phon.media.LongSound;
-import ca.phon.session.MediaSegment;
+import ca.phon.media.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
+import ca.phon.session.*;
 import ca.phon.session.position.SegmentCalculator;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 

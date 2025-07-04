@@ -14,6 +14,7 @@ import ca.phon.ui.FlatButton;
 import ca.phon.ui.HasIconStrip;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

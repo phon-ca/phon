@@ -20,13 +20,10 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
-import ca.phon.app.session.editor.view.tierManagement.TierEditorDialog;
-import ca.phon.app.session.editor.view.tierManagement.TierInfoEditor;
+import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.session.*;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.toast.*;
+import ca.phon.util.icons.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;

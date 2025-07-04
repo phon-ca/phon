@@ -1,7 +1,11 @@
 package ca.phon.app.session.editor.view.transcript;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
+import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,9 +13,8 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 /**
  * The {@link ViewFactory} used by the {@link TranscriptEditor}

@@ -15,30 +15,25 @@
  */
 package ca.phon.app.project.checkwizard;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.log.*;
 import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.*;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.wizard.BreadcrumbWizardFrame;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.ui.wizard.*;
+import ca.phon.worker.*;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.UUID;
 
 /**
  * A wizard for checking/repairing IPA transcriptions

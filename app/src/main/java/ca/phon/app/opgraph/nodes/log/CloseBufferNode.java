@@ -16,10 +16,7 @@
 package ca.phon.app.opgraph.nodes.log;
 
 import ca.phon.app.log.BufferPanelContainer;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
 
 import javax.swing.*;

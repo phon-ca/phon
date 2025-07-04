@@ -16,8 +16,7 @@
 package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.project.NewSessionDialog;
-import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.*;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.project.SessionTemplate;
@@ -26,6 +25,8 @@ import ca.phon.session.SessionFactory;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.UUID;
 
 public class NewSessionAction extends ProjectWindowAction {
 	

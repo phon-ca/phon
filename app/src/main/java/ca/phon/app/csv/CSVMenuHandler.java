@@ -15,18 +15,15 @@
  */
 package ca.phon.app.csv;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.IPluginMenuFilter;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.project.Project;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-
-import javax.swing.*;
 import java.awt.*;
+
+import javax.swing.JMenuBar;
+
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.plugin.*;
+import ca.phon.project.Project;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
 
 /**
  * Add CSV import/export menu items to the 'Tools' menu

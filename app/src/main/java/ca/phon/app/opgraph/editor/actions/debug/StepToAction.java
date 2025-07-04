@@ -16,15 +16,12 @@
 package ca.phon.app.opgraph.editor.actions.debug;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.Processor;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class StepToAction extends OpgraphDebugAction {
 

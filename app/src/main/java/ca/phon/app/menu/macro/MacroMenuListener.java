@@ -20,8 +20,7 @@ import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 
 public class MacroMenuListener implements MenuListener {
 

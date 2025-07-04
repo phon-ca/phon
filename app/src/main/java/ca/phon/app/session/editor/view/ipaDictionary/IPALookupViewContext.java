@@ -17,8 +17,7 @@ package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.ipadictionary.ui.IPALookupContext;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.*;
 
 /**
  * IPA Lookup context for app.

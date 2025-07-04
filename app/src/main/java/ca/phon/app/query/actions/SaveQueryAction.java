@@ -25,14 +25,10 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.text.DefaultTextCompleterModel;
-import ca.phon.ui.text.PromptedTextField;
-import ca.phon.ui.text.TextCompleter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.text.*;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;

@@ -16,30 +16,22 @@
 package ca.phon.app.opgraph.editor;
 
 import ca.hedlund.tst.TernaryTree;
-import ca.phon.app.opgraph.nodes.ScriptNode;
-import ca.phon.app.opgraph.nodes.ScriptNodeEdit;
-import ca.phon.app.opgraph.nodes.ScriptNodeEditor;
+import ca.phon.app.opgraph.nodes.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.components.OpGraphTreeCellRenderer;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.DropDownIcon;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import org.apache.commons.lang3.StringUtils;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXTree;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.stream.Collectors;

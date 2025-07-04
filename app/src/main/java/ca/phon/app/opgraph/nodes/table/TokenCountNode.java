@@ -22,8 +22,8 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.TableDataSource;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Count the total number of tokens and distinct tokens

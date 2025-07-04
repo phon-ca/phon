@@ -23,8 +23,7 @@ import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 
 public class WorkspaceProjectsMenuListener implements MenuListener {
 

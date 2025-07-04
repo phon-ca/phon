@@ -29,9 +29,8 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @OpNodeInfo(
 	category="Project",

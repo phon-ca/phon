@@ -4,9 +4,7 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.session.Participant;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Node used in all anlyses representing the set of selected

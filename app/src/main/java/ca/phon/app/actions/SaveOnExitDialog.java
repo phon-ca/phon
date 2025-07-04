@@ -15,26 +15,20 @@
  */
 package ca.phon.app.actions;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.tristatecheckbox.*;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.*;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

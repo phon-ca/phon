@@ -2,18 +2,17 @@ package ca.phon.app.session.editor.view.timeline.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.undo.RecordSegmentEdit;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.media.LongSound;
-import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
+import ca.phon.session.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * Distribute unsegmented records evenly across the space between existing records while maintaining order

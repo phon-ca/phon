@@ -20,8 +20,7 @@ import ca.phon.app.query.QueryAndReportWizardEP;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
 import ca.phon.query.db.ScriptLibrary;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.*;
 
 /**
  * Open the query script editor with given script.

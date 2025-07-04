@@ -17,11 +17,9 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.session.SessionPath;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;

@@ -15,20 +15,16 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ParticipantUndoableEdit;
-import ca.phon.session.Participant;
-import ca.phon.session.Participants;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
+import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.participant.ParticipantEditor;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class EditParticipantAction extends SessionEditorAction {

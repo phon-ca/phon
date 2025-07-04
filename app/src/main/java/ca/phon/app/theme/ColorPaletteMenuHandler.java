@@ -9,6 +9,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 
 /**

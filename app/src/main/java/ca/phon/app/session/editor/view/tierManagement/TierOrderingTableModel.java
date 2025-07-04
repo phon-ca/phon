@@ -20,8 +20,7 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TierOrderingTableModel extends AbstractTableModel {
 	

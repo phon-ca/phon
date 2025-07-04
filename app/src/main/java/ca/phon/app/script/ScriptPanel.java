@@ -16,19 +16,13 @@
 package ca.phon.app.script;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
-import ca.phon.script.params.StringScriptParam;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 import ca.phon.script.params.ui.ParamPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 
 /**
  * Component for {@link PhonScript} forms.

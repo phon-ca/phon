@@ -16,13 +16,12 @@
 package ca.phon.app.session.editor.view.syllabificationAlignment.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabificationAlignmentEditorView;
-import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabifyEdit;
+import ca.phon.app.session.editor.view.syllabificationAlignment.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
-import ca.phon.session.SyllabifierOptions;
-import ca.phon.session.Tier;
-import ca.phon.syllabifier.Syllabifier;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
+import ca.phon.util.Language;
 
 import javax.swing.undo.CompoundEdit;
 import java.awt.event.ActionEvent;

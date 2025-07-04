@@ -15,6 +15,7 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 

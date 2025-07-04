@@ -15,20 +15,15 @@
  */
 package ca.phon.app;
 
-import ca.phon.app.actions.OpenFileEP;
-import ca.phon.app.actions.PhonURISchemeHandler;
+import ca.phon.app.actions.*;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.util.OSInfo;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.net.MalformedURLException;
 
 /**

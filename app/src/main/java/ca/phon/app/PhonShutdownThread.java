@@ -18,11 +18,8 @@ package ca.phon.app;
 import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
-import ca.phon.plugin.PluginManager;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.plugin.*;
+import ca.phon.worker.*;
 
 import java.util.List;
 

@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.app.session.editor.view.transcript.extensions.AlignmentComponentFactory;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.*;
 import ca.phon.session.Record;

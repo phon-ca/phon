@@ -20,29 +20,25 @@ import ca.phon.app.session.editor.undo.ShowHideViewEdit;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 import ca.phon.session.Session;
 import ca.phon.session.Transcript;
-import ca.phon.session.check.SessionCheck;
-import ca.phon.session.check.SessionValidator;
-import ca.phon.session.check.ValidationEvent;
+import ca.phon.session.check.*;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class SessionCheckView extends EditorView {
 	

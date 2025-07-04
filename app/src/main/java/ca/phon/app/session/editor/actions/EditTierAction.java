@@ -17,12 +17,9 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
-import ca.phon.app.session.editor.undo.TierViewItemEdit;
-import ca.phon.app.session.editor.view.tierManagement.TierEditorDialog;
-import ca.phon.app.session.editor.view.tierManagement.TierInfoEditor;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tierManagement.*;
+import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.mor.GraspTierData;

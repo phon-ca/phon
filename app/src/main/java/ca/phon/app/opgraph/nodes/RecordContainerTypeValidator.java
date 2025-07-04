@@ -17,11 +17,9 @@ package ca.phon.app.opgraph.nodes;
 
 import ca.phon.opgraph.validators.TypeValidator;
 import ca.phon.query.db.ResultSet;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
+import ca.phon.session.*;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class RecordContainerTypeValidator implements TypeValidator {
 

@@ -21,9 +21,7 @@ import ca.phon.query.report.io.ResultListing;
 import ca.phon.session.Session;
 import ca.phon.util.Tuple;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Displays the contents of a resultset using

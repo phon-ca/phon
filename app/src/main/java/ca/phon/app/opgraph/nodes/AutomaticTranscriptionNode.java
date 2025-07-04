@@ -8,8 +8,7 @@ import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.orthography.Orthography;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.syllabifier.*;
 import ca.phon.util.Language;
 
 import java.awt.*;

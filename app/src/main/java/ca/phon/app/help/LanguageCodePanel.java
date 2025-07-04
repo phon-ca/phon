@@ -15,20 +15,15 @@
  */
 package ca.phon.app.help;
 
-import ca.phon.util.LanguageEntry;
-import ca.phon.util.LanguageParser;
+import ca.phon.util.*;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.util.regex.*;
 
 /**
  * UI for viewing and selecting a language from

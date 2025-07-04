@@ -15,9 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
+import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;

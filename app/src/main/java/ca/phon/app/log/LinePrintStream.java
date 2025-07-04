@@ -15,10 +15,8 @@
  */
 package ca.phon.app.log;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.beans.*;
+import java.io.*;
 
 /**
  * Fires a property change event when a new line is printed to

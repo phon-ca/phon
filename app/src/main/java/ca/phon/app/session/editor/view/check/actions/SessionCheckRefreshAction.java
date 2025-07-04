@@ -16,8 +16,7 @@
 package ca.phon.app.session.editor.view.check.actions;
 
 import ca.phon.app.session.editor.view.check.SessionCheckView;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

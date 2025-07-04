@@ -15,23 +15,12 @@
  */
 package ca.phon.app.actions;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.xml.stream.*;
+import javax.xml.stream.events.*;
+import java.io.*;
+import java.util.*;
 
 @PhonPlugin(name="Open")
 public class XMLFileOpenHandler implements OpenFileHandler, IPluginExtensionPoint<OpenFileHandler> {

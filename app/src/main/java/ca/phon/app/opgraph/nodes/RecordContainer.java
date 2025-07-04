@@ -19,15 +19,10 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.nodes.query.ResultSetRecordContainer;
 import ca.phon.project.Project;
 import ca.phon.query.db.ResultSet;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
+import ca.phon.session.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public interface RecordContainer {
 	

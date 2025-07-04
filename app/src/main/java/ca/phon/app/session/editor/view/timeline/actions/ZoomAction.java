@@ -19,8 +19,7 @@ import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.media.TimeUIModel;
 import ca.phon.session.Session;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;

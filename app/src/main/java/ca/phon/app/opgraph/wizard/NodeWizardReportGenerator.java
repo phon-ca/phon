@@ -18,9 +18,7 @@ package ca.phon.app.opgraph.wizard;
 import ca.phon.app.VersionInfo;
 import ca.phon.app.html.HTMLConstants;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -30,6 +28,8 @@ import org.commonmark.parser.Parser;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Create a html report using data from generated buffers in wizard.

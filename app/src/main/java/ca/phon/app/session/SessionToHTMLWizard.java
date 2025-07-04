@@ -15,15 +15,11 @@
  */
 package ca.phon.app.session;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.ExcelExporter;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.log.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.wizard.BreadcrumbWizardFrame;
-import ca.phon.ui.wizard.WizardStep;
+import ca.phon.ui.wizard.*;
 import org.cef.browser.CefBrowser;
 import org.cef.handler.CefLoadHandlerAdapter;
 import org.jdesktop.swingx.JXBusyLabel;
@@ -31,6 +27,7 @@ import org.jdesktop.swingx.JXBusyLabel;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.util.concurrent.ExecutionException;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {

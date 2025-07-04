@@ -15,12 +15,9 @@
  */
 package ca.phon.app.session.editor.view.syllabificationAlignment;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.*;
 import ca.phon.session.Session;
 import ca.phon.syllable.SyllabificationInfo;
 

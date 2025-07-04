@@ -16,18 +16,15 @@
 package ca.phon.app.opgraph.wizard;
 
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.wizard.WizardEvent;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.wizard.*;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.lang.ref.WeakReference;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class WizardStepList extends JPanel {
 	

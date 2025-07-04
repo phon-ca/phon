@@ -19,8 +19,7 @@ import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpGraph;
 
 import java.io.IOException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.*;
 
 /**
  * Instantiator for {@link OpgraphEditor} editor models.

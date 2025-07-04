@@ -16,29 +16,20 @@
 package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
-import ca.phon.app.session.editor.view.ipaDictionary.actions.ExportIPACommand;
-import ca.phon.app.session.editor.view.ipaDictionary.actions.ImportIPACommand;
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.IPADictionaryLibrary;
-import ca.phon.ipadictionary.ui.IPADictionaryCellRenderer;
-import ca.phon.ipadictionary.ui.IPALookupContext;
-import ca.phon.ipadictionary.ui.IPALookupContextListener;
-import ca.phon.ipadictionary.ui.IPALookupPanel;
+import ca.phon.app.session.editor.view.ipaDictionary.actions.*;
+import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.ui.*;
 import ca.phon.util.Language;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
+import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.*;
+import java.awt.event.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class IPADictionaryView extends EditorView {

@@ -2,8 +2,7 @@ package ca.phon.app.session.editor.view.timeline.actions;
 
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 import java.awt.event.ActionEvent;
 

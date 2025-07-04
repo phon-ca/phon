@@ -16,18 +16,14 @@
 package ca.phon.app.session.editor.view.syllabificationAlignment;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllable.StripSyllabifcationVisitor;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.*;
 
 import java.text.ParseException;
 

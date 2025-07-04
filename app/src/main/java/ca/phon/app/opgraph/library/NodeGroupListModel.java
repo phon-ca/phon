@@ -18,8 +18,7 @@ package ca.phon.app.opgraph.library;
 import ca.phon.opgraph.library.NodeData;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

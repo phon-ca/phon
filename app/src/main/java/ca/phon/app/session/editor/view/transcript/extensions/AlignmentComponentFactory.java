@@ -14,6 +14,7 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -22,6 +23,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class AlignmentComponentFactory implements ComponentFactory {

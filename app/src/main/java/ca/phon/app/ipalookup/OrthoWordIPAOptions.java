@@ -19,10 +19,7 @@ import ca.phon.extensions.Extension;
 import ca.phon.orthography.Word;
 import ca.phon.util.Language;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Extension for {@link Word} objects providing

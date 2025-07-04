@@ -16,8 +16,7 @@
 package ca.phon.app.phonex;
 
 import ca.phon.ui.ipa.DefaultSyllabificationDisplayUI;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;

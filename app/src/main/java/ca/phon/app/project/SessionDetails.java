@@ -19,11 +19,9 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.project.*;
 import ca.phon.project.ProjectEvent.ProjectEventProp;
-import ca.phon.session.Participant;
-import ca.phon.session.SessionPath;
+import ca.phon.session.*;
 import ca.phon.util.OSInfo;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.worker.*;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
@@ -31,12 +29,11 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Panel showing details about a session.

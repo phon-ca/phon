@@ -18,19 +18,15 @@ package ca.phon.app.theme;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.prefs.PhonProperties;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.theme.UIDefaults;
-import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Sets UI theme

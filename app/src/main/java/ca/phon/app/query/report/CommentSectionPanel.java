@@ -18,8 +18,7 @@ package ca.phon.app.query.report;
 import ca.phon.query.report.io.CommentSection;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import java.awt.*;
 
 public class CommentSectionPanel extends SectionPanel<CommentSection> {

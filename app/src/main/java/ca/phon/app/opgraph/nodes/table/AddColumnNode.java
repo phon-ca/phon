@@ -15,19 +15,13 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
+import ca.phon.query.report.datasource.*;
+import ca.phon.script.*;
 import ca.phon.ui.text.PromptedTextField;
-import ca.phon.util.resources.ClassLoaderHandler;
-import ca.phon.util.resources.ResourceLoader;
-import org.mozilla.javascript.NativeJavaObject;
-import org.mozilla.javascript.Scriptable;
+import ca.phon.util.resources.*;
+import org.mozilla.javascript.*;
 
 import javax.swing.*;
 import java.awt.*;

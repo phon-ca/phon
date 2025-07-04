@@ -16,13 +16,11 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 /**
  * Move {@link SessionEditor} to previous record.

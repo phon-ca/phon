@@ -17,9 +17,7 @@ package ca.phon.app.opgraph.report.tree;
 
 import ca.phon.query.report.datasource.TableDataSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TableNode extends ReportTreeNode {

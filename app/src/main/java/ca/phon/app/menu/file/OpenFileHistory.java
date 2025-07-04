@@ -15,8 +15,7 @@
  */
 package ca.phon.app.menu.file;
 
-import ca.phon.util.PrefHelper;
-import ca.phon.util.RecentFiles;
+import ca.phon.util.*;
 
 public class OpenFileHistory extends RecentFiles {
 

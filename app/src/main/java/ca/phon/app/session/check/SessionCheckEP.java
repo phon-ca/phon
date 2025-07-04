@@ -16,8 +16,7 @@
 package ca.phon.app.session.check;
 
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 
 import java.awt.*;
 import java.util.Map;

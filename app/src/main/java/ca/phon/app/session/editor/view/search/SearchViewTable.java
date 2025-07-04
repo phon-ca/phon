@@ -10,6 +10,7 @@ import ca.phon.util.Range;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;

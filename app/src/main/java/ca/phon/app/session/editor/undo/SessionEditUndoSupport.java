@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEventManager;
 
 import javax.swing.undo.*;
+import java.lang.ref.WeakReference;
 
 /**
  * Undo support for the {@link EditorEventManager}

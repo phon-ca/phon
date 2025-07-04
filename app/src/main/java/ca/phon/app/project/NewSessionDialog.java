@@ -20,6 +20,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.SessionNameField;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PhonConstants;
 
 import javax.swing.*;

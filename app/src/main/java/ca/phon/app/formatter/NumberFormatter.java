@@ -15,12 +15,10 @@
  */
 package ca.phon.app.formatter;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterType;
+import ca.phon.formatter.*;
 import ca.phon.util.PrefHelper;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
+import java.text.*;
 
 @FormatterType(value=Number.class)
 public class NumberFormatter implements Formatter<Number> {

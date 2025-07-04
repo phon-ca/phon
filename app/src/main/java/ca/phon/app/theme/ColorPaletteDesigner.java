@@ -1,11 +1,10 @@
 package ca.phon.app.theme;
 
+import ca.phon.session.Comment;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.theme.UIDefaults;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
@@ -24,7 +23,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;

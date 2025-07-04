@@ -18,31 +18,24 @@ package ca.phon.app.session.editor.view.common;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorWindow;
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.Tier;
-import ca.phon.session.TierListener;
+import ca.phon.formatter.*;
+import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.text.Highlighter.Highlight;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

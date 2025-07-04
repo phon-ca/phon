@@ -15,13 +15,10 @@
  */
 package ca.phon.app.project;
 
-import ca.phon.project.DefaultProjectFactory;
-import ca.phon.project.Project;
+import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Factory for cases where the Desktop paradigm is available.  Desktop projects

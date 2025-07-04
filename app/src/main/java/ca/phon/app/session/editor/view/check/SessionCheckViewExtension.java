@@ -16,13 +16,11 @@
 package ca.phon.app.session.editor.view.check;
 
 import ca.phon.app.session.ViewPosition;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.EditorViewCategory;
-import ca.phon.app.session.editor.EditorViewInfo;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.phonex.PhonexPlugin;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.*;
+
+import javax.swing.*;
 
 @PhonexPlugin(name="Session Check")
 @EditorViewInfo(category=EditorViewCategory.SESSION,

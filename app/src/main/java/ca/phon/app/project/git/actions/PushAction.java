@@ -21,14 +21,12 @@ import ca.phon.app.project.actions.ProjectWindowAction;
 import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.worker.PhonWorker;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.Status;
+import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.PushResult;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class PushAction extends ProjectWindowAction {
 	

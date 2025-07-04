@@ -15,21 +15,16 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

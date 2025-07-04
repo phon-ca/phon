@@ -16,10 +16,7 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
 /**
  * Custom layout management for tier data.  Layout implementation

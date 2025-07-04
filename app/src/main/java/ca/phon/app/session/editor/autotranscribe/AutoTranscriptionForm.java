@@ -21,17 +21,15 @@ import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.filter.RecordFilter;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.syllabifier.*;
 import ca.phon.util.Language;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Form for selection options when performing automatic

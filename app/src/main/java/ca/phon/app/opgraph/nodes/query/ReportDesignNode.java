@@ -22,24 +22,16 @@ import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.ReportBuilder;
-import ca.phon.query.report.ReportBuilderException;
-import ca.phon.query.report.ReportBuilderFactory;
+import ca.phon.query.db.*;
+import ca.phon.query.report.*;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.*;
 
 import javax.swing.*;
 import javax.xml.namespace.QName;
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Properties;
 
 /**

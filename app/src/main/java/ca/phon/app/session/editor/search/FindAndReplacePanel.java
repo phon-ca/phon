@@ -16,36 +16,42 @@
 package ca.phon.app.session.editor.search;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.search.FindManager.*;
+import ca.phon.app.session.editor.search.actions.*;
 import ca.phon.app.session.editor.undo.ChangeCommentEdit;
 import ca.phon.app.session.editor.undo.ChangeGemEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.position.TranscriptElementLocation;
-import ca.phon.session.position.TranscriptElementRange;
+import ca.phon.session.position.*;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.SearchField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Highlighter;
+import javax.swing.undo.UndoableEditSupport;
 import java.awt.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.*;
 
 /**
  * Find and replace panel for the session editor.

@@ -16,22 +16,19 @@
 package ca.phon.app.session.editor;
 
 import bibliothek.gui.dock.common.perspective.CControlPerspective;
+import bibliothek.gui.dock.common.perspective.CGridPerspective;
 import bibliothek.gui.dock.common.perspective.CPerspective;
+import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
 import ca.phon.app.log.LogUtil;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.resources.ClassLoaderHandler;
-import ca.phon.util.resources.FolderHandler;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.util.resources.*;
 
+import javax.swing.*;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 
 /**
  * Perspective for record editor docking views.  This class

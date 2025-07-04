@@ -21,8 +21,7 @@ import ca.phon.plugin.PluginAction;
 import ca.phon.ui.action.PhonUIAction;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 import java.io.File;
 
 /**

@@ -15,15 +15,13 @@
  */
 package ca.phon.app.project;
 
-import ca.phon.project.LocalProject;
-import ca.phon.project.ProjectEvent;
-import ca.phon.project.SessionWriteLock;
+import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.UUID;
 
 /**
  * Local project which will send files to trash instead of

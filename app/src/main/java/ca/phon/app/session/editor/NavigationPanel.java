@@ -15,22 +15,16 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.phon.app.session.editor.actions.FirstRecordAction;
-import ca.phon.app.session.editor.actions.LastRecordAction;
-import ca.phon.app.session.editor.actions.NextRecordAction;
-import ca.phon.app.session.editor.actions.PreviousRecordAction;
+import ca.phon.app.session.editor.actions.*;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class NavigationPanel extends JPanel {
 	

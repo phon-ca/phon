@@ -19,14 +19,10 @@ import ca.phon.query.db.Query;
 import ca.phon.session.format.DateFormatter;
 import ca.phon.ui.StarBox;
 import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import java.lang.ref.WeakReference;
 
 /**

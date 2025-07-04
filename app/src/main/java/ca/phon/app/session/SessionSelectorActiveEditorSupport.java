@@ -20,12 +20,10 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorWindow;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.CommonModuleFrameCreatedListener;
+import ca.phon.ui.*;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
 
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.Iterator;
 
 /**

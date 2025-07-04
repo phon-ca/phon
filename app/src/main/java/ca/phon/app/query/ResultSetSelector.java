@@ -16,23 +16,17 @@
 package ca.phon.app.query;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.*;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.event.*;
 import java.util.List;
+import java.util.*;
 
 
 /**

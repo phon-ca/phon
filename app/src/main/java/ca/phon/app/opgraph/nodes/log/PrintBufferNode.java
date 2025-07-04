@@ -29,12 +29,9 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @OpNodeInfo(

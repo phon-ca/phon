@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.Terminator;
 import ca.phon.visitor.annotation.Visits;
 
 import javax.swing.*;

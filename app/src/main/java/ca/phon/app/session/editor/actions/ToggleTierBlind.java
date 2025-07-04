@@ -1,10 +1,11 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierBlindEdit;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -13,6 +14,7 @@ import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class ToggleTierBlind extends SessionEditorAction {
 

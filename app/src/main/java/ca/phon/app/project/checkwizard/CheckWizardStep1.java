@@ -19,21 +19,18 @@ import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.syllabifier.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PrefHelper;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Step 1 - Check IPA wizard

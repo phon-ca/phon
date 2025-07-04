@@ -15,49 +15,36 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import bibliothek.gui.dock.common.CControl;
-import bibliothek.gui.dock.common.DefaultSingleCDockable;
-import bibliothek.gui.dock.common.SingleCDockable;
-import bibliothek.gui.dock.common.SingleCDockableFactory;
+import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.perspective.*;
 import bibliothek.util.Filter;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel.ViewLocation;
 import ca.phon.app.opgraph.editor.actions.debug.*;
-import ca.phon.app.opgraph.editor.actions.file.NewAction;
-import ca.phon.app.opgraph.editor.actions.file.OpenAction;
-import ca.phon.app.opgraph.editor.actions.file.SaveAction;
-import ca.phon.app.opgraph.editor.actions.file.SaveAsAction;
+import ca.phon.app.opgraph.editor.actions.file.*;
 import ca.phon.app.opgraph.editor.actions.graph.*;
-import ca.phon.app.opgraph.editor.actions.view.ResetViewAction;
-import ca.phon.app.opgraph.editor.actions.view.ToggleViewAction;
+import ca.phon.app.opgraph.editor.actions.view.*;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.app.MenuProvider;
-import ca.phon.opgraph.app.OpgraphIO;
+import ca.phon.opgraph.app.*;
 import ca.phon.opgraph.app.components.PathAddressableMenuImpl;
 import ca.phon.opgraph.app.components.canvas.GridLayer;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.menu.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.RecentFiles;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-import javax.swing.event.UndoableEditListener;
+import javax.swing.event.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

@@ -17,9 +17,7 @@ package ca.phon.app.session.editor.view.ipaDictionary.actions;
 
 import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.ui.nativedialogs.*;
 
 import java.awt.event.ActionEvent;
 

@@ -18,14 +18,12 @@ package ca.phon.app.session.editor.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.session.*;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class DuplicateRecordAction extends SessionEditorAction {
 

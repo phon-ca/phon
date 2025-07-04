@@ -16,43 +16,25 @@
 package ca.phon.app.opgraph.library;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.app.opgraph.analysis.StockAnalysisHandler;
-import ca.phon.app.opgraph.macro.MacroLibrary;
-import ca.phon.app.opgraph.macro.StockMacroHandler;
-import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
-import ca.phon.app.opgraph.nodes.PhonScriptNode;
-import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
-import ca.phon.app.opgraph.nodes.query.QueryNode;
-import ca.phon.app.opgraph.nodes.query.QueryNodeData;
-import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
+import ca.phon.app.opgraph.analysis.*;
+import ca.phon.app.opgraph.macro.*;
+import ca.phon.app.opgraph.nodes.*;
+import ca.phon.app.opgraph.nodes.query.*;
 import ca.phon.app.opgraph.nodes.table.*;
 import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.components.canvas.NodeStyle;
 import ca.phon.opgraph.library.NodeLibrary;
-import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.opgraph.nodes.general.MacroNodeData;
-import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.opgraph.nodes.general.*;
+import ca.phon.query.script.*;
+import ca.phon.script.*;
+import ca.phon.util.icons.*;
 import ca.phon.util.resources.ResourceLoader;
 import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.io.*;
+import java.net.*;
 import java.util.Iterator;
 
 /**

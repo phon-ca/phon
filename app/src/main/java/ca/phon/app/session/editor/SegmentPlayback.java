@@ -17,19 +17,14 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
-import ca.phon.media.LongSound;
-import ca.phon.media.PlaySegment;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.SessionFactory;
+import ca.phon.media.*;
+import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.*;
 
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.beans.*;
 import java.io.IOException;
 
 /**

@@ -18,11 +18,9 @@ package ca.phon.app;
 import ca.phon.util.PrefHelper;
 import com.github.zafarkhaja.semver.Version;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * Methods for determining the version number of the application.

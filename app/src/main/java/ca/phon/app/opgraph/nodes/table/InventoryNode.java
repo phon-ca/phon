@@ -18,26 +18,18 @@ package ca.phon.app.opgraph.nodes.table;
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.query.script.TableUtils;
+import ca.phon.query.db.*;
+import ca.phon.query.report.datasource.*;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

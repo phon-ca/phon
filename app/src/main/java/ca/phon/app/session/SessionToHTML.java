@@ -21,20 +21,15 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.query.db.ReportHelper;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetRecordFilter;
+import ca.phon.query.db.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 import ca.phon.session.filter.RecordFilter;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Class for constructing an HTML page from a Phon session.

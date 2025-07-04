@@ -15,8 +15,7 @@
  */
 package ca.phon.app.opgraph.report.tree;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReportTreePath implements Iterable<ReportTreeNode> {

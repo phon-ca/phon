@@ -22,13 +22,11 @@ import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionModel;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.opgraph.nodes.menu.edits.ExplodeMacroEdit;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class ExpandMacroAction extends OpgraphEditorAction {
 

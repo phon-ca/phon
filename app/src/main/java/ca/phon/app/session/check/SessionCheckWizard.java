@@ -17,12 +17,9 @@ package ca.phon.app.session.check;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.opgraph.wizard.NodeWizardReportGenerator;
-import ca.phon.app.session.SessionSelector;
-import ca.phon.app.session.SessionSelectorActiveEditorSupport;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.Processor;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.session.*;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
@@ -33,10 +30,7 @@ import ca.phon.ui.wizard.WizardStep;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.util.List;
 

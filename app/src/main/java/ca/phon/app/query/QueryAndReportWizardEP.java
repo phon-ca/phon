@@ -19,8 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.project.Project;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.*;
 import ca.phon.ui.CommonModuleFrame;
 
 import java.io.File;

@@ -1,7 +1,6 @@
 package ca.phon.app.script;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.*;
 
 /**
  * RSyntaxTextArea with ability to control discarding of edits.

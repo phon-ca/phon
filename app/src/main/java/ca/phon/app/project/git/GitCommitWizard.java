@@ -23,15 +23,12 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.ui.wizard.WizardFrame;
-import ca.phon.ui.wizard.WizardStep;
+import ca.phon.ui.wizard.*;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.Status;
+import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import java.awt.*;

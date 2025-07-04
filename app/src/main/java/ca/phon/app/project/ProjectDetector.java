@@ -17,16 +17,11 @@ package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.LocalProject;
-import ca.phon.session.io.SessionInputFactory;
-import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 import java.util.function.Function;
 
 /**

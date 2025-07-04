@@ -23,8 +23,8 @@ import org.jdesktop.swingx.JXTable;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * Display a list of all available queries from any open

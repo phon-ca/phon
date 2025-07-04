@@ -15,11 +15,8 @@
  */
 package ca.phon.app.prefs;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.plugin.*;
+import ca.phon.ui.action.*;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 

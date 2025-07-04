@@ -15,11 +15,13 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
+import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.util.Properties;
 import java.util.Set;

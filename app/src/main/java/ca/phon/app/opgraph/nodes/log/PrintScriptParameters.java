@@ -19,18 +19,15 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptException;
+import ca.phon.script.*;
 import ca.phon.script.params.ScriptParameters;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

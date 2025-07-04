@@ -23,26 +23,20 @@ import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectResources;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
 import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.*;
 
 /**
  * <p>Library of query reports. These reports are available

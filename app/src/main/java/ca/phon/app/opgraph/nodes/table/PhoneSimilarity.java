@@ -15,14 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
@@ -31,8 +27,8 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Calculate feature similarity between two {@link IPATranscript}s.

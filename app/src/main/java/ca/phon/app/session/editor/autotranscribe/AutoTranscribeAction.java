@@ -16,16 +16,14 @@
 package ca.phon.app.session.editor.autotranscribe;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.app.session.editor.*;
+import ca.phon.ipadictionary.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.Transcriber;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.Language;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.worker.*;
 
 import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;

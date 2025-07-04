@@ -15,12 +15,9 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.*;
 import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-import org.jdesktop.swingx.painter.RectanglePainter;
+import org.jdesktop.swingx.painter.*;
 
 import javax.swing.*;
 import java.awt.*;

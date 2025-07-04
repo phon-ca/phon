@@ -17,17 +17,12 @@ package ca.phon.app.project.mergewizard;
 
 import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.project.Project;
-import ca.phon.session.Participant;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.text.CorpusNameField;
-import ca.phon.ui.text.SessionNameField;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
+import ca.phon.session.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.text.*;
+import ca.phon.ui.toast.*;
 import ca.phon.ui.wizard.WizardStep;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import java.awt.*;

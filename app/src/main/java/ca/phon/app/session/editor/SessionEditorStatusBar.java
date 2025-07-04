@@ -21,11 +21,10 @@ import ca.phon.project.ProjectPaths;
 import ca.phon.project.SessionDetails;
 import ca.phon.session.Session;
 import ca.phon.util.ByteSize;
-import ca.phon.worker.PhonTask;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXStatusBar;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import javax.swing.*;

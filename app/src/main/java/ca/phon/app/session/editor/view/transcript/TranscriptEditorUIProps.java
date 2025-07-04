@@ -1,11 +1,12 @@
 package ca.phon.app.session.editor.view.transcript;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
-import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.theme.PhonUIDefaults;
 import ca.phon.ui.theme.UIDefaults;
 import ca.phon.ui.theme.UIDefaultsHandler;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.ui.PhonGuiConstants;
 
 import javax.swing.*;
 import java.awt.*;

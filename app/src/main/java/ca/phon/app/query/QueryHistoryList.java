@@ -15,8 +15,7 @@
  */
 package ca.phon.app.query;
 
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.*;
 import ca.phon.script.params.history.*;
 import org.apache.commons.lang3.StringUtils;
 

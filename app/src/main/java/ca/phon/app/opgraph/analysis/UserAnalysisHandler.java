@@ -18,9 +18,7 @@ package ca.phon.app.opgraph.analysis;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.FolderHandler;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 public class UserAnalysisHandler extends FolderHandler<URL> {

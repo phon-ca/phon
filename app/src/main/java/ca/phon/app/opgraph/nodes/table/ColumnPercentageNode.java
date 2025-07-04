@@ -16,8 +16,7 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
@@ -26,11 +25,9 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.*;
+import java.io.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Column Percentage", category="Table", description="Calculate percentage using a divisor and dividend columns.", showInLibrary=true)

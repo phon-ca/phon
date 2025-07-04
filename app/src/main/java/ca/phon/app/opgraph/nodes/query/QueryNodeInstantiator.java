@@ -17,11 +17,9 @@ package ca.phon.app.opgraph.nodes.query;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.library.instantiators.Instantiator;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.*;
 
 public class QueryNodeInstantiator implements Instantiator<QueryNode> {
 

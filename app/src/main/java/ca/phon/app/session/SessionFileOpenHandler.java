@@ -18,30 +18,20 @@ package ca.phon.app.session;
 import ca.phon.app.actions.XMLOpenHandler;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.DesktopProject;
-import ca.phon.app.project.DesktopProjectFactory;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionEditorEP;
-import ca.phon.app.session.editor.SessionEditorWindow;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.app.project.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
-import ca.phon.session.io.SessionInputFactory;
-import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.*;
 import ca.phon.ui.CommonModuleFrame;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.xml.stream.events.StartElement;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.io.*;
+import java.util.*;
 
 /**
  * Open session files in Phon format. If no project is detected a temorary

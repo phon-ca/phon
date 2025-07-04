@@ -1,8 +1,6 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.phon.media.TimeComponent;
-import ca.phon.media.TimeComponentUI;
-import ca.phon.media.TimeUIModel;
+import ca.phon.media.*;
 
 import javax.swing.*;
 import java.awt.*;

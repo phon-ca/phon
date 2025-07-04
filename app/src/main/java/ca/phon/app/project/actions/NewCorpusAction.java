@@ -16,8 +16,7 @@
 package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.project.NewCorpusDialog;
-import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.*;
 import ca.phon.project.MutableProject;
 
 import java.awt.event.ActionEvent;

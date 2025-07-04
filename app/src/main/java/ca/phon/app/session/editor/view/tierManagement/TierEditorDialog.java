@@ -19,6 +19,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierDescription;
 import ca.phon.session.UserTierType;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.icons.IconManager;
@@ -26,8 +27,7 @@ import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * Simple dialog that closes on OK or Cancel. Use showDialog() to display the

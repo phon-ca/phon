@@ -16,11 +16,9 @@
 package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.project.RenameSessionDialog;
-import ca.phon.project.LocalProject;
-import ca.phon.project.MutableProject;
-import ca.phon.project.Project;
+import ca.phon.app.project.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.*;
 import ca.phon.session.Session;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
@@ -28,18 +26,17 @@ import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.CollatorFactory;
 import org.apache.commons.io.FileUtils;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class RenameSessionAction extends ProjectWindowAction {
 	

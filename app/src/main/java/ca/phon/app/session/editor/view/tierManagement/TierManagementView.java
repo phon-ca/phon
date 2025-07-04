@@ -17,19 +17,15 @@ package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.MoveTierEdit;
-import ca.phon.app.session.editor.undo.TierViewEdit;
-import ca.phon.app.session.editor.undo.TierViewItemEdit;
+import ca.phon.app.session.editor.undo.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.*;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,12 +36,10 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

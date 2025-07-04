@@ -19,8 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.script.PhonScript;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import javax.swing.text.BadLocationException;
 
 public class ScriptEditorFactory {

@@ -17,6 +17,7 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.session.ViewPosition;
 
+import javax.swing.*;
 import java.lang.annotation.*;
 
 /**

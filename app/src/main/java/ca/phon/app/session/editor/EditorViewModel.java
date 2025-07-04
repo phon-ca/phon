@@ -20,8 +20,7 @@ import ca.phon.app.session.ViewPosition;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>View model for the {@link SessionEditor}.  This class

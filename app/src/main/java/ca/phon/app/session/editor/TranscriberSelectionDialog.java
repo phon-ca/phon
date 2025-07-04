@@ -15,22 +15,16 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
+import ca.phon.session.*;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
+import ca.phon.ui.toast.*;
 import ca.phon.util.JCrypt;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.awt.event.*;
+import java.util.*;
 
 public class TranscriberSelectionDialog extends JDialog {
 	

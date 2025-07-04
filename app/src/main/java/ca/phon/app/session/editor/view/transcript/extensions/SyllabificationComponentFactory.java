@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabificationAlignment.ScTypeEdit;
 import ca.phon.app.session.editor.view.syllabificationAlignment.ToggleDiphthongEdit;
 import ca.phon.app.session.editor.view.transcript.*;
@@ -13,6 +15,7 @@ import ca.phon.session.Session;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.position.TranscriptElementLocation;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;

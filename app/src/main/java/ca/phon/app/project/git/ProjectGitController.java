@@ -17,15 +17,11 @@ package ca.phon.app.project.git;
 
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PullResult;
-import org.eclipse.jgit.api.Status;
-import org.eclipse.jgit.api.StatusCommand;
+import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.errors.NoWorkTreeException;
-import org.eclipse.jgit.lib.ProgressMonitor;
-import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.PushResult;

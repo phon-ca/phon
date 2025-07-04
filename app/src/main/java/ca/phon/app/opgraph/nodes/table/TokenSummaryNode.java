@@ -17,9 +17,7 @@ package ca.phon.app.opgraph.nodes.table;
 
 import ca.phon.app.opgraph.nodes.query.ColumnOptionsPanel;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
@@ -28,8 +26,8 @@ import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @OpNodeInfo(
 		name="Token Summary",

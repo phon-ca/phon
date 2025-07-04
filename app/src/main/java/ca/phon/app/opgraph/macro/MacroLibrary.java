@@ -26,13 +26,10 @@ import ca.phon.util.resources.ResourceLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.*;
 
 public class MacroLibrary {
 	

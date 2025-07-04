@@ -16,17 +16,18 @@
 package ca.phon.app.project.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.project.RenameCorpusDialog;
+import ca.phon.app.project.*;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
+import ca.phon.util.CollatorFactory;
 import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.List;
+import java.util.*;
 
 public class RenameCorpusAction extends ProjectWindowAction {
 	

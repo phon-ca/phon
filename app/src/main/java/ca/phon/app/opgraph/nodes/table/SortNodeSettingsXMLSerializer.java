@@ -15,13 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortColumn;
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortOrder;
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortType;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.extensions.Extendable;
-import ca.phon.opgraph.io.xml.XMLSerializer;
-import ca.phon.opgraph.io.xml.XMLSerializerFactory;
+import ca.phon.opgraph.io.xml.*;
 import ca.phon.xml.XMLConstants;
 import org.w3c.dom.*;
 

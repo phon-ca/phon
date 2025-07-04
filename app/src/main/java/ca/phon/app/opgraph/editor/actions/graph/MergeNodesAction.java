@@ -21,13 +21,11 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionModel;
 import ca.phon.opgraph.nodes.menu.edits.CreateMacroEdit;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.Collection;
 
 /**

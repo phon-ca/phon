@@ -17,14 +17,9 @@ package ca.phon.app.opgraph.editor;
 
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OpgraphEditorModelFactory {
 	

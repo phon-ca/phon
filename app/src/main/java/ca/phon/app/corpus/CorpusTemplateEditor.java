@@ -15,8 +15,7 @@
  */
 package ca.phon.app.corpus;
 
-import ca.phon.app.session.editor.RecordEditorPerspective;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.project.Project;
 import ca.phon.project.SessionTemplate;
 import ca.phon.session.Session;

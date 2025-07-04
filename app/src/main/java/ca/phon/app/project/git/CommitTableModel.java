@@ -18,8 +18,7 @@ package ca.phon.app.project.git;
 import org.eclipse.jgit.api.Status;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class CommitTableModel extends AbstractTableModel {
