@@ -20,7 +20,9 @@ import ca.phon.csv.CSVWriter;
 import ca.phon.util.OSInfo;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Writes a csv file based on the values displayed

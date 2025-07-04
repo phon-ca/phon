@@ -15,14 +15,20 @@
  */
 package ca.phon.ipamap2;
 
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.features.Feature;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 import ca.phon.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ui.ipamap.io.*;
-import jakarta.xml.bind.*;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;

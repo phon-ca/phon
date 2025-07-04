@@ -15,10 +15,13 @@
  */
 package ca.phon.query.report;
 
-import ca.phon.query.report.io.*;
+import ca.phon.query.report.io.ObjectFactory;
+import ca.phon.query.report.io.ReportDesign;
 import jakarta.xml.bind.*;
 
-import javax.xml.stream.*;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 
 /**

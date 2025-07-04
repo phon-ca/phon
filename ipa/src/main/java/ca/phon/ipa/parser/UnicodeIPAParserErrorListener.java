@@ -1,9 +1,13 @@
 package ca.phon.ipa.parser;
 
-import ca.phon.ipa.parser.exceptions.*;
-import org.antlr.v4.runtime.*;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.InvalidTokenException;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UnicodeIPAParserErrorListener extends BaseErrorListener {
 

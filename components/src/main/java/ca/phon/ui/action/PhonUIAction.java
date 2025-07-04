@@ -19,7 +19,6 @@ import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**

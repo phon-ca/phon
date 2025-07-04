@@ -17,7 +17,8 @@ package ca.phon.query.db;
 
 import ca.phon.util.PhonConstants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Various methods aiding report generation.  Results have a <i>schema<i>, the schema determines

@@ -15,8 +15,10 @@
  */
 package ca.phon.ipa.alignment;
 
-import ca.phon.alignment.*;
-import ca.phon.ipa.*;
+import ca.phon.alignment.AlignmentMap;
+import ca.phon.alignment.IndelAligner;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
 
 import java.util.List;
 

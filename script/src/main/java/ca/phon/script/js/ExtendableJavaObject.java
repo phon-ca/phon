@@ -16,7 +16,9 @@
 package ca.phon.script.js;
 
 import ca.phon.extensions.IExtendable;
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.Scriptable;
 
 import java.lang.ref.WeakReference;
 

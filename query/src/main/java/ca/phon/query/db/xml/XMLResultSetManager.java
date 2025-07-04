@@ -18,20 +18,24 @@ package ca.phon.query.db.xml;
 
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
-import ca.phon.query.db.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetManager;
 import ca.phon.query.db.xml.io.query.QueryType;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;
-import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.xml.XMLConstants;
 import jakarta.xml.bind.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.*;
-import java.io.*;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

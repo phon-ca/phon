@@ -2,7 +2,6 @@ package ca.phon.session.alignment;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
-import ca.phon.orthography.Quotation;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;

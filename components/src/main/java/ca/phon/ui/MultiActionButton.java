@@ -15,18 +15,24 @@
  */
 package ca.phon.ui;
 
-import ca.phon.util.icons.*;
-import org.jdesktop.swingx.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXLabel;
+import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 /**
  * A 'on click' button which includes the following features:

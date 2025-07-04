@@ -17,13 +17,17 @@ package ca.phon.media.export;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.text.*;
-import com.jgoodies.forms.layout.*;
-import org.jdesktop.swingx.*;
+import ca.phon.ui.text.FileSelectionField;
+import ca.phon.ui.text.FormatterTextField;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import java.text.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 /**
  * Panel for configuration options for media export.  Includes fields for

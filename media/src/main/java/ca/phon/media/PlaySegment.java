@@ -17,7 +17,8 @@ package ca.phon.media;
 
 import ca.phon.extensions.Extension;
 
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
 /**

@@ -15,16 +15,19 @@
  */
 package ca.phon.util.icons;
 
-import ca.hedlund.desktopicons.*;
+import ca.hedlund.desktopicons.DesktopIconException;
+import ca.hedlund.desktopicons.DesktopIcons;
+import ca.hedlund.desktopicons.StockIcon;
 import ca.phon.plugin.PluginManager;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;

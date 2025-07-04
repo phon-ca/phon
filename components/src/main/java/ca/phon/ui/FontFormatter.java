@@ -15,7 +15,8 @@
  */
 package ca.phon.ui;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 
 import java.awt.*;
 import java.text.ParseException;

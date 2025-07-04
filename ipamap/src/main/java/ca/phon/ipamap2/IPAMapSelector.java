@@ -15,15 +15,19 @@
  */
 package ca.phon.ipamap2;
 
-import ca.phon.ui.ipamap.io.*;
-import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ui.ipamap.io.Grid;
+import ca.phon.ui.ipamap.io.ObjectFactory;
+import ca.phon.ui.tristatecheckbox.TristateCheckBox;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**

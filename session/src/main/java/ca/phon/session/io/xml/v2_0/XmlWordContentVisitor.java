@@ -1,8 +1,7 @@
 package ca.phon.session.io.xml.v2_0;
 
-import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
-import ca.phon.orthography.ProsodyType;
+import ca.phon.orthography.mor.Pos;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 import jakarta.xml.bind.JAXBElement;

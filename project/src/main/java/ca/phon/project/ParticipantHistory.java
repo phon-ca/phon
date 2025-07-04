@@ -18,7 +18,9 @@ package ca.phon.project;
 import ca.phon.session.SessionPath;
 
 import java.time.Period;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Runtime extension for Participant objects.  This

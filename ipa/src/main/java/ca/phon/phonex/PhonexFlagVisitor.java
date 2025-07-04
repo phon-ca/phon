@@ -19,7 +19,8 @@ import ca.phon.ipa.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Filter a iterable list of phones based on phonex

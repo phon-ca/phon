@@ -17,9 +17,13 @@ package ca.phon.phonex;
 
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSAState.RunningState;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PhonexMatcher {
 

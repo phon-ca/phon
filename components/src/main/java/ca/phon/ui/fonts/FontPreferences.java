@@ -16,13 +16,13 @@
 package ca.phon.ui.fonts;
 
 import ca.phon.ui.FontFormatter;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 public class FontPreferences {

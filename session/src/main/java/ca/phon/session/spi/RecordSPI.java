@@ -21,7 +21,8 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 public interface RecordSPI {
 

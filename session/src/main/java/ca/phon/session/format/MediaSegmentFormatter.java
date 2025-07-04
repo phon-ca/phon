@@ -15,8 +15,13 @@
  */
 package ca.phon.session.format;
 
-import ca.phon.formatter.*;
-import ca.phon.session.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
+import ca.phon.formatter.MediaTimeFormat;
+import ca.phon.formatter.MediaTimeFormatStyle;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.SessionFactory;
 
 import java.text.ParseException;
 

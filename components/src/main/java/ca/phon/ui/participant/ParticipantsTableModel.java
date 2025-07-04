@@ -15,7 +15,8 @@
  */
 package ca.phon.ui.participant;
 
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.Session;
 import ca.phon.session.format.AgeFormatter;
 
 import javax.swing.table.AbstractTableModel;

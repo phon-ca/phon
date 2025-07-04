@@ -15,7 +15,8 @@
  */
 package ca.phon.project;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Wrapper for project events.

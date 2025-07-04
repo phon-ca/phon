@@ -18,7 +18,8 @@ package ca.phon.xml;
 import ca.phon.xml.annotation.XMLSerial;
 
 import javax.xml.namespace.QName;
-import java.util.*;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * Creates {@link XMLObjectReader} for given {@link QName}

@@ -15,15 +15,19 @@
  */
 package ca.phon.ui.toast;
 
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
-import javax.script.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

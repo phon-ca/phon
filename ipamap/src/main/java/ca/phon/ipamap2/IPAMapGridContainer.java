@@ -15,19 +15,26 @@
  */
 package ca.phon.ipamap2;
 
-import ca.phon.ui.ipamap.io.*;
+import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.util.Tuple;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.List;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**

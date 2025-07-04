@@ -15,7 +15,9 @@
 package ca.phon.alignedTypesDatabase;
 
 import java.io.*;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Serialization methods {@link AlignedTypesDatabase} including compression.

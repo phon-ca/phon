@@ -17,14 +17,16 @@ package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.io.xml.v12.ParticipantType;
 import ca.phon.session.io.xml.v12.RecordType;
 import ca.phon.session.spi.RecordSPI;
 import ca.phon.session.tierdata.TierData;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public final class LazyRecord implements RecordSPI {
 	

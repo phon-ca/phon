@@ -16,10 +16,12 @@
 package ca.phon.ui;
 
 import ca.phon.formatter.MsFormat;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.text.Format;
 
 /**

@@ -17,7 +17,9 @@ package ca.phon.session.io;
 
 import ca.phon.session.Session;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Interface for a session reader.  The reader is responsible

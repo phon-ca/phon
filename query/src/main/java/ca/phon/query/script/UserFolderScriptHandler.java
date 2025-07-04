@@ -18,7 +18,9 @@ package ca.phon.query.script;
 import ca.phon.query.db.ScriptLibrary;
 import ca.phon.util.resources.FolderHandler;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 
 public class UserFolderScriptHandler extends FolderHandler<QueryScript> {
 

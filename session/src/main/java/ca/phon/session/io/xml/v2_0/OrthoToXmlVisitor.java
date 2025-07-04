@@ -15,26 +15,12 @@
  */
 package ca.phon.session.io.xml.v2_0;
 
+import ca.phon.orthography.*;
+import ca.phon.orthography.Error;
+import ca.phon.orthography.Terminator;
 import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Pos;
-import ca.phon.orthography.*;
-import ca.phon.orthography.Action;
-import ca.phon.orthography.Error;
-import ca.phon.orthography.Freecode;
-import ca.phon.orthography.Italic;
-import ca.phon.orthography.Linker;
-import ca.phon.orthography.LongFeature;
-import ca.phon.orthography.Nonvocal;
-import ca.phon.orthography.OtherSpokenEvent;
-import ca.phon.orthography.OverlapPoint;
-import ca.phon.orthography.Pause;
-import ca.phon.orthography.Postcode;
-import ca.phon.orthography.Quotation;
-import ca.phon.orthography.Replacement;
-import ca.phon.orthography.TagMarker;
-import ca.phon.orthography.ToneMarker;
-import ca.phon.orthography.Underline;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.UserTierType;
 import ca.phon.session.io.xml.OneToOne;

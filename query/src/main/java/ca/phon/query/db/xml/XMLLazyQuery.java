@@ -18,9 +18,11 @@ package ca.phon.query.db.xml;
 
 import ca.phon.query.db.Script;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

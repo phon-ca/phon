@@ -16,7 +16,8 @@
 package ca.phon.query.detectors;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.features.*;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
 
 import java.util.*;
 

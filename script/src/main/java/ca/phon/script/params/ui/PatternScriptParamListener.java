@@ -15,10 +15,12 @@
  */
 package ca.phon.script.params.ui;
 
-import ca.phon.script.params.*;
+import ca.phon.script.params.PatternScriptParam;
+import ca.phon.script.params.ScriptParam;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.lang.ref.WeakReference;
 

@@ -16,7 +16,8 @@
 package ca.phon.cvseq.fsa;
 
 import ca.phon.cvseq.CVSeqType;
-import ca.phon.fsa.*;
+import ca.phon.fsa.FSAState;
+import ca.phon.fsa.FSATransition;
 
 /**
  *

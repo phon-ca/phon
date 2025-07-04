@@ -18,7 +18,9 @@ package ca.phon.query.detectors;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class AdvancedMetathesisDetector extends BasicMetathesisDetector {
 

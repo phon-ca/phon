@@ -3,10 +3,7 @@ package ca.phon.ui.theme;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
-import ca.phon.ui.theme.UIDefaults;
-import ca.phon.ui.theme.UIDefaultsHandler;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**

@@ -16,11 +16,15 @@
 package ca.phon.query.report.datasource;
 
 import ca.phon.csv.CSVWriter;
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.util.PhonConstants;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 

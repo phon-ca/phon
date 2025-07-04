@@ -1,6 +1,5 @@
 package ca.phon.session.impl;
 
-import ca.phon.session.Gem;
 import ca.phon.session.GemType;
 import ca.phon.session.spi.GemSPI;
 

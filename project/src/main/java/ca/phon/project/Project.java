@@ -16,12 +16,16 @@
 package ca.phon.project;
 
 import ca.phon.extensions.IExtendable;
-import ca.phon.session.*;
-import ca.phon.session.io.*;
+import ca.phon.session.Participant;
+import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
+import ca.phon.session.io.SessionReader;
 
-import java.io.*;
-import java.time.ZonedDateTime;
-import java.util.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Minimal interface for a phon Project.

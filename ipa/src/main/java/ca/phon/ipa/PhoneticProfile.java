@@ -18,7 +18,10 @@ package ca.phon.ipa;
 import ca.phon.ipa.features.FeatureSet;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Phonetic profile for {@link IPAElement}

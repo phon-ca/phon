@@ -20,7 +20,8 @@ import ca.phon.util.OSInfo;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class IPAMap  {
 

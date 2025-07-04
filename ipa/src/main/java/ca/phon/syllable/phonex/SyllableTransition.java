@@ -15,13 +15,18 @@
  */
 package ca.phon.syllable.phonex;
 
-import ca.phon.fsa.*;
-import ca.phon.ipa.*;
-import ca.phon.phonex.*;
+import ca.phon.fsa.FSAState;
+import ca.phon.fsa.OffsetType;
+import ca.phon.fsa.TransitionType;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.PhonexTransition;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A transition which will match a full syllable unit

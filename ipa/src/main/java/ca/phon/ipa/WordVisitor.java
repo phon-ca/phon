@@ -18,7 +18,9 @@ package ca.phon.ipa;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Breaks a transcript into individual words or phonetic groups.

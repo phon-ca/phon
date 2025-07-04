@@ -2,10 +2,13 @@ package ca.phon.query.pql;
 
 import ca.phon.project.Project;
 import ca.phon.query.db.ResultSet;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a compiled PQL query

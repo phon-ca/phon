@@ -15,11 +15,14 @@
  */
 package ca.phon.query.detectors;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * <div id='harmony'><h2>Harmony</h2>

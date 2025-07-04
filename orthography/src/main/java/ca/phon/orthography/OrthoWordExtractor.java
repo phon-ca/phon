@@ -17,7 +17,9 @@ package ca.phon.orthography;
 
 import ca.phon.visitor.annotation.Visits;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Removes any comments, events, or punctuation

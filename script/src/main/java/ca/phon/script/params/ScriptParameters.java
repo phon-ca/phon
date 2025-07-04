@@ -15,15 +15,21 @@
  */
 package ca.phon.script.params;
 
-import ca.phon.visitor.*;
-import org.antlr.runtime.*;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 
-import java.io.*;
-import java.security.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *

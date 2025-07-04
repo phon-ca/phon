@@ -15,9 +15,11 @@
  */
 package ca.phon.session.spi;
 
-import ca.phon.session.*;
+import ca.phon.session.ParticipantRole;
+import ca.phon.session.Sex;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 public interface ParticipantSPI {
 

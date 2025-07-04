@@ -1,7 +1,9 @@
 package ca.phon.alignedTypesDatabase;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public interface AlignedTypesDatabaseImpl {
 

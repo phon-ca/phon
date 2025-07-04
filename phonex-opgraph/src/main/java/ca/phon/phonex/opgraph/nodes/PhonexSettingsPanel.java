@@ -20,7 +20,8 @@ import ca.phon.opgraph.app.edits.node.NodeSettingsEdit;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Properties;
 
 /**

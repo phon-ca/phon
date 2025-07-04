@@ -15,10 +15,13 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.fsa.*;
+import ca.phon.fsa.FSATransition;
+import ca.phon.fsa.SimpleFSA;
 import ca.phon.ipa.IPAElement;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of a phonex state machine.

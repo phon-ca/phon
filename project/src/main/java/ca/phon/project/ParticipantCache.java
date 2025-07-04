@@ -15,11 +15,12 @@
  */
 package ca.phon.project;
 
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 import java.io.IOException;
-import java.time.*;
+import java.time.Period;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;

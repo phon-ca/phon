@@ -15,7 +15,8 @@
  */
 package ca.phon.session;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.util.OSInfo;
 
 import java.util.Set;

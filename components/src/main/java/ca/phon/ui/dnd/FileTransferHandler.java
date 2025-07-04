@@ -16,8 +16,11 @@
 package ca.phon.ui.dnd;
 
 import javax.swing.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class FileTransferHandler extends TransferHandler {

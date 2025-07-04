@@ -15,7 +15,8 @@
  */
 package ca.phon.session.format;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 import ca.phon.session.tierdata.TierString;
 
 import java.text.ParseException;

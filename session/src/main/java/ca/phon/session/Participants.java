@@ -16,7 +16,8 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.visitor.*;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
 
 import java.time.Period;
 import java.util.*;

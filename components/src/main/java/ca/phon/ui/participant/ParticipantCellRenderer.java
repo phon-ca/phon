@@ -21,7 +21,8 @@ import ca.phon.session.format.AgeFormatter;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {

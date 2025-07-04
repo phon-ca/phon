@@ -15,10 +15,15 @@
  */
 package ca.phon.session;
 
-import ca.phon.extensions.*;
-import ca.phon.visitor.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 

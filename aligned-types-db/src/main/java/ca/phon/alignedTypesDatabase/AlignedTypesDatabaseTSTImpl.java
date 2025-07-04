@@ -14,13 +14,18 @@
  */
 package ca.phon.alignedTypesDatabase;
 
-import ca.hedlund.tst.*;
+import ca.hedlund.tst.TerminatedNodeIterator;
+import ca.hedlund.tst.TernaryTree;
+import ca.hedlund.tst.TernaryTreeNode;
 import ca.phon.util.Tuple;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**

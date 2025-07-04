@@ -15,7 +15,9 @@
  */
 package ca.phon.ipa.tree;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 
 public class IpaTernaryTreeNode<V> {
 

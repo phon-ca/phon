@@ -16,8 +16,10 @@
 package ca.phon.ui.text;
 
 import ca.phon.ui.fonts.FontPreferences;
-import org.fife.ui.autocomplete.*;
-import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

@@ -7,8 +7,9 @@ import ca.phon.session.alignment.TierAligner;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.Map;
 

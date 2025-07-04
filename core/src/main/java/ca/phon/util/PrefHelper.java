@@ -17,10 +17,13 @@ package ca.phon.util;
 
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.*;
-import java.text.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.Format;
+import java.text.ParseException;
 import java.util.logging.Logger;
-import java.util.prefs.*;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 
 

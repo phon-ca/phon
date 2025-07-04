@@ -16,11 +16,14 @@
 package ca.phon.query.script;
 
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.*;
-import ca.phon.ipa.*;
+import ca.phon.formatter.FormatterFactory;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.ipa.Diacritic;
+import ca.phon.ipa.IPATranscript;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class TableUtils {
 	

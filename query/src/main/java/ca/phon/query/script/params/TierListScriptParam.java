@@ -1,8 +1,12 @@
 package ca.phon.query.script.params;
 
-import ca.phon.script.params.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.StringScriptParam;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TierListScriptParam extends ScriptParam {

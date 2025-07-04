@@ -16,28 +16,30 @@
 package ca.phon.session.check;
 
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
-import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
-import ca.phon.orthography.Orthography;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.OrthographyBuilder;
 import ca.phon.orthography.Terminator;
 import ca.phon.orthography.TerminatorType;
 import ca.phon.orthography.mor.MorTierData;
-import ca.phon.plugin.*;
-import ca.phon.session.Record;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.Rank;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.alignment.CrossTierAlignment;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.alignment.TierElementFilter;
-import ca.phon.session.io.xml.OneToOne;
 import ca.phon.session.tierdata.TierData;
-import ca.phon.syllabifier.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Check IPA transcriptions for a session. 

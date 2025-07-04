@@ -17,10 +17,11 @@
 package ca.phon.query.db;
 
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Session;
 import ca.phon.session.filter.AbstractRecordFilter;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

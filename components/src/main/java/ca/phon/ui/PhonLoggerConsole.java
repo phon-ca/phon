@@ -17,8 +17,9 @@ package ca.phon.ui;
 
 import javax.swing.*;
 import javax.swing.text.*;
-import java.util.*;
-import java.util.logging.Formatter;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.*;
 
 /**

@@ -15,7 +15,9 @@
  */
 package ca.phon.phonex.plugins;
 
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 
 /**
  * <p>Base matcher for all diacritic phonex plug-ins.  The matcher accepts

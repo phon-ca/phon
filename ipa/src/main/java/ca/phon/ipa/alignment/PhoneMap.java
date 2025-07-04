@@ -17,13 +17,16 @@
 package ca.phon.ipa.alignment;
 
 import ca.phon.alignment.AlignmentMap;
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.*;
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
 import ca.phon.util.PhonConstants;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

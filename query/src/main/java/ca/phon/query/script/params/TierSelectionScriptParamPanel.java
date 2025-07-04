@@ -1,15 +1,21 @@
 package ca.phon.query.script.params;
 
-import ca.phon.script.params.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.StringScriptParam;
 import ca.phon.session.SystemTierType;
-import ca.phon.ui.text.*;
+import ca.phon.ui.text.DefaultTextCompleterModel;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.TextCompleter;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class TierSelectionScriptParamPanel extends JPanel  {
 

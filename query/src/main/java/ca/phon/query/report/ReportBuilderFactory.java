@@ -15,7 +15,9 @@
  */
 package ca.phon.query.report;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.query.report.csv.CSVReportBuilder;
 import ca.phon.util.CollatorFactory;
 

@@ -15,7 +15,8 @@
  */
 package ca.phon.media;
 
-import ca.phon.media.TimeUIModel.*;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 
 import java.beans.PropertyChangeEvent;
 

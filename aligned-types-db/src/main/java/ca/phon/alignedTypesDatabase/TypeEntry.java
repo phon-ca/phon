@@ -14,10 +14,14 @@
 
 package ca.phon.alignedTypesDatabase;
 
-import ca.hedlund.tst.*;
+import ca.hedlund.tst.TernaryTree;
+import ca.hedlund.tst.TernaryTreeNode;
+import ca.hedlund.tst.TernaryTreeNodePath;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 final class TypeEntry implements Serializable {
 

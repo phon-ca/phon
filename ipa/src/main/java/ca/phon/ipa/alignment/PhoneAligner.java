@@ -15,12 +15,15 @@
  */
 package ca.phon.ipa.alignment;
 
-import ca.phon.alignment.*;
+import ca.phon.alignment.AlignmentMap;
+import ca.phon.alignment.IndelAligner;
 import ca.phon.ipa.*;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.SyllableStress;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**

@@ -15,17 +15,24 @@
  */
 package ca.phon.xml;
 
+import ca.phon.util.EmptyQueueException;
 import ca.phon.util.Queue;
-import ca.phon.util.*;
 import ca.phon.visitor.annotation.Visits;
-import org.antlr.runtime.*;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenSource;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.*;
+import javax.xml.stream.Location;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Properties;
 
 /**
  * <p>ANTLR3 lexer for XML files using the

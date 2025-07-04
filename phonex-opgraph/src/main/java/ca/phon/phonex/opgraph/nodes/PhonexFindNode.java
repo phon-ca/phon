@@ -27,8 +27,8 @@ import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
 
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 @OpNodeInfo(
 		name="Phonex Find",

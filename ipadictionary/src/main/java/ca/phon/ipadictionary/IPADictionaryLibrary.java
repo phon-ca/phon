@@ -15,9 +15,11 @@
  */
 package ca.phon.ipadictionary;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
-import ca.phon.util.*;
+import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
 
 import java.util.*;

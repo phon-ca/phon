@@ -17,10 +17,8 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.*;
-import ca.phon.orthography.Error;
-import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.spi.RecordSPI;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;

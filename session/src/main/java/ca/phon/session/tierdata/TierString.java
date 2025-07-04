@@ -19,7 +19,10 @@ import ca.phon.extensions.ExtendableObject;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Custom String implementation for tiers with extension support.

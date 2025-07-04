@@ -16,7 +16,9 @@
 
 package ca.phon.query.db;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Interface for the result of a Phon query. 

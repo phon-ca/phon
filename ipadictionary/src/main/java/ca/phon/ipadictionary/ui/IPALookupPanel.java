@@ -17,18 +17,24 @@ package ca.phon.ipadictionary.ui;
 
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipadictionary.exceptions.IPADictionaryException;
-import ca.phon.ipadictionary.cmd.*;
-import ca.phon.util.*;
+import ca.phon.util.LanguageEntry;
+import ca.phon.util.LanguageParser;
 import ca.phon.worker.PhonTask;
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

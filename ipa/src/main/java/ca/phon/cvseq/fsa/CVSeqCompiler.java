@@ -16,7 +16,8 @@
 package ca.phon.cvseq.fsa;
 
 import ca.phon.cvseq.CVSeqType;
-import ca.phon.fsa.*;
+import ca.phon.fsa.FSATransition;
+import ca.phon.fsa.SimpleFSA;
 
 import java.text.ParseException;
 

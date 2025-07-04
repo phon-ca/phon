@@ -1,6 +1,9 @@
 package ca.phon.ipa.parser;
 
-import ca.phon.ipa.parser.exceptions.*;
+import ca.phon.ipa.parser.exceptions.HangingLigatureException;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.InvalidTokenException;
+import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 import org.antlr.v4.runtime.*;
 
 public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {

@@ -16,8 +16,10 @@
 package ca.phon.ui;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import java.beans.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
 
 public class ButtonPopup {

@@ -15,10 +15,11 @@
  */
 package ca.phon.session.filter;
 
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Filter utterances by speaker.  If 'null' is given during construction

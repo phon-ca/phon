@@ -15,12 +15,15 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableStress;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>A basic phone consists of the following parts:

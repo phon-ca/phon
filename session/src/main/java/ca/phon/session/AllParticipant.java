@@ -2,7 +2,8 @@ package ca.phon.session;
 
 import ca.phon.session.spi.ParticipantSPI;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * Used as a placeholder in lists for all participants

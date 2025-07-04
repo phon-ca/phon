@@ -15,7 +15,8 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.ipa.features.*;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 
 /**

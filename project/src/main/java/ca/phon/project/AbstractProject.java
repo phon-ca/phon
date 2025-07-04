@@ -1,13 +1,11 @@
 package ca.phon.project;
 
 import ca.phon.extensions.ExtensionSupport;
-import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.*;
-import jakarta.xml.bind.*;
 
-import javax.xml.stream.*;
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractProject implements Project, ProjectEvents {
 

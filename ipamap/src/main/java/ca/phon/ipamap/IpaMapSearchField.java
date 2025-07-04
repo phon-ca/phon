@@ -15,7 +15,8 @@
  */
 package ca.phon.ipamap;
 
-import ca.phon.ui.action.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.SearchField;
 
 import javax.swing.*;

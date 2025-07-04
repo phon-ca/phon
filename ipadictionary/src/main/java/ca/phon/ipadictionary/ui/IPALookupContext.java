@@ -15,17 +15,26 @@
  */
 package ca.phon.ipadictionary.ui;
 
-import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryException;
-import ca.phon.ipadictionary.impl.*;
-import ca.phon.ipadictionary.spi.*;
+import ca.phon.ipadictionary.impl.CompoundDictionary;
+import ca.phon.ipadictionary.spi.AddEntry;
+import ca.phon.ipadictionary.spi.ClearEntries;
+import ca.phon.ipadictionary.spi.RemoveEntry;
 import ca.phon.util.Language;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Context object for cmd interpreter.

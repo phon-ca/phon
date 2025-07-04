@@ -16,9 +16,12 @@
 package ca.phon.query.report.datasource;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.query.db.*;
+import ca.phon.query.db.ReportHelper;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.io.InventorySection;
-import ca.phon.util.*;
+import ca.phon.util.CollatorFactory;
+import ca.phon.util.Tuple;
 
 import java.text.ParseException;
 import java.util.*;

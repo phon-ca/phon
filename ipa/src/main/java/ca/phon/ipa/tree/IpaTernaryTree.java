@@ -15,12 +15,14 @@
  */
 package ca.phon.ipa.tree;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.ipa.tree.IpaTernaryTreeNode.Position;
 
 import java.util.*;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Ternary tree implementation for IPA transcripts

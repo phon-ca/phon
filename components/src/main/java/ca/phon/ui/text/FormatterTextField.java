@@ -15,14 +15,17 @@
  */
 package ca.phon.ui.text;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class FormatterTextField<T> extends PromptedTextField {
 	

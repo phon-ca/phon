@@ -15,10 +15,14 @@
  */
 package ca.phon.ipa.relations;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.alignment.PhoneMap;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
 * <link rel='stylesheet' type='text/css' href='../../../../../resources/ca/phon/query/detectors/detectors.css'/>

@@ -15,26 +15,28 @@
  */
 package ca.phon.session.io.xml.v2_0;
 
-import ca.phon.orthography.mor.*;
-import ca.phon.session.GemType;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
+import ca.phon.orthography.mor.*;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.alignment.TierElementFilter;
-import ca.phon.session.tierdata.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
+import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
 import ca.phon.util.Tuple;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
-import jakarta.xml.bind.*;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,7 +59,10 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

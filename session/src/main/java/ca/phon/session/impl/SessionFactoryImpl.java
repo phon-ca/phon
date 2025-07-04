@@ -15,7 +15,9 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.Rank;
 import ca.phon.session.CommentType;
 import ca.phon.session.GemType;
 import ca.phon.session.SystemTierType;

@@ -16,13 +16,19 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.impl.GemImpl;
-import ca.phon.session.io.*;
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.SessionWriter;
 import ca.phon.session.spi.*;
 import ca.phon.session.tierdata.TierData;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;

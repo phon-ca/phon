@@ -1,12 +1,8 @@
 package ca.phon.session.alignment;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
-import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
-import ca.phon.session.UserTierType;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Tuple;
 

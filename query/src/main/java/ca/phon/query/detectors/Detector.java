@@ -17,7 +17,8 @@ package ca.phon.query.detectors;
 
 import ca.phon.ipa.alignment.PhoneMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * An abstraction of a process detector.

@@ -16,9 +16,10 @@
 package ca.phon.ui.decorations;
 
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.icons.*;
-import org.jdesktop.swingx.painter.Painter;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.painter.*;
+import org.jdesktop.swingx.painter.Painter;
 
 import javax.swing.*;
 import java.awt.*;

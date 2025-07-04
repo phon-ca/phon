@@ -20,7 +20,8 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.ParticipantSPI;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * A participant is a speaker or object which participates in the {@link Session}.

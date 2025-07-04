@@ -15,7 +15,8 @@
  */
 package ca.phon.query.script.params;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ui.ScriptParamComponentFactory;
 
