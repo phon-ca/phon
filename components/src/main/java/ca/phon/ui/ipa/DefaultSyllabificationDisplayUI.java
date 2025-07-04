@@ -452,8 +452,9 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 					phoneArea.add(new Area(fillRect));
 				}
 
-				Color grad_top = p.getScType().getColor().brighter();
-				Color grad_btm = p.getScType().getColor().darker();
+				final Color scColor = IPAUIDefaults.getColorForConstituentType(p.getScType());
+				Color grad_top = scColor.brighter();
+				Color grad_btm = scColor.darker();
 				GradientPaint gp = new GradientPaint(new Point(phoneRect.x,
 						phoneRect.y), grad_top, new Point(phoneRect.x,
 						phoneRect.y + phoneRect.height), grad_btm);

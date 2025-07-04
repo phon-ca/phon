@@ -23,28 +23,25 @@ import java.awt.*;
  * types associated with it.
  */
 public enum SyllableConstituentType {
-	LEFTAPPENDIX("LA", "L", Color.decode("0xffe13c")),
-	ONSET("O", "O", Color.decode("0x307ECC")),
-	NUCLEUS("N", "N", Color.decode("0xFE3C3C")),
-	CODA("C", "C", Color.decode("0x5BA151")),
-	RIGHTAPPENDIX("RA", "R", Color.decode("0xFF8A3C")),
-	OEHS("OEHS", "E", Color.decode("0x3cd3c3")),
-	AMBISYLLABIC("AS", "A", Color.decode("0x6C9BA1")),
-	UNKNOWN("UK", "U", Color.white),
-	SYLLABLEBOUNDARYMARKER("SB", "B", Color.white),
-	SYLLABLESTRESSMARKER("SS", "S", Color.lightGray),
-	WORDBOUNDARYMARKER("WB", "W", Color.white);
+	LEFTAPPENDIX("LA", "L"),
+	ONSET("O", "O"),
+	NUCLEUS("N", "N"),
+	CODA("C", "C"),
+	RIGHTAPPENDIX("RA", "R"),
+	OEHS("OEHS", "E"),
+	AMBISYLLABIC("AS", "A"),
+	UNKNOWN("UK", "U"),
+	SYLLABLEBOUNDARYMARKER("SB", "B"),
+	SYLLABLESTRESSMARKER("SS", "S"),
+	WORDBOUNDARYMARKER("WB", "W");
 	
 	private String shortHand;
 	
 	private String mnemonic;
 	
-	private Color uiColor;
-	
-	private SyllableConstituentType(String sh, String mnemonic, Color c) {
+	private SyllableConstituentType(String sh, String mnemonic) {
 		this.shortHand = sh;
 		this.mnemonic = mnemonic;
-		this.uiColor = c;
 	}
 	
 	public String getIdentifier() {
@@ -53,10 +50,6 @@ public enum SyllableConstituentType {
 	
 	public char getIdChar() {
 		return mnemonic.charAt(0);
-	}
-	
-	public Color getColor() {
-		return uiColor;
 	}
 	
 	public String getMnemonic() {

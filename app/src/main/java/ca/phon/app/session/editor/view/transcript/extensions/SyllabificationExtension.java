@@ -573,7 +573,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 retVal.add(TranscriptBatchBuilder.getBatchString("D", attrs));
             }
             else {
-                StyleConstants.setForeground(attrs, sInfo.getConstituentType().getColor());
                 retVal.add(TranscriptBatchBuilder.getBatchString(String.valueOf(sInfo.getConstituentType().getIdChar()), attrs));
             }
         }
@@ -819,7 +818,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                                     if (!doc.containsNotEditableAttribute(charAttrs) && charPhone != null && (charPhone.equals(phone) || charPhone.equals(otherNucleus))) {
                                         SimpleAttributeSet newCharAttrs = new SimpleAttributeSet();
                                         newCharAttrs.addAttributes(charAttrs);
-                                        StyleConstants.setForeground(newCharAttrs, SyllableConstituentType.NUCLEUS.getColor());
                                         super.replace(fb, i, 1, "N", attrs);
                                     }
                                 }
@@ -827,7 +825,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                             return;
                         }
                         else {
-                            StyleConstants.setForeground(attrs, type.getColor());
                             text = textUpper;
                         }
                     }

@@ -220,8 +220,9 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		Font displayFont = display.getFont();
 		
 		if(display.isPaintPhoneBackground()) {
-			Color grad_top = p.getScType().getColor().brighter();
-			Color grad_btm = p.getScType().getColor().darker();
+			final Color scColor = IPAUIDefaults.getColorForConstituentType(p.getScType());
+			Color grad_top = scColor.brighter();
+			Color grad_btm = scColor.darker();
 			GradientPaint gp =
 					new GradientPaint(
 						new Point(pRect.x, pRect.y), grad_top,
