@@ -1,11 +1,15 @@
 package ca.phon.app.session.editor.view.transcript;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.session.*;
+import ca.phon.session.Comment;
+import ca.phon.session.Gem;
 import ca.phon.session.Record;
+import ca.phon.session.Tier;
 
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Element;
+import javax.swing.text.NavigationFilter;
+import javax.swing.text.Position;
 
 /**
  * The default navigation filter for the transcript editor

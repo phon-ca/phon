@@ -17,7 +17,8 @@ package ca.phon.app.opgraph.nodes;
 
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.opgraph.OpNode;
-import ca.phon.script.*;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
 
 public interface ScriptNode {
 

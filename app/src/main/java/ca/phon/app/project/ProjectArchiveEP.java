@@ -17,7 +17,8 @@ package ca.phon.app.project;
 
 import ca.phon.app.welcome.ProjectArchiveTask;
 import ca.phon.app.workspace.Workspace;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
 import ca.phon.session.format.DateFormatter;
 

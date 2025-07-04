@@ -1,12 +1,14 @@
 package ca.phon.app.project;
 
-import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.CGrid;
+import bibliothek.gui.dock.common.CWorkingArea;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.event.CFocusListener;
 import bibliothek.gui.dock.common.intern.CDockable;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.RecordEditorPerspective;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
 import ca.phon.session.Session;

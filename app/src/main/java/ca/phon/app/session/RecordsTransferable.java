@@ -2,14 +2,18 @@ package ca.phon.app.session;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.csv.CSVWriter;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
-import java.awt.datatransfer.*;
-import java.io.*;
-import java.nio.charset.Charset;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordsTransferable implements Transferable {
 

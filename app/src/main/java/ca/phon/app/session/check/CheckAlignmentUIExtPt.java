@@ -15,7 +15,8 @@
  */
 package ca.phon.app.session.check;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.session.check.CheckAlignment;
 
 @SessionCheckTarget(CheckAlignment.class)

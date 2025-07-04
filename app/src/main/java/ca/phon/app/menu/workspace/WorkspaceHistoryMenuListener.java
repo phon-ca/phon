@@ -15,11 +15,13 @@
  */
 package ca.phon.app.menu.workspace;
 
-import ca.phon.app.workspace.*;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.app.workspace.WorkspaceHistory;
 import ca.phon.ui.action.PhonUIAction;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.io.File;
 
 public class WorkspaceHistoryMenuListener implements MenuListener {

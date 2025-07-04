@@ -15,20 +15,23 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.ui.action.*;
+import ca.phon.session.Record;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.CollatorFactory;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.*;
 
 /**
  * A dialog for choosing sort options for records

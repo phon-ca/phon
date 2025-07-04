@@ -1,7 +1,6 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.view.transcript.extensions.BlindTranscriptionExtension;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
@@ -10,7 +9,6 @@ import ca.phon.session.Transcript;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -19,7 +17,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;

@@ -19,10 +19,7 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.XMLQueryFactory;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.Range;
 
 /**
  * JavaScript bridge for common Phon functions.

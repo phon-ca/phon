@@ -18,7 +18,10 @@ package ca.phon.app.opgraph.nodes.query;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetManager;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 

@@ -15,7 +15,8 @@
  */
 package ca.phon.app.prefs;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 import ca.phon.ui.CommonModuleFrame;
 
 import javax.swing.*;

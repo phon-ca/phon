@@ -20,7 +20,8 @@ import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
 
 import javax.swing.*;

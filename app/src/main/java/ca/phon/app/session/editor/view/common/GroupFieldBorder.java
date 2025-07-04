@@ -16,7 +16,8 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.ui.PhonGuiConstants;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.border.Border;

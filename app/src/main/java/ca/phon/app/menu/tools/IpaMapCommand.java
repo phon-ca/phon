@@ -15,7 +15,8 @@
  */
 package ca.phon.app.menu.tools;
 
-import ca.phon.ipamap.*;
+import ca.phon.ipamap.IPAMapEP;
+import ca.phon.ipamap.IpaMap;
 import ca.phon.plugin.PluginAction;
 
 import javax.swing.*;

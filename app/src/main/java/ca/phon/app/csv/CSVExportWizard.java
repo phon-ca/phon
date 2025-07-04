@@ -6,10 +6,15 @@ import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.app.welcome.WelcomeWindow;
-import ca.phon.formatter.*;
+import ca.phon.formatter.MediaTimeFormatStyle;
+import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.formatter.PeriodFormatStyle;
+import ca.phon.formatter.PeriodFormatter;
 import ca.phon.project.Project;
-
-import ca.phon.session.*;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.DropDownIcon;

@@ -19,14 +19,18 @@ import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import java.awt.*;
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.List;
 

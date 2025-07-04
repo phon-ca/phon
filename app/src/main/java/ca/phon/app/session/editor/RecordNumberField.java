@@ -16,7 +16,9 @@
 package ca.phon.app.session.editor;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 /**
  * Displays a number between (min, max).

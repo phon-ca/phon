@@ -16,12 +16,15 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Tier;
+import ca.phon.session.TierDescription;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 /**

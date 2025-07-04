@@ -15,22 +15,24 @@
  */
 package ca.phon.app.session;
 
-import ca.hedlund.desktopicons.*;
-import ca.hedlund.tst.TernaryTree;
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
-import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.tristatecheckbox.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.OSInfo;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.*;
 
 /**
  * Displays an interface for selection one or more

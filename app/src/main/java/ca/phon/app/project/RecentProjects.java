@@ -18,7 +18,8 @@ package ca.phon.app.project;
 import ca.phon.util.RecentFiles;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecentProjects extends RecentFiles {
 	

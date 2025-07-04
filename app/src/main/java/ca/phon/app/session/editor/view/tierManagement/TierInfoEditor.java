@@ -15,7 +15,8 @@
  */
 package ca.phon.app.session.editor.view.tierManagement;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.mor.GraspTierData;
@@ -30,7 +31,8 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

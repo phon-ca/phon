@@ -2,7 +2,6 @@ package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

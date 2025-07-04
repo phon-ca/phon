@@ -19,7 +19,8 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.*;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 
 import java.awt.*;

@@ -15,7 +15,8 @@
  */
 package ca.phon.app.welcome;
 
-import ca.phon.app.workspace.*;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.app.workspace.WorkspaceButton;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.util.PrefHelper;
 import org.jdesktop.swingx.painter.Painter;

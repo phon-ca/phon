@@ -15,7 +15,8 @@
  */
 package ca.phon.app.log;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 
 import javax.swing.*;
 import java.util.Map;

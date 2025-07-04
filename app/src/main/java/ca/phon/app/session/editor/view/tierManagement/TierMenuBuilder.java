@@ -6,17 +6,11 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
-import ca.phon.app.session.editor.undo.ToggleTierAlignedEdit;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.Tuple;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

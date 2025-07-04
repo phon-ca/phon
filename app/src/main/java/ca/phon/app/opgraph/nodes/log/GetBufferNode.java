@@ -15,7 +15,8 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import ca.phon.app.log.*;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
 

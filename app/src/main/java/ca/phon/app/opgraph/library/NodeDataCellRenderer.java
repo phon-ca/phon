@@ -19,7 +19,8 @@ import ca.phon.opgraph.library.NodeData;
 import org.jdesktop.swingx.JXPanel;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class NodeDataCellRenderer implements ListCellRenderer<NodeData> {

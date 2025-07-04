@@ -1,19 +1,23 @@
 package ca.phon.app.opgraph.nodes;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.script.*;
-import ca.phon.script.*;
+import ca.phon.app.script.PhonScriptTextArea;
+import ca.phon.app.script.ScriptEditorFactory;
+import ca.phon.script.BasicScript;
+import ca.phon.script.PhonScriptException;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Script editor dialog for {@link ScriptNode}s

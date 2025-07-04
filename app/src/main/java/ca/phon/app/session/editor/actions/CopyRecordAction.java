@@ -20,7 +20,8 @@ import ca.phon.app.session.editor.SessionEditor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * Copy record data into system clipboard. 

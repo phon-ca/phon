@@ -18,19 +18,28 @@ package ca.phon.app.opgraph;
 import ca.phon.app.actions.XMLOpenHandler;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.opgraph.analysis.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.report.*;
+import ca.phon.app.opgraph.analysis.AnalysisComposerEP;
+import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
+import ca.phon.app.opgraph.editor.OpgraphEditorEP;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
+import ca.phon.app.opgraph.editor.SimpleEditorExtension;
+import ca.phon.app.opgraph.report.ReportComposerEP;
+import ca.phon.app.opgraph.report.ReportWizardExtension;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 
 import javax.xml.stream.events.StartElement;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {
 

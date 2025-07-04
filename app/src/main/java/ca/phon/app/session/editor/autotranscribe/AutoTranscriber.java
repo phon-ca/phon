@@ -15,21 +15,24 @@
  */
 package ca.phon.app.session.editor.autotranscribe;
 
-import ca.phon.app.ipalookup.*;
+import ca.phon.app.ipalookup.OrthoLookupVisitor;
+import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.view.ipaDictionary.IPALookupEdit;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyElement;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.alignment.TierElementFilter;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.syllabifier.Syllabifier;
 
-import javax.swing.undo.*;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEdit;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

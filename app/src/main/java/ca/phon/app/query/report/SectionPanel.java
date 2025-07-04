@@ -16,15 +16,20 @@
 package ca.phon.app.query.report;
 
 import ca.phon.query.report.io.Section;
-import ca.phon.ui.*;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.painter.*;
+import ca.phon.ui.HidablePanel;
+import ca.phon.ui.PhonGuiConstants;
+import org.jdesktop.swingx.JXLabel;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.RectanglePainter;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
 
 
 /**

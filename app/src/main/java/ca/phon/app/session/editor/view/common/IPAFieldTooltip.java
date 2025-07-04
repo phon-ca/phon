@@ -4,14 +4,16 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.ipa.*;
+import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Optional;
 
 public class IPAFieldTooltip {

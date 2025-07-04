@@ -22,7 +22,8 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import org.eclipse.jgit.util.FileUtils;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class ProjectWindowProjectListener implements ProjectListener {

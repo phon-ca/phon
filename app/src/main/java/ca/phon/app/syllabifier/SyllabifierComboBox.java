@@ -15,13 +15,14 @@
  */
 package ca.phon.app.syllabifier;
 
-import ca.phon.syllabifier.*;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 public class SyllabifierComboBox extends JComboBox<Syllabifier> {
 	

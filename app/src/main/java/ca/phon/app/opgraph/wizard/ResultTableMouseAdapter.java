@@ -1,7 +1,6 @@
 package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.opgraph.report.ReportTableView;
-import ca.phon.project.Project;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;

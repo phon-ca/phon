@@ -15,13 +15,19 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.undo.RemoveParticipantEdit;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.undo.CompoundEdit;

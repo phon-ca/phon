@@ -15,10 +15,6 @@
  */
 package ca.phon.app.session.editor;
 
-import bibliothek.gui.dock.common.perspective.CControlPerspective;
-import bibliothek.gui.dock.common.perspective.CPerspective;
-import bibliothek.util.xml.XElement;
-import bibliothek.util.xml.XIO;
 import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.file.OpenFileHistory;
@@ -26,26 +22,36 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.UnifiedProjectWindow;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.session.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.LocalProject;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectProperties;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
+import ca.phon.session.Transcriber;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
-import com.jgoodies.forms.layout.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.Base64;
+import ca.phon.util.JCrypt;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.Range;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.ByteArrayInputStream;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 

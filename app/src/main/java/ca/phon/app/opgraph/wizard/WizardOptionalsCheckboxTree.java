@@ -15,13 +15,16 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpNode;
 import ca.phon.ui.tristatecheckbox.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
-import java.util.*;
+import java.util.List;
+import java.util.Stack;
 
 public class WizardOptionalsCheckboxTree extends TristateCheckBoxTree {
 	

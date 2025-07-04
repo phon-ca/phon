@@ -24,8 +24,12 @@ import ca.phon.plugin.PluginException;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
-import com.sun.jna.*;
-import com.sun.jna.platform.win32.*;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.Kernel32;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinUser;
 
 import java.io.*;
 import java.net.URI;

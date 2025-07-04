@@ -18,11 +18,13 @@ package ca.phon.app.menu.file;
 import ca.phon.app.actions.OpenFileEP;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.*;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.ui.action.PhonUIAction;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.io.File;
 

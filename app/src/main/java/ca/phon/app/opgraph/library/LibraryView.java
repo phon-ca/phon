@@ -16,22 +16,34 @@
 package ca.phon.app.opgraph.library;
 
 import ca.phon.opgraph.app.components.canvas.GraphCanvas;
-import ca.phon.opgraph.library.*;
+import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.NodeLibrary;
 import ca.phon.ui.text.SearchField;
 import ca.phon.util.PrefHelper;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.JXList;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.dnd.*;
-import java.awt.event.*;
-import java.awt.font.*;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 /**
  * <p>Custom library view for Phon node editor.  The view consists

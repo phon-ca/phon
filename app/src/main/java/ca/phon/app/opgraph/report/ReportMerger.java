@@ -19,12 +19,16 @@ import ca.phon.app.opgraph.editor.NodeEditorSettings;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
+import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
 

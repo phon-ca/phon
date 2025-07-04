@@ -16,12 +16,18 @@
 package ca.phon.app.query;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
-import ca.phon.worker.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetManager;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.table.AbstractTableModel;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 /**

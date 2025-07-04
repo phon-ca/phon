@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;

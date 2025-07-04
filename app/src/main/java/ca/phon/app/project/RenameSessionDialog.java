@@ -23,15 +23,16 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PhonConstants;
 import ca.phon.worker.PhonWorker;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Dialog for renaming a session

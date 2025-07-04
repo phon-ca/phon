@@ -2,10 +2,13 @@ package ca.phon.app.session.editor.view.timeline.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
-import ca.phon.app.session.editor.view.timeline.*;
+import ca.phon.app.session.editor.view.timeline.TimelineView;
+import ca.phon.app.session.editor.view.timeline.TimelineViewRecordTier;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import java.awt.event.ActionEvent;
 

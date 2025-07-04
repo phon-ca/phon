@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.actions;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.ITRWizard;
+import ca.phon.app.session.editor.SessionEditor;
 
 import java.awt.event.ActionEvent;
 

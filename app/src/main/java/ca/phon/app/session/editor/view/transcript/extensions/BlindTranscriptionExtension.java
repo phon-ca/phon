@@ -5,7 +5,10 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.util.ArrayList;
 import java.util.List;
 

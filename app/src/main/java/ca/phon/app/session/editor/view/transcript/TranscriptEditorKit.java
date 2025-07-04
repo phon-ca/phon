@@ -6,7 +6,6 @@ import javax.swing.text.Document;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.ViewFactory;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * The {@link javax.swing.text.EditorKit} used by the {@link TranscriptEditor}

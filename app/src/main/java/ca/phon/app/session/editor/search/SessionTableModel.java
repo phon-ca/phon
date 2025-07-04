@@ -15,8 +15,8 @@
  */
 package ca.phon.app.session.editor.search;
 
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.concurrent.atomic.AtomicReference;

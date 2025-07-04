@@ -19,7 +19,8 @@ import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectMediaFolders;
 import ca.phon.project.ProjectPaths;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

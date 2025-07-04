@@ -17,13 +17,16 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierViewEdit;
-import ca.phon.session.*;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.TierViewItem;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ToggleLockAllTiersAction extends SessionEditorAction {
 

@@ -18,9 +18,13 @@ package ca.phon.app.opgraph.analysis;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.tree.TreePath;

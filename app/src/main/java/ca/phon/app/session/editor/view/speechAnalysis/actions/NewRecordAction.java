@@ -18,8 +18,10 @@ package ca.phon.app.session.editor.view.speechAnalysis.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.SessionFactory;
 
 import java.awt.event.ActionEvent;
 

@@ -16,7 +16,9 @@
 package ca.phon.app.opgraph.nodes.report;
 
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
 
 @OpNodeInfo(name="Add Report Section", category="Report", description="Add section to report tree", showInLibrary=true)
 public class AddReportSectionNode extends ReportSectionNode {

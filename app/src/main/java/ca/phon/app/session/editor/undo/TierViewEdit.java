@@ -15,11 +15,16 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.Session;
+import ca.phon.session.TierViewItem;
 
 import javax.swing.undo.CannotUndoException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Changes to the tier view including order, visibility and locking.

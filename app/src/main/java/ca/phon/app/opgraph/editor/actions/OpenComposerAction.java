@@ -17,14 +17,18 @@ package ca.phon.app.opgraph.editor.actions;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
 
 import java.awt.event.ActionEvent;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class OpenComposerAction extends HookableAction {
 	

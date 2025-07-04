@@ -16,14 +16,19 @@
 package ca.phon.app.session.editor.search;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Tier;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
-import java.util.*;
-import java.util.regex.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 	

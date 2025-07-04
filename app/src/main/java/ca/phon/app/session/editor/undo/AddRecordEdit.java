@@ -15,9 +15,12 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.session.Record;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 /**
  * Edit performed when a new record is added.

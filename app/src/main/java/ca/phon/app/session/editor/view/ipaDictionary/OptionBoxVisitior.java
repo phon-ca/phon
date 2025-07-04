@@ -17,15 +17,19 @@ package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.view.common.*;
+import ca.phon.app.session.editor.view.common.TierDataConstraint;
+import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.*;
+import ca.phon.orthography.CompoundWord;
+import ca.phon.orthography.OrthographyElement;
+import ca.phon.orthography.Word;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 public class OptionBoxVisitior extends VisitorAdapter<OrthographyElement> {

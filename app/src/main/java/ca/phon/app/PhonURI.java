@@ -1,20 +1,11 @@
 package ca.phon.app;
 
-import ca.phon.app.actions.PhonURISchemeHandler;
-import ca.phon.session.SessionPath;
 import ca.phon.util.Range;
-import org.apache.commons.codec.EncoderException;
-import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *

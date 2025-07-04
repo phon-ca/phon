@@ -15,24 +15,40 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.undo.RecordSegmentEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToEndOfSegmentedAction;
-import ca.phon.media.*;
+import ca.phon.media.TimeUIModel;
+import ca.phon.media.VolumeModel;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.SessionFactory;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.*;
-import ca.phon.ui.nativedialogs.*;
-import uk.co.caprica.vlcj.player.base.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
 
 import javax.swing.*;
 import javax.swing.undo.CompoundEdit;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.AWTEventListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
-import java.util.*;
+import java.util.TimerTask;
 
 public final class SegmentationHandler {
 

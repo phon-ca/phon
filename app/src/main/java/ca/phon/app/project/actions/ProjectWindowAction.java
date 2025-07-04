@@ -17,7 +17,8 @@ package ca.phon.app.project.actions;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 
 import java.lang.ref.WeakReference;
 

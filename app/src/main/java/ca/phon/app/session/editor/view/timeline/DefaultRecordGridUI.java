@@ -15,16 +15,18 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.hedlund.desktopicons.*;
 import ca.phon.app.log.LogUtil;
-import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
+import ca.phon.session.Record;
+import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.Tuple;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 
@@ -33,10 +35,12 @@ import javax.swing.border.Border;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DefaultRecordGridUI extends RecordGridUI {

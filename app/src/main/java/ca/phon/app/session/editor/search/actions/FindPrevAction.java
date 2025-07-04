@@ -15,7 +15,6 @@
  */
 package ca.phon.app.session.editor.search.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 
 import java.awt.event.ActionEvent;

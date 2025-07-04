@@ -19,19 +19,21 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.participant.AnonymizeParticipantOptionsPanel;
-import ca.phon.ui.wizard.*;
-import ca.phon.worker.*;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.time.Period;
-import java.util.UUID;
 
 /**
  * Wizard for stripping participant info.

@@ -15,20 +15,23 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.LevenshteinDistance;
 import ca.phon.ipa.tree.IpaTernaryTree;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.query.script.TableUtils;
-import ca.phon.query.report.datasource.*;
 import ca.phon.session.SystemTierType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**

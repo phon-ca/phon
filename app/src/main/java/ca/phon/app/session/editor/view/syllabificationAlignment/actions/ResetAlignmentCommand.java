@@ -15,11 +15,12 @@
  */
 package ca.phon.app.session.editor.view.syllabificationAlignment.actions;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabificationAlignmentEditorView;
+import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Tier;
 
 import java.awt.event.ActionEvent;
 

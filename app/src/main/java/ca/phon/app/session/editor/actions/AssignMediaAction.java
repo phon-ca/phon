@@ -18,8 +18,11 @@ package ca.phon.app.session.editor.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

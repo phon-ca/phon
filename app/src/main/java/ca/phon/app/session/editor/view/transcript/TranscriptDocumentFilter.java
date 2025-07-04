@@ -1,17 +1,11 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.formatter.MediaTimeFormatStyle;
-import ca.phon.session.MediaSegment;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
-import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.position.TranscriptElementLocation;
 
 import javax.swing.text.*;
-import java.text.ParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The default document filter for the {@link TranscriptDocument}

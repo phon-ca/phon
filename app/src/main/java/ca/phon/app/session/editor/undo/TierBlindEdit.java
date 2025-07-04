@@ -6,7 +6,6 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.session.Session;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
-import com.kitfox.svg.A;
 
 import javax.swing.undo.CannotUndoException;
 import java.util.ArrayList;

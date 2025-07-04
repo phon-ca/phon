@@ -18,11 +18,13 @@ package ca.phon.app.opgraph.editor.actions.debug;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class StepOutOfAction extends OpgraphDebugAction {
 

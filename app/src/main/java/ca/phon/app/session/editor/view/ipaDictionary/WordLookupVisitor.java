@@ -16,8 +16,11 @@
 package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.ipalookup.OrthoWordIPAOptions;
-import ca.phon.ipa.*;
-import ca.phon.orthography.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.orthography.CompoundWord;
+import ca.phon.orthography.OrthographyElement;
+import ca.phon.orthography.Word;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

@@ -18,8 +18,11 @@ package ca.phon.app.project;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Shadow projects are used as temporary projects with the same

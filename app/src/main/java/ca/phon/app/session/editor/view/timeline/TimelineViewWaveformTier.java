@@ -16,23 +16,35 @@
 
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.app.session.editor.undo.RecordSegmentEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
-import ca.phon.media.*;
+import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.WaveformDisplay;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
-import ca.phon.ui.action.*;
+import ca.phon.session.SessionFactory;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
-import javax.swing.FocusManager;
 import javax.swing.*;
+import javax.swing.FocusManager;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class TimelineViewWaveformTier extends TimelineViewTier {

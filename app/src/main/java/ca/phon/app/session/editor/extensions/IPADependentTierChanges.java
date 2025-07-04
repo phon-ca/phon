@@ -5,7 +5,9 @@ import ca.phon.extensions.Extension;
 import ca.phon.extensions.ExtensionProvider;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.session.*;
+import ca.phon.session.PhoneAlignment;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
 
 /**
  * Install default dependent tier changes for IPA tiers.  Default behaviour is to update

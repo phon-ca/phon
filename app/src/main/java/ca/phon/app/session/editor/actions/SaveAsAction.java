@@ -17,16 +17,21 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.io.*;
+import ca.phon.session.io.SessionIO;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionWriter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
-import org.apache.commons.logging.Log;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Display save as... dialog for Sessions

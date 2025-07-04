@@ -15,13 +15,15 @@
  */
 package ca.phon.app.about;
 
+import ca.phon.app.PhonSplasher;
 import ca.phon.app.VersionInfo;
-import ca.phon.app.*;
 import ca.phon.app.log.LogUtil;
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import java.awt.*;

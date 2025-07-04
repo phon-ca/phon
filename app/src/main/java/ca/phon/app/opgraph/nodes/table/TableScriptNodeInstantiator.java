@@ -18,8 +18,11 @@ package ca.phon.app.opgraph.nodes.table;
 import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.query.script.QueryScript;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import ca.phon.script.BasicScript;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode> {
 

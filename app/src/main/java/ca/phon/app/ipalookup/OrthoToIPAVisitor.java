@@ -15,8 +15,11 @@
  */
 package ca.phon.app.ipalookup;
 
-import ca.phon.ipa.*;
-import ca.phon.orthography.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.orthography.CompoundWord;
+import ca.phon.orthography.Orthography;
+import ca.phon.orthography.Word;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

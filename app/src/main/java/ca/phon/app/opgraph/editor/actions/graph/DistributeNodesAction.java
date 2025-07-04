@@ -20,11 +20,15 @@ import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.edits.graph.DistributeNodesEdit;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class DistributeNodesAction extends OpgraphEditorAction {
 

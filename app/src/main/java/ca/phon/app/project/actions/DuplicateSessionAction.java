@@ -20,7 +20,6 @@ import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.LocalProject;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
-import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 import ca.phon.util.CollatorFactory;
 import org.apache.commons.io.FileUtils;
@@ -28,9 +27,12 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -16,20 +16,24 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.media.MediaLocator;
 import ca.phon.media.export.VLCWavExporter;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Generate session audio file

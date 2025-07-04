@@ -18,15 +18,18 @@ package ca.phon.app.modules;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.workspace.Workspace;
-import ca.phon.project.*;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import org.apache.commons.cli.*;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Argument information for plug-in entry points.

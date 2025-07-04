@@ -1,6 +1,8 @@
 package ca.phon.app.opgraph.nodes;
 
-import javax.swing.undo.*;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 public class ScriptNodeEdit extends AbstractUndoableEdit {
 

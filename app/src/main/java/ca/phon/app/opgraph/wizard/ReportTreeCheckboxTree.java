@@ -15,9 +15,12 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.app.opgraph.report.tree.ReportTree;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
 import ca.phon.ui.tristatecheckbox.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;

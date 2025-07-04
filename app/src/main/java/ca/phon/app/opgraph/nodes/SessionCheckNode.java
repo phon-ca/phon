@@ -16,26 +16,38 @@
 package ca.phon.app.opgraph.nodes;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.check.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.extensions.*;
+import ca.phon.app.session.check.SessionCheckUI;
+import ca.phon.app.session.check.SessionCheckUIFactory;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventName;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.PluginManager;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.session.*;
-import ca.phon.session.check.*;
+import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
+import ca.phon.session.check.SessionCheck;
+import ca.phon.session.check.SessionValidator;
 import org.apache.commons.lang.StringUtils;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 

@@ -16,7 +16,8 @@
 package ca.phon.app.opgraph.wizard;
 
 import ca.phon.ui.GUIHelper;
-import ca.phon.ui.jbreadcrumb.*;
+import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
+import ca.phon.ui.jbreadcrumb.BreadcrumbStateBorder;
 
 import javax.swing.*;
 import java.awt.*;

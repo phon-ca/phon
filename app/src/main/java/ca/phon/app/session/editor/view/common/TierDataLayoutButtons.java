@@ -17,7 +17,8 @@ package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;

@@ -18,11 +18,15 @@ package ca.phon.app.opgraph.report;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.app.opgraph.nodes.query.QueryHistoryNode;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpLink;
+import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
+import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.reflect.ObjectNode;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.project.Project;
 
 import java.io.IOException;

@@ -20,10 +20,11 @@ import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
 import ca.phon.session.Session;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.time.*;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Extension for {@link Project}s which manages auto-save files for 

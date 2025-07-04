@@ -16,25 +16,31 @@
 package ca.phon.app.session.editor.view.participants;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.participants.actions.*;
+import ca.phon.app.session.editor.actions.DeleteParticipantAction;
+import ca.phon.app.session.editor.actions.EditParticipantAction;
+import ca.phon.app.session.editor.actions.NewParticipantAction;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.view.participants.actions.AssignUnidentifiedSpeakerAction;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Session;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.PhonTable;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.*;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.participant.ParticipantsTableModel;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.undo.CompoundEdit;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * Participants view for session editor.  This view displays a list of participants in the session.

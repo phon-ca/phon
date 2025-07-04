@@ -15,8 +15,12 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.Participant;
+import ca.phon.session.Session;
 
 import javax.swing.undo.CannotUndoException;
 

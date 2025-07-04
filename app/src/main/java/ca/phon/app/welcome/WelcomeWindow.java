@@ -15,29 +15,40 @@
  */
 package ca.phon.app.welcome;
 
-import ca.hedlund.desktopicons.*;
 import ca.phon.app.VersionInfo;
 import ca.phon.app.menu.edit.PreferencesCommand;
-import ca.phon.app.menu.file.*;
-import ca.phon.app.project.*;
-import ca.phon.extensions.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.*;
+import ca.phon.app.menu.file.NewProjectCommand;
+import ca.phon.app.menu.file.OpenProjectCommand;
+import ca.phon.app.project.RecentProjects;
+import ca.phon.app.project.RecentProjectsList;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.*;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
-import org.jdesktop.swingx.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.JXMultiSplitPane;
+import org.jdesktop.swingx.JXTitledSeparator;
+import org.jdesktop.swingx.MultiSplitLayout;
+import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.util.Set;
 
 /**

@@ -15,24 +15,36 @@
  */
 package ca.phon.app.query.report;
 
-import ca.phon.app.log.*;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogBuffer;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
-import ca.phon.query.report.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.ReportBuilder;
+import ca.phon.query.report.ReportBuilderException;
+import ca.phon.query.report.ReportIO;
 import ca.phon.query.report.csv.CSVReportBuilder;
-import ca.phon.query.report.io.*;
+import ca.phon.query.report.io.ObjectFactory;
+import ca.phon.query.report.io.ReportDesign;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.wizard.*;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PrefHelper;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 /**
  * 1-step wizard for creating reports.

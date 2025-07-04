@@ -19,15 +19,18 @@ import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.app.extensions.Note;
+import ca.phon.opgraph.app.extensions.Notes;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.extensions.NodeMetadata;
 import ca.phon.opgraph.nodes.reflect.ObjectNode;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.project.Project;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 @EditorModelInstantiatorMenuInfo(

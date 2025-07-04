@@ -22,7 +22,8 @@ import org.commonmark.html.HtmlRenderer;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Title, message, and message format.

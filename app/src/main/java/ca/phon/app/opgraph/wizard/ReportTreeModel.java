@@ -6,7 +6,6 @@ import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-import java.util.Enumeration;
 
 public class ReportTreeModel extends DefaultTreeModel {
     public ReportTreeModel(ReportTree reportTree) {

@@ -16,14 +16,16 @@
 package ca.phon.app.actions;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 
-import javax.swing.FocusManager;
 import javax.swing.*;
+import javax.swing.FocusManager;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 @PhonPlugin(name="default")

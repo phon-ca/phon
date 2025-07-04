@@ -1,6 +1,7 @@
 package ca.phon.app.project.actions;
 
-import ca.phon.app.project.*;
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.RenameProjectDialog;
 import ca.phon.project.Project;
 
 import java.awt.event.ActionEvent;

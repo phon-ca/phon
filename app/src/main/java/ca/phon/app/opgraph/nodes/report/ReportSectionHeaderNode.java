@@ -15,8 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.phon.app.opgraph.report.tree.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
 
 @OpNodeInfo(name="Section Header", category="Report", description="New section header node", showInLibrary=true)
 public class ReportSectionHeaderNode extends ReportSectionNode {

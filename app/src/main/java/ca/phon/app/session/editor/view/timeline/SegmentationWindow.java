@@ -15,7 +15,8 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * 

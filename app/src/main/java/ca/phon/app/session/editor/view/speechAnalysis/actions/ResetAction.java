@@ -16,8 +16,10 @@
 package ca.phon.app.session.editor.view.speechAnalysis.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.speechAnalysis.*;
-import ca.phon.util.icons.*;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisTier;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -16,16 +16,18 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import ca.phon.app.opgraph.GlobalParameter;
-import ca.phon.ipa.*;
+import ca.phon.ipa.Diacritic;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
+import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.ResultsToTable;
-import ca.phon.query.report.datasource.*;
-import ca.phon.query.script.params.*;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.query.script.params.DiacriticOptionsPanel;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.worker.PhonWorkerGroup;
 import org.jdesktop.swingx.JXTitledSeparator;

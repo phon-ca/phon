@@ -17,7 +17,8 @@ package ca.phon.app.opgraph.nodes.query;
 
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
-import ca.phon.app.opgraph.report.*;
+import ca.phon.app.opgraph.report.ReportEditorModelInstantiator;
+import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.project.ShadowProject;
 import ca.phon.opgraph.*;
@@ -27,7 +28,10 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.query.db.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetManager;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -36,8 +40,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Properties;
 
 /**
  * Select query report from file or created using the Report Composer.

@@ -16,8 +16,6 @@
 
 package ca.phon.app.session.editor;
 
-import ca.phon.session.TierListener;
-
 /**
  * Common event names for the editor event model
  * 

@@ -6,12 +6,15 @@ import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.*;
+import ca.phon.ui.ipa.PhoneMapDisplay;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Optional;
 

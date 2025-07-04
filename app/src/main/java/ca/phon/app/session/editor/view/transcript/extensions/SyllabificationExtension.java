@@ -24,7 +24,6 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-import org.w3c.dom.Attr;
 
 import javax.swing.*;
 import javax.swing.text.*;

@@ -16,8 +16,11 @@
 package ca.phon.app.opgraph.nodes.report;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.report.tree.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.query.report.datasource.TableDataSource;
@@ -25,9 +28,12 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Table Section", category="Report", description="Add/Create a new table section for the report", showInLibrary=true)

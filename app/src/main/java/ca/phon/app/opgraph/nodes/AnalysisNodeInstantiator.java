@@ -17,11 +17,16 @@ package ca.phon.app.opgraph.nodes;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.library.instantiators.Instantiator;
-import ca.phon.opgraph.nodes.general.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import ca.phon.opgraph.nodes.general.LinkedMacroNodeOverrides;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 /**
  * Node {@link Instantiator} for analysis documents.  The {@link Instantiator}

@@ -17,18 +17,20 @@ package ca.phon.app;
 
 import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.*;
+import ca.phon.plugin.PluginException;
+import ca.phon.plugin.PluginManager;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.OSInfo;
-import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
 
 public class BootWindow extends Window {
 	

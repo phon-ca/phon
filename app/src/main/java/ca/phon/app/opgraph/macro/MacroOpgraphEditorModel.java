@@ -15,7 +15,8 @@
  */
 package ca.phon.app.opgraph.macro;
 
-import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.app.opgraph.editor.OpgraphEditorModelInfo;
 import ca.phon.app.opgraph.library.PhonNodeLibrary;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;

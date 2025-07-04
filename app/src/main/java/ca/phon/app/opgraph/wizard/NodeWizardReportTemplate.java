@@ -21,8 +21,10 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Properties;
+import java.util.UUID;
 
 public class NodeWizardReportTemplate {
 

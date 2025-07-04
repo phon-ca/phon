@@ -6,7 +6,6 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.session.Session;
 import ca.phon.session.SyllabifierOptions;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.Language;
 
 public class SyllabifierChangeEdit extends SessionUndoableEdit {

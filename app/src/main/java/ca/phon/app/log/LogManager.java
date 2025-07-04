@@ -19,11 +19,13 @@ import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.RollingFileAppender;
-import org.apache.logging.log4j.core.appender.rolling.*;
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy;
 import org.apache.logging.log4j.core.config.Configuration;
 
 import java.io.*;
-import java.util.logging.*;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * Method for setup and management of application logs.

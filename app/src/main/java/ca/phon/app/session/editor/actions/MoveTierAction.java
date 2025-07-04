@@ -15,7 +15,6 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MoveTierEdit;
@@ -27,7 +26,8 @@ import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MoveTierAction extends SessionEditorAction {
 

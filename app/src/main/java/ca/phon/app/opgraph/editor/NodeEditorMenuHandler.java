@@ -16,7 +16,9 @@
 package ca.phon.app.opgraph.editor;
 
 import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;

@@ -1,21 +1,27 @@
 package ca.phon.app.actions;
 
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.*;
+import ca.phon.app.project.OpenProjectEP;
 import ca.phon.app.session.editor.SessionEditorEP;
-import ca.phon.plugin.*;
-import ca.phon.project.Project;
-import ca.phon.query.db.*;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.db.xml.XMLQueryFactory;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.*;
+import ca.phon.util.Range;
+import ca.phon.util.Tuple;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Open url with phon:// scheme.  The url may have the following parts:

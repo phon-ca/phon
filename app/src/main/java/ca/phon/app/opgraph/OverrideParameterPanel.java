@@ -16,17 +16,22 @@
 package ca.phon.app.opgraph;
 
 import ca.phon.ipa.Diacritic;
-import ca.phon.query.script.params.*;
+import ca.phon.query.script.params.DiacriticOptionsPanel;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.ui.HidablePanel;
-import ca.phon.ui.action.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.*;
-import org.jdesktop.swingx.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * UI for modifying OverrideParameter settings for a report/analysis.

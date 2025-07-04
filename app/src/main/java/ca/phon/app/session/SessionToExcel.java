@@ -15,28 +15,37 @@
  */
 package ca.phon.app.session;
 
-import ca.phon.app.excel.*;
+import ca.phon.app.excel.WorkbookFormats;
+import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.query.db.*;
+import ca.phon.query.db.ReportHelper;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetRecordFilter;
+import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Session;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Tuple;
 import jxl.format.CellFormat;
-import jxl.write.Label;
 import jxl.write.*;
+import jxl.write.Label;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class SessionToExcel extends SessionExporter {
 

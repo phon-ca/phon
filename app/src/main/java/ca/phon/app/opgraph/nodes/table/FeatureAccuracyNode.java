@@ -19,18 +19,22 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.tree.IpaTernaryTree;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.*;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.text.PromptedTextField;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXTitledSeparator;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 @OpNodeInfo(
 		name="Feature Accuracy",

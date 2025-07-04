@@ -21,7 +21,8 @@ import ca.phon.session.MediaSegment;
 import ca.phon.session.format.MediaSegmentFormatter;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.text.ParseException;

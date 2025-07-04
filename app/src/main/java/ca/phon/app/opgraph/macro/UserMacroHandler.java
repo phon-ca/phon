@@ -18,7 +18,9 @@ package ca.phon.app.opgraph.macro;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.FolderHandler;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.net.URL;
 
 public class UserMacroHandler extends FolderHandler<URL> {

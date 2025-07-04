@@ -16,17 +16,24 @@
 package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.project.*;
+import ca.phon.project.MutableProject;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectPath;
+import ca.phon.project.ProjectPaths;
 import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
 
 /**
  * Data transfer handler for project data. This is used by the ProjectWindow to transfer

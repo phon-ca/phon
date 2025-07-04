@@ -3,9 +3,11 @@ package ca.phon.app.session.editor;
 import ca.phon.project.SessionDetails;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 
-import java.awt.event.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.time.ZonedDateTime;
 
 /**

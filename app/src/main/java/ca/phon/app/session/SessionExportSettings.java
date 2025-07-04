@@ -20,7 +20,8 @@ import ca.phon.session.TierViewItem;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.util.PrefHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 /**

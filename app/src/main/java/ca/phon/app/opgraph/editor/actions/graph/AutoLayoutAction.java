@@ -17,12 +17,15 @@ package ca.phon.app.opgraph.editor.actions.graph;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.opgraph.app.*;
-import ca.phon.util.icons.*;
+import ca.phon.opgraph.app.AutoLayoutManager;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class AutoLayoutAction extends OpgraphEditorAction {
 

@@ -16,7 +16,8 @@
 package ca.phon.app.session.editor.view.timeline;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.timeline.SegmentationHandler.*;
+import ca.phon.app.session.editor.view.timeline.SegmentationHandler.MediaStart;
+import ca.phon.app.session.editor.view.timeline.SegmentationHandler.SegmentationMode;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.Participant;
 import ca.phon.ui.CommonModuleFrame;
@@ -30,8 +31,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
 
 /**
  * Options dialog for segmentation.

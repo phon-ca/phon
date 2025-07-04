@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;

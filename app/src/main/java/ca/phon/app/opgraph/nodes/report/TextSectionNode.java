@@ -15,8 +15,11 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.phon.app.opgraph.report.tree.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.TextNode;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 

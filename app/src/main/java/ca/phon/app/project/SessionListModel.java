@@ -20,9 +20,13 @@ import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.text.Collator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Handles the data model for the session list in the

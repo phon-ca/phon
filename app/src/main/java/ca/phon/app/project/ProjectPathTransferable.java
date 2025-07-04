@@ -17,9 +17,15 @@ package ca.phon.app.project;
 
 import ca.phon.project.ProjectPath;
 
-import java.awt.datatransfer.*;
-import java.io.*;
-import java.util.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ProjectPathTransferable implements Transferable {
 	/**

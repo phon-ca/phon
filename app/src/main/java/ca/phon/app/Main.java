@@ -15,12 +15,17 @@
  */
 package ca.phon.app;
 
-import ca.phon.app.actions.*;
+import ca.phon.app.actions.OpenFileEP;
+import ca.phon.app.actions.PhonURISchemeHandler;
 import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogManager;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.WelcomeWindowEP;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
+import ca.phon.plugin.PluginManager;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 import org.apache.commons.io.FileUtils;
@@ -30,9 +35,13 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
-import java.net.*;
-import java.util.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * Main entry point for the application.

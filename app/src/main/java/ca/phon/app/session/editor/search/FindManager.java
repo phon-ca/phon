@@ -17,12 +17,16 @@
 package ca.phon.app.session.editor.search;
 
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.position.*;
+import ca.phon.session.Record;
+import ca.phon.session.position.TranscriptElementLocation;
+import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.util.Range;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class to manage find and replace for a transcript.

@@ -3,20 +3,26 @@ package ca.phon.app.session.editor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.Diacritic;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
-import ca.phon.query.script.params.*;
-import ca.phon.session.*;
+import ca.phon.query.script.params.DiacriticOptionsPanel;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
+import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.wizard.WizardStep;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ITRWizard extends NodeWizard {

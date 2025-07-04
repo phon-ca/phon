@@ -16,8 +16,11 @@
 package ca.phon.app.opgraph.nodes.report;
 
 import ca.phon.app.log.ExcelExporter;
-import ca.phon.app.opgraph.report.tree.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.report.tree.ExcelExportableNode;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNodeInfo;
 
 @OpNodeInfo(name="Excel Exportable Text Section", description="Text Section with Excel export option", category="Report", showInLibrary=true)
 public class ExcelExportableSectionNode extends TextSectionNode {

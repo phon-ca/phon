@@ -17,12 +17,16 @@ package ca.phon.app.workspace;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectDetector;
-import ca.phon.project.*;
+import ca.phon.project.DefaultProjectFactory;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.util.PrefHelper;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Workspace {
 	

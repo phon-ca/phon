@@ -16,7 +16,8 @@
 package ca.phon.app.query.report;
 
 import ca.phon.query.report.io.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;

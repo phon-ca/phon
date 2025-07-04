@@ -17,19 +17,28 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
-import ca.phon.audio.*;
-import ca.phon.media.*;
+import ca.phon.audio.AudioIO;
+import ca.phon.audio.AudioIOException;
+import ca.phon.media.LongSound;
+import ca.phon.media.MediaLocator;
+import ca.phon.media.VolumeModel;
 import ca.phon.project.Project;
-import ca.phon.session.*;
+import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PrefHelper;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.beans.*;
-import java.io.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 

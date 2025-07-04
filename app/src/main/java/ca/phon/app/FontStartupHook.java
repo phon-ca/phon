@@ -2,11 +2,14 @@ package ca.phon.app;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginException;
 import ca.phon.ui.fonts.FontPreferences;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Registers all ttf fonts found in 'bin/fonts' with

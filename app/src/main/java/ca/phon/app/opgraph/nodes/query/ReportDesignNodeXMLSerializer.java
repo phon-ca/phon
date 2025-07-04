@@ -18,17 +18,24 @@ package ca.phon.app.opgraph.nodes.query;
 import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.extensions.Extendable;
-import ca.phon.opgraph.io.xml.*;
+import ca.phon.opgraph.io.xml.XMLSerializer;
+import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
 import ca.phon.xml.XMLConstants;
 import jakarta.xml.bind.*;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.*;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.*;
-import java.io.*;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 
 public class ReportDesignNodeXMLSerializer implements XMLSerializer {

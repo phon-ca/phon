@@ -19,20 +19,28 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectResources;
 import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.*;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.history.ParamSetType;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.toast.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class SaveQueryForm extends JPanel {

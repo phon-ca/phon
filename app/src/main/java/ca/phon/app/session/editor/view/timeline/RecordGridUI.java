@@ -16,8 +16,8 @@
 package ca.phon.app.session.editor.view.timeline;
 
 import ca.phon.media.TimeComponentUI;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
-import ca.phon.session.*;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;

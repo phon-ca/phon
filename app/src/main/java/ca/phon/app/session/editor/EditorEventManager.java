@@ -17,13 +17,15 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.util.PrefHelper;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 import org.apache.logging.log4j.Level;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * <p>Handles passing of internal EditorEvents.  Events can be dispatched on the AWT event

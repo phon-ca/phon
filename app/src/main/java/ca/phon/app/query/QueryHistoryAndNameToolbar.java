@@ -16,29 +16,42 @@
 package ca.phon.app.query;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.query.actions.*;
+import ca.phon.app.query.actions.ExportQueryAction;
+import ca.phon.app.query.actions.SaveQueryAction;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectResources;
 import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.*;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.*;
-import ca.phon.script.params.history.*;
-import ca.phon.ui.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.history.ObjectFactory;
+import ca.phon.script.params.history.ParamSetType;
+import ca.phon.script.params.history.ParamType;
+import ca.phon.ui.ButtonPopup;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

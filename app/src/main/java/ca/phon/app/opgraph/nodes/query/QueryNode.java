@@ -15,7 +15,9 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import ca.phon.app.opgraph.nodes.*;
+import ca.phon.app.opgraph.nodes.RecordContainer;
+import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
+import ca.phon.app.opgraph.nodes.ScriptNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.QueryHistoryAndNameToolbar;
 import ca.phon.app.script.ScriptPanel;
@@ -26,20 +28,29 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
-import ca.phon.session.*;
-import ca.phon.worker.*;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptContext;
+import ca.phon.query.script.QueryTask;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
+import ca.phon.session.Participant;
+import ca.phon.session.Session;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.*;
-import java.io.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 @OpNodeInfo(
 	category="Query",

@@ -15,8 +15,11 @@
  */
 package ca.phon.app.session.editor.view.syllabificationAlignment;
 
-import ca.phon.session.*;
-import ca.phon.syllabifier.*;
+import ca.phon.session.Session;
+import ca.phon.session.SyllabifierOptions;
+import ca.phon.session.SystemTierType;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.SyllabifierSelector;
 import ca.phon.util.Language;
 

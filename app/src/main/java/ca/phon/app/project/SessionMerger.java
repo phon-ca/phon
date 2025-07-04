@@ -17,9 +17,10 @@ package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
-import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.filter.*;
+import ca.phon.session.Record;
+import ca.phon.session.filter.RangeRecordFilter;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.worker.PhonTask;
 
 import java.io.IOException;

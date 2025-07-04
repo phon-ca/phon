@@ -20,11 +20,13 @@ import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
 import ca.phon.project.SessionTemplate;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Entry point for session template editor.

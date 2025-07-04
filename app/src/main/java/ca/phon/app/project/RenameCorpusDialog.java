@@ -22,13 +22,13 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PhonConstants;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Iterator;
-import java.util.List;
 
 public class RenameCorpusDialog extends JDialog {
 	/**

@@ -16,12 +16,16 @@
 package ca.phon.app.opgraph.analysis;
 
 import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.NodeWizardReportContext;
+import ca.phon.app.opgraph.wizard.NodeWizardReportGenerator;
 import ca.phon.app.project.ParticipantsPanel;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.Processor;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
 
@@ -29,8 +33,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
-import java.util.*;
 
 /**
  * Wizard for running an analysis graph. This wizard allows the user to

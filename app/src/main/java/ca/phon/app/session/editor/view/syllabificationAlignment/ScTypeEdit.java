@@ -15,11 +15,12 @@
  */
 package ca.phon.app.session.editor.view.syllabificationAlignment;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
 import ca.phon.syllable.SyllableConstituentType;
 
 public class ScTypeEdit extends SessionUndoableEdit {

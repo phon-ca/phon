@@ -16,7 +16,8 @@
 package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
-import ca.phon.app.session.editor.view.ipaDictionary.actions.*;
+import ca.phon.app.session.editor.view.ipaDictionary.actions.ExportIPACommand;
+import ca.phon.app.session.editor.view.ipaDictionary.actions.ImportIPACommand;
 
 import javax.swing.*;
 

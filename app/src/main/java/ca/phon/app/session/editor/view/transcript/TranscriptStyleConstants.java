@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
-import ca.phon.ui.fonts.FontPreferences;
 
 import javax.swing.*;
 import javax.swing.border.Border;

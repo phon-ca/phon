@@ -29,7 +29,10 @@ import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

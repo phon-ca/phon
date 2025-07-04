@@ -1,10 +1,6 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.position.TranscriptElementLocation;
 
 import javax.swing.*;

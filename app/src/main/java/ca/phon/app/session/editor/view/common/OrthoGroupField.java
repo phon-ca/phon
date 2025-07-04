@@ -16,13 +16,16 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.orthography.*;
 import ca.phon.orthography.Event;
+import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyElement;
+import ca.phon.orthography.Word;
 import ca.phon.session.Tier;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
-import javax.swing.text.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 import java.awt.*;
 import java.text.ParseException;

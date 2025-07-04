@@ -16,9 +16,10 @@
 package ca.phon.app.session.editor.view.syllabificationAlignment.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.syllabificationAlignment.*;
+import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabificationAlignmentEditorView;
+import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabificationSettingsPanel;
 import ca.phon.app.session.editor.view.transcript.extensions.SyllabifierChangeEdit;
-import ca.phon.session.*;
+import ca.phon.session.SystemTierType;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
@@ -26,8 +27,8 @@ import ca.phon.util.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SyllabificationSettingsCommand extends SyllabificationAlignmentCommand {
 	

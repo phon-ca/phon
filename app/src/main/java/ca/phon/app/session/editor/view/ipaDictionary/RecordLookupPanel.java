@@ -16,19 +16,24 @@
 package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.ipalookup.OrthoLookupVisitor;
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
-import ca.phon.plugin.*;
-import ca.phon.session.Record;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;

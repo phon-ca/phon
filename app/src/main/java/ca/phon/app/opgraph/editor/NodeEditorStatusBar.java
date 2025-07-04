@@ -16,7 +16,8 @@
 package ca.phon.app.opgraph.editor;
 
 import ca.phon.util.OSInfo;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.jdesktop.swingx.JXStatusBar;
 
 import javax.swing.*;

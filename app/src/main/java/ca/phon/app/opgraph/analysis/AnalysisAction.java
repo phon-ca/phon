@@ -22,8 +22,10 @@ import ca.phon.worker.PhonWorker;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.net.*;
-import java.util.*;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Action to run an analysis graph.

@@ -17,7 +17,8 @@ package ca.phon.app.opgraph.syllabifier;
 
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
 

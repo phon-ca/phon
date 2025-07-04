@@ -17,7 +17,8 @@ package ca.phon.app.session.editor;
 
 import ca.phon.project.Project;
 import ca.phon.session.Record;
-import ca.phon.session.*;
+import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 /**
  * Data model for the session editor.

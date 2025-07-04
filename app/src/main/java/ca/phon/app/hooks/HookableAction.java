@@ -15,7 +15,8 @@
  */
 package ca.phon.app.hooks;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
