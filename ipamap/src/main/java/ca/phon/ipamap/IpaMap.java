@@ -480,7 +480,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 								if(feature == null) break;
 								Feature f = FeatureMatrix.getInstance().getFeature(StringUtils.strip(feature));
 								if(f != null) {
-									fs = FeatureSet.union(fs, f.getFeatureSet());
+									fs = FeatureSet.union(fs, f.featureSet());
 								}
 							}
 							FeatureSet charFs = new FeatureSet();

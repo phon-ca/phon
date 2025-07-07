@@ -290,13 +290,13 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 			final FeatureMatrix fm = FeatureMatrix.getInstance();
 			
 			for(Feature feature:fm.getFeatureData()) {
-				BasicCompletion featureCompletion = new BasicCompletion(this, feature.getName());
+				BasicCompletion featureCompletion = new BasicCompletion(this, feature.name());
 				featureCompletion.setShortDescription("feature name");
 				featureCompletion.setRelevance(FEATURE_RELEVANCE);
 				featureCompletions.add(featureCompletion);
-				for(String syn:feature.getSynonyms()) {
+				for(String syn:feature.synonyms()) {
 					BasicCompletion synCompletion = new BasicCompletion(this, syn);
-					synCompletion.setShortDescription("synonym for " + feature.getName());
+					synCompletion.setShortDescription("synonym for " + feature.name());
 					synCompletion.setRelevance(FEATURE_RELEVANCE);
 					featureCompletions.add(synCompletion);
 				}

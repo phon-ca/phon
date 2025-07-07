@@ -108,7 +108,7 @@ public class BasicHarmonyDetector extends Detector {
    				HarmonyDetectorResult res = new HarmonyDetectorResult(map);
    				res.setFirstPosition(index);
    				res.setSecondPosition(index);
-   				res.setSharedFeatures(FeatureSet.union(res.getSharedFeatures(), FeatureSet.singleonFeature(feature)));
+   				res.setSharedFeatures(FeatureSet.union(res.getSharedFeatures(), FeatureSet.singletonFeature(feature)));
    				current.add(res);
    			}
    			

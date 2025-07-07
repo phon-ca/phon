@@ -28,24 +28,15 @@ import java.util.logging.Logger;
  *
  */
 public class FeatureSet implements Iterable<Feature> {
-	/** Sonority Class constants */
-	final static int STOP      = 0;
-	final static int FRICATIVE = 1;
-	final static int NASAL     = 2;
-	final static int LATERAL   = 3;
-	final static int RHOTIC    = 4;
-	final static int GLIDE     = 5;
-	final static int VOWEL     = 6;
-	
 	/** The set of features */
-	private BitSet features;
+	private final BitSet features;
 	
 	/**
 	 * Create a feature set from a single feature.
 	 * 
 	 * @param featureName
 	 */
-	public static FeatureSet singleonFeature(String featureName) {
+	public static FeatureSet singletonFeature(String featureName) {
 		Set<String> fs = new HashSet<>();
 		Feature fObj = FeatureMatrix.getInstance().getFeature(featureName);
 		if(fObj != null)
@@ -153,17 +144,6 @@ public class FeatureSet implements Iterable<Feature> {
 		return this.features.cardinality();
 	}
 	
-	public int sonority(){
-		if(hasFeature("Stop")) return STOP;
-		if(hasFeature("Fricative")) return FRICATIVE;
-		if(hasFeature("Nasal")) return NASAL;
-		if(hasFeature("Lateral")) return LATERAL;
-		if(hasFeature("Rhotic")) return RHOTIC;
-		if(hasFeature("Glide")) return GLIDE;
-		if(hasFeature("Vowel")) return VOWEL;
-		else return -1;
-	}
-	
 	/** A string representation of the feature set */
 	@Override
 	public String toString() {
@@ -254,8 +234,8 @@ public class FeatureSet implements Iterable<Feature> {
 	public FeatureSet getManner() {
 		FeatureSet retVal = new FeatureSet();
 		for(Feature f:this) {
-			if(f.getPrimaryFamily() == FeatureFamily.MANNER)
-				retVal.addFeature(f.getName());
+			if(f.primaryFamily() == FeatureFamily.MANNER)
+				retVal.addFeature(f.name());
 		}
 		return retVal;
 	}
@@ -263,8 +243,8 @@ public class FeatureSet implements Iterable<Feature> {
 	public FeatureSet getPlace() {
 		FeatureSet retVal = new FeatureSet();
 		for(Feature f:this) {
-			if(f.getPrimaryFamily() == FeatureFamily.PLACE)
-				retVal.addFeature(f.getName());
+			if(f.primaryFamily() == FeatureFamily.PLACE)
+				retVal.addFeature(f.name());
 		}
 		return retVal;
 	}
@@ -272,8 +252,8 @@ public class FeatureSet implements Iterable<Feature> {
 	public FeatureSet getVoicing() {
 		FeatureSet retVal = new FeatureSet();
 		for(Feature f:this) {
-			if(f.getPrimaryFamily() == FeatureFamily.VOICING)
-				retVal.addFeature(f.getName());
+			if(f.primaryFamily() == FeatureFamily.VOICING)
+				retVal.addFeature(f.name());
 		}
 		return retVal;
 	}

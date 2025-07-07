@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,93 +15,17 @@
  */
 package ca.phon.ipa.features;
 
-import java.util.List;
-
 /**
  * A phonetic feature
  *
+ * This class represents a phonetic feature, which includes its name, synonyms,
+ * primary and secondary families, and its associated feature set with the single
+ * bit set representation of the feature.
  */
-public class Feature {
+public record Feature(String name,
+                      String[] synonyms,
+                      FeatureFamily primaryFamily,
+                      FeatureFamily secondaryFamily,
+                      FeatureSet featureSet) {
 
-	/**
-	 * Feature name
-	 */
-	private String name;
-	
-	/**
-	 * Feature synonyms
-	 */
-	private String[] synonyms = new String[0];
-	
-	/**
-	 * Primary family
-	 */
-	private FeatureFamily primaryFamily = FeatureFamily.UNDEFINED;
-	
-	/**
-	 * Secondary family
-	 */
-	private FeatureFamily secondaryFamily = FeatureFamily.UNDEFINED;
-	
-	/**
-	 * Feature set (mask)
-	 */
-	private FeatureSet fs;
-	
-	/**
-	 * Constructors
-	 */
-	public Feature(String name) {
-		this.name = name;
-	}
-	
-	public Feature(String name, List<String> synonyms) {
-		this(name, synonyms.toArray(new String[0]));
-	}
-	
-	public Feature(String name, String[] synonyms) {
-		this.name = name;
-		this.synonyms = synonyms;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String[] getSynonyms() {
-		return synonyms;
-	}
-
-	public void setSynonyms(String[] synonyms) {
-		this.synonyms = synonyms;
-	}
-
-	public FeatureFamily getPrimaryFamily() {
-		return primaryFamily;
-	}
-
-	public void setPrimaryFamily(FeatureFamily primaryFamily) {
-		this.primaryFamily = primaryFamily;
-	}
-
-	public FeatureFamily getSecondaryFamily() {
-		return secondaryFamily;
-	}
-
-	public void setSecondaryFamily(FeatureFamily secondaryFamily) {
-		this.secondaryFamily = secondaryFamily;
-	}
-	
-	public FeatureSet getFeatureSet() {
-		return this.fs;
-	}
-	
-	public void setFeatureSet(FeatureSet fs) {
-		this.fs = fs;
-	}
-	
 }

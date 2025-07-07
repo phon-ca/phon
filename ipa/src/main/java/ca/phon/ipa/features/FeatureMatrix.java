@@ -264,22 +264,21 @@ public class FeatureMatrix {
 
 					case XMLStreamConstants.END_ELEMENT:
 						if (reader.getLocalName().equals("feature")) {
-							Feature f = new Feature(currentFeature);
-							f.setPrimaryFamily(currentFamily);
-							f.setSecondaryFamily(currentSecondaryFamily);
-							f.setSynonyms(currentSynonyms.toArray(new String[0]));
 							featureNameHash.put(currentFeature.toLowerCase(), numberOfFeatures);
 							for(String syn:currentSynonyms) {
 								featureNameHash.put(syn.toLowerCase(), numberOfFeatures);
 							}
-							featureData = Arrays.copyOf(featureData, numberOfFeatures + 1);
-							featureData[numberOfFeatures] = f;
 							numberOfFeatures++;
 
 							BitSet bs = new BitSet(numberOfFeatures);
 							bs.clear();
 							bs.set(numberOfFeatures - 1, true);
-							f.setFeatureSet(new FeatureSet(bs));
+
+							final Feature f = new Feature(currentFeature,
+									currentSynonyms.toArray(new String[0]),
+									currentFamily, currentSecondaryFamily, new FeatureSet(bs));
+							featureData = Arrays.copyOf(featureData, numberOfFeatures);
+							featureData[numberOfFeatures-1] = f;
 
 							currentFamily = FeatureFamily.UNDEFINED;
 							currentSecondaryFamily = FeatureFamily.UNDEFINED;
@@ -416,7 +415,7 @@ public class FeatureMatrix {
 		Set<String> retVal = new HashSet<String>();
 		
 		for(Feature f:featureData) {
-			retVal.add(f.getName());
+			retVal.add(f.name());
 		}
 		
 		return retVal;
@@ -496,7 +495,7 @@ public class FeatureMatrix {
 
 		Integer fIdx = featureNameHash.get(feature.toLowerCase());
 		if (fIdx != null && fIdx >= 0) {
-			retVal = featureData[fIdx].getFeatureSet();
+			retVal = featureData[fIdx].featureSet();
 		}
 		return retVal;
 	}
@@ -544,7 +543,7 @@ public class FeatureMatrix {
 		if (fIdx != null && fIdx >= 0) {
 			Feature fd = featureData[fIdx];
 			if (fd != null)
-				retVal = fd.getPrimaryFamily().value();
+				retVal = fd.primaryFamily().value();
 		}
 
 		return retVal;
@@ -554,31 +553,7 @@ public class FeatureMatrix {
 	 * Returns the feature name for the given index.
 	 */
 	public String getFeatureForIndex(int idx) {
-		return featureData[idx].getName();
-	}
-
-	/**
-	 * Sets the primary family for the given feature. If family doesn't exist,
-	 * it is created. Returns true if successful, false if not. Put will be
-	 * unsuccessful if feature doesn't exist.
-	 * 
-	 * @param featureName
-	 *            name of feature
-	 * @param familyName
-	 *            name of primary family to put with feature
-	 * @return true if successful, false if not
-	 */
-	public boolean putFeaturePrimaryFamily(String featureName, String familyName) {
-		boolean retVal = false;
-		Integer fIdx = featureNameHash.get(featureName);
-		if (fIdx != null && fIdx >= 0) {
-			Feature fd = featureData[fIdx];
-			if (fd != null) {
-				fd.setPrimaryFamily(FeatureFamily.fromValue(familyName.toLowerCase()));
-				retVal = true;
-			}
-		}
-		return retVal;
+		return featureData[idx].name();
 	}
 
 	/**
@@ -596,34 +571,9 @@ public class FeatureMatrix {
 		if (fIdx != null && fIdx >= 0) {
 			Feature fd = featureData[fIdx];
 			if (fd != null)
-				retVal = fd.getSecondaryFamily().value();
+				retVal = fd.secondaryFamily().value();
 		}
 
-		return retVal;
-	}
-
-	/**
-	 * Sets the secondary family for the given feature. If family doesn't exist,
-	 * it is created. Returns true if successful, false if not. Put will be
-	 * unsuccessful if feature doesn't exist.
-	 * 
-	 * @param featureName
-	 *            name of feature
-	 * @param familyName
-	 *            name of secondary family to put with feature
-	 * @return true if successful, false if not
-	 */
-	public boolean putFeatureSecondaryFamily(String featureName,
-			String familyName) {
-		boolean retVal = false;
-		Integer fIdx = featureNameHash.get(featureName);
-		if (fIdx != null && fIdx >= 0) {
-			Feature fd = featureData[fIdx];
-			if (fd != null) {
-				fd.setSecondaryFamily(FeatureFamily.fromValue(familyName.toLowerCase()));
-				retVal = true;
-			}
-		}
 		return retVal;
 	}
 
@@ -633,7 +583,7 @@ public class FeatureMatrix {
 			Integer fIdx = featureNameHash.get(feature);
 			if (fIdx != null && fIdx >= 0) {
 				Feature fd = featureData[fIdx];
-				FeatureFamily family = fd.getPrimaryFamily();
+				FeatureFamily family = fd.primaryFamily();
 				if (family != null && family == FeatureFamily.fromValue(familyName.toLowerCase()))
 					result.add(feature);
 			}

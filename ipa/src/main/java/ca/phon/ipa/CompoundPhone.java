@@ -154,7 +154,7 @@ public final class CompoundPhone extends Phone {
 		// when the same consonant, add the long feature
 		if(retVal.hasFeature("c") && firstPhone.getBasePhone() != null 
 				&& firstPhone.getBasePhone().equals(secondPhone.getBasePhone())) {
-			retVal = FeatureSet.union(retVal, FeatureSet.singleonFeature("long"));
+			retVal = FeatureSet.union(retVal, FeatureSet.singletonFeature("long"));
 		}
 		
 		return retVal;
