@@ -189,7 +189,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
@@ -218,7 +218,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
@@ -247,7 +247,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
@@ -276,7 +276,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
@@ -351,7 +351,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
@@ -380,7 +380,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[CODA]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="367" y="216"/>
                                     </extensions>
@@ -409,7 +409,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
@@ -475,7 +475,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
@@ -504,7 +504,7 @@
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.ipa.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>

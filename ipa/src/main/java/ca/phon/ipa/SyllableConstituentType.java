@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ca.phon.syllable;
+package ca.phon.ipa;
 
 /**
  * Parts of a syllable. Every phone may have one of these

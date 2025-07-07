@@ -53,7 +53,7 @@ public class SyllabificationInfo {
 	
 	private static void setupStressInfo(IPATranscript ipa) {
 		ipa.syllables().parallelStream().forEach( (syll) -> {
-			if(syll.length() > 0 && syll.elementAt(0).getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+			if(syll.length() > 0 && syll.elementAt(0).constituentType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
 				final StressMarker marker = (StressMarker)syll.elementAt(0);
 				syll.forEach( (ele) -> {
 					final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
@@ -81,25 +81,25 @@ public class SyllabificationInfo {
 	}
 	
 	private static String diacriticToToneNumber(Diacritic dia) {
-		if(dia.getFeatureSet().hasFeature("tone0")) {
+		if(dia.featureSet().hasFeature("tone0")) {
 			return "0";
-		} else if(dia.getFeatureSet().hasFeature("tone1")) {
+		} else if(dia.featureSet().hasFeature("tone1")) {
 			return "1";
-		} else if(dia.getFeatureSet().hasFeature("tone2")) {
+		} else if(dia.featureSet().hasFeature("tone2")) {
 			return "2";
-		} else if(dia.getFeatureSet().hasFeature("tone3")) {
+		} else if(dia.featureSet().hasFeature("tone3")) {
 			return "3";
-		} else if(dia.getFeatureSet().hasFeature("tone4")) {
+		} else if(dia.featureSet().hasFeature("tone4")) {
 			return "4";
-		} else if(dia.getFeatureSet().hasFeature("tone5")) {
+		} else if(dia.featureSet().hasFeature("tone5")) {
 			return "5";
-		} else if(dia.getFeatureSet().hasFeature("tone6")) {
+		} else if(dia.featureSet().hasFeature("tone6")) {
 			return "6";
-		} else if(dia.getFeatureSet().hasFeature("tone7")) {
+		} else if(dia.featureSet().hasFeature("tone7")) {
 			return "7";
-		} else if(dia.getFeatureSet().hasFeature("tone8")) {
+		} else if(dia.featureSet().hasFeature("tone8")) {
 			return "8";
-		} else if(dia.getFeatureSet().hasFeature("tone9")) {
+		} else if(dia.featureSet().hasFeature("tone9")) {
 			return "9";
 		} else {
 			return "";

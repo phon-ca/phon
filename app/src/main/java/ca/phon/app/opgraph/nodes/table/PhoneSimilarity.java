@@ -286,13 +286,13 @@ public class PhoneSimilarity extends TableOpNode implements NodeSettings {
 		FeatureSimilarity retVal = new FeatureSimilarity();
 		
 		if(a == null || b == null) {
-			FeatureSet features = (a != null ? a.getFeatureSet() : b.getFeatureSet() );
+			FeatureSet features = (a != null ? a.featureSet() : b.featureSet() );
 			features = FeatureSet.intersect(features, dim.getFeatures());
 			
 			retVal.numFeatures = features.size();
 		} else {
-			final FeatureSet aFeatures = FeatureSet.intersect(a.getFeatureSet(), dim.getFeatures());
-			final FeatureSet bFeatures = FeatureSet.intersect(b.getFeatureSet(), dim.getFeatures());
+			final FeatureSet aFeatures = FeatureSet.intersect(a.featureSet(), dim.getFeatures());
+			final FeatureSet bFeatures = FeatureSet.intersect(b.featureSet(), dim.getFeatures());
 			
 			final FeatureSet sameFeatures = FeatureSet.intersect(aFeatures, bFeatures);
 			

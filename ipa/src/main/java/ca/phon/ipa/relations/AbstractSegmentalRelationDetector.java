@@ -171,7 +171,7 @@ public abstract class AbstractSegmentalRelationDetector implements SegmentalRela
 				pm.getAlignedElements(p1).get(0) : pm.getAlignedElements(p2).get(0));
 		
 		Optional<SegmentalRelation> retVal = Optional.empty();
-		if(tEle.getFeatureSet().hasFeature("consonant")) {
+		if(tEle.featureSet().hasFeature("consonant")) {
 			retVal = detectConsonantRelation(pm, p1, p2);
 			if(isReversible() && !retVal.isPresent()) {
 				retVal = detectConsonantRelation(pm, p2, p1);

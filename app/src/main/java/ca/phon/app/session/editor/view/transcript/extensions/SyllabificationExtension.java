@@ -16,7 +16,7 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -24,7 +24,6 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
-import org.w3c.dom.Attr;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -559,7 +558,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             attrs.removeAttribute(StyleConstants.Foreground);
             attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION, true);
             attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-            if (p.getScType().equals(SyllableConstituentType.UNKNOWN)) {
+            if (p.constituentType().equals(SyllableConstituentType.UNKNOWN)) {
                 StyleConstants.setForeground(attrs, UIManager.getColor(TranscriptEditorUIProps.IPA_PAUSE));
             }
             retVal.add(TranscriptBatchBuilder.getBatchString(p.toString(), attrs));
@@ -763,17 +762,17 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                             for (int i = 0; i < syllabificationTranscript.size(); i++) {
                                 IPAElement p = syllabificationTranscript.get(i);
                                 if (!p.equals(phone)) continue;
-                                if (!p.getScType().equals(SyllableConstituentType.NUCLEUS)) return;
+                                if (!p.constituentType().equals(SyllableConstituentType.NUCLEUS)) return;
                                 if (i < syllabificationTranscript.size() - 1) {
                                     IPAElement nextP = syllabificationTranscript.get(i + 1);
-                                    if (nextP.getScType().equals(SyllableConstituentType.NUCLEUS)) {
+                                    if (nextP.constituentType().equals(SyllableConstituentType.NUCLEUS)) {
                                         otherNucleus = nextP;
                                         break;
                                     }
                                 }
                                 if (i > 0) {
                                     IPAElement prevP = syllabificationTranscript.get(i - 1);
-                                    if (prevP.getScType().equals(SyllableConstituentType.NUCLEUS)) {
+                                    if (prevP.constituentType().equals(SyllableConstituentType.NUCLEUS)) {
                                         otherNucleus = prevP;
                                         break;
                                     }

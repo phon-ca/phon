@@ -16,6 +16,7 @@
 package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.plugins.CombinableMatcher;
 import ca.phon.syllable.*;
@@ -30,7 +31,7 @@ public final class SyllableConstituentMatcher implements PhoneMatcher, Combinabl
 	/**
 	 * Allowed constituent types
 	 */
-	private final List<SyllableConstituentType> allowedTypes = 
+	private final List<SyllableConstituentType> allowedTypes =
 			new ArrayList<SyllableConstituentType>();
 
 	/**

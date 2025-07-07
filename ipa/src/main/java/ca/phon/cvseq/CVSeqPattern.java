@@ -18,7 +18,7 @@ package ca.phon.cvseq;
 import ca.phon.cvseq.fsa.CVSeqCompiler;
 import ca.phon.fsa.*;
 import ca.phon.ipa.IPAElement;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Range;
 
 import java.text.ParseException;
@@ -113,21 +113,21 @@ public class CVSeqPattern {
 		String retVal = "";
 		
 		for(IPAElement p:phones) {
-			if(p.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER
-					|| p.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER)
+			if(p.constituentType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER
+					|| p.constituentType() == SyllableConstituentType.SYLLABLESTRESSMARKER)
 				continue;
-			else if(p.getScType() == SyllableConstituentType.WORDBOUNDARYMARKER) {
+			else if(p.constituentType() == SyllableConstituentType.WORDBOUNDARYMARKER) {
 				retVal += " ";
 				continue;
 			}
 			
-			if(p.getFeatureSet().hasFeature("Consonant")) {
-				if(p.getFeatureSet().hasFeature("Glide")) {
+			if(p.featureSet().hasFeature("Consonant")) {
+				if(p.featureSet().hasFeature("Glide")) {
 					retVal += "G";
 				} else {
 					retVal += "C";
 				}
-			} else if(p.getFeatureSet().hasFeature("Vowel")) {
+			} else if(p.featureSet().hasFeature("Vowel")) {
 				retVal += "V";
 			}
 		}
@@ -143,8 +143,8 @@ public class CVSeqPattern {
 		int pIndex = 0;
 		while(pIndex < phones.size()) {
 			IPAElement p = phones.get(pIndex);
-			if(p.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER
-					|| p.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+			if(p.constituentType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER
+					|| p.constituentType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
 				// don't increment cvIndex and continue
 				pIndex++;
 				continue;

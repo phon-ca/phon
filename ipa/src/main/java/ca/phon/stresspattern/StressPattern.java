@@ -18,7 +18,7 @@ package ca.phon.stresspattern;
 import ca.phon.fsa.*;
 import ca.phon.ipa.*;
 import ca.phon.stresspattern.fsa.StressPatternCompiler;
-import ca.phon.syllable.SyllableStress;
+import ca.phon.ipa.SyllableStress;
 import ca.phon.util.Range;
 
 import java.text.ParseException;

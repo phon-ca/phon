@@ -79,10 +79,10 @@ public class PMLU {
 				} else {
 					continue;
 				}
-				if(targetEle.getFeatureSet().hasFeature("Consonant")) {
+				if(targetEle.featureSet().hasFeature("Consonant")) {
 					// check for target-like conditions, in this case target-like means
 					// both base glyphs match
-					if(actualEle.getFeatureSet().hasFeature("Consonant")) {
+					if(actualEle.featureSet().hasFeature("Consonant")) {
 						final Phone tPhone = (Phone)targetEle;
 						final Phone aPhone = (Phone)actualEle;
 						

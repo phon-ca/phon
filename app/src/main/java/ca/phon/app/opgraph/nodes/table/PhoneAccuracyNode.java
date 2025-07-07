@@ -27,7 +27,7 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.db.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.params.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Range;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -244,7 +244,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 			Map<SyllableConstituentType, Integer> scTypeCounts = new HashMap<>();
 			for(SyllableConstituentType scType:SyllableConstituentType.values()) scTypeCounts.put(scType, 0);
 			int lastIdx = 0;
-			SyllableConstituentType lastTargetType = (alignment.getTopElements().length > 0 ? alignment.getTopElements()[0].getScType() : null);
+			SyllableConstituentType lastTargetType = (alignment.getTopElements().length > 0 ? alignment.getTopElements()[0].constituentType() : null);
 			Counts rowCount = new Counts();
 			for(int i = 0; i < alignment.getAlignmentLength(); i++) {
 				final IPAElement ipaTEle = alignment.getTopAlignmentElements().get(i);
@@ -260,8 +260,8 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 					transcriptInfo.put(eleKey, eleInfo);
 				}
 				
-				int typeIdx = scTypeCounts.get(ipaEle.getScType()) + 1;
-				String position = ipaEle.getScType().getIdChar() + ("" + typeIdx);
+				int typeIdx = scTypeCounts.get(ipaEle.constituentType()) + 1;
+				String position = ipaEle.constituentType().getIdChar() + ("" + typeIdx);
 				
 				Counts currentCount = new Counts();
 				++currentCount.count;
@@ -274,18 +274,18 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 						++currentCount.substitions;
 						++rowCount.substitions;
 					}
-					scTypeCounts.put(ipaEle.getScType(), typeIdx);
-					lastTargetType = ipaTEle.getScType();
+					scTypeCounts.put(ipaEle.constituentType(), typeIdx);
+					lastTargetType = ipaTEle.constituentType();
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
 					++rowCount.deletions;
-					scTypeCounts.put(ipaEle.getScType(), typeIdx);
-					lastTargetType = ipaTEle.getScType();
+					scTypeCounts.put(ipaEle.constituentType(), typeIdx);
+					lastTargetType = ipaTEle.constituentType();
 				} else if(ipaTEle == null && ipaAEle != null) {
 					if(isIncludeEpenthesis()) {
 						++currentCount.epenthesis;
 						++rowCount.epenthesis;
-						position = (lastTargetType != null ? lastTargetType.getIdChar() : ipaEle.getScType().getIdChar()) + ("" + lastIdx) + "+";
+						position = (lastTargetType != null ? lastTargetType.getIdChar() : ipaEle.constituentType().getIdChar()) + ("" + lastIdx) + "+";
 					} else {
 						// ignore
 						continue;

@@ -17,8 +17,6 @@ package ca.phon.session.check;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
-import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
-import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyBuilder;
 import ca.phon.orthography.Terminator;
 import ca.phon.orthography.TerminatorType;
@@ -30,10 +28,8 @@ import ca.phon.session.alignment.CrossTierAlignment;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.alignment.TierElementFilter;
-import ca.phon.session.io.xml.OneToOne;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.syllabifier.*;
-import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 

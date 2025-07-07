@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;

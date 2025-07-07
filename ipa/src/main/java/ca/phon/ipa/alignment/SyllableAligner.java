@@ -36,9 +36,9 @@ public class SyllableAligner extends IndelAligner<IPATranscript> {
 		for(IPAElement ele:t2.audiblePhones()) {
 			final List<IPAElement> alignedEle = alignment.getAligned(new IPAElement[]{ele});
 			if(alignedEle.size() > 0 && t1.indexOf(alignedEle.get(0)) >= 0) {
-				if(ele.getFeatureSet().hasFeature("Consonant")) {
+				if(ele.featureSet().hasFeature("Consonant")) {
 					tally += 2;
-				} else if(ele.getFeatureSet().hasFeature("Vowel")) {
+				} else if(ele.featureSet().hasFeature("Vowel")) {
 					tally += 4;
 				} else {
 					// we are probably aligning cover symbols

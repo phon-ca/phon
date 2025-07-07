@@ -68,15 +68,15 @@ public class PhoneticProfile {
 	}
 
 	public boolean isConsonant() {
-		return (ele != null && ele.getFeatureSet().hasFeature("c"));
+		return (ele != null && ele.featureSet().hasFeature("c"));
 	}
 
 	public boolean isVowel() {
-		return (ele != null && ele.getFeatureSet().hasFeature("v"));
+		return (ele != null && ele.featureSet().hasFeature("v"));
 	}
 
 	public boolean isGlide() {
-		return (ele != null && ele.getFeatureSet().hasFeature("g"));
+		return (ele != null && ele.featureSet().hasFeature("g"));
 	}
 
 	public void clearProfile() {
@@ -93,14 +93,14 @@ public class PhoneticProfile {
 	private void updateProfile() {
 		clearProfile();
 
-		final FeatureSet features = (ele != null ? ele.getFeatureSet() : new FeatureSet());
+		final FeatureSet features = (ele != null ? ele.featureSet() : new FeatureSet());
 		if(ele == null)
 			return;
-		else if(ele.getFeatureSet().hasFeature("Consonant")) {
+		else if(ele.featureSet().hasFeature("Consonant")) {
 			profile.put(PhoneDimension.PLACE, FeatureSet.intersect(features, PhoneDimension.PLACE.getFeatures()));
 			profile.put(PhoneDimension.MANNER, FeatureSet.intersect(features, PhoneDimension.MANNER.getFeatures()));
 			profile.put(PhoneDimension.VOICING, FeatureSet.intersect(features, PhoneDimension.VOICING.getFeatures()));
-		} else if(ele.getFeatureSet().hasFeature("Vowel")) {
+		} else if(ele.featureSet().hasFeature("Vowel")) {
 			profile.put(PhoneDimension.HEIGHT, FeatureSet.intersect(features, PhoneDimension.HEIGHT.getFeatures()));
 			profile.put(PhoneDimension.BACKNESS, FeatureSet.intersect(features, PhoneDimension.BACKNESS.getFeatures()));
 			profile.put(PhoneDimension.TENSENESS, FeatureSet.intersect(features, PhoneDimension.TENSENESS.getFeatures()));

@@ -8,7 +8,7 @@ import ca.phon.ipa.parser.exceptions.HangingLigatureException;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 

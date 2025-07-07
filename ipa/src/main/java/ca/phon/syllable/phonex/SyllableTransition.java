@@ -18,7 +18,7 @@ package ca.phon.syllable.phonex;
 import ca.phon.fsa.*;
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Tuple;
 
 import java.util.*;
@@ -100,7 +100,7 @@ public class SyllableTransition extends PhonexTransition {
 	private boolean checkRange(IPAElement ele) {
 		if(syllableRange == null) return true;
 		else {
-			SyllableConstituentType sctype = ele.getScType();
+			SyllableConstituentType sctype = ele.constituentType();
 		
 			boolean afterStart = false;
 			switch(syllableRange.getObj1()) {

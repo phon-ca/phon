@@ -18,8 +18,7 @@ package ca.phon.ui.ipa;
 
 import ca.phon.ipa.*;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.Tuple;
+import ca.phon.ipa.SyllableConstituentType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -150,7 +149,7 @@ public class SyllabificationDisplay extends JComponent {
 		if(p != null) {
 			final int realPhonexIndex = getTranscript().indexOf(p);
 			SyllabificationChangeData oldData =
-					new SyllabificationChangeData(realPhonexIndex, p.getScType());
+					new SyllabificationChangeData(realPhonexIndex, p.constituentType());
 			SyllabificationChangeData newData =
 					new SyllabificationChangeData(realPhonexIndex, scType);
 			

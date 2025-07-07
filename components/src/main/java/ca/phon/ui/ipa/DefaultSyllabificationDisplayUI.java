@@ -17,7 +17,7 @@
 package ca.phon.ui.ipa;
 
 import ca.phon.ipa.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ui.action.*;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
@@ -183,12 +183,12 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		int pIdx = (pae.getData() != null ? pae.getData().intValue() : display.getFocusedPhone());
 		final IPAElement focusedElement = display.getDisplayedPhones().elementAt(pIdx);
 		int realEleIdx = display.getTranscript().indexOf(focusedElement);
-		if(focusedElement.getScType() == SyllableConstituentType.NUCLEUS) {
+		if(focusedElement.constituentType() == SyllableConstituentType.NUCLEUS) {
 			// check for phone either directly after or before this nucleus
 			if(pIdx < display.getNumberOfDisplayedPhones()-1) {
 				IPAElement nextPhone = display.getPhoneAtIndex(pIdx+1);
 				int nextRealIdx = display.getTranscript().indexOf(nextPhone);
-				if(nextRealIdx - realEleIdx == 1 && nextPhone.getScType() == SyllableConstituentType.NUCLEUS) {
+				if(nextRealIdx - realEleIdx == 1 && nextPhone.constituentType() == SyllableConstituentType.NUCLEUS) {
 					display.toggleHiatus(pIdx, pIdx + 1);
 					return;
 				}
@@ -196,7 +196,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			if(pIdx > 0) {
 				IPAElement prevPhone = display.getPhoneAtIndex(pIdx-1);
 				int prevRealIdx = display.getTranscript().indexOf(prevPhone);
-				if(realEleIdx - prevRealIdx == 1 && prevPhone.getScType() == SyllableConstituentType.NUCLEUS) {
+				if(realEleIdx - prevRealIdx == 1 && prevPhone.constituentType() == SyllableConstituentType.NUCLEUS) {
 					display.toggleHiatus(pIdx - 1, pIdx);
 				}
 			}
@@ -263,10 +263,10 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			}
 			
 			if(pIdx < display.getNumberOfDisplayedPhones()-1
-					&& phone.getScType() == SyllableConstituentType.NUCLEUS) {
+					&& phone.constituentType() == SyllableConstituentType.NUCLEUS) {
 				IPAElement nextPhone = display.getPhoneAtIndex(pIdx+1);
 				
-				if(nextPhone.getScType() == SyllableConstituentType.NUCLEUS) {
+				if(nextPhone.constituentType() == SyllableConstituentType.NUCLEUS) {
 					String itemText = "<html>Toggle Hiatus with " + nextPhone.getText();
 					JMenuItem item = new JMenuItem();
 					PhonUIAction<Integer> toggleHiatusAct = PhonUIAction.eventConsumer(
@@ -280,10 +280,10 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			}
 
 			if (pIdx > 0
-					&& phone.getScType() == SyllableConstituentType.NUCLEUS) {
+					&& phone.constituentType() == SyllableConstituentType.NUCLEUS) {
 				IPAElement prevPhone = display.getPhoneAtIndex(pIdx - 1);
 
-				if (prevPhone.getScType() == SyllableConstituentType.NUCLEUS) {
+				if (prevPhone.constituentType() == SyllableConstituentType.NUCLEUS) {
 					String itemText = "<html>Toggle <u><b>H</b></u>iatus with " + prevPhone.getText();
 					JMenuItem item = new JMenuItem();
 					PhonUIAction<Integer> toggleHiatusAct = PhonUIAction.eventConsumer(
@@ -403,7 +403,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 			
 			if((sIdx+1) < syllables.size()) {
 				final IPATranscript nextSyll = syllables.get(sIdx+1);
-				if(nextSyll.length() > 0 && nextSyll.elementAt(0).getScType() == SyllableConstituentType.AMBISYLLABIC) {
+				if(nextSyll.length() > 0 && nextSyll.elementAt(0).constituentType() == SyllableConstituentType.AMBISYLLABIC) {
 					sW += phoneRect.width;
 				}
 			}
@@ -452,7 +452,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 					phoneArea.add(new Area(fillRect));
 				}
 
-				final Color scColor = IPAUIDefaults.getColorForConstituentType(p.getScType());
+				final Color scColor = IPAUIDefaults.getColorForConstituentType(p.constituentType());
 				Color grad_top = scColor.brighter();
 				Color grad_btm = scColor.darker();
 				GradientPaint gp = new GradientPaint(new Point(phoneRect.x,

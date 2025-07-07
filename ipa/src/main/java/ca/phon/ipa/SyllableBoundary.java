@@ -16,7 +16,6 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents a syllable boundary between words.

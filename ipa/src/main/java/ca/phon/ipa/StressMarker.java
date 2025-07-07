@@ -16,7 +16,6 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.*;
-import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * A stress marker.  Stress markers can either be

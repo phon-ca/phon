@@ -138,7 +138,7 @@ public class FeatureCollator extends Collator {
 			} catch (ParseException e) {
 			}
 			for(int i = 0; i < features.length; i++) {
-				features[i] = t.elementAt(i).getFeatureSet();
+				features[i] = t.elementAt(i).featureSet();
 			}
 		}
 

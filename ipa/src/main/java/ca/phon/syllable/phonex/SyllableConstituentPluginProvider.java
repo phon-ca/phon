@@ -16,7 +16,7 @@
 package ca.phon.syllable.phonex;
 
 import ca.phon.phonex.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 
 import java.util.List;
 

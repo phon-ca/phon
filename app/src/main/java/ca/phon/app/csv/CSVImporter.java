@@ -26,7 +26,7 @@ import ca.phon.session.Record;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Language;
 
 import java.io.*;
@@ -494,7 +494,7 @@ public class CSVImporter {
                 false);
         ipaElementStream = ipaElementStream.filter(element -> element instanceof Phone);
         boolean syllabificationRequired = ipaElementStream.allMatch(
-                ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN);
+                ipaElement -> ipaElement.constituentType() == SyllableConstituentType.UNKNOWN);
         if (syllabificationRequired) {
             var syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
                     column.getOption("syllabifierLanguage"));
@@ -540,7 +540,7 @@ public class CSVImporter {
                 false);
         ipaElementStream = ipaElementStream.filter(element -> element instanceof Phone);
         boolean syllabificationRequired = ipaElementStream.allMatch(
-                ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN);
+                ipaElement -> ipaElement.constituentType() == SyllableConstituentType.UNKNOWN);
         if (syllabificationRequired) {
             var syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
                     column.getOption("syllabifierLanguage"));

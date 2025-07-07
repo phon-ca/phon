@@ -16,6 +16,7 @@
 package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.syllable.*;
 

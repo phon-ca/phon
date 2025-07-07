@@ -83,7 +83,7 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 			|| pmr.getSuffix().length() > 0) {
 			String temp = builder.last().toString();
 			temp += pmr.getCombining() + pmr.getSuffix();
-			temp += ":" + builder.last().getScType().getIdChar();
+			temp += ":" + builder.last().constituentType().getIdChar();
 			builder.removeLast();
 			builder.append(temp, true);
 		}

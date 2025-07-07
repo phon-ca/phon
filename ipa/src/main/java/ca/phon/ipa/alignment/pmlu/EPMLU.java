@@ -71,16 +71,16 @@ public class EPMLU {
 			final IPAElement actualEle = pm.getBottomAlignmentElements().get(i);
 			
 			if(targetEle != null) {
-				if(targetEle.getFeatureSet().hasFeature("Consonant")) {
-					if(actualEle != null && actualEle.getFeatureSet().hasFeature("Consonant")) {
+				if(targetEle.featureSet().hasFeature("Consonant")) {
+					if(actualEle != null && actualEle.featureSet().hasFeature("Consonant")) {
 						// check manner
-						if(targetEle.getFeatureSet().getManner().equals(actualEle.getFeatureSet().getManner())) 
+						if(targetEle.featureSet().getManner().equals(actualEle.featureSet().getManner()))
 							++pmlu;
 						// check place
-						if(targetEle.getFeatureSet().getPlace().equals(actualEle.getFeatureSet().getPlace()))
+						if(targetEle.featureSet().getPlace().equals(actualEle.featureSet().getPlace()))
 							++pmlu;
 						// check voicing
-						if(targetEle.getFeatureSet().getVoicing().equals(actualEle.getFeatureSet().getVoicing()))
+						if(targetEle.featureSet().getVoicing().equals(actualEle.featureSet().getVoicing()))
 							++pmlu;
 					}
 				}

@@ -2,7 +2,7 @@ package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.ipa.*;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 import jakarta.xml.bind.JAXBElement;

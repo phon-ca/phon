@@ -19,7 +19,7 @@ import ca.phon.ipa.*;
 import ca.phon.ipa.Linker;
 import ca.phon.ipa.Pause;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -65,8 +65,8 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 				Arrays.stream(phone.getSuffixDiacritics()).filter(d -> d.getType() == DiacriticType.SUFFIX).toList();
 		if(filteredSuffixDiacritics.size() > 0)
 			filteredSuffixDiacritics.stream().map(Diacritic::getText).forEach(phoneType.getSuffix()::add);
-		if(phone.getScType() != SyllableConstituentType.UNKNOWN) {
-			XmlSyllableConstituentType scType = switch (phone.getScType()) {
+		if(phone.constituentType() != SyllableConstituentType.UNKNOWN) {
+			XmlSyllableConstituentType scType = switch (phone.constituentType()) {
 				case AMBISYLLABIC -> XmlSyllableConstituentType.AMBISYLLABIC;
 				case CODA -> XmlSyllableConstituentType.CODA;
 				case LEFTAPPENDIX -> XmlSyllableConstituentType.LEFT_APPENDIX;
@@ -109,8 +109,8 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		lig.setType(ligType);
 		xmlCompoundPhoneType.getContent().add(factory.createLig(lig));
 
-		if(cmpPhone.getScType() != SyllableConstituentType.UNKNOWN) {
-			XmlSyllableConstituentType scType = switch (cmpPhone.getScType()) {
+		if(cmpPhone.constituentType() != SyllableConstituentType.UNKNOWN) {
+			XmlSyllableConstituentType scType = switch (cmpPhone.constituentType()) {
 				case AMBISYLLABIC -> XmlSyllableConstituentType.AMBISYLLABIC;
 				case CODA -> XmlSyllableConstituentType.CODA;
 				case LEFTAPPENDIX -> XmlSyllableConstituentType.LEFT_APPENDIX;

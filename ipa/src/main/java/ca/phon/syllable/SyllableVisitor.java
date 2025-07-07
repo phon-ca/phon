@@ -83,7 +83,7 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 			// check for stress marker
 			final IPAElement firstEle = currentSyllable.elementAt(0);
 			SyllableStress stress = SyllableStress.NoStress;
-			if(firstEle.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
+			if(firstEle.constituentType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
 				final StressType st = StressMarker.class.cast(firstEle).getType();
 				stress = (st == StressType.PRIMARY ? SyllableStress.PrimaryStress : SyllableStress.SecondaryStress);
 			}
@@ -110,8 +110,8 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	
 	private void appendSyllable(IPAElement p) {
 		if(lastPhone != null) {
-			final SyllableConstituentType prevType = lastPhone.getScType();
-			final SyllableConstituentType currentType = p.getScType();
+			final SyllableConstituentType prevType = lastPhone.constituentType();
+			final SyllableConstituentType currentType = p.constituentType();
 			
 			switch(prevType) {
 			case LEFTAPPENDIX:

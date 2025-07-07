@@ -18,7 +18,6 @@ package ca.phon.ipa;
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableStress;
 
 import java.util.*;
 
@@ -118,7 +117,7 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	public FeatureSet getPrefixFeatures() {
 		FeatureSet retVal = new FeatureSet();
 		for(Diacritic dia:getPrefixDiacritics()) {
-			retVal = FeatureSet.union(retVal, dia.getFeatureSet());
+			retVal = FeatureSet.union(retVal, dia.featureSet());
 		}
 		return retVal;
 	}
@@ -259,7 +258,7 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	public FeatureSet getCombiningFeatures() {
 		FeatureSet retVal = new FeatureSet();
 		for(Diacritic dia:getCombiningDiacritics()) {
-			retVal = FeatureSet.union(retVal, dia.getFeatureSet());
+			retVal = FeatureSet.union(retVal, dia.featureSet());
 		}
 		return retVal;
 	}
@@ -301,7 +300,7 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	public FeatureSet getSuffixFeatures() {
 		FeatureSet retVal = new FeatureSet();
 		for(Diacritic dia:getSuffixDiacritics()) {
-			retVal = FeatureSet.union(retVal, dia.getFeatureSet());
+			retVal = FeatureSet.union(retVal, dia.featureSet());
 		}
 		return retVal;
 	}

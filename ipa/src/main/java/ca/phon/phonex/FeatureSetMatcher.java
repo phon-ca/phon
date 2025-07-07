@@ -86,7 +86,7 @@ public final class FeatureSetMatcher implements PhoneMatcher {
 	public boolean matches(IPAElement p) {
 		boolean retVal = false;
 		
-		FeatureSet phoneFs = p.getFeatureSet();
+		FeatureSet phoneFs = p.featureSet();
 		
 		FeatureSet reqFs = FeatureSet.intersect(phoneFs, requiredFeatures);
 		FeatureSet notFs = FeatureSet.intersect(phoneFs, notFeatures);

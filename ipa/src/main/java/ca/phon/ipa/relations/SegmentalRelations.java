@@ -95,26 +95,26 @@ public class SegmentalRelations {
 				final IPAElement t2 = pm.getAlignedElements(p2).get(0);
 				if(t1 == null && t2 == null) continue;
 				boolean isConsonant = 
-						(t1 != null ? t1.getFeatureSet().hasFeature("consonant") : t2.getFeatureSet().hasFeature("consonant"));
+						(t1 != null ? t1.featureSet().hasFeature("consonant") : t2.featureSet().hasFeature("consonant"));
 				
 				if(isConsonant && !isIncludeConsonants()) continue;
 				if(!isConsonant && !isIncludeVowels()) continue;
 				
 				if(t2 != null) {
-					if( (isConsonant && t2.getFeatureSet().hasFeature("vowel"))
-							|| (!isConsonant && t2.getFeatureSet().hasFeature("consonant")) ) continue;
+					if( (isConsonant && t2.featureSet().hasFeature("vowel"))
+							|| (!isConsonant && t2.featureSet().hasFeature("consonant")) ) continue;
 				}
 				
 				final IPAElement a1 = pm.getAlignedElements(p1).get(1);
 				final IPAElement a2 = pm.getAlignedElements(p2).get(1);
 				if(a1 == null && a2 == null) continue;
 				if(a1 != null) {
-					if( (isConsonant && a1.getFeatureSet().hasFeature("vowel")) 
-							|| (!isConsonant && a1.getFeatureSet().hasFeature("consonant")) ) continue;
+					if( (isConsonant && a1.featureSet().hasFeature("vowel"))
+							|| (!isConsonant && a1.featureSet().hasFeature("consonant")) ) continue;
 				}
 				if(a2 != null) {
-					if( (isConsonant && a2.getFeatureSet().hasFeature("vowel")) 
-							|| (!isConsonant && a2.getFeatureSet().hasFeature("consonant")) ) continue;
+					if( (isConsonant && a2.featureSet().hasFeature("vowel"))
+							|| (!isConsonant && a2.featureSet().hasFeature("consonant")) ) continue;
 				
 				}
 				

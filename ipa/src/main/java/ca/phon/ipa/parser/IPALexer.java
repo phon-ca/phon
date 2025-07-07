@@ -16,7 +16,7 @@
 package ca.phon.ipa.parser;
 
 import ca.phon.ipa.parser.exceptions.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import org.antlr.runtime.*;
 
 

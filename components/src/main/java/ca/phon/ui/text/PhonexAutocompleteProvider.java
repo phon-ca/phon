@@ -17,7 +17,7 @@ package ca.phon.ui.text;
 
 import ca.phon.ipa.features.*;
 import ca.phon.phonex.*;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import org.fife.ui.autocomplete.*;
 
 import javax.swing.text.*;

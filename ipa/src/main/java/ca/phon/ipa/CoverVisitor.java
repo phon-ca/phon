@@ -143,7 +143,7 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	public void fallbackVisit(IPAElement obj) {
 		builder.append(obj.toString());
 		
-		builder.last().setFeatureSet(obj.getFeatureSet());
+		builder.last().setFeatureSet(obj.featureSet());
 		copySyllabificationInfo(obj, builder.last());
 	}
 	
@@ -219,7 +219,7 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 		
 		final Phone newPhone = factory.createPhone(baseChar);
 		if(includeDiacritics) {
-			newPhone.setFeatureSet(p.getFeatureSet());
+			newPhone.setFeatureSet(p.featureSet());
 			newPhone.setPrefixDiacritics(p.getPrefixDiacritics());
 			newPhone.setCombiningDiacritics(p.getCombiningDiacritics());
 			newPhone.setSuffixDiacritics(p.getSuffixDiacritics());

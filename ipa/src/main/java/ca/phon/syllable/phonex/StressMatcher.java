@@ -16,6 +16,7 @@
 package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.SyllableStress;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.syllable.*;
 
@@ -29,7 +30,7 @@ public class StressMatcher implements PhoneMatcher {
 	/**
 	 * List of stress types allowed
 	 */
-	private Set<SyllableStress> stressTypes = 
+	private Set<SyllableStress> stressTypes =
 			new HashSet<SyllableStress>();
 
 	public StressMatcher() {

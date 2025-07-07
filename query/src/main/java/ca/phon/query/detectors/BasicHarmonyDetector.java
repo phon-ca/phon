@@ -78,8 +78,8 @@ public class BasicHarmonyDetector extends Detector {
    			IPAElement ele2 = pair1.get(1);
    			
    			// Get feature sets
-   			FeatureSet fsTarget = (ele1 != null ? ele1.getFeatureSet() : new FeatureSet());
-   			FeatureSet fsActual = (ele2 != null ? ele2.getFeatureSet() : new FeatureSet());
+   			FeatureSet fsTarget = (ele1 != null ? ele1.featureSet() : new FeatureSet());
+   			FeatureSet fsActual = (ele2 != null ? ele2.featureSet() : new FeatureSet());
    			if((fsTarget.size() > 0 && !fsTarget.hasFeature(lookFor))
    					|| (fsActual.size() > 0 && !fsActual.hasFeature(lookFor)) )
    				continue;

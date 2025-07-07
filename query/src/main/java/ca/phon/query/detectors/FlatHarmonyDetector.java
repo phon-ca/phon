@@ -38,7 +38,7 @@ public class FlatHarmonyDetector {
 		
 		final List<IPAElement> consonants = 
 				StreamSupport.stream(ipa.spliterator(), false)
-					.filter( (e) -> e.getFeatureSet().hasFeature("consonant") )
+					.filter( (e) -> e.featureSet().hasFeature("consonant") )
 					.collect(Collectors.toList());
 		
 		for(int i = 0; i < consonants.size()-1; i++) {
@@ -67,7 +67,7 @@ public class FlatHarmonyDetector {
 		
 		final List<IPAElement> vowels = 
 				StreamSupport.stream(ipa.spliterator(), false)
-					.filter( (e) -> e.getFeatureSet().hasFeature("vowel") )
+					.filter( (e) -> e.featureSet().hasFeature("vowel") )
 					.collect(Collectors.toList());
 		
 		for(int i = 0; i < vowels.size()-1; i++) {

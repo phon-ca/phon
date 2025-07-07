@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package ca.phon.syllable;
+package ca.phon.ipa;
 
 import ca.phon.extensions.Extension;
-import ca.phon.ipa.IPATranscript;
 
 /**
  * Represents syllable stress.

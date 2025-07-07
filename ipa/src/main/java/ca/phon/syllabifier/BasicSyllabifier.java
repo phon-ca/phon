@@ -4,7 +4,7 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.Phone;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.syllabifier.phonex.SonorityInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Language;
 import ca.phon.visitor.Visitor;
 

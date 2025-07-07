@@ -34,7 +34,7 @@ public class IPCCalculator {
         int D = 0;
         explanation.append("\n\tD=");
         for (IPAElement t : ipa) {
-            if (t.getFeatureSet().hasFeature("dorsal")) {
+            if (t.featureSet().hasFeature("dorsal")) {
                 if (D > 0) {
                     explanation.append(" +");
                 }
@@ -48,7 +48,7 @@ public class IPCCalculator {
         int M = 0;
         explanation.append("\n\tM=");
         for (IPAElement t : ipa) {
-            if (t.getFeatureSet().hasFeature("fricative") || t.getFeatureSet().hasFeature("affricate") || t.getFeatureSet().hasFeature("liquid")) {
+            if (t.featureSet().hasFeature("fricative") || t.featureSet().hasFeature("affricate") || t.featureSet().hasFeature("liquid")) {
                 if (M > 0) {
                     explanation.append(" +");
                 }
@@ -62,7 +62,7 @@ public class IPCCalculator {
         int V = 0;
         explanation.append("\n\tV=");
         for (IPAElement t : ipa) {
-            if (t.getFeatureSet().hasFeature("v") && t.getFeatureSet().hasFeature("rhotic")) {
+            if (t.featureSet().hasFeature("v") && t.featureSet().hasFeature("rhotic")) {
                 if (V > 0) {
                     explanation.append(" +");
                 }
@@ -73,7 +73,7 @@ public class IPCCalculator {
         explanation.append(" = " + V);
 
         // Word shape (S)
-        int S = ipa.elementAt(ipa.length() - 1).getFeatureSet().hasFeature("consonant") ? 1 : 0;
+        int S = ipa.elementAt(ipa.length() - 1).featureSet().hasFeature("consonant") ? 1 : 0;
         explanation.append("\n\tS=");
         if (S > 0) {
             explanation.append(" ends with consonant");
@@ -105,19 +105,19 @@ public class IPCCalculator {
         StringBuilder placeVariegationExplanation = new StringBuilder();
         for (int i = 0; i < ipa.audiblePhones().length(); i++) {
             IPAElement t = ipa.audiblePhones().elementAt(i);
-            if (t.getFeatureSet().hasFeature("consonant")) {
+            if (t.featureSet().hasFeature("consonant")) {
                 if (lastWasConsonant) {
                     // cluster reset our place
                     prevPlace = null;
                 } else {
                     if (i < ipa.audiblePhones().length() - 1) {
                         IPAElement next = ipa.audiblePhones().elementAt(i + 1);
-                        if (next.getFeatureSet().hasFeature("consonant")) {
+                        if (next.featureSet().hasFeature("consonant")) {
                             prevPlace = null;
                             lastWasConsonant = false;
                             ++i; // move past next non-consonant
                         } else {
-                            FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.getFeatureSet());
+                            FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.featureSet());
                             if (prevPlace != null) {
                                 if (!prevPlace.equals(currentPlace)) {
                                     placeVariegationExplanation.append(" -> " + t.toString());
@@ -169,8 +169,8 @@ public class IPCCalculator {
             // if place variegation is present, increment T
             prevPlace = null;
             for (var ele : matcher.group()) {
-                if (ele.getFeatureSet().hasFeature("consonant")) {
-                    FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), ele.getFeatureSet());
+                if (ele.featureSet().hasFeature("consonant")) {
+                    FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), ele.featureSet());
                     if (prevPlace != null) {
                         if (!prevPlace.equals(currentPlace)) {
                             if (T > 0) {
@@ -188,7 +188,7 @@ public class IPCCalculator {
             // if cluster is heterosyllabic, increment T
             int lastSyllableIdx = -1;
             for (var ele : matcher.group()) {
-                if (ele.getFeatureSet().hasFeature("consonant")) {
+                if (ele.featureSet().hasFeature("consonant")) {
                     int currentSyllableIdx = ipa.syllableIndexOf(ele);
                     if (lastSyllableIdx == -1) {
                         lastSyllableIdx = currentSyllableIdx;

@@ -653,7 +653,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		final PunctuationFilter filter = new PunctuationFilter(true);
 		accept(filter);
 		for(IPAElement ele:filter.getIPATranscript()) {
-			if(ele.getScType() != SyllableConstituentType.UNKNOWN)
+			if(ele.constituentType() != SyllableConstituentType.UNKNOWN)
 				return true;
 		}
 		return false;

@@ -17,11 +17,11 @@ package ca.phon.phonex;
 
 import ca.phon.fsa.*;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.SyllableConstituentType;
+import ca.phon.ipa.SyllableStress;
 import ca.phon.ipa.features.*;
 import ca.phon.phonex.plugins.*;
 import ca.phon.phonexg4.PhonexParser;
-import ca.phon.phonexg4.*;
-import ca.phon.syllable.*;
 import ca.phon.syllable.phonex.*;
 import ca.phon.util.Tuple;
 import org.antlr.v4.runtime.ParserRuleContext;

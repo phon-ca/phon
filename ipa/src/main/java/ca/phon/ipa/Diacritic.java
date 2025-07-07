@@ -79,10 +79,10 @@ public class Diacritic extends IPAElement {
 	protected FeatureSet _getFeatureSet() {
 		FeatureSet fs = getFeatures(character);
 		for(Diacritic dia:prefixDiacritics) {
-			fs = FeatureSet.union(fs, dia.getFeatureSet());
+			fs = FeatureSet.union(fs, dia.featureSet());
 		}
 		for(Diacritic dia:suffixDiacritics) {
-			fs = FeatureSet.union(fs, dia.getFeatureSet());
+			fs = FeatureSet.union(fs, dia.featureSet());
 		}
 		return fs;
 	}

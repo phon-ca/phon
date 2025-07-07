@@ -129,12 +129,12 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 				sb.append(',');
 			sb.append( (topEle != null ? topEle.getText() : PhonConstants.nullChar) );
 			if(includeScType && topEle != null) {
-				sb.append(":").append(topEle.getScType().getIdChar());
+				sb.append(":").append(topEle.constituentType().getIdChar());
 			}
 			sb.append(PhonConstants.doubleArrow);
 			sb.append( (btmEle != null ? btmEle.getText() : PhonConstants.nullChar) );
 			if(includeScType && btmEle != null) {
-				sb.append(":").append(btmEle.getScType().getIdChar());
+				sb.append(":").append(btmEle.constituentType().getIdChar());
 			}
 		}
 
@@ -190,7 +190,7 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 				final IPAElement aele = (btmPhoneIdx < actualPhones.length() ? actualPhones.elementAt(btmPhoneIdx) : null);
 
 				Integer alignCol[] = new Integer[2];
-				if(g1.getFeatureSet().hasFeature("null")) {
+				if(g1.featureSet().hasFeature("null")) {
 					alignCol[0] = -1;
 				} else if(tele != null && g1.toString().equals(tele.toString())) {
 					alignCol[0] = topPhoneIdx++;
@@ -199,7 +199,7 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 					throw new IllegalArgumentException(target + " is not the correct source transcript");
 				}
 
-				if(g2.getFeatureSet().hasFeature("null")) {
+				if(g2.featureSet().hasFeature("null")) {
 					alignCol[1] = -1;
 				} else if(aele != null && g2.toString().equals(aele.toString())) {
 					alignCol[1] = btmPhoneIdx++;
@@ -254,13 +254,13 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 				aBuilder.append(g2);
 
 				Integer alignCol[] = new Integer[2];
-				if(g1.getFeatureSet().hasFeature("null")) {
+				if(g1.featureSet().hasFeature("null")) {
 					alignCol[0] = -1;
 				} else {
 					alignCol[0] = topPhoneIdx++;
 				}
 
-				if(g2.getFeatureSet().hasFeature("null")) {
+				if(g2.featureSet().hasFeature("null")) {
 					alignCol[1] = -1;
 				} else {
 					alignCol[1] = btmPhoneIdx++;

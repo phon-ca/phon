@@ -227,7 +227,7 @@ public class FeatureAccuracyNode extends TableOpNode implements NodeSettings {
 			}
 
 			Optional<String> featureNameOpt =
-					FeatureSet.intersect(ipaT.elementAt(0).getFeatureSet(), fs).getFeatures().stream().findFirst();
+					FeatureSet.intersect(ipaT.elementAt(0).featureSet(), fs).getFeatures().stream().findFirst();
 			if(!featureNameOpt.isPresent()) continue;
 			final String featureName = featureNameOpt.get();
 

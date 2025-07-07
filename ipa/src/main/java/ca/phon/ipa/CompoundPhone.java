@@ -146,7 +146,7 @@ public final class CompoundPhone extends Phone {
 
 	@Override
 	protected FeatureSet _getFeatureSet() {
-		FeatureSet retVal = FeatureSet.union(firstPhone.getFeatureSet(), secondPhone.getFeatureSet());
+		FeatureSet retVal = FeatureSet.union(firstPhone.featureSet(), secondPhone.featureSet());
 		retVal = FeatureSet.union(retVal, getPrefixFeatures());
 		retVal = FeatureSet.union(retVal, getCombiningFeatures());
 		retVal = FeatureSet.union(retVal, getSuffixFeatures());

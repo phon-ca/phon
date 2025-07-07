@@ -18,7 +18,6 @@ package ca.phon.ipa.alignment;
 import ca.phon.alignment.*;
 import ca.phon.ipa.*;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,17 +52,17 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 			return -1;
 		}
 
-		if( (ele1.getFeatureSet().hasFeature("Consonant")
-				&& ele2.getFeatureSet().hasFeature("Consonant")) ) {
+		if( (ele1.featureSet().hasFeature("Consonant")
+				&& ele2.featureSet().hasFeature("Consonant")) ) {
 			tally += 2;
-		} else if( (ele1.getFeatureSet().hasFeature("Vowel")
-				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
+		} else if( (ele1.featureSet().hasFeature("Vowel")
+				&& ele2.featureSet().hasFeature("Vowel")) ) {
 			tally += 2;
 		} else {
-			final IPAElement vowel = (ele1.getFeatureSet().hasFeature("Vowel") ? ele1 : ele2);
+			final IPAElement vowel = (ele1.featureSet().hasFeature("Vowel") ? ele1 : ele2);
 			final IPAElement notvowel = (vowel == ele1 ? ele2 : ele1);
 
-			if(notvowel.getFeatureSet().hasFeature("syllabic")) {
+			if(notvowel.featureSet().hasFeature("syllabic")) {
 				return 2;
 			} else {
 				// align if toString() matches
@@ -75,8 +74,8 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 			}
 		}
 
-		final SyllableConstituentType t1 = ele1.getScType();
-		final SyllableConstituentType t2 = ele2.getScType();
+		final SyllableConstituentType t1 = ele1.constituentType();
+		final SyllableConstituentType t2 = ele2.constituentType();
 		if(t1 == t2) {
 			tally += 1;
 		} else {

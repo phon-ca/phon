@@ -15,7 +15,7 @@
  */
 package ca.phon.ui.syllable;
 
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 
 import javax.swing.*;
 

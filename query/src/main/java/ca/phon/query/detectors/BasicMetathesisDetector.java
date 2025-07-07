@@ -52,8 +52,8 @@ public class BasicMetathesisDetector extends Detector
 		int i = 0;
 		for(; i < map.getAlignmentLength(); ++i) {
 			pair1 = map.getAlignedElements(i);
-			if(pair1.get(0) != null && !pair1.get(0).getFeatureSet().hasFeature("Consonant")) continue;
-			if(pair1.get(1) != null && !pair1.get(1).getFeatureSet().hasFeature("Consonant")) continue;
+			if(pair1.get(0) != null && !pair1.get(0).featureSet().hasFeature("Consonant")) continue;
+			if(pair1.get(1) != null && !pair1.get(1).featureSet().hasFeature("Consonant")) continue;
 			if(pair1.get(0) != null && pair1.get(1) != null)
 				return;
 			
@@ -63,8 +63,8 @@ public class BasicMetathesisDetector extends Detector
 		int j = end;
 		for(; j > i; --j) {
 			pair2 = map.getAlignedElements(j);
-			if(pair2.get(0) != null && !pair2.get(0).getFeatureSet().hasFeature("Consonant")) continue;
-			if(pair2.get(1) != null && !pair2.get(1).getFeatureSet().hasFeature("Consonant")) continue;
+			if(pair2.get(0) != null && !pair2.get(0).featureSet().hasFeature("Consonant")) continue;
+			if(pair2.get(1) != null && !pair2.get(1).featureSet().hasFeature("Consonant")) continue;
 			if(pair2.get(0) != null && pair2.get(1) != null)
 				return;
 			
@@ -83,11 +83,11 @@ public class BasicMetathesisDetector extends Detector
 		// get the feature sets for both
 		FeatureSet fs1 = new FeatureSet();
 		if(pair1.get(0) != null && pair2.get(1) != null)
-			fs1 = FeatureSet.intersect(pair1.get(0).getFeatureSet(), pair2.get(1).getFeatureSet());
+			fs1 = FeatureSet.intersect(pair1.get(0).featureSet(), pair2.get(1).featureSet());
 		
 		FeatureSet fs2 = new FeatureSet();
 		if(pair1.get(1) != null && pair2.get(0) != null)
-			fs2 = FeatureSet.intersect(pair1.get(1).getFeatureSet(), pair2.get(0).getFeatureSet());
+			fs2 = FeatureSet.intersect(pair1.get(1).featureSet(), pair2.get(0).featureSet());
 		
 		final MetathesisDetectorResult r = new MetathesisDetectorResult(map);
 		r.setFirstPosition(i);
@@ -116,8 +116,8 @@ public class BasicMetathesisDetector extends Detector
 			final IPAElement ele2 = pair1.get(1);
 
 			// Get feature sets for previous consonant
-			FeatureSet fsTargetL = (ele1 != null ? pair1.get(0).getFeatureSet() : new FeatureSet());
-			FeatureSet fsActualL = (ele2 != null ? pair1.get(1).getFeatureSet() : new FeatureSet());
+			FeatureSet fsTargetL = (ele1 != null ? pair1.get(0).featureSet() : new FeatureSet());
+			FeatureSet fsActualL = (ele2 != null ? pair1.get(1).featureSet() : new FeatureSet());
 			
 			boolean bothC = fsTargetL.hasFeature("Consonant") && fsActualL.hasFeature("Consonant");
 			boolean targetC = fsActualL.size() == 0 && fsTargetL.hasFeature("Consonant");
@@ -133,8 +133,8 @@ public class BasicMetathesisDetector extends Detector
 //				if(pair2.get(0) == null || pair2.get(1) == null)
 //					continue;
 
-				fsTargetR = (pair2.get(0) != null ? pair2.get(0).getFeatureSet() : new FeatureSet());
-				fsActualR = (pair2.get(1) != null ? pair2.get(1).getFeatureSet() : new FeatureSet());
+				fsTargetR = (pair2.get(0) != null ? pair2.get(0).featureSet() : new FeatureSet());
+				fsActualR = (pair2.get(1) != null ? pair2.get(1).featureSet() : new FeatureSet());
 				
 				bothC = fsTargetR.hasFeature("Consonant") && fsActualR.hasFeature("Consonant");
 				targetC = fsTargetR.hasFeature("Consonant") && fsActualR.size() == 0;

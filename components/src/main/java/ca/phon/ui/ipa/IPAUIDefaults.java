@@ -2,7 +2,7 @@ package ca.phon.ui.ipa;
 
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ui.theme.UIDefaults;
 import ca.phon.ui.theme.UIDefaultsHandler;
 

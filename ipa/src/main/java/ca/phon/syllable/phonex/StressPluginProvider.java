@@ -16,7 +16,7 @@
 package ca.phon.syllable.phonex;
 
 import ca.phon.phonex.*;
-import ca.phon.syllable.SyllableStress;
+import ca.phon.ipa.SyllableStress;
 
 import java.util.List;
 

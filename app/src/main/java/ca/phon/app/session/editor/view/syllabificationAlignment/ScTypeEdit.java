@@ -19,8 +19,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.SyllableConstituentType;
 
 public class ScTypeEdit extends SessionUndoableEdit {
 
@@ -64,7 +63,7 @@ public class ScTypeEdit extends SessionUndoableEdit {
 	@Override
 	public void doIt() {
 		if(index >= 0 && index < transcript.length()) {
-			prevScType = transcript.elementAt(index).getScType();
+			prevScType = transcript.elementAt(index).constituentType();
 			transcript.elementAt(index).setScType(scType);
 
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =

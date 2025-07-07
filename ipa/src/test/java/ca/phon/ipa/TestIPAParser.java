@@ -16,8 +16,6 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.parser.*;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.PrefHelper;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -283,12 +281,12 @@ public class TestIPAParser {
 		final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 		
 		Assert.assertEquals(6, transcript.length());
-		Assert.assertEquals(SyllableConstituentType.OEHS, transcript.elementAt(0).getScType());
-		Assert.assertEquals(SyllableConstituentType.LEFTAPPENDIX, transcript.elementAt(1).getScType());
-		Assert.assertEquals(SyllableConstituentType.ONSET, transcript.elementAt(2).getScType());
-		Assert.assertEquals(SyllableConstituentType.NUCLEUS, transcript.elementAt(3).getScType());
-		Assert.assertEquals(SyllableConstituentType.CODA, transcript.elementAt(4).getScType());
-		Assert.assertEquals(SyllableConstituentType.RIGHTAPPENDIX, transcript.elementAt(5).getScType());
+		Assert.assertEquals(SyllableConstituentType.OEHS, transcript.elementAt(0).constituentType());
+		Assert.assertEquals(SyllableConstituentType.LEFTAPPENDIX, transcript.elementAt(1).constituentType());
+		Assert.assertEquals(SyllableConstituentType.ONSET, transcript.elementAt(2).constituentType());
+		Assert.assertEquals(SyllableConstituentType.NUCLEUS, transcript.elementAt(3).constituentType());
+		Assert.assertEquals(SyllableConstituentType.CODA, transcript.elementAt(4).constituentType());
+		Assert.assertEquals(SyllableConstituentType.RIGHTAPPENDIX, transcript.elementAt(5).constituentType());
 	}
 
 	@Test
