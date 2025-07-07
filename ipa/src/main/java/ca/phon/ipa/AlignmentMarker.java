@@ -18,15 +18,22 @@ package ca.phon.ipa;
 import ca.phon.ipa.features.*;
 
 /**
- * Character used to indicate alignment.
+ * An IPAElement that represents an alignment marker in an IPA transcription.
  */
 public class AlignmentMarker extends IPAElement {
 	
 	public final static char ALIGNMENT_CHAR = '\u2194';
-	
+
 	public AlignmentMarker() {
-		super();
-		setScType(SyllableConstituentType.UNKNOWN);
+		this(new SyllableInfo(SyllableConstituentType.WORDBOUNDARYMARKER));
+	}
+
+	public AlignmentMarker(SyllableInfo syllableInfo) {
+		this(null, syllableInfo);
+	}
+
+	public AlignmentMarker(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+		super(overrideFeatureSet, syllableInfo);
 	}
 
 	@Override

@@ -18,17 +18,23 @@ package ca.phon.ipa;
 import ca.phon.ipa.features.FeatureSet;
 
 /**
- * Compound word marker.
+ * An IPAElement that represents a compound word marker in an IPA transcription.
  *
  */
 public class CompoundWordMarker extends IPAElement {
 
-	private char cwmChar = '+';
+	private final char cwmChar;
 
 	public CompoundWordMarker() {
+		this('+');
 	}
 
 	public CompoundWordMarker(char cwm) {
+		this(cwm, null, new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
+	}
+
+	public CompoundWordMarker(char cwm, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+		super(overrideFeatureSet, syllableInfo);
 		if(cwm != '+' && cwm != '~')
 			throw new IllegalArgumentException("Invalid compound word marker '" + cwm + "'");
 		this.cwmChar = cwm;

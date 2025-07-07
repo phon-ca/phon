@@ -34,30 +34,45 @@ import java.util.*;
  */
 public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacritics, CombiningDiacritics {
 	
-	private Diacritic[] prefixDiacritics = new Diacritic[0];
+	private final Diacritic[] prefixDiacritics;
 	
-	private Diacritic[] suffixDiacritics = new Diacritic[0];
+	private final Diacritic[] suffixDiacritics;
 	
-	private Diacritic[] combiningDiacritics = new Diacritic[0];
+	private final Diacritic[] combiningDiacritics;
 	
-	private Character basePhone;
-	
+	private final Character basePhone;
+
+	public Phone() {
+		this(null, new SyllableInfo());
+	}
+
 	/**
 	 * Create a new empty phone object.
 	 * 
 	 */
-	Phone() {
-		this('x');
+	public Phone(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+		super(overrideFeatureSet, syllableInfo);
+		this.basePhone = null;
+	}
+
+	/**
+	 * Create a new Phone for the given base phone.
+	 *
+	 * @param basePhone
+	 */
+	public Phone(Character basePhone) {
+		this(new Diacritic[0], basePhone, new Diacritic[0], new Diacritic[0], new FeatureSet(), new SyllableInfo());
 	}
 	
 	/**
 	 * Create a new Phone for the given base
-	 * 
+	 *
 	 * @param basePhone
+	 * @param overrideFeatureSet
+	 * @param syllableInfo
 	 */
-	Phone(Character basePhone) {
-		super();
-		setBasePhone(basePhone);
+	public Phone(Character basePhone, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+		this(new Diacritic[0], basePhone, new Diacritic[0], new Diacritic[0], overrideFeatureSet, syllableInfo);
 	}
 	
 	/**
@@ -70,15 +85,12 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	 */
 	Phone(Diacritic[] prefixDiacritics, Character basePhone,
 			Diacritic[] combiningDiacritics,
-			Diacritic[] suffixDiacritics) {
-		super();
-		if(prefixDiacritics != null)
-			setPrefixDiacritics(prefixDiacritics);
-		setBasePhone(basePhone);
-		if(combiningDiacritics != null)
-			setCombiningDiacritics(combiningDiacritics);
-		if(suffixDiacritics != null)
-			setSuffixDiacritics(suffixDiacritics);
+			Diacritic[] suffixDiacritics, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+		super(overrideFeatureSet, syllableInfo);
+		this.prefixDiacritics = prefixDiacritics != null ? prefixDiacritics : new Diacritic[0];
+		this.basePhone = basePhone;
+		this.combiningDiacritics = combiningDiacritics != null ? combiningDiacritics : new Diacritic[0];
+		this.suffixDiacritics = suffixDiacritics != null ? suffixDiacritics : new Diacritic[0];
 	}
 
 	/* Get/Set methods */
@@ -86,15 +98,6 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 		return prefixDiacritics;
 	}
 
-	/**
-	 * Set the prefix diacritics for this Phone.
-	 * 
-	 * @param prefixDiacritics
-	 */
-	public void setPrefixDiacritics(Diacritic[] prefixDiacritics) {
-		this.prefixDiacritics = prefixDiacritics;
-	}
-	
 	/**
 	 * Get the string representing this phone's prefix.
 	 * 
@@ -133,35 +136,6 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	}
 
 	/**
-	 * <p>Set the base glyph for the Phone.  The base glyph must be 
-	 * one of the following {@link IPATokenType}s:
-	 * <ul>
-	 * <li>{@link IPATokenType#CONSONANT}</li>
-	 * <li>{@link IPATokenType#COVER_SYMBOL}</li>
-	 * <li>{@link IPATokenType#GLIDE}</li>
-	 * <li>{@link IPATokenType#VOWEL}</li>
-	 * </ul>
-	 * </p>
-	 * 
-	 * @param basePhone
-	 */
-	public void setBasePhone(Character basePhone) {
-		final IPATokenType tokenType = 
-				IPATokens.getSharedInstance().getTokenType(basePhone);
-		if(tokenType == null) {
-			throw new IllegalArgumentException("Invalid glyph: '" + basePhone + "'");
-		} else {
-			if(tokenType != IPATokenType.CONSONANT
-					&& tokenType != IPATokenType.COVER_SYMBOL
-					&& tokenType != IPATokenType.GLIDE
-					&& tokenType != IPATokenType.VOWEL) {
-				throw new IllegalArgumentException("Base phones must be one of: CONSONANT, COVER_SYMBOL, GLIDE, VOWEL");
-			}
-		}
-		this.basePhone = basePhone;
-	}
-	
-	/**
 	 * Get the string for the phone's base.
 	 *
 	 * @return the text for the phone's base 
@@ -192,23 +166,6 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 		return combiningDiacritics;
 	}
 
-	/**
-	 * <p>Set the combining diacritics for this phone.  Each character
-	 * must have a the {@link IPATokenType#COMBINING_DIACRITIC} token
-	 * type.</p>
-	 * 
-	 * @param combiningDiacritics
-	 * @throws IllegalArgumentException if one of the given diacritics
-	 *  is not a combining diacritic
-	 */
-	public void setCombiningDiacritics(Diacritic[] combiningDiacritics) {
-		for(Diacritic dc:combiningDiacritics) {
-			if(dc.getType() != DiacriticType.COMBINING)
-				throw new IllegalArgumentException();
-		}
-		this.combiningDiacritics = combiningDiacritics;
-	}
-	
 	/**
 	 * Get the tone diacritics for this phone.
 	 * 
@@ -269,15 +226,6 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	}
 
 	/**
-	 * Set the prefix diacritics for this Phone.
-	 * 
-	 * @param suffixDiacritics
-	 */
-	public void setSuffixDiacritics(Diacritic[] suffixDiacritics) {
-		this.suffixDiacritics = suffixDiacritics;
-	}
-	
-	/**
 	 * Get the string for this phone's suffix.
 	 * 
 	 * @return the text for the suffix portion of
@@ -326,54 +274,14 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 		return retVal;
 	}
 
-	// region Syllabification info
-	/* This region defined methods which access the SyllabificationInfo extension for Phones */
-	/**
-	 * Is this phone part of a diphthong
-	 *
-	 * @return true if this phone has been flagged as a diphthong member
-	 */
-	public boolean isDiphthongMember() {
-		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
-		return (info != null && info.isDiphthongMember());
-	}
-
-	/**
-	 * Set the flag indicating that this phone is part of a diphthong member
-	 *
-	 * @param diphthongMember
-	 */
-	public void setDiphthongMember(boolean diphthongMember) {
-		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
-		if(info != null) info.setDiphthongMember(diphthongMember);
-	}
-
-	/**
-	 * Get this Phone's stress (applied when calling the syllables() function in IPATranscript after syllabification)
-	 *
-	 * @return stress if set, AnyStress otherwise
-	 */
-	public SyllableStress getStress() {
-		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
-		return info != null ? info.getStress() : SyllableStress.AnyStress;
-	}
-
-	/**
-	 * Get this Phone's tone number  (applied when calling the syllables() function in IPATranscript after syllabification)
-	 *
-	 * @return tone number if set, null otherwise
-	 */
-	public String getToneNumber() {
-		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
-		return info != null ? info.getToneNumber() : null;
-	}
-	// endregion
-
 	@Override
 	public String getText() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(getPrefix());
-		sb.append(getBasePhone());
+		if(getBasePhone() != null)
+			sb.append(getBasePhone());
+		else
+			sb.append("");
 		sb.append(getCombining());
 		sb.append(getSuffix());
 		return sb.toString();
