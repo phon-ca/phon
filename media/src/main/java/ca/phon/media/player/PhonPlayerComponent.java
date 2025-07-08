@@ -83,7 +83,7 @@ public class PhonPlayerComponent extends JComponent {
 		
 		int width = getWidth();
 		int height = getHeight();
-		
+
 		g.fillRect(0, 0, width, height);
 		
 		final Graphics2D g2 = (Graphics2D)g;
@@ -116,14 +116,17 @@ public class PhonPlayerComponent extends JComponent {
 					// scale on height
 					scale = (double)height/(double)imgHeight;
 					offsetX = ((double)width - (scale * imgWidth)) / 2.0;
+				} else if(imageRatio == rectRatio) {
+					// scale on both
+					scale = (double)width/(double)imgWidth;
 				}
-				
+
 				transform.translate(offsetX, offsetY);
 				transform.scale(scale, scale);
 			} else if(getScaleMode() == ScaleMode.FILL_DISPLAY) {
 				double scaleX = (double)width/(double)imgWidth;
 				double scaleY = (double)height/(double)imgHeight;
-				
+
 				transform.scale(scaleX, scaleY);
 			}
 

@@ -55,6 +55,7 @@ import ca.phon.util.icons.*;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
@@ -581,7 +582,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			} else if(dockPosition == ViewPosition.EMBEDDED) {
 				// embedded into the transcript view
 				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
-				dockable.getView().setBorder(BorderFactory.createTitledBorder(viewName));
+				final var matteBorder = BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY);
+				dockable.getView().setBorder(BorderFactory.createTitledBorder(matteBorder, viewName));
 				transcriptView.add(dockable.getView(), BorderLayout.SOUTH);
 				transcriptView.revalidate();
 				fireViewShown(viewName);
@@ -631,9 +633,16 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	@Override
-	public void showDynamicFloatingDockable(String title, JComponent comp,
+	public SingleCDockable showDynamicFloatingDockable(String title, JComponent comp,
 											int x, int y, int w, int h) {
-		throw new UnsupportedOperationException("Dynamic floating dockables not supported by this view model");
+		final DynamicViewFactory factory = new DynamicViewFactory(comp);
+		final SingleCDockable dockable = factory.createBackup(title);
+
+		dockControl.addDockable(dockable);
+		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
+		dynamicViews.put(title, comp);
+
+		return dockable;
 	}
 
 	@Override
@@ -1604,4 +1613,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 
 	}
+
+
 }

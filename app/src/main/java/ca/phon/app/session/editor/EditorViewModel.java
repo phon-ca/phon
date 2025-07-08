@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import bibliothek.gui.dock.common.SingleCDockable;
 import ca.phon.app.session.ViewPosition;
 
 import javax.swing.*;
@@ -164,8 +165,7 @@ public interface EditorViewModel {
 	 * @param w
 	 * @param h
 	 */
-	@Deprecated
-	public void showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
+	public SingleCDockable showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
 
 	/**
 	 * Show the given component as a new dockable at the given position.

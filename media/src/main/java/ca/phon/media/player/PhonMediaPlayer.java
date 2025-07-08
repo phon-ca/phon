@@ -708,7 +708,7 @@ public class PhonMediaPlayer extends JPanel {
 				}
 			
 				mediaPlayerCanvas.repaint((long)(1/30.0f * 1000.0f));
-			}			
+			}
 		}
 		
 	}
