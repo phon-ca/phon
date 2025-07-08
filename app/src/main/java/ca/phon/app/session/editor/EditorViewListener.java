@@ -17,12 +17,31 @@ package ca.phon.app.session.editor;
 
 import java.util.EventListener;
 
+/**
+ * Listener for {@link EditorView} events.
+ *
+ * This interface is used to listen for events related to the opening,
+ * closing, and focusing of editor views within the session editor dock control.
+ */
 public interface EditorViewListener extends EventListener {
 
+	/**
+	 * Called when an editor view is opened the first time it's created.
+	 * @param view
+	 */
 	public void onOpened(EditorView view);
-	
+
+	/**
+	 * Called when an editor view is closed, this is called once when
+	 * the editor is closed
+	 * @param view
+	 */
 	public void onClosed(EditorView view);
-	
+
+	/**
+	 * Called when an editor view is focused
+	 * @param view
+	 */
 	public void onFocused(EditorView view);
 	
 }

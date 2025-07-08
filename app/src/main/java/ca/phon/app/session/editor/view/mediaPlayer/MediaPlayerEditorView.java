@@ -22,11 +22,13 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.*;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.formatter.MsFormatter;
 import ca.phon.media.*;
 import ca.phon.media.player.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
 import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -60,11 +62,35 @@ public class MediaPlayerEditorView extends EditorView {
 
 	public static final EditorEventType<MediaPlayerEditorView> MediaUnloaded = new EditorEventType<>("_media_unloaded_", MediaPlayerEditorView.class);
 
+	/**
+	 * Media player for this view
+	 */
 	private PhonMediaPlayer mediaPlayer;
-	
+
+	/**
+	 * Panel for error message when media is not available
+	 */
 	private JPanel errorPanel;
 	private ErrorBanner messageButton = new ErrorBanner();
-	
+
+	/**
+	 * Manual location setting of the media player canavs when embedded.
+	 */
+	private int mediaCanvasX = -1;
+	private int mediaCanvasY = -1;
+
+	private final static int DEFAULT_MEDIA_CANVAS_WIDTH = 320;
+	/**
+	 * Manual width of the media player canvas when embedded.
+	 */
+	private int mediaCanvasWidth = -1;
+
+	private final static int DEFAULT_MEDIA_CANVAS_HEIGHT = 240;
+	/**
+	 * Manual height of the media player canvas when embedded.
+	 */
+	private int mediaCanvasHeight = -1;
+
 	public MediaPlayerEditorView(SessionEditor editor) {
 		super(editor);
 
@@ -82,6 +108,53 @@ public class MediaPlayerEditorView extends EditorView {
 				break;
 			}
 		});
+		editor.getViewModel().addEditorViewModelListener(new EditorViewModelListener() {
+			@Override
+			public void viewShown(String viewName) {
+
+			}
+
+			@Override
+			public void viewHidden(String viewName) {
+				if(viewName.equals(MediaPlayerEditorView.VIEW_NAME)) {
+					if(mediaPlayer != null)  {
+						if(mediaPlayer.isPlaying()) {
+							mediaPlayer.pause();
+						}
+						mediaPlayer.setVideoVisible(false);
+						final JComponent glassPane = (JComponent) getEditor().getRootPane().getGlassPane();
+						if(SwingUtilities.isDescendingFrom(mediaPlayer.getMediaPlayerCanvas(), glassPane)) {
+							glassPane.remove(mediaPlayer.getMediaPlayerCanvas());
+						}
+					}
+				}
+			}
+
+			@Override
+			public void viewMinimized(String viewName) {
+
+			}
+
+			@Override
+			public void viewMaximized(String viewName) {
+
+			}
+
+			@Override
+			public void viewNormalized(String viewName) {
+
+			}
+
+			@Override
+			public void viewExternalized(String viewName) {
+
+			}
+
+			@Override
+			public void viewFocused(String viewName) {
+
+			}
+		});
 	}
 
 	private void init() {
@@ -97,8 +170,11 @@ public class MediaPlayerEditorView extends EditorView {
 				getEditor().getEventManager().queueEvent(ee);
 			}
 		});
-		mediaPlayer.getMediaPlayerCanvas().setTransferHandler(new FileSelectionTransferHandler());
-		
+		final JComponent mediaPlayerCanvas = mediaPlayer.getMediaPlayerCanvas();
+		mediaPlayerCanvas.setTransferHandler(new FileSelectionTransferHandler());
+		mediaPlayer.remove(mediaPlayerCanvas);
+		mediaPlayer.setVideoVisible(false);
+
 		add(mediaPlayer, BorderLayout.CENTER);
 		
 		final AssignMediaAction browseForMediaAct = new AssignMediaAction(getEditor());
@@ -363,6 +439,11 @@ public class MediaPlayerEditorView extends EditorView {
 	@Override
 	public JMenu getMenu() {
 		final JMenu menu = new JMenu();
+
+		final PhonUIAction showInGlassPaneAct = PhonUIAction.runnable(this::showVideoInWindowGlassPane);
+		showInGlassPaneAct.putValue(PhonUIAction.NAME, "Show embedded media player");
+		showInGlassPaneAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show embedded media player above window content");
+		menu.add(new JMenuItem(showInGlassPaneAct));
 	
 		menu.add(new TakeSnapshotAction(getEditor(), this));
 		menu.addSeparator();
@@ -377,6 +458,7 @@ public class MediaPlayerEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		// for each participant
+		// for each participant
 		for(int i = 0; i < session.getParticipantCount(); i++) {
 			final Participant p = session.getParticipant(i);
 			final GoToEndOfSegmentedAction gotoPartSegmentAct =
@@ -385,6 +467,51 @@ public class MediaPlayerEditorView extends EditorView {
 		}
 	
 		return menu;
+	}
+
+	public void showVideoInWindowGlassPane() {
+		final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+		if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+			final TranscriptView transcriptView = (TranscriptView)sessionEditorWindow.getSessionEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
+			transcriptView.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentResized(ComponentEvent e) {
+					setupMediaCanvasBounds();
+				}
+
+				@Override
+				public void componentMoved(ComponentEvent e) {
+					setupMediaCanvasBounds();
+				}
+			});
+			final JComponent glassPane = (JComponent) cmf.getGlassPane();
+			setupMediaCanvasBounds();
+			mediaPlayer.setVideoVisible(true);
+			glassPane.setLayout(null);
+			glassPane.add(mediaPlayer.getMediaPlayerCanvas());
+			glassPane.revalidate();
+			glassPane.setVisible(true);
+		}
+	}
+
+	private void setupMediaCanvasBounds() {
+		final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+		if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+			// get bounds of media player view in window, place above on top-right
+			final Rectangle bounds = getBounds();
+			// convert to window coordinates
+			final TranscriptView transcriptView = (TranscriptView)sessionEditorWindow.getSessionEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
+			final JComponent glassPane = (JComponent) cmf.getGlassPane();
+
+			final int width = this.mediaCanvasWidth >= 0 ? this.mediaCanvasWidth : DEFAULT_MEDIA_CANVAS_WIDTH;
+			final int height = this.mediaCanvasHeight >= 0 ? this.mediaCanvasHeight : DEFAULT_MEDIA_CANVAS_HEIGHT;
+			final Point p = SwingUtilities.convertPoint(transcriptView, bounds.x, bounds.y, glassPane);
+
+			final int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width);
+			final int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height;
+
+			mediaPlayer.getMediaPlayerCanvas().setBounds(x, y, width, height);
+		}
 	}
 
 	@Override
@@ -411,6 +538,12 @@ public class MediaPlayerEditorView extends EditorView {
 		@Override
 		public JPopupMenu makeMenuChanges(JPopupMenu menu) {
 			JPopupMenu retVal = menu;
+
+			final PhonUIAction<Void> showInGlassPaneAct = PhonUIAction.runnable(MediaPlayerEditorView.this::showVideoInWindowGlassPane);
+			showInGlassPaneAct.putValue(PhonUIAction.NAME, "Show embedded media player");
+			showInGlassPaneAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show embedded media player above window content");
+			JMenuItem showInGlassPaneItem = new JMenuItem(showInGlassPaneAct);
+			retVal.add(showInGlassPaneItem);
 
 			menu.addSeparator();
 

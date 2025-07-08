@@ -157,7 +157,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     /**
      * The session location of the current caret position
      */
-    private TranscriptElementLocation currentTranscriptLocation = null;
+    private TranscriptElementLocation currentTranscriptLocation = new TranscriptElementLocation(-1, null, 0);
 
     /**
      * Reference to our custom transcript editor kit

@@ -587,6 +587,14 @@ public class PhonMediaPlayer extends JPanel {
 		}
 	}
 
+	public boolean isVideoVisible() {
+		return mediaPlayerCanvas.isVisible();
+	}
+
+	public void setVideoVisible(boolean visible) {
+		mediaPlayerCanvas.setVisible(visible);
+	}
+
 	/**
 	 * Listener for user changes to the position slider
 	 *

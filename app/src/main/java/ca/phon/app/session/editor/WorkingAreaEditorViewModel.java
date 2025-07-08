@@ -271,6 +271,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		// first add all ViewPosition placeholders
 		for (ViewPosition pos : ViewPosition.values()) {
+			if(pos == ViewPosition.EXTERNAL || pos == ViewPosition.EMBEDDED) continue; // external position is not a dockable
 			final SingleCDockablePerspective dockable =
 					new SingleCDockablePerspective(pos.getName());
 			dockables.put(pos.getName(), dockable);
@@ -411,6 +412,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public boolean isShowing(String viewName) {
+		if (viewName == null || viewName.trim().length() == 0) {
+			return false;
+		}
+		return isShowingInDock(viewName) || isShowingEmbedded(viewName) || isShowingExternal(viewName);
+	}
+
+	public boolean isShowingInDock(String viewName) {
 		boolean retVal = false;
 		final CControlRegister register = dockControl.getRegister();
 		for (CDockable currentDockable : register.getDockables()) {
@@ -419,6 +427,16 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			}
 		}
 		return retVal;
+	}
+
+	public boolean isShowingEmbedded(String viewName) {
+		final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+		final EditorView view = registeredViews.get(viewName);
+		return view != null && SwingUtilities.isDescendingFrom(view, transcriptView);
+	}
+
+	public boolean isShowingExternal(String viewName) {
+		return false;
 	}
 
 	@Override
@@ -559,11 +577,26 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			ViewPosition dockPosition = dockPositions.get(viewName);
 			if (dockPosition == ViewPosition.WORK) {
 				workingArea.show(dockable);
+				dockable.setVisible(true);
+			} else if(dockPosition == ViewPosition.EMBEDDED) {
+				// embedded into the transcript view
+				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+				dockable.getView().setBorder(BorderFactory.createTitledBorder(viewName));
+				transcriptView.add(dockable.getView(), BorderLayout.SOUTH);
+				transcriptView.revalidate();
+				fireViewShown(viewName);
+			} else if(dockPosition == ViewPosition.EXTERNAL) {
+				// open in a new accessory window
+				final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
+				window.getArea().getCenter().drop(dockable.intern());
+				window.pack();
+				window.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+				window.setVisible(true);
 			} else {
 				dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", dockPosition.getName())));
 				dockControl.addDockable(dockable);
+				dockable.setVisible(true);
 			}
-			dockable.setVisible(true);
 
 //			PhonWorker.getInstance().invokeLater(this::savePreviousPerspective);
 
@@ -579,10 +612,22 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void hideView(String viewName) {
-		if (!isShowing(viewName)) return;
-//		if (!dockControl.getSingleDockable(viewName).isCloseable()) return;
-
-		dockControl.removeDockable(dockControl.getSingleDockable(viewName));
+		final EditorView view = registeredViews.get(viewName);
+		if (view == null) {
+			LogUtil.warning("View '" + viewName + "' not registered, cannot hide");
+			return;
+		}
+		if (isShowingInDock(viewName)) {
+			dockControl.removeDockable(dockControl.getSingleDockable(viewName));
+		} else if(isShowingEmbedded(viewName)) {
+			// remove from transcript view
+			final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+			if (view != null) {
+				transcriptView.remove(view);
+				transcriptView.revalidate();
+				fireViewHidden(viewName);
+			}
+		}
 	}
 
 	@Override
@@ -714,6 +759,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		for (String viewName : dockables.keySet()) {
 			final ViewPosition dockPosition = dockPositions.get(viewName);
+			if(dockPosition == ViewPosition.EXTERNAL || dockPosition == ViewPosition.EMBEDDED) continue;
 			if (dockPosition == ViewPosition.WORK) {
 				if (TranscriptView.VIEW_NAME.equals(viewName)) {
 					workingPerspective.gridAdd(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), dockables.get(viewName));

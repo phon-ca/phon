@@ -106,13 +106,15 @@ public class SegmentPlayback {
 					LogUtil.warning(e);
 				}
 			}
-			
-			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)viewModel.getView(MediaPlayerEditorView.VIEW_NAME);
-			if(!mediaModel.isSessionAudioAvailable()) {
-				mediaPlayerView.getPlayer().addMediaPlayerListener(new MediaPlayerListener(mediaPlayerView));
+
+			if(viewModel.isShowing(MediaPlayerEditorView.VIEW_NAME) || !mediaModel.isSessionAudioAvailable()) {
+				MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)viewModel.getView(MediaPlayerEditorView.VIEW_NAME);
+				if(!mediaModel.isSessionAudioAvailable()) {
+					mediaPlayerView.getPlayer().addMediaPlayerListener(new MediaPlayerListener(mediaPlayerView));
+				}
+				mediaPlayerView.getPlayer().playSegment(Float.valueOf(mediaSegment.getStartValue()).longValue(),
+						Float.valueOf(mediaSegment.getEndValue()-mediaSegment.getStartValue()).longValue(), mediaModel.isSessionAudioAvailable());
 			}
-			mediaPlayerView.getPlayer().playSegment(Float.valueOf(mediaSegment.getStartValue()).longValue(), 
-					Float.valueOf(mediaSegment.getEndValue()-mediaSegment.getStartValue()).longValue(), mediaModel.isSessionAudioAvailable());
 		}
 	}
 	

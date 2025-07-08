@@ -22,7 +22,7 @@ import ca.phon.plugin.*;
 @PhonPlugin(name="Media Player")
 @EditorViewInfo(name=MediaPlayerEditorView.VIEW_NAME,
 		category=EditorViewCategory.MEDIA,
-		dockPosition = ViewPosition.LEFT_TOP,
+		dockPosition = ViewPosition.EMBEDDED,
 		icon= MediaPlayerEditorView.VIEW_ICON)
 public class MediaPlayerExtension implements IPluginExtensionPoint<EditorView> {
 

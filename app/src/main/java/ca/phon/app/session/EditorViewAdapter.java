@@ -17,6 +17,13 @@ package ca.phon.app.session;
 
 import ca.phon.app.session.editor.*;
 
+/**
+ * Default implementation of {@link EditorViewListener}.
+ *
+ * This class provides empty implementations for all methods in the
+ * {@link EditorViewListener} interface, allowing subclasses to override
+ * only the methods they are interested in.
+ */
 public class EditorViewAdapter implements EditorViewListener {
 
 	@Override
