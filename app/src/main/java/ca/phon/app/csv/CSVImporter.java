@@ -496,8 +496,9 @@ public class CSVImporter {
         boolean syllabificationRequired = ipaElementStream.allMatch(
                 ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN);
         if (syllabificationRequired) {
-            var syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
-                    column.getOption("syllabifierLanguage"));
+            var syllabifier = column.getOption("syllabifierLanguage") != null
+                ? SyllabifierLibrary.getInstance().getSyllabifierForLanguage(column.getOption("syllabifierLanguage"))
+                : SyllabifierLibrary.getInstance().defaultSyllabifier();
             syllabifier.syllabify(ipaTargetTier.getValue().toList());
         }
 
@@ -542,8 +543,9 @@ public class CSVImporter {
         boolean syllabificationRequired = ipaElementStream.allMatch(
                 ipaElement -> ipaElement.getScType() == SyllableConstituentType.UNKNOWN);
         if (syllabificationRequired) {
-            var syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
-                    column.getOption("syllabifierLanguage"));
+            var syllabifier = column.getOption("syllabifierLanguage") != null
+                ? SyllabifierLibrary.getInstance().getSyllabifierForLanguage(column.getOption("syllabifierLanguage"))
+                : SyllabifierLibrary.getInstance().defaultSyllabifier();
             syllabifier.syllabify(ipaActualTier.getValue().toList());
         }
 

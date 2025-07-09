@@ -250,7 +250,7 @@ public final class TimelineView extends EditorView {
 		add(errorPanel, BorderLayout.SOUTH);
 		
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(mediaModel.isSessionMediaAvailable()) {
+		if(mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)) {
 			MediaPlayerEditorView mediaPlayerView = 
 					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 			if(mediaPlayerView.getPlayer().getMediaFile() != null) {

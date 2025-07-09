@@ -130,7 +130,6 @@ public class PhonPlayerComponent extends JComponent {
 				transform.scale(scaleX, scaleY);
 			}
 
-
 			// using 'this' as an imageobserver will cause
 			// the drawing to be executed twice on macosx
 			g2.drawImage(bufferedImage, transform, null/*this*/);

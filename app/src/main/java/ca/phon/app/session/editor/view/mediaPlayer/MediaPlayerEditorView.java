@@ -52,6 +52,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Properties;
 
 /**
  * Panel for embedded media player for editor.
@@ -86,24 +87,36 @@ public class MediaPlayerEditorView extends EditorView {
         }
 
     };
+
     /**
      * Panel for error message when media is not available
      */
     private JPanel errorPanel;
     private ErrorBanner messageButton = new ErrorBanner();
+
     /**
      * Manual location setting of the media player canavs when embedded.
      */
     private int mediaCanvasX = -1;
     private int mediaCanvasY = -1;
+
     /**
      * Manual width of the media player canvas when embedded.
      */
     private int mediaCanvasWidth = -1;
+
     /**
      * Manual height of the media player canvas when embedded.
      */
     private int mediaCanvasHeight = -1;
+
+    /**
+     * Is the player embedded or external?
+     */
+    private boolean embedded = true;
+
+    private boolean loadVideoOnShow = false;
+
     // popup frame for time selection
     private JFrame timeSelectionPopup = null;
 
@@ -127,7 +140,15 @@ public class MediaPlayerEditorView extends EditorView {
         editor.getViewModel().addEditorViewModelListener(new EditorViewModelListener() {
             @Override
             public void viewShown(String viewName) {
-
+                if(MediaPlayerEditorView.VIEW_NAME.equals(viewName) && loadVideoOnShow) {
+                    if(embedded) {
+                        SwingUtilities.invokeLater(MediaPlayerEditorView.this::showVideoInWindowGlassPane);
+                    } else {
+                        mediaPlayer.setVideoVisible(true);
+                        mediaPlayer.revalidate();
+                    }
+                    loadVideoOnShow = false;
+                }
             }
 
             @Override
@@ -189,7 +210,7 @@ public class MediaPlayerEditorView extends EditorView {
         final JComponent mediaPlayerCanvas = mediaPlayer.getMediaPlayerCanvas();
         mediaPlayerCanvas.setTransferHandler(new FileSelectionTransferHandler());
 //        mediaPlayer.remove(mediaPlayerCanvas);
-//        mediaPlayer.setVideoVisible(false);
+        mediaPlayer.setVideoVisible(false);
 
         add(mediaPlayer, BorderLayout.CENTER);
 
@@ -415,7 +436,6 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
-    private JPanel mediaCanvasPanel = null;
     public void showVideoInWindowGlassPane() {
         final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
         if (cmf instanceof SessionEditorWindow sessionEditorWindow) {
@@ -432,16 +452,14 @@ public class MediaPlayerEditorView extends EditorView {
                 }
             });
             final JComponent glassPane = (JComponent) cmf.getGlassPane();
-            final JPanel panel = new JPanel(new BorderLayout());
-            panel.add(mediaPlayer.getMediaPlayerCanvas(), BorderLayout.CENTER);
-            this.mediaCanvasPanel = panel;
             setupMediaCanvasBounds();
             mediaPlayer.setVideoVisible(true);
             glassPane.setLayout(null);
-            glassPane.add(mediaCanvasPanel);
+            glassPane.add(mediaPlayer.getMediaPlayerCanvas());
             glassPane.revalidate();
             glassPane.setOpaque(false);
 			glassPane.setVisible(true);
+            mediaPlayer.getMediaPlayerCanvas().setBorder(BorderFactory.createLineBorder(Color.GRAY));
         }
     }
 
@@ -458,11 +476,11 @@ public class MediaPlayerEditorView extends EditorView {
             final int height = this.mediaCanvasHeight >= 0 ? this.mediaCanvasHeight : DEFAULT_MEDIA_CANVAS_HEIGHT;
             final Point p = SwingUtilities.convertPoint(transcriptView, bounds.x, bounds.y, glassPane);
 
-            final int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width);
-            final int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height - transcriptView.getStatusBar().getHeight();
+            final Insets insets = mediaPlayer.getMediaPlayerCanvas().getInsets();
+            final int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width) - insets.right;
+            final int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height - transcriptView.getStatusBar().getHeight() - insets.top - insets.bottom;
 
-            mediaCanvasPanel.setBounds(x, y, width, height);
-            mediaCanvasPanel.revalidate();
+            mediaPlayer.getMediaPlayerCanvas().setBounds(x, y, width, height);
         }
     }
 
@@ -604,6 +622,44 @@ public class MediaPlayerEditorView extends EditorView {
     public void onToggleAdjustVideo() {
         final Boolean isAdjustVideo = isAdjustVideo();
         PrefHelper.getUserPreferences().putBoolean(ADJUST_VIDEO, !isAdjustVideo);
+    }
+
+    @Override
+    public Properties getStateProperties() {
+        Properties retVal = super.getStateProperties();
+        retVal.put("mediaCanvasX", String.valueOf(mediaCanvasX));
+        retVal.put("mediaCanvasY", String.valueOf(mediaCanvasY));
+        retVal.put("mediaCanvasWidth", String.valueOf(mediaCanvasWidth));
+        retVal.put("mediaCanvasHeight", String.valueOf(mediaCanvasHeight));
+        retVal.put("videoVisible", String.valueOf(mediaPlayer.isVideoVisible()));
+        retVal.put("embedded", String.valueOf(embedded));
+        return retVal;
+    }
+
+    @Override
+    public void loadStateProperties(Properties props) {
+        super.loadStateProperties(props);
+
+        if (props.containsKey("mediaCanvasX")) {
+            mediaCanvasX = Integer.parseInt(props.getProperty("mediaCanvasX"));
+        }
+        if (props.containsKey("mediaCanvasY")) {
+            mediaCanvasY = Integer.parseInt(props.getProperty("mediaCanvasY"));
+        }
+        if (props.containsKey("mediaCanvasWidth")) {
+            mediaCanvasWidth = Integer.parseInt(props.getProperty("mediaCanvasWidth"));
+        }
+        if (props.containsKey("mediaCanvasHeight")) {
+            mediaCanvasHeight = Integer.parseInt(props.getProperty("mediaCanvasHeight"));
+        }
+        if (props.containsKey("embedded")) {
+            embedded = Boolean.parseBoolean(props.getProperty("embedded"));
+        } else {
+            embedded = true; // default
+        }
+        if(props.containsKey("videoVisible")) {
+            loadVideoOnShow = Boolean.parseBoolean(props.getProperty("videoVisible"));
+        }
     }
 
     /**

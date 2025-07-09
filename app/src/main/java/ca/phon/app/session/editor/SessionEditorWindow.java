@@ -30,8 +30,14 @@ public class SessionEditorWindow extends ProjectFrame implements EditMenuModifie
 
         @Override
         public boolean contains(int x, int y) {
-            // Always return false so mouse events pass through
-            return false;
+            boolean retVal = false;
+            for(Component comp : getComponents()) {
+                if(comp.getBounds().contains(x, y)) {
+                    retVal = true;
+                    break;
+                }
+            }
+            return retVal;
         }
     }
 

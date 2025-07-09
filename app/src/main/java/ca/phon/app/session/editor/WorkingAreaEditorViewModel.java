@@ -15,7 +15,6 @@
  */
 package ca.phon.app.session.editor;
 
-import bibliothek.extension.gui.dock.theme.FlatTheme;
 import bibliothek.gui.DockStation;
 import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.action.*;
@@ -38,6 +37,7 @@ import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.undo.ShowHideViewEdit;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
@@ -55,7 +55,6 @@ import ca.phon.util.icons.*;
 import org.json.JSONObject;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
@@ -654,6 +653,15 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockable.setVisible(true);
 	}
 
+	/**
+	 * During setupWindows is may be detected that the media player should be shown embedded
+	 * in the transcript view.  This property is used to determine if the media player should
+	 * be manually opened.
+	 */
+	private boolean mediaPlayerEmbedded = false;
+
+	private boolean mediaPlayerVisible = false;
+
 	@Override
 	public void setupWindows(RecordEditorPerspective editorPerspective) {
 		final AccessoryWindow[] windows = accessoryWindows.toArray(new AccessoryWindow[0]);
@@ -737,6 +745,20 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 								viewProps.setProperty(propName, propValue);
 							}
 							viewStateProperties.put(viewName, viewProps);
+
+							if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
+								if(viewProps.containsKey("embedded")) {
+									mediaPlayerEmbedded = Boolean.parseBoolean(viewProps.getProperty("embedded"));
+								} else {
+									mediaPlayerEmbedded = false;
+								}
+								if(viewProps.containsKey("mediaPlayerVisible")) {
+									mediaPlayerVisible = Boolean.parseBoolean(viewProps.getProperty("mediaPlayerVisible"));
+								} else {
+									mediaPlayerVisible = false;
+								}
+							}
+
 							// if view is already registered, load state properties
 							if (view != null)
 								view.loadStateProperties(viewProps);
@@ -801,6 +823,23 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				}
 			}
 		}
+
+		if(mediaPlayerVisible) {
+			if(mediaPlayerEmbedded) {
+				// open media player embedded in transcript view
+				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+				if (transcriptView != null) {
+					final MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView) getView(MediaPlayerEditorView.VIEW_NAME);
+					if (mediaPlayerView != null) {
+						transcriptView.add(mediaPlayerView, BorderLayout.SOUTH);
+						transcriptView.revalidate();
+						fireViewShown(MediaPlayerEditorView.VIEW_NAME);
+					}
+				}
+			}
+		}
+		mediaPlayerEmbedded = false; // reset flag for next time
+		mediaPlayerVisible = false; // reset flag for next time
 	}
 
 	@Override
@@ -838,6 +877,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				for (String viewName : viewNames) {
 					final EditorView view = registeredViews.get(viewName);
 					final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
+
+					if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
+						viewProps.put("mediaPlayerVisible", isShowing(MediaPlayerEditorView.VIEW_NAME));
+					}
+
 					if (viewProps != null && !viewProps.isEmpty()) {
 						final XElement viewEle = viewsEle.addElement("view");
 						final XAttribute nameAttr = new XAttribute("name");
