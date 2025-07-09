@@ -188,6 +188,10 @@ public class TranscriptView extends EditorView {
         centerPanel.add(transcriptStatusBar, BorderLayout.SOUTH);
     }
 
+    public TranscriptScrollPane getTranscriptScrollPane() {
+        return this.transcriptScrollPane;
+    }
+
     /**
      * Setup icon strip
      */

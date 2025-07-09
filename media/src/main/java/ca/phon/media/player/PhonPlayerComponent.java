@@ -21,7 +21,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.function.Consumer;
 
+/**
+ * Component for displaying a buffered image from a media player.
+ * This component is used to display the video stream from a media player
+ * and can scale the image to fit or fill the display area.
+ */
 public class PhonPlayerComponent extends JComponent {
 	
 	private static final long serialVersionUID = 4196967316753261134L;
@@ -37,6 +43,8 @@ public class PhonPlayerComponent extends JComponent {
 	private final Color IMG_BG = Color.BLACK;
 	
 	private final Color NO_IMG_BG = Color.DARK_GRAY;
+
+	private Consumer<Graphics2D> overlayPainter = null;
 	
 	public PhonPlayerComponent() {
 		super();
@@ -66,6 +74,14 @@ public class PhonPlayerComponent extends JComponent {
 	
 	public void setScaleMode(ScaleMode scaleMode) {
 		this.scaleMode = scaleMode;
+	}
+
+	public Consumer<Graphics2D> getOverlayPainter() {
+		return overlayPainter;
+	}
+
+	public void setOverlayPainter(Consumer<Graphics2D> overlayPainter) {
+		this.overlayPainter = overlayPainter;
 	}
 	
 	@Override
@@ -133,6 +149,10 @@ public class PhonPlayerComponent extends JComponent {
 			// using 'this' as an imageobserver will cause
 			// the drawing to be executed twice on macosx
 			g2.drawImage(bufferedImage, transform, null/*this*/);
+		}
+
+		if(overlayPainter != null) {
+			overlayPainter.accept(g2);
 		}
 	}
 	

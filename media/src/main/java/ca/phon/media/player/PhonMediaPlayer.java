@@ -151,8 +151,6 @@ public class PhonMediaPlayer extends JPanel {
 		addMediaMenuFilter(new MediaMenuFilter());
 		
 		mediaPlayerCanvas = new PhonPlayerComponent();
-		mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
-		
 		mediaPlayerCanvas.setTransferHandler(new FileSelectionTransferHandler());
 				
 		add(mediaPlayerCanvas, BorderLayout.CENTER);
@@ -744,25 +742,6 @@ public class PhonMediaPlayer extends JPanel {
 		}
 		
 	}
-	
-	private MouseInputAdapter mediaPlayerCanvasMouseAdapter = new MouseInputAdapter() {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 1) {
-			if(getMediaPlayer() != null && getMediaPlayer().media().isValid()) {
-				if(getMediaPlayer().status().isPlaying()) {
-					getMediaPlayer().controls().pause();
-				} else {
-					getMediaPlayer().controls().play();
-				}
-			}
-		}
-		}
-		
-		
-		
-	};
 
 	/*
 	 * Media player delegate methods

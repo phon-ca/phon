@@ -16,7 +16,6 @@
 
 package ca.phon.app.session.editor.view.mediaPlayer;
 
-import bibliothek.gui.dock.common.SingleCDockable;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
@@ -26,12 +25,15 @@ import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToEndOfSegmentedAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.TakeSnapshotAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.ToggleAdjustVideoAction;
+import ca.phon.app.session.editor.view.mediaPlayer.undo.VideoPositionAndSizeEdit;
+import ca.phon.app.session.editor.view.mediaPlayer.undo.VideoVisibleEdit;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.formatter.MsFormatter;
 import ca.phon.media.MediaLocator;
 import ca.phon.media.VLCHelper;
 import ca.phon.media.player.IMediaMenuFilter;
 import ca.phon.media.player.PhonMediaPlayer;
+import ca.phon.media.player.PhonPlayerComponent;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.CommonModuleFrame;
@@ -43,8 +45,10 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.VerticalLayout;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
@@ -207,8 +211,12 @@ public class MediaPlayerEditorView extends EditorView {
                 getEditor().getEventManager().queueEvent(ee);
             }
         });
-        final JComponent mediaPlayerCanvas = mediaPlayer.getMediaPlayerCanvas();
+        final PhonPlayerComponent mediaPlayerCanvas = mediaPlayer.getMediaPlayerCanvas();
         mediaPlayerCanvas.setTransferHandler(new FileSelectionTransferHandler());
+        mediaPlayerCanvas.setOverlayPainter(this::paintMediaCanvasOverlay);
+        mediaPlayerCanvas.addMouseListener(new MediaPlayerCanvasOverlayListener());
+        mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
+        mediaPlayerCanvas.addMouseMotionListener(mediaPlayerCanvasMouseAdapter);
 //        mediaPlayer.remove(mediaPlayerCanvas);
         mediaPlayer.setVideoVisible(false);
 
@@ -276,6 +284,42 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
+    private boolean paintOverlay = false;
+
+    private void paintMediaCanvasOverlay(Graphics2D g2d) {
+        if(!paintOverlay) return;
+
+        final Color iconColor = new Color(255, 255, 255, 170);
+        final ImageIcon playIcn = IconManager.getInstance().getFontIcon(
+                IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.XXLARGE,
+                iconColor);
+        final ImageIcon pauseIcn = IconManager.getInstance().getFontIcon(
+                IconManager.GoogleMaterialDesignIconsFontName, "pause", IconSize.XXLARGE,
+                iconColor);
+
+        final ImageIcon closeIcn = IconManager.getInstance().getFontIcon(
+                IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM,
+                iconColor);
+
+        final MediaPlayer player = mediaPlayer.getMediaPlayer();
+        final JComponent mediaPlayerCanvas = mediaPlayer.getMediaPlayerCanvas();
+        // draw icon in center of media player canvas
+        int x = (mediaPlayerCanvas.getWidth() - playIcn.getIconWidth()) / 2;
+        int y = (mediaPlayerCanvas.getHeight() - playIcn.getIconHeight()) / 2;
+        if(player != null && player.status().isPlaying()) {
+            g2d.drawImage(pauseIcn.getImage(), x, y, null);
+        } else {
+            g2d.drawImage(playIcn.getImage(), x, y, null);
+        }
+
+        if(embedded) {
+            // draw close icon in top right corner
+            x = mediaPlayerCanvas.getWidth() - closeIcn.getIconWidth() - 5;
+            y = 5;
+            g2d.drawImage(closeIcn.getImage(), x, y, null);
+        }
+    }
+
     /**
      * Editor actions
      */
@@ -317,6 +361,64 @@ public class MediaPlayerEditorView extends EditorView {
         mediaPlayer.cleanup();
     }
 
+    public boolean isEmbedded() {
+        return embedded;
+    }
+
+    public void setEmbedded(boolean embedded) {
+        this.embedded = embedded;
+    }
+
+    public int getMediaCanvasX() {
+        return mediaCanvasX;
+    }
+
+    public void setMediaCanvasX(int mediaCanvasX) {
+        this.mediaCanvasX = mediaCanvasX;
+    }
+
+    public int getMediaCanvasY() {
+        return mediaCanvasY;
+    }
+
+    public void setMediaCanvasY(int mediaCanvasY) {
+        this.mediaCanvasY = mediaCanvasY;
+    }
+
+    public Point getMediaCanvasPosition() {
+        return new Point(mediaCanvasX, mediaCanvasY);
+    }
+
+    public int getMediaCanvasWidth() {
+        return mediaCanvasWidth;
+    }
+
+    public void setMediaCanvasWidth(int mediaCanvasWidth) {
+        this.mediaCanvasWidth = mediaCanvasWidth;
+    }
+
+    public int getMediaCanvasHeight() {
+        return mediaCanvasHeight;
+    }
+
+    public void setMediaCanvasHeight(int mediaCanvasHeight) {
+        this.mediaCanvasHeight = mediaCanvasHeight;
+    }
+
+    public void setMediaCanvasPosition(Point p) {
+        this.mediaCanvasX = p.x;
+        this.mediaCanvasY = p.y;
+    }
+
+    public Dimension getMediaCanvasSize() {
+        return new Dimension(mediaCanvasWidth, mediaCanvasHeight);
+    }
+
+    public void setMediaCanvasSize(Dimension size) {
+        this.mediaCanvasWidth = size.width;
+        this.mediaCanvasHeight = size.height;
+    }
+
     /**
      * Should the media position move with the
      * current record.
@@ -341,10 +443,10 @@ public class MediaPlayerEditorView extends EditorView {
     public JMenu getMenu() {
         final JMenu menu = new JMenu();
 
-        final PhonUIAction showInGlassPaneAct = PhonUIAction.runnable(this::showVideoInWindowGlassPane);
-        showInGlassPaneAct.putValue(PhonUIAction.NAME, "Show embedded media player");
-        showInGlassPaneAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show embedded media player above window content");
-        menu.add(new JMenuItem(showInGlassPaneAct));
+        final PhonUIAction toggleEmbeddedVideoAct = PhonUIAction.runnable(this::toggleEmbeddedVideo);
+        toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+        toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+        menu.add(new JMenuItem(toggleEmbeddedVideoAct));
 
         menu.add(new TakeSnapshotAction(getEditor(), this));
         menu.addSeparator();
@@ -370,69 +472,18 @@ public class MediaPlayerEditorView extends EditorView {
         return menu;
     }
 
-    private SingleCDockable floatingDockable = null;
-    public void showVideoInPopupWindow() {
-        final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
-        if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
-            final TranscriptView transcriptView = (TranscriptView) sessionEditorWindow.getSessionEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
-            transcriptView.addComponentListener(new ComponentAdapter() {
-                @Override
-                public void componentResized(ComponentEvent e) {
-                    setupMediaPopupBounds();
-                }
-
-                @Override
-                public void componentMoved(ComponentEvent e) {
-                    setupMediaPopupBounds();
-                }
-            });
-
-            // get bounds of media player view in window, place above on top-right
-            final Rectangle bounds = getBounds();
-            // convert to window coordinates
-            final int width = this.mediaCanvasWidth >= 0 ? this.mediaCanvasWidth : DEFAULT_MEDIA_CANVAS_WIDTH;
-            final int height = this.mediaCanvasHeight >= 0 ? this.mediaCanvasHeight : DEFAULT_MEDIA_CANVAS_HEIGHT;
-            Point p = new Point(bounds.x, bounds.y);
-            SwingUtilities.convertPointToScreen(p, transcriptView);
-
-            final int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width);
-            final int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height;
-
-            mediaPlayer.setVideoVisible(true);
-            floatingDockable = sessionEditorWindow.getSessionEditor().getViewModel().showDynamicFloatingDockable(VIEW_NAME + " (video)",
-                    mediaPlayer.getMediaPlayerCanvas(), x, y, width, height);
-
-
-//            final JFrame videoWindow = new JFrame("Media Player");
-//            videoWindow.setUndecorated(true);
-//            videoWindow.setAlwaysOnTop(true);
-//            videoWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//            videoWindow.setLayout(new BorderLayout());
-//            videoWindow.getContentPane().add(mediaPlayer.getMediaPlayerCanvas(), BorderLayout.CENTER);
-//            mediaPlayer.setVideoVisible(true);
-//            videoWindow.pack();
-//            setupMediaPopupBounds();
-//            videoWindow.setVisible(true);
-        }
+    private void toggleEmbeddedVideo() {
+        final VideoVisibleEdit edit = new VideoVisibleEdit(this, !mediaPlayer.isVideoVisible());
+        getEditor().getUndoSupport().postEdit(edit);
     }
 
-    private void setupMediaPopupBounds() {
-        final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
-        if (cmf instanceof SessionEditorWindow sessionEditorWindow) {
-            // get bounds of media player view in window, place above on top-right
-            final Rectangle bounds = getBounds();
-            // convert to window coordinates
-            final TranscriptView transcriptView = (TranscriptView) sessionEditorWindow.getSessionEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
-            final JComponent glassPane = (JComponent) cmf.getGlassPane();
-
-            final int width = this.mediaCanvasWidth >= 0 ? this.mediaCanvasWidth : DEFAULT_MEDIA_CANVAS_WIDTH;
-            final int height = this.mediaCanvasHeight >= 0 ? this.mediaCanvasHeight : DEFAULT_MEDIA_CANVAS_HEIGHT;
-            Point p = new Point(bounds.x, bounds.y);
-            SwingUtilities.convertPointToScreen(p, transcriptView);
-
-            final int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width);
-            final int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height;
-
+    public void hideMediaPlayerCanvas() {
+        if(embedded) {
+            mediaPlayer.setVideoVisible(false);
+            final JComponent glassPane = (JComponent) getEditor().getRootPane().getGlassPane();
+            if (SwingUtilities.isDescendingFrom(mediaPlayer.getMediaPlayerCanvas(), glassPane)) {
+                glassPane.remove(mediaPlayer.getMediaPlayerCanvas());
+            }
         }
     }
 
@@ -463,7 +514,11 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
-    private void setupMediaCanvasBounds() {
+    public void setupMediaCanvasBounds() {
+        setupMediaCanvasBounds(true);
+    }
+
+    public void setupMediaCanvasBounds(boolean allowSnap) {
         final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
         if (cmf instanceof SessionEditorWindow sessionEditorWindow) {
             // get bounds of media player view in window, place above on top-right
@@ -477,8 +532,24 @@ public class MediaPlayerEditorView extends EditorView {
             final Point p = SwingUtilities.convertPoint(transcriptView, bounds.x, bounds.y, glassPane);
 
             final Insets insets = mediaPlayer.getMediaPlayerCanvas().getInsets();
-            final int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width) - insets.right;
-            final int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height - transcriptView.getStatusBar().getHeight() - insets.top - insets.bottom;
+
+            final int transcriptScrollBarWidth =
+                    transcriptView.getTranscriptScrollPane().getVerticalScrollBar().isVisible() ?
+                    transcriptView.getTranscriptScrollPane().getVerticalScrollBar().getWidth(): 0;
+
+            final Point snapPoint = new Point(p.x + transcriptView.getWidth() - transcriptScrollBarWidth, p.y - transcriptView.getStatusBar().getHeight());
+            int x = this.mediaCanvasX >= 0 ? this.mediaCanvasX : p.x + (transcriptView.getWidth() - width) - insets.right - transcriptScrollBarWidth;
+            int y = this.mediaCanvasY >= 0 ? this.mediaCanvasY : p.y - height - transcriptView.getStatusBar().getHeight() - insets.top - insets.bottom;
+            final Point bottomRight = new Point(x + width, y + height);
+
+            // if bottomRight is within 10px of the snapPoint, snap to it
+            if (allowSnap && Math.abs(bottomRight.x - snapPoint.x) < 10 && Math.abs(bottomRight.y - snapPoint.y) < 10) {
+                // snap to bottom right corner
+                x = snapPoint.x - width - insets.right;
+                y = snapPoint.y - height - insets.top - insets.bottom;
+                mediaCanvasX = -1;
+                mediaCanvasY = -1;
+            }
 
             mediaPlayer.getMediaPlayerCanvas().setBounds(x, y, width, height);
         }
@@ -671,11 +742,10 @@ public class MediaPlayerEditorView extends EditorView {
         public JPopupMenu makeMenuChanges(JPopupMenu menu) {
             JPopupMenu retVal = menu;
 
-            final PhonUIAction<Void> showInGlassPaneAct = PhonUIAction.runnable(MediaPlayerEditorView.this::showVideoInWindowGlassPane);
-            showInGlassPaneAct.putValue(PhonUIAction.NAME, "Show embedded media player");
-            showInGlassPaneAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show embedded media player above window content");
-            JMenuItem showInGlassPaneItem = new JMenuItem(showInGlassPaneAct);
-            retVal.add(showInGlassPaneItem);
+            final PhonUIAction toggleEmbeddedVideoAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedVideo);
+            toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+            toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+            menu.add(new JMenuItem(toggleEmbeddedVideoAct), 0);
 
             menu.addSeparator();
 
@@ -749,4 +819,217 @@ public class MediaPlayerEditorView extends EditorView {
         }
 
     }
+
+    private class MediaPlayerCanvasOverlayListener extends MouseAdapter {
+        @Override
+        public void mouseExited(MouseEvent e) {
+            super.mouseExited(e);
+            paintOverlay = false;
+            if(!mediaPlayer.isPlaying())
+                mediaPlayer.getMediaPlayerCanvas().repaint();
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            super.mouseEntered(e);
+            paintOverlay = true;
+            if(!mediaPlayer.isPlaying())
+                mediaPlayer.getMediaPlayerCanvas().repaint();
+        }
+    }
+
+    private boolean isDraggingPosition = false;
+    private boolean isDraggingSize = false;
+    private boolean isDraggingTopLeft = false;
+    private boolean isDraggingBottomRight = false;
+    private boolean isDraggingBottomLeft = false;
+    private Point dragStartPoint = null;
+    private Point mediaPositionStart = null;
+    private Dimension mediaSizeStart = null;
+    private MouseInputAdapter mediaPlayerCanvasMouseAdapter = new MouseInputAdapter() {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 1) {
+                if(embedded) {
+                    final Rectangle closeBounds = new Rectangle(mediaPlayer.getMediaPlayerCanvas().getWidth() - IconSize.MEDIUM.getWidth() - 5, 0,
+                        IconSize.MEDIUM.getWidth() + 5, IconSize.MEDIUM.getHeight() + 5);
+                    if(closeBounds.contains(e.getPoint())) {
+                        hideMediaPlayerCanvas();
+                    } else {
+                        if (mediaPlayer.getMediaPlayer() != null && mediaPlayer.getMediaPlayer().media().isValid()) {
+                            if (mediaPlayer.getMediaPlayer().status().isPlaying()) {
+                                mediaPlayer.getMediaPlayer().controls().pause();
+                            } else {
+                                mediaPlayer.getMediaPlayer().controls().play();
+                            }
+                        }
+                    }
+                } else {
+                    if (mediaPlayer.getMediaPlayer() != null && mediaPlayer.getMediaPlayer().media().isValid()) {
+                        if (mediaPlayer.getMediaPlayer().status().isPlaying()) {
+                            mediaPlayer.getMediaPlayer().controls().pause();
+                        } else {
+                            mediaPlayer.getMediaPlayer().controls().play();
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if(!embedded) return;
+
+            final Rectangle topLeftResizeBounds = new Rectangle(0, 0, 10, 10);
+            final Rectangle bottomRightResizeBounds = new Rectangle(mediaPlayer.getMediaPlayerCanvas().getWidth() - 10, mediaPlayer.getMediaPlayerCanvas().getHeight() - 10, 10, 10);
+            final Rectangle bottomLeftResizeBounds = new Rectangle(0, mediaPlayer.getMediaPlayerCanvas().getHeight() - 10, 10, 10);
+            if (topLeftResizeBounds.contains(e.getPoint())) {
+                isDraggingSize = true;
+                isDraggingPosition = false;
+                isDraggingTopLeft = true;
+                isDraggingBottomRight = false;
+            } else if (bottomRightResizeBounds.contains(e.getPoint())) {
+                isDraggingSize = true;
+                isDraggingPosition = false;
+                isDraggingTopLeft = false;
+                isDraggingBottomRight = true;
+            } else if (bottomLeftResizeBounds.contains(e.getPoint())) {
+                isDraggingSize = true;
+                isDraggingPosition = false;
+                isDraggingTopLeft = false;
+                isDraggingBottomRight = false;
+                isDraggingBottomLeft = true;
+            } else {
+                // start dragging position
+                isDraggingSize = false;
+                isDraggingPosition = true;
+            }
+            dragStartPoint = e.getPoint();
+            mediaPositionStart = new Point(mediaCanvasX, mediaCanvasY);
+            mediaSizeStart = new Dimension(mediaCanvasWidth, mediaCanvasHeight);
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            if(!embedded) return;
+
+            final Rectangle topLeftResizeBounds = new Rectangle(0, 0, 10, 10);
+            final Rectangle bottomRightResizeBounds = new Rectangle(mediaPlayer.getMediaPlayerCanvas().getWidth() - 10, mediaPlayer.getMediaPlayerCanvas().getHeight() - 10, 10, 10);
+            final Rectangle bottomLeftResizeBounds = new Rectangle(0, mediaPlayer.getMediaPlayerCanvas().getHeight() - 10, 10, 10);
+
+            if (topLeftResizeBounds.contains(e.getPoint())) {
+                mediaPlayer.getMediaPlayerCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
+            } else if (bottomRightResizeBounds.contains(e.getPoint())) {
+                mediaPlayer.getMediaPlayerCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
+            } else if (bottomLeftResizeBounds.contains(e.getPoint())) {
+                mediaPlayer.getMediaPlayerCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
+            } else {
+                mediaPlayer.getMediaPlayerCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            if(embedded && isDraggingPosition) {
+                final Point dragEndPoint = e.getPoint();
+                // adjust media player canvas position
+                final Point currentPoint = mediaPlayer.getMediaPlayerCanvas().getLocation();
+                mediaCanvasX = Math.max(0, currentPoint.x + (dragEndPoint.x - dragStartPoint.x));
+                mediaCanvasY = Math.max(0, currentPoint.y + (dragEndPoint.y - dragStartPoint.y));
+                setupMediaCanvasBounds();
+            } else if(embedded && isDraggingSize) {
+                Point dragEndPoint = e.getPoint();
+
+                if(isDraggingTopLeft) {
+                    final Rectangle currentBounds = mediaPlayer.getMediaPlayerCanvas().getBounds();
+                    Point bottomRight = new Point(currentBounds.x + currentBounds.width, currentBounds.y + currentBounds.height);
+                    // convert point to session editor coordinates
+                    dragEndPoint = SwingUtilities.convertPoint(mediaPlayer.getMediaPlayerCanvas(), dragEndPoint, getEditor().getRootPane());
+                    dragEndPoint.x = Math.max(0, dragEndPoint.x);
+                    dragEndPoint.y = Math.max(0, dragEndPoint.y);
+
+                    final Rectangle newBounds = new Rectangle(
+                            dragEndPoint.x, dragEndPoint.y,
+                            Math.max(0, bottomRight.x - dragEndPoint.x),
+                            Math.max(0, bottomRight.y - dragEndPoint.y)
+                    );
+                    if (mediaCanvasX >= 0 && mediaCanvasY >= 0) {
+                        mediaCanvasX = newBounds.x;
+                        mediaCanvasY = newBounds.y;
+                    }
+                    mediaCanvasWidth = newBounds.width;
+                    mediaCanvasHeight = newBounds.height;
+                    setupMediaCanvasBounds();
+                } else if(isDraggingBottomRight) {
+                    final Rectangle currentBounds = mediaPlayer.getMediaPlayerCanvas().getBounds();
+                    Point topLeft = new Point(currentBounds.x, currentBounds.y);
+                    // convert point to session editor coordinates
+                    dragEndPoint = SwingUtilities.convertPoint(mediaPlayer.getMediaPlayerCanvas(), dragEndPoint, getEditor().getRootPane());
+                    dragEndPoint.x = Math.max(0, dragEndPoint.x);
+                    dragEndPoint.y = Math.max(0, dragEndPoint.y);
+
+                    final Rectangle newBounds = new Rectangle(
+                            topLeft.x, topLeft.y,
+                            Math.max(0, dragEndPoint.x - topLeft.x),
+                            Math.max(0, dragEndPoint.y - topLeft.y)
+                    );
+                    mediaCanvasX = newBounds.x;
+                    mediaCanvasY = newBounds.y;
+                    mediaCanvasWidth = newBounds.width;
+                    mediaCanvasHeight = newBounds.height;
+                    setupMediaCanvasBounds(false);
+                } else if(isDraggingBottomLeft) {
+                    final Rectangle currentBounds = mediaPlayer.getMediaPlayerCanvas().getBounds();
+                    Point topRight = new Point(currentBounds.x + currentBounds.width, currentBounds.y);
+                    // convert point to session editor coordinates
+                    dragEndPoint = SwingUtilities.convertPoint(mediaPlayer.getMediaPlayerCanvas(), dragEndPoint, getEditor().getRootPane());
+                    dragEndPoint.x = Math.max(0, dragEndPoint.x);
+                    dragEndPoint.y = Math.max(0, dragEndPoint.y);
+
+                    final Rectangle newBounds = new Rectangle(
+                            dragEndPoint.x, topRight.y,
+                            Math.max(0, topRight.x - dragEndPoint.x),
+                            Math.max(0, dragEndPoint.y - topRight.y)
+                    );
+                    mediaCanvasX = newBounds.x;
+                    mediaCanvasY = newBounds.y;
+                    mediaCanvasWidth = newBounds.width;
+                    mediaCanvasHeight = newBounds.height;
+                    setupMediaCanvasBounds(false);
+                }
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if(!embedded) return;
+            if(isDraggingPosition) {
+                isDraggingPosition = false;
+                dragStartPoint = null;
+            } else if(isDraggingSize) {
+                isDraggingSize = false;
+                dragStartPoint = null;
+            }
+            final Point finalPosition = new Point(mediaCanvasX, mediaCanvasY);
+            final Dimension finalSize = new Dimension(mediaCanvasWidth, mediaCanvasHeight);
+
+            if(mediaPositionStart != null && mediaSizeStart != null) {
+                if (mediaPositionStart.x != finalPosition.x ||
+                        mediaPositionStart.y != finalPosition.y ||
+                        mediaSizeStart.width != finalSize.width ||
+                        mediaSizeStart.height != finalSize.height) {
+                    // post edit
+                    final VideoPositionAndSizeEdit edit = new VideoPositionAndSizeEdit(
+                            MediaPlayerEditorView.this,
+                            mediaCanvasX, mediaCanvasY, mediaCanvasWidth, mediaCanvasHeight,
+                            mediaPositionStart.x, mediaPositionStart.y,
+                            mediaSizeStart.width, mediaSizeStart.height);
+                    getEditor().getUndoSupport().postEdit(edit);
+                }
+            }
+            mediaPositionStart = null;
+            mediaSizeStart = null;
+        }
+    };
 }
