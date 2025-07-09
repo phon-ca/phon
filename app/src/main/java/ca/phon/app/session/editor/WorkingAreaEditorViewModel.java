@@ -879,7 +879,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
 
 					if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
-						viewProps.put("mediaPlayerVisible", isShowing(MediaPlayerEditorView.VIEW_NAME));
+						viewProps.put("mediaPlayerVisible", String.valueOf(isShowing(MediaPlayerEditorView.VIEW_NAME)));
+						System.out.println("Saving media player view state: " + viewProps);
 					}
 
 					if (viewProps != null && !viewProps.isEmpty()) {
