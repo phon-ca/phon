@@ -78,7 +78,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="9280767f2ad04a82" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="78492795">
+            <graph id="7a104961">
                 <node id="1113543fd9424d48" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -128,7 +128,7 @@ function setup_params(params) {
                 <oga:meta x="570" y="48"/>
             </extensions>
         </node>
-        <node id="38c0e51f" name="Index of Phonetic Complexity" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+        <node id="38c0e51f" name="Report Header" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
                 <oga:meta x="737" y="591"/>
@@ -142,7 +142,6 @@ function setup_params(params) {
         <node id="2d1a9107" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey"/>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                 </oga:settings>
                 <oga:meta x="1160" y="66"/>
@@ -168,12 +167,18 @@ function setup_params(params) {
                 <oga:meta x="1377" y="68"/>
             </extensions>
         </node>
+        <node id="30e13e1c" name="Explanations" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
+            <extensions>
+                <oga:meta x="1277" y="587">
+                    <oga:default for="sectionName" type="java.lang.String">Breakdown</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
         <ogcn:macro id="7e3c5aa6" name="For each exaplanation" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="8be55a">
+            <graph id="5ee75db4">
                 <node id="7f508aba" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                         </oga:settings>
@@ -183,14 +188,13 @@ function setup_params(params) {
                 <node id="675283ae2c8b47b8" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="44" y="127"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="411165ad58cf4b8c" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="370df2aa">
+                    <graph id="10965903">
                         <node id="576312cd5ac6462b" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -246,9 +250,12 @@ function setup_params(params) {
                 <link dest="ad5ae12" destField="obj" source="675283ae2c8b47b8" sourceField="obj"/>
                 <link dest="ad5ae12" destField="arg1" source="7f508aba" sourceField="obj"/>
                 <link dest="e972e51c71b446fa" destField="obj" source="ad5ae12" sourceField="value"/>
-                <link dest="69a866c0" destField="parent" source="411165ad58cf4b8c" sourceField="parent"/>
                 <link dest="69a866c0" destField="sectionName" source="63348df3" sourceField="value"/>
                 <link dest="69a866c0" destField="text" source="e972e51c71b446fa" sourceField="value"/>
+                <link dest="69a866c0" destField="parent" source="411165ad58cf4b8c" sourceField="collection"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
             </graph>
             <ogcn:published_input field="obj" name="Map" ref="675283ae2c8b47b8"/>
             <ogcn:published_input field="collection" name="ReportTreeNode.collection" ref="411165ad58cf4b8c"/>
@@ -256,7 +263,7 @@ function setup_params(params) {
                 <oga:settings>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Set]]></oga:property>
                 </oga:settings>
-                <oga:meta x="1404" y="312"/>
+                <oga:meta x="1497" y="418"/>
             </extensions>
         </ogcn:macro>
         <link dest="6d6d4558" destField="project" source="4e320465" sourceField="obj"/>
@@ -273,7 +280,9 @@ function setup_params(params) {
         <link dest="647fe34b" destField="obj" source="2d1a9107" sourceField="obj"/>
         <link dest="7e3c5aa6" destField="collection" source="647fe34b" sourceField="value"/>
         <link dest="7e3c5aa6" destField="Map" source="2d1a9107" sourceField="obj"/>
-        <link dest="7e3c5aa6" destField="ReportTreeNode.collection" source="38c0e51f" sourceField="root"/>
+        <link dest="30e13e1c" destField="parent" source="38c0e51f" sourceField="root"/>
+        <link dest="7e3c5aa6" destField="ReportTreeNode.collection" source="30e13e1c" sourceField="section"/>
+        <link dest="30e13e1c" destField="enabled" source="777df0e" sourceField="finished"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" minVersion="4.0.0" title="Index of Phonetic Complexity">
