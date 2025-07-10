@@ -25,6 +25,7 @@ import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToEndOfSegmentedAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.TakeSnapshotAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.ToggleAdjustVideoAction;
+import ca.phon.app.session.editor.view.mediaPlayer.undo.EmbeddedExternalEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.undo.VideoPositionAndSizeEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.undo.VideoVisibleEdit;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
@@ -221,7 +222,8 @@ public class MediaPlayerEditorView extends EditorView {
         mediaPlayerCanvas.addMouseListener(new MediaPlayerCanvasOverlayListener());
         mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
         mediaPlayerCanvas.addMouseMotionListener(mediaPlayerCanvasMouseAdapter);
-        mediaPlayer.setVideoVisible(false);
+        if(embedded)
+            mediaPlayer.setVideoVisible(false);
 
         add(mediaPlayer, BorderLayout.CENTER);
 
@@ -706,6 +708,7 @@ public class MediaPlayerEditorView extends EditorView {
         } else {
             embedded = true; // default
         }
+        mediaPlayer.setVideoVisible(!embedded);
         if(props.containsKey("videoVisible")) {
             loadVideoOnShow = Boolean.parseBoolean(props.getProperty("videoVisible"));
         }
@@ -723,11 +726,11 @@ public class MediaPlayerEditorView extends EditorView {
             resetVideoSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset video size and position to default");
             menuBuilder.addItem(".", new JMenuItem(resetVideoSizeAct));
 
-            final PhonUIAction moveToExternalWindowAct = PhonUIAction.runnable(MediaPlayerEditorView.this::moveToExternalWindow);
-            moveToExternalWindowAct.putValue(PhonUIAction.NAME, "Move video to external window");
-            moveToExternalWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move video player to external window");
-            menuBuilder.addItem(".", new JMenuItem(moveToExternalWindowAct));
         }
+        final PhonUIAction moveToExternalWindowAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedExternal);
+        moveToExternalWindowAct.putValue(PhonUIAction.NAME, embedded ? "Move media player to external window" : "Move video to embedded media player");
+        moveToExternalWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, embedded ? "Move media player to external window" : "Move video to embedded media player");
+        menuBuilder.addItem(".", new JMenuItem(moveToExternalWindowAct));
 
         menuBuilder.addItem(".", new TakeSnapshotAction(getEditor(), this));
 
@@ -770,10 +773,24 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
-    private void moveToExternalWindow() {
+    /**
+     * Toggle between embedded and external video player.
+     * This action is undoable.
+     */
+    public void toggleEmbeddedExternal() {
+        final EmbeddedExternalEdit embeddedExternalEdit = new EmbeddedExternalEdit(this, !embedded);
+        getEditor().getUndoSupport().postEdit(embeddedExternalEdit);
+    }
+
+    public void moveToExternalWindow() {
         if(embedded) {
             // remove media player canvas from glass pane and into accessory window
-            getEditor().getViewModel().showViewInAccessoryWindow(VIEW_NAME);
+            setEmbedded(false);
+            JFrame window = getEditor().getViewModel().showViewInAccessoryWindow(VIEW_NAME);
+            window.setAlwaysOnTop(true);
+            mediaPlayer.add(mediaPlayer.getMediaPlayerCanvas(), BorderLayout.CENTER);
+            mediaPlayer.setVideoVisible(true);
+            mediaPlayer.revalidate();
         }
     }
 

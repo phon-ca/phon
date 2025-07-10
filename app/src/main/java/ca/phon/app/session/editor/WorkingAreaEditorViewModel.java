@@ -584,10 +584,18 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		if (dockable != null) {
 			ViewPosition dockPosition = dockPositions.get(viewName);
+			if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
+				final MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView) dockable.getView();
+				if(!mediaPlayerView.isEmbedded()) {
+					dockPosition = ViewPosition.EXTERNAL;
+				}
+			}
 			if (dockPosition == ViewPosition.WORK) {
 				workingArea.show(dockable);
 				dockable.setVisible(true);
 			} else if(dockPosition == ViewPosition.EMBEDDED) {
+				// special case for media player views
+
 				// embedded into the transcript view
 				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
 				final var matteBorder = BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY);
@@ -596,6 +604,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				transcriptView.revalidate();
 				fireViewShown(viewName);
 			} else if(dockPosition == ViewPosition.EXTERNAL) {
+				dockControl.addDockable(dockable);
 				// open in a new accessory window
 				final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
 				window.getArea().getCenter().drop(dockable.intern());
@@ -607,8 +616,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				dockControl.addDockable(dockable);
 				dockable.setVisible(true);
 			}
-
-//			PhonWorker.getInstance().invokeLater(this::savePreviousPerspective);
 
 			Window parentWin = SwingUtilities.getWindowAncestor(getEditor());
 			if (parentWin instanceof CommonModuleFrame commonModuleFrame) {
@@ -626,6 +633,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		if (view == null) {
 			LogUtil.warning("View '" + viewName + "' not registered, cannot hide");
 			return;
+		}
+		// save view properties when opened again
+		final Properties viewProps = view.getStateProperties();
+		if (viewProps != null) {
+			viewStateProperties.put(viewName, viewProps);
 		}
 		if (isShowingInDock(viewName) || isShowingExternal(viewName)) {
 			dockControl.removeDockable(dockControl.getSingleDockable(viewName));

@@ -18,15 +18,23 @@ public class EmbeddedExternalEdit extends MediaPlayerViewEdit {
     @Override
     public void doIt() {
         if(embedded) {
-            // close accessory window for the media player
-
+            getView().setEmbedded(true);
+            getView().getEditor().getViewModel().hideView(MediaPlayerEditorView.VIEW_NAME);
+            getView().getEditor().getViewModel().showView(MediaPlayerEditorView.VIEW_NAME);
         } else {
-
+            getView().moveToExternalWindow();
         }
     }
 
     @Override
     public void undo() {
+        if(embedded) {
+            getView().moveToExternalWindow();
+        } else {
+            getView().setEmbedded(true);
+            getView().getEditor().getViewModel().hideView(MediaPlayerEditorView.VIEW_NAME);
+            getView().getEditor().getViewModel().showView(MediaPlayerEditorView.VIEW_NAME);
+        }
     }
 
 }
