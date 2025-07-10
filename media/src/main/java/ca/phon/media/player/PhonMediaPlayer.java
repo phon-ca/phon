@@ -256,19 +256,6 @@ public class PhonMediaPlayer extends JPanel {
 		return retVal;
 	}
 
-//	public JButton getVolumeButton() {
-//		JButton retVal = volumeBtn;
-//		if(retVal == null) {
-//			PhonUIAction toggleMuteAct =
-//					new PhonUIAction(this, "onVolumeBtn");
-//			toggleMuteAct.putValue(Action.SMALL_ICON, volIcn);
-//			retVal = new JButton();
-//			retVal.setAction(toggleMuteAct);
-//			volumeBtn = retVal;
-//		}
-//		return retVal;
-//	}
-
 	public VolumeSlider getVolumeSlider() {
 		VolumeSlider retVal = this.volumeSlider;
 		if(retVal == null) {
@@ -469,7 +456,7 @@ public class PhonMediaPlayer extends JPanel {
 	
 	public void onReplay30(PhonActionEvent<Void> pae) {
 		final MediaPlayer player = getMediaPlayer();
-		if(player != null) {
+		if (player != null) {
 			long currentPos = player.status().time();
 			long newPos = Math.max(0, currentPos - (30 * 1000));
 			player.controls().setTime(newPos);

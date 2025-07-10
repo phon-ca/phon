@@ -436,6 +436,15 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	public boolean isShowingExternal(String viewName) {
+		for(AccessoryWindow window: accessoryWindows) {
+			final var dockableArea = window.contentArea.getCenter();
+			for(int i = 0;  i < dockableArea.getDockableCount(); i++) {
+				final var dockable = dockableArea.getDockable(i);
+				if(dockable.getTitleText().equals(viewName)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
@@ -618,7 +627,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			LogUtil.warning("View '" + viewName + "' not registered, cannot hide");
 			return;
 		}
-		if (isShowingInDock(viewName)) {
+		if (isShowingInDock(viewName) || isShowingExternal(viewName)) {
 			dockControl.removeDockable(dockControl.getSingleDockable(viewName));
 		} else if(isShowingEmbedded(viewName)) {
 			// remove from transcript view
@@ -632,7 +641,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	@Override
-	public SingleCDockable showDynamicFloatingDockable(String title, JComponent comp,
+	public void showDynamicFloatingDockable(String title, JComponent comp,
 											int x, int y, int w, int h) {
 		final DynamicViewFactory factory = new DynamicViewFactory(comp);
 		final SingleCDockable dockable = factory.createBackup(title);
@@ -640,8 +649,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockControl.addDockable(dockable);
 		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
 		dynamicViews.put(title, comp);
-
-		return dockable;
 	}
 
 	@Override
@@ -651,6 +658,30 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", position.getName())));
 		dockControl.addDockable(dockable);
 		dockable.setVisible(true);
+	}
+
+	@Override
+	public JFrame showViewInAccessoryWindow(String viewName) {
+		if(registeredViews.containsKey(viewName)) {
+			hideView(viewName);
+		}
+		final EditorView view = getView(viewName);
+		if(view == null) {
+			LogUtil.warning("View '" + viewName + "' not registered, cannot show in accessory window");
+			return null;
+		}
+		final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
+		final var editorViewDockable = (EditorViewDockable) factory.createBackup(viewName);
+		dockControl.addDockable(editorViewDockable);
+		final AccessoryWindow accessoryWindow = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
+		accessoryWindow.contentArea.getCenter().drop(editorViewDockable.intern());
+		accessoryWindow.pack();
+		accessoryWindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+		accessoryWindow.setVisible(true);
+
+		fireViewShown(viewName);
+
+		return accessoryWindow;
 	}
 
 	/**
@@ -1588,6 +1619,31 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			putExtension(UndoManager.class, getEditor().getUndoManager());
 
 			accessoryWindows.add(this);
+
+			dockControl.addControlListener(new CControlListener() {
+				@Override
+				public void added(CControl cControl, CDockable cDockable) {
+
+				}
+
+				@Override
+				public void removed(CControl cControl, CDockable cDockable) {
+					if(contentArea.getCenter().getDockableCount() == 0) {
+						// no dockables left in content area, close window
+						dispose();
+					}
+				}
+
+				@Override
+				public void opened(CControl cControl, CDockable cDockable) {
+
+				}
+
+				@Override
+				public void closed(CControl cControl, CDockable cDockable) {
+
+				}
+			});
 
 			addWindowListener(new WindowListener() {
 

@@ -164,8 +164,10 @@ public interface EditorViewModel {
 	 * @param y
 	 * @param w
 	 * @param h
+	 * @deprecated Use {@link #showDynamicDockable(String, JComponent, ViewPosition)} instead.
 	 */
-	public SingleCDockable showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
+	@Deprecated
+	public void showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
 
 	/**
 	 * Show the given component as a new dockable at the given position.
@@ -175,6 +177,13 @@ public interface EditorViewModel {
 	 * @param position
 	 */
 	public void showDynamicDockable(String title, JComponent comp, ViewPosition position);
+
+	/**
+	 * Open a given viewName as a new accessory window.
+	 *
+	 * @param viewName
+	 */
+	public JFrame showViewInAccessoryWindow(String viewName);
 	
 	/**
 	 * Hide the specified view

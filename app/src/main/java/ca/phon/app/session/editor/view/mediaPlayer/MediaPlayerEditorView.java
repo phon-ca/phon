@@ -40,6 +40,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
@@ -59,7 +60,10 @@ import java.text.ParseException;
 import java.util.Properties;
 
 /**
- * Panel for embedded media player for editor.
+ * Panel for media player in the session editor.  The media player may be embedded
+ * or external.  If embedded, the media player canvas is placed in the glass pane
+ * of the session editor window.  If external, the media player canvas is placed
+ * in an accessory window of the session editor window.
  */
 public class MediaPlayerEditorView extends EditorView {
 
@@ -217,7 +221,6 @@ public class MediaPlayerEditorView extends EditorView {
         mediaPlayerCanvas.addMouseListener(new MediaPlayerCanvasOverlayListener());
         mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
         mediaPlayerCanvas.addMouseMotionListener(mediaPlayerCanvasMouseAdapter);
-//        mediaPlayer.remove(mediaPlayerCanvas);
         mediaPlayer.setVideoVisible(false);
 
         add(mediaPlayer, BorderLayout.CENTER);
@@ -441,35 +444,10 @@ public class MediaPlayerEditorView extends EditorView {
 
     @Override
     public JMenu getMenu() {
-        final JMenu menu = new JMenu();
-
-        final PhonUIAction toggleEmbeddedVideoAct = PhonUIAction.runnable(this::toggleEmbeddedVideo);
-        toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
-        toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
-        menu.add(new JMenuItem(toggleEmbeddedVideoAct));
-
-        menu.add(new TakeSnapshotAction(getEditor(), this));
-        menu.addSeparator();
-        final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
-        adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
-        JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
-        menu.add(adjustVideoItem);
-        menu.addSeparator();
-        menu.add(new GoToAction(getEditor(), this));
-        menu.add(new GoToEndOfSegmentedAction(getEditor(), this));
-
-        final SessionEditor editor = getEditor();
-        final Session session = editor.getSession();
-        // for each participant
-        // for each participant
-        for (int i = 0; i < session.getParticipantCount(); i++) {
-            final Participant p = session.getParticipant(i);
-            final GoToEndOfSegmentedAction gotoPartSegmentAct =
-                    new GoToEndOfSegmentedAction(getEditor(), this, p);
-            menu.add(gotoPartSegmentAct);
-        }
-
-        return menu;
+        final JMenu retVal = new JMenu(VIEW_NAME);
+        final MenuBuilder menuBuilder = new MenuBuilder(retVal);
+        setupMenu(menuBuilder);
+        return retVal;
     }
 
     private void toggleEmbeddedVideo() {
@@ -733,6 +711,72 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
+    private void setupMenu(MenuBuilder menuBuilder) {
+        final PhonUIAction toggleEmbeddedVideoAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedVideo);
+        toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+        toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+        menuBuilder.addItem(".", new JMenuItem(toggleEmbeddedVideoAct));
+
+        if(embedded) {
+            final PhonUIAction resetVideoSizeAct = PhonUIAction.runnable(MediaPlayerEditorView.this::resetVideoSizeAndPosition);
+            resetVideoSizeAct.putValue(PhonUIAction.NAME, "Reset video size and position");
+            resetVideoSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset video size and position to default");
+            menuBuilder.addItem(".", new JMenuItem(resetVideoSizeAct));
+
+            final PhonUIAction moveToExternalWindowAct = PhonUIAction.runnable(MediaPlayerEditorView.this::moveToExternalWindow);
+            moveToExternalWindowAct.putValue(PhonUIAction.NAME, "Move video to external window");
+            moveToExternalWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move video player to external window");
+            menuBuilder.addItem(".", new JMenuItem(moveToExternalWindowAct));
+        }
+
+        menuBuilder.addItem(".", new TakeSnapshotAction(getEditor(), this));
+
+        menuBuilder.addSeparator(".", "adjust video options");
+        final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
+        adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
+        JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
+        menuBuilder.addItem(".", adjustVideoItem);
+
+        menuBuilder.addSeparator(".", "Media Player");
+        setupGotoItems(menuBuilder);
+    }
+
+    private void setupGotoItems(MenuBuilder menuBuilder) {
+        final GoToAction gotoSelectAct = new GoToAction(getEditor(), MediaPlayerEditorView.this);
+        JMenuItem gotoSelectItem = new JMenuItem(gotoSelectAct);
+        menuBuilder.addItem(".", gotoSelectItem);
+
+        final GoToEndOfSegmentedAction gotoLastSegmentAct = new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this);
+        menuBuilder.addItem(".", gotoLastSegmentAct);
+
+        final SessionEditor editor = getEditor();
+        final Session session = editor.getSession();
+
+        // for each participant
+        for (int i = 0; i < session.getParticipantCount(); i++) {
+            final Participant p = session.getParticipant(i);
+            final GoToEndOfSegmentedAction gotoPartSegmentAct =
+                    new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this, p);
+            menuBuilder.addItem(".", gotoPartSegmentAct);
+        }
+    }
+
+    private void resetVideoSizeAndPosition() {
+        if(embedded) {
+            final VideoPositionAndSizeEdit edit = new VideoPositionAndSizeEdit(this,
+                -1, -1, DEFAULT_MEDIA_CANVAS_WIDTH, DEFAULT_MEDIA_CANVAS_HEIGHT,
+                mediaCanvasX, mediaCanvasY, mediaCanvasWidth, mediaCanvasHeight);
+            getEditor().getUndoSupport().postEdit(edit);
+        }
+    }
+
+    private void moveToExternalWindow() {
+        if(embedded) {
+            // remove media player canvas from glass pane and into accessory window
+            getEditor().getViewModel().showViewInAccessoryWindow(VIEW_NAME);
+        }
+    }
+
     /**
      * Media player menu filter
      */
@@ -740,43 +784,10 @@ public class MediaPlayerEditorView extends EditorView {
 
         @Override
         public JPopupMenu makeMenuChanges(JPopupMenu menu) {
-            JPopupMenu retVal = menu;
-
-            final PhonUIAction toggleEmbeddedVideoAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedVideo);
-            toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
-            toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
-            menu.add(new JMenuItem(toggleEmbeddedVideoAct), 0);
-
-            menu.addSeparator();
-
-            setupGotoItems(menu);
-
-            return retVal;
-        }
-
-        private void setupGotoItems(JPopupMenu menu) {
-            final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
-            adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
-            JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
-            menu.add(adjustVideoItem);
-
-            final GoToAction gotoSelectAct = new GoToAction(getEditor(), MediaPlayerEditorView.this);
-            JMenuItem gotoSelectItem = new JMenuItem(gotoSelectAct);
-            menu.add(gotoSelectItem);
-
-            final GoToEndOfSegmentedAction gotoLastSegmentAct = new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this);
-            menu.add(gotoLastSegmentAct);
-
-            final SessionEditor editor = getEditor();
-            final Session session = editor.getSession();
-
-            // for each participant
-            for (int i = 0; i < session.getParticipantCount(); i++) {
-                final Participant p = session.getParticipant(i);
-                final GoToEndOfSegmentedAction gotoPartSegmentAct =
-                        new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this, p);
-                menu.add(gotoPartSegmentAct);
-            }
+            menu.removeAll();
+            final MenuBuilder menuBuilder = new MenuBuilder(menu);
+            setupMenu(menuBuilder);
+            return menu;
         }
 
     }
@@ -855,7 +866,7 @@ public class MediaPlayerEditorView extends EditorView {
                     final Rectangle closeBounds = new Rectangle(mediaPlayer.getMediaPlayerCanvas().getWidth() - IconSize.MEDIUM.getWidth() - 5, 0,
                         IconSize.MEDIUM.getWidth() + 5, IconSize.MEDIUM.getHeight() + 5);
                     if(closeBounds.contains(e.getPoint())) {
-                        hideMediaPlayerCanvas();
+                        toggleEmbeddedVideo();
                     } else {
                         if (mediaPlayer.getMediaPlayer() != null && mediaPlayer.getMediaPlayer().media().isValid()) {
                             if (mediaPlayer.getMediaPlayer().status().isPlaying()) {

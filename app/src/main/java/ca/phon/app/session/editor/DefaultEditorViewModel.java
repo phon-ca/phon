@@ -496,7 +496,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 
 	@Override
-	public SingleCDockable showDynamicFloatingDockable(String title, JComponent comp,
+	public void showDynamicFloatingDockable(String title, JComponent comp,
 			int x, int y, int w, int h) {
 		final DynamicViewFactory factory = new DynamicViewFactory(comp);
 		final SingleCDockable dockable = factory.createBackup(title);
@@ -504,13 +504,15 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		dockControl.addDockable(dockable);
 		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
 		dynamicViews.put(title, comp);
-
-		return dockable;
 	}
 
 	@Override
 	public void showDynamicDockable(String title, JComponent comp, ViewPosition position) {
-		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public JFrame showViewInAccessoryWindow(String viewName) {
+		return null;
 	}
 
 	/**
