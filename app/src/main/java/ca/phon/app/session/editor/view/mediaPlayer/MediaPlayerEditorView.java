@@ -124,7 +124,7 @@ public class MediaPlayerEditorView extends EditorView {
      */
     private boolean embedded = true;
 
-    private boolean loadVideoOnShow = false;
+    private boolean loadVideoOnShow = true;
 
     // popup frame for time selection
     private JFrame timeSelectionPopup = null;
@@ -149,15 +149,6 @@ public class MediaPlayerEditorView extends EditorView {
         editor.getViewModel().addEditorViewModelListener(new EditorViewModelListener() {
             @Override
             public void viewShown(String viewName) {
-                if(MediaPlayerEditorView.VIEW_NAME.equals(viewName) && loadVideoOnShow) {
-                    if(embedded) {
-                        SwingUtilities.invokeLater(MediaPlayerEditorView.this::showVideoInWindowGlassPane);
-                    } else {
-                        mediaPlayer.setVideoVisible(true);
-                        mediaPlayer.revalidate();
-                    }
-                    loadVideoOnShow = false;
-                }
             }
 
             @Override
@@ -211,8 +202,15 @@ public class MediaPlayerEditorView extends EditorView {
                 EditorEvent<MediaPlayerEditorView> ee = new EditorEvent<>(MediaLoaded, this, this);
                 getEditor().getEventManager().queueEvent(ee);
 
-                if(embedded && mediaPlayer.isVideoVisible()) {
-                    setupMediaCanvasBounds();
+                if(embedded && loadVideoOnShow) {
+                    if(mediaPlayer.getMediaPlayer().video().trackCount() > 0) {
+                        if(embedded) {
+                            SwingUtilities.invokeLater(MediaPlayerEditorView.this::showVideoInWindowGlassPane);
+                        } else {
+                            mediaPlayer.setVideoVisible(true);
+                            mediaPlayer.revalidate();
+                        }
+                    }
                 }
 
             } else {
