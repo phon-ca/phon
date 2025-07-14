@@ -27,15 +27,15 @@ import java.awt.geom.*;
 
 public class TimeSliderUI extends SliderUI {
 	
-	private JSlider slider;
+	private TimeSlider slider;
 
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		
-		this.slider = (JSlider)c;
-//		slider.addMouseMotionListener(mouseOverListener);
-//		slider.addMouseListener(mouseOverListener);
+		this.slider = (TimeSlider) c;
+		slider.addMouseMotionListener(mouseOverListener);
+		slider.addMouseListener(mouseOverListener);
 		this.slider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -140,8 +140,8 @@ public class TimeSliderUI extends SliderUI {
 		@Override
 		public void mousePressed(MouseEvent me) {
 			if(!slider.isEnabled()) return;
-			slider.setValueIsAdjusting(true);
 			dragging = true;
+			slider.setValueIsAdjusting(true);
 			slider.setValue((int)posToTime(me.getX()));
 		}
 		@Override
@@ -153,6 +153,9 @@ public class TimeSliderUI extends SliderUI {
 			}
 			slider.setValueIsAdjusting(false);
 			slider.setValue((int)posToTime(me.getX()));
+
+			// notify listeners of manual change
+			slider.notifyManualChange(slider.getValue());
 		}
 		
 		@Override
@@ -203,12 +206,9 @@ public class TimeSliderUI extends SliderUI {
 		
 		@Override
 		public void mouseDragged(MouseEvent me) {
-//			if(dragging) {
-//				mouseMoved(me);
-//				slider.setValueIsAdjusting(true);
-//				slider.setValue((int)posToTime(me.getX()));
-//				slider.setValueIsAdjusting(false);
-//			}
+			if(dragging) {
+				slider.setValue((int)posToTime(me.getX()));
+			}
 		}
 		
 	};

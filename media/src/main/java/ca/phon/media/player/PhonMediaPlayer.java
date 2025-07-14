@@ -35,6 +35,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.beans.PropertyChangeListener;
@@ -179,8 +180,6 @@ public class PhonMediaPlayer extends JPanel {
 			replayBtn = getReplayButton();
 			replayBtn.setEnabled(false);
 			positionSlider = getPositionSlider();
-			positionSlider.setEnabled(false);
-			positionSlider.setUI(new TimeSliderUI());
 			menuBtn = getMenuButton();
 			volumeSlider = getVolumeSlider();
 
@@ -251,6 +250,15 @@ public class PhonMediaPlayer extends JPanel {
 			retVal.setPaintLabels(false);
 			retVal.setPaintTicks(false);
 			retVal.setOrientation(SwingConstants.HORIZONTAL);
+			retVal.setUI(new TimeSliderUI());
+			retVal.addManualChangeListener( (timeSlider, value) -> {
+				final MediaPlayer mediaPlayer = getMediaPlayer();
+				if(mediaPlayer == null) return;
+				float pos = (float)value / getPositionSlider().getMaximum();
+				if(pos < 1.0f) {
+					mediaPlayer.controls().setPosition(pos);
+				}
+			});
 			positionSlider = retVal;
 		}
 		return retVal;
@@ -517,7 +525,7 @@ public class PhonMediaPlayer extends JPanel {
 				player.snapshots().save(new File(saveTo));
 			}
 		}
-		
+
 	}
 	
 	private SegmentListener segmentListener;

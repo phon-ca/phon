@@ -16,15 +16,69 @@
 package ca.phon.media.player;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TimeSlider extends JSlider {
 
 	private static final long serialVersionUID = -3955798002058380628L;
-	
+
+	private final List<TimeSliderManualChangeListener> manualChangeListeners = new ArrayList<>();
+
 	public TimeSlider() {
 		super();
 		
 		setUI(new TimeSliderUI());
 	}
-	
+
+	/**
+	 * Add a manual change listener to this slider.
+	 *
+	 * @param listener
+	 */
+	public void addManualChangeListener(TimeSliderManualChangeListener listener) {
+		if(listener == null) throw new NullPointerException("listener must not be null");
+		synchronized(manualChangeListeners) {
+			if(!manualChangeListeners.contains(listener)) {
+				manualChangeListeners.add(listener);
+			}
+		}
+	}
+
+	/**
+	 * Remove a manual change listener from this slider.
+	 *
+	 * @param listener
+	 */
+	public void removeManualChangeListener(TimeSliderManualChangeListener listener) {
+		synchronized(manualChangeListeners) {
+			if(manualChangeListeners.contains(listener)) {
+				manualChangeListeners.remove(listener);
+			}
+		}
+	}
+
+	/**
+	 * Notify all listeners of a manual change.
+	 *
+	 * @param value
+	 */
+	public void notifyManualChange(long value) {
+		synchronized(manualChangeListeners) {
+			for(TimeSliderManualChangeListener listener : manualChangeListeners) {
+				listener.manualChange(this, value);
+			}
+		}
+	}
+
+	public interface TimeSliderManualChangeListener {
+		/**
+		 * Called when the user manually changes the slider value.
+		 *
+		 * @param slider
+		 * @param value
+		 */
+		void manualChange(TimeSlider slider, long value);
+	}
+
 }
