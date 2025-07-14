@@ -45,6 +45,8 @@ public class PhonPlayerComponent extends JComponent {
 	private final Color NO_IMG_BG = Color.DARK_GRAY;
 
 	private Consumer<Graphics2D> overlayPainter = null;
+
+	private final Dimension preferredSize = new Dimension(320, 240);
 	
 	public PhonPlayerComponent() {
 		super();
@@ -89,7 +91,7 @@ public class PhonPlayerComponent extends JComponent {
 		if(bufferedImage != null) {
 			return new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight());
 		} else {
-			return super.getPreferredSize();
+			return preferredSize;
 		}
 	}
 	

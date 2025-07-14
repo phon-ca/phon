@@ -1193,16 +1193,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				externalizeAct.setText("Open view in new window");
 				externalizeAct.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_new", IconSize.SMALL, Color.darkGray));
 				externalizeAct.addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent e) {
-
 						final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
 						window.getArea().getCenter().drop(EditorViewDockable.this.intern());
 						window.pack();
 						window.setVisible(true);
 					}
-
 				});
 				actionSource.add(externalizeAct);
 			}

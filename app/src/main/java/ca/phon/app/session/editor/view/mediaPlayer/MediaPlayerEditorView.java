@@ -162,12 +162,11 @@ public class MediaPlayerEditorView extends EditorView {
 
             @Override
             public void viewHidden(String viewName) {
-                if (viewName.equals(MediaPlayerEditorView.VIEW_NAME)) {
+                if (isEmbedded() && viewName.equals(MediaPlayerEditorView.VIEW_NAME)) {
                     if (mediaPlayer != null) {
                         if (mediaPlayer.isPlaying()) {
                             mediaPlayer.pause();
                         }
-                        mediaPlayer.setVideoVisible(false);
                         final JComponent glassPane = (JComponent) getEditor().getRootPane().getGlassPane();
                         if (SwingUtilities.isDescendingFrom(mediaPlayer.getMediaPlayerCanvas(), glassPane)) {
                             glassPane.remove(mediaPlayer.getMediaPlayerCanvas());
@@ -211,6 +210,11 @@ public class MediaPlayerEditorView extends EditorView {
             if ((boolean) e.getNewValue()) {
                 EditorEvent<MediaPlayerEditorView> ee = new EditorEvent<>(MediaLoaded, this, this);
                 getEditor().getEventManager().queueEvent(ee);
+
+                if(embedded && mediaPlayer.isVideoVisible()) {
+                    setupMediaCanvasBounds();
+                }
+
             } else {
                 EditorEvent<MediaPlayerEditorView> ee = new EditorEvent(MediaUnloaded, this, this);
                 getEditor().getEventManager().queueEvent(ee);
@@ -507,8 +511,32 @@ public class MediaPlayerEditorView extends EditorView {
             final TranscriptView transcriptView = (TranscriptView) sessionEditorWindow.getSessionEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
             final JComponent glassPane = (JComponent) cmf.getGlassPane();
 
-            final int width = this.mediaCanvasWidth >= 0 ? this.mediaCanvasWidth : DEFAULT_MEDIA_CANVAS_WIDTH;
-            final int height = this.mediaCanvasHeight >= 0 ? this.mediaCanvasHeight : DEFAULT_MEDIA_CANVAS_HEIGHT;
+            int prefWidth = DEFAULT_MEDIA_CANVAS_WIDTH;
+            int prefHeight = DEFAULT_MEDIA_CANVAS_HEIGHT;
+            int maxWidth = transcriptView.getWidth() / 2;
+            int maxHeight = transcriptView.getHeight() / 2;
+            if(mediaPlayer.getMediaPlayer().video().trackCount() > 0) {
+                Dimension prefSize = mediaPlayer.getMediaPlayer().video().videoDimension();
+                if(prefSize != null) {
+                    // Calculate the aspect ratio of the video and the maximum allowed area
+                    double videoAspectRatio = (double) prefSize.width / (double) prefSize.height;
+                    double maxAspectRatio = (double) maxWidth / (double) maxHeight;
+
+                    // Check if the video is wider or taller than the allowed aspect ratio
+                    if (videoAspectRatio > maxAspectRatio) {
+                        // If the video is wider, the width is the limiting factor
+                        prefWidth = maxWidth;
+                        prefHeight = (int) (maxWidth / videoAspectRatio);
+                    } else {
+                        // Otherwise, the height is the limiting factor
+                        prefHeight = maxHeight;
+                        prefWidth = (int) (maxHeight * videoAspectRatio);
+                    }
+                }
+            }
+
+            final int width = this.mediaCanvasWidth >= 0 ? this.mediaCanvasWidth : prefWidth;
+            final int height = this.mediaCanvasHeight >= 0 ? this.mediaCanvasHeight : prefHeight;
             final Point p = SwingUtilities.convertPoint(transcriptView, bounds.x, bounds.y, glassPane);
 
             final Insets insets = mediaPlayer.getMediaPlayerCanvas().getInsets();
@@ -767,7 +795,7 @@ public class MediaPlayerEditorView extends EditorView {
     private void resetVideoSizeAndPosition() {
         if(embedded) {
             final VideoPositionAndSizeEdit edit = new VideoPositionAndSizeEdit(this,
-                -1, -1, DEFAULT_MEDIA_CANVAS_WIDTH, DEFAULT_MEDIA_CANVAS_HEIGHT,
+                -1, -1, -1, -1,
                 mediaCanvasX, mediaCanvasY, mediaCanvasWidth, mediaCanvasHeight);
             getEditor().getUndoSupport().postEdit(edit);
         }
@@ -786,11 +814,11 @@ public class MediaPlayerEditorView extends EditorView {
         if(embedded) {
             // remove media player canvas from glass pane and into accessory window
             setEmbedded(false);
-            JFrame window = getEditor().getViewModel().showViewInAccessoryWindow(VIEW_NAME);
-            window.setAlwaysOnTop(true);
             mediaPlayer.add(mediaPlayer.getMediaPlayerCanvas(), BorderLayout.CENTER);
             mediaPlayer.setVideoVisible(true);
             mediaPlayer.revalidate();
+            JFrame window = getEditor().getViewModel().showViewInAccessoryWindow(VIEW_NAME);
+            window.setAlwaysOnTop(true);
         }
     }
 
