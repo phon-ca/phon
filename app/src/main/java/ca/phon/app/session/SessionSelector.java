@@ -285,10 +285,24 @@ public class SessionSelector extends TristateCheckBoxTree {
 				TristateCheckBoxTreeNode child = chunk.child;
 				int index = chunk.index;
 
-				if(index == -1)
-					parent.add(child);
-				else
+				if(index == -1) {
+					// attempt to add in sorted order
+					final List<String> childNames = new ArrayList<>();
+					for(int i = 0; i < parent.getChildCount(); i++) {
+						final TristateCheckBoxTreeNode childNode = (TristateCheckBoxTreeNode)parent.getChildAt(i);
+						childNames.add(childNode.getUserObject().toString());
+					}
+					childNames.add(child.getUserObject().toString());
+					Collections.sort(childNames);
+					index = childNames.indexOf(child.getUserObject().toString());
+					if(index == -1) {
+						parent.add(child);
+ 					} else {
+						parent.insert(child, index);
+					}
+				} else {
 					parent.insert(child, index);
+				}
 				int childIdx = parent.getIndex(child);
 				getCheckboxTreeModel().nodesWereInserted(parent, new int[]{ childIdx });
 			}
