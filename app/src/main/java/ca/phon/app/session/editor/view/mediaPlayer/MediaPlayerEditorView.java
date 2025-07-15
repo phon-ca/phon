@@ -149,6 +149,9 @@ public class MediaPlayerEditorView extends EditorView {
         editor.getViewModel().addEditorViewModelListener(new EditorViewModelListener() {
             @Override
             public void viewShown(String viewName) {
+                if(isEmbedded() && mediaPlayer.getMediaPlayer() != null && mediaPlayer.hasVideo() && loadVideoOnShow) {
+                    SwingUtilities.invokeLater(MediaPlayerEditorView.this::showVideoInWindowGlassPane);
+                }
             }
 
             @Override
@@ -224,8 +227,11 @@ public class MediaPlayerEditorView extends EditorView {
         mediaPlayerCanvas.addMouseListener(new MediaPlayerCanvasOverlayListener());
         mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
         mediaPlayerCanvas.addMouseMotionListener(mediaPlayerCanvasMouseAdapter);
-        if(embedded)
+        if(embedded) {
+            final var matteBorder = BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY);
+            setBorder(BorderFactory.createTitledBorder(matteBorder, VIEW_NAME));
             mediaPlayer.setVideoVisible(false);
+        }
 
         add(mediaPlayer, BorderLayout.CENTER);
 
@@ -493,6 +499,9 @@ public class MediaPlayerEditorView extends EditorView {
             glassPane.setOpaque(false);
 			glassPane.setVisible(true);
             mediaPlayer.getMediaPlayerCanvas().setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            final var matteBorder = BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY);
+            setBorder(BorderFactory.createTitledBorder(matteBorder, VIEW_NAME));
         }
     }
 
@@ -815,6 +824,7 @@ public class MediaPlayerEditorView extends EditorView {
             mediaPlayer.add(mediaPlayer.getMediaPlayerCanvas(), BorderLayout.CENTER);
             mediaPlayer.setVideoVisible(true);
             mediaPlayer.revalidate();
+//            mediaPlayer.setBorder(BorderFactory.createEmptyBorder());
             JFrame window = getEditor().getViewModel().showViewInAccessoryWindow(VIEW_NAME);
             window.setAlwaysOnTop(true);
         }

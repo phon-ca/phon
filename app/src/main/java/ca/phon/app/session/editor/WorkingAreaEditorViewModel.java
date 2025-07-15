@@ -598,8 +598,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 				// embedded into the transcript view
 				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
-				final var matteBorder = BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY);
-				dockable.getView().setBorder(BorderFactory.createTitledBorder(matteBorder, viewName));
 				transcriptView.add(dockable.getView(), BorderLayout.SOUTH);
 				transcriptView.revalidate();
 				fireViewShown(viewName);
