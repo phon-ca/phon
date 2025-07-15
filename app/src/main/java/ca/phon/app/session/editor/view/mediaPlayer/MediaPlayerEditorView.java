@@ -199,6 +199,7 @@ public class MediaPlayerEditorView extends EditorView {
     private void init() {
         setLayout(new BorderLayout());
         mediaPlayer = new PhonMediaPlayer(getEditor().getMediaModel().getVolumeModel());
+        mediaPlayer.getMediaPlayerCanvas().setBorder(BorderFactory.createLineBorder(Color.GRAY));
         mediaPlayer.addMediaMenuFilter(new MediaMenuFilter());
         mediaPlayer.addPropertyChangeListener("mediaLoaded", (e) -> {
             if ((boolean) e.getNewValue()) {
@@ -498,7 +499,6 @@ public class MediaPlayerEditorView extends EditorView {
             glassPane.revalidate();
             glassPane.setOpaque(false);
 			glassPane.setVisible(true);
-            mediaPlayer.getMediaPlayerCanvas().setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
             final var matteBorder = BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY);
             setBorder(BorderFactory.createTitledBorder(matteBorder, VIEW_NAME));
@@ -750,22 +750,32 @@ public class MediaPlayerEditorView extends EditorView {
     }
 
     private void setupMenu(MenuBuilder menuBuilder) {
+        final PhonUIAction moveToExternalWindowAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedExternal);
+        moveToExternalWindowAct.putValue(PhonUIAction.NAME, embedded ? "Open Media Player in new window" : "Switch to embedded Media Player");
+        moveToExternalWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, embedded ? "Move media player to external window" : "Embed media player in session editor window");
+        menuBuilder.addItem(".", new JMenuItem(moveToExternalWindowAct));
+
         final PhonUIAction toggleEmbeddedVideoAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedVideo);
-        toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
-        toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video player" : "Show video player");
+        toggleEmbeddedVideoAct.putValue(PhonUIAction.NAME, mediaPlayer.isVideoVisible() ? "Hide video" : "Show video");
+        toggleEmbeddedVideoAct.putValue(PhonUIAction.SHORT_DESCRIPTION, mediaPlayer.isVideoVisible() ? "Hide video" : "Show video");
         menuBuilder.addItem(".", new JMenuItem(toggleEmbeddedVideoAct));
 
         if(embedded) {
-            final PhonUIAction resetVideoSizeAct = PhonUIAction.runnable(MediaPlayerEditorView.this::resetVideoSizeAndPosition);
-            resetVideoSizeAct.putValue(PhonUIAction.NAME, "Reset video size and position");
-            resetVideoSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset video size and position to default");
-            menuBuilder.addItem(".", new JMenuItem(resetVideoSizeAct));
+            final JMenu videoSizeMenu = menuBuilder.addMenu(".", "Video size and position");
+            final MenuBuilder videoSizeMenuBuilder = new MenuBuilder(videoSizeMenu);
 
+            final PhonUIAction resetVideoSizeAct = PhonUIAction.runnable(MediaPlayerEditorView.this::resetVideSize);
+            resetVideoSizeAct.putValue(PhonUIAction.NAME, "Reset video size");
+            resetVideoSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset video size to default");
+            videoSizeMenuBuilder.addItem(".", new JMenuItem(resetVideoSizeAct));
+
+            final PhonUIAction resetVideoPositionAct = PhonUIAction.runnable(MediaPlayerEditorView.this::resetVideoPosition);
+            resetVideoPositionAct.putValue(PhonUIAction.NAME, "Reset video position");
+            resetVideoPositionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset video position, anchored to bottom-right corner of the Transcript view");
+            videoSizeMenuBuilder.addItem(".", new JMenuItem(resetVideoPositionAct));
         }
-        final PhonUIAction moveToExternalWindowAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedExternal);
-        moveToExternalWindowAct.putValue(PhonUIAction.NAME, embedded ? "Move media player to external window" : "Move video to embedded media player");
-        moveToExternalWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, embedded ? "Move media player to external window" : "Move video to embedded media player");
-        menuBuilder.addItem(".", new JMenuItem(moveToExternalWindowAct));
+
+        menuBuilder.addSeparator(".", "media player actions");
 
         menuBuilder.addItem(".", new TakeSnapshotAction(getEditor(), this));
 
@@ -799,10 +809,19 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
-    private void resetVideoSizeAndPosition() {
+    private void resetVideSize() {
         if(embedded) {
             final VideoPositionAndSizeEdit edit = new VideoPositionAndSizeEdit(this,
-                -1, -1, -1, -1,
+                    mediaCanvasX, mediaCanvasY, -1, -1,
+                    mediaCanvasX, mediaCanvasY, mediaCanvasWidth, mediaCanvasHeight);
+            getEditor().getUndoSupport().postEdit(edit);
+        }
+    }
+
+    private void resetVideoPosition() {
+        if(embedded) {
+            final VideoPositionAndSizeEdit edit = new VideoPositionAndSizeEdit(this,
+                -1, -1, mediaCanvasWidth, mediaCanvasHeight,
                 mediaCanvasX, mediaCanvasY, mediaCanvasWidth, mediaCanvasHeight);
             getEditor().getUndoSupport().postEdit(edit);
         }

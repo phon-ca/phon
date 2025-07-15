@@ -339,8 +339,6 @@ public class PhonMediaPlayer extends JPanel {
 			
 			mediaPlayerCanvas.setBufferedImage(noMediaImage);
 			mediaPlayerCanvas.repaint();
-			
-			mediaPlayerCanvas.setToolTipText("No media");
 		} else if(VLCHelper.isLoaded()) {
 			try {
 				mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access", "--no-plugins-cache");
@@ -357,13 +355,9 @@ public class PhonMediaPlayer extends JPanel {
 					mediaPlayer.events().addMediaPlayerEventListener(loadListener);
 					mediaPlayer.controls().play();
 					mediaPlayer.audio().setMute(true);
-
-					mediaPlayerCanvas.setToolTipText(getMediaFile());
 				} else {
 					mediaPlayerCanvas.setBufferedImage(noMediaImage);
 					mediaPlayerCanvas.repaint();
-					
-					mediaPlayerCanvas.setToolTipText("Unable to load media");
 				}
 			} catch (UnsatisfiedLinkError | Exception e) {
 				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
