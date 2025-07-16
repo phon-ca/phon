@@ -611,22 +611,69 @@ public class FindAndReplacePanel extends JPanel {
 		}
 	}
 
-	public void replaceCurrent() {
-		final FindResult findResult = searchResults.get(currentResultIdx);
-		invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
-		if(currentSelection != null) {
-			final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
-			final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().start());
-			final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().end());
-			removeCurrentSelection();
-			if(replaceStart >= 0 && replaceEnd >= 0) {
-				transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
-				transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
-				final String replaceText = getReplaceText(findResult, replaceField.getText());
-				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
-				transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
-				findNext();
+	/**
+	 * Update tier results after a replacement has been made.  This will update all results for the
+	 * specified element index and tier name.  It will also update the current result index to be the
+	 * index of the first result that was found after the replacement.
+	 *
+	 * @param elementIndex index of the transcript element to update results for
+	 * @param tierName name of the tier to update results for
+	 * @param insertIdx search results index to insert the new results at (if applicable)
+	 * @param findNextStart character position to start searching for the next result
+	 *
+	 * @return the number of results that were added
+	 */
+	private void updateTierResults(int elementIndex, String tierName, int insertIdx, int findNextStart) {
+		final TranscriptElementLocation tierStart = new TranscriptElementLocation(elementIndex, tierName, 0);
+		final FindManager findManager = getFindManager();
+		findManager.setCurrentLocation(tierStart);
+		FindResult result = null;
+		while((result = findManager.findNext()) != null) {
+			if(result.range().transcriptElementIndex() == elementIndex && result.range().tier().equals(tierName)) {
+				if(insertIdx < 0 || insertIdx >= searchResults.size()) {
+					searchResults.add(result);
+				} else {
+					searchResults.add(insertIdx++, result);
+				}
+				if(result.range().end().charPosition() <= findNextStart) {
+					currentResultIdx++;
+				}
+				final SessionEditorSelection selection = new SessionEditorSelection(result.range());
+				selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
+				getSelectionModel().addSelection(selection);
+			} else {
+				break;
 			}
+		}
+	}
+
+	public void replaceCurrent() {
+		if(currentResultIdx < 0 || currentResultIdx >= searchResults.size() || currentSelection == null) {
+			return;
+		}
+		final FindResult findResult = searchResults.get(currentResultIdx);
+		int insertIdx = invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
+		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
+		final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().start());
+		final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().end());
+		removeCurrentSelection();
+		if(replaceStart >= 0 && replaceEnd >= 0) {
+			transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
+			transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
+			final String replaceText = getReplaceText(findResult, replaceField.getText());
+			transcriptView.getTranscriptEditor().replaceSelection(replaceText);
+			transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
+
+			// get character position at the end of the selection
+			final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
+			final TranscriptElementLocation newLocation =
+					transcriptView.getTranscriptEditor().charPosToSessionLocation(finalReplaceEnd);
+
+			// update tier results
+			updateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier(), insertIdx, newLocation.charPosition());
+			updateSearchButtons();
+
+			findNext();
 		}
 	}
 
