@@ -679,13 +679,10 @@ public class FindAndReplacePanel extends JPanel {
 
 					findNext();
 
-					SwingUtilities.invokeLater(() -> {
-						transcriptView.getTranscriptEditor().removeTierChangeListener(this);
-					});
+					transcriptView.getTranscriptEditor().removeTierChangeListener(this);
 				}
 			});
 			transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
-
 		}
 	}
 
@@ -750,7 +747,7 @@ public class FindAndReplacePanel extends JPanel {
 		}
 		getUndoSupport().endUpdate();
 		clearResults();
-//		onQuery();
+		onQuery();
 	}
 
 	private void removeCurrentSelection() {
