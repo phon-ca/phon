@@ -130,7 +130,6 @@ public record FindExpr(SearchType type, String expr, boolean caseSensitive) {
 				return new FindExprMatch(range, matcher, null);
 			}
 		} catch (PatternSyntaxException e) {
-			LogUtil.warning(e);
 			// invalid regex, return empty match
 		}
 		return FindExprMatch.empty();
@@ -155,7 +154,6 @@ public record FindExpr(SearchType type, String expr, boolean caseSensitive) {
 				return new FindExprMatch(range, matcher, null);
 			}
 		} catch (PatternSyntaxException e) {
-			LogUtil.warning(e);
 			// invalid regex, return empty match
 		}
 		return null;
@@ -181,7 +179,6 @@ public record FindExpr(SearchType type, String expr, boolean caseSensitive) {
 				}
 			}
 		} catch (PhonexPatternException e) {
-			LogUtil.warning(e);
 			// invalid phonex, return empty match
 		}
 		return FindExprMatch.empty();
@@ -214,7 +211,6 @@ public record FindExpr(SearchType type, String expr, boolean caseSensitive) {
 				}
 			}
 		} catch (PhonexPatternException e) {
-			LogUtil.warning(e);
 			// invalid phonex, return empty match
 		}
 		return FindExprMatch.empty();
