@@ -152,6 +152,7 @@ public class SearchView extends EditorView {
     }
 
     private void setupEditorActions() {
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     private void clearResults() {
@@ -347,6 +348,26 @@ public class SearchView extends EditorView {
         });
     }
 
+    private void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {
+        if(ee.data().valueAdjusting()) return;
+        final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        for(int i = 0; i < model.getRowCount(); i++) {
+            final FindResult findResult = model.getResultAt(i);
+            if(findResult == null) continue;
+            final int currentTranscriptElementIndex = getEditor().getSession().getRecordElementIndex(getEditor().currentRecord());
+
+            final List<SessionEditorSelection> selectionsForTier = getEditor().getSelectionModel().getSelectionsForTier(currentTranscriptElementIndex, ee.data().tier().getName());
+            for(SessionEditorSelection selection : selectionsForTier) {
+                getEditor().getSelectionModel().removeSelection(selection);
+            }
+            if(findResult.range().transcriptElementIndex() == currentTranscriptElementIndex) {
+                if(ee.data().tier().getName().equals(findResult.range().tier())) {
+                    model.invalidateResultAt(i);
+                }
+            }
+        }
+    }
+
     @Override
     public String getName() {
         return VIEW_NAME;
@@ -368,6 +389,10 @@ public class SearchView extends EditorView {
      */
     private final ListSelectionListener tableSelectionListener =  (e) -> {
         final int row = table.getSelectedRow();
+        if(table.getSearchViewTableModel().isInvalid(row)) {
+            // row is invalid, do nothing
+            return;
+        }
         if(row >= 0) {
             final FindResult findResult = table.getSearchViewTableModel().getResultAt(row);
             final TranscriptElementRange range = findResult.range();

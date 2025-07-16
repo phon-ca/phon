@@ -120,6 +120,8 @@ public class SearchViewTable extends JXTable {
 
         private List<FindResult> results;
 
+        private List<Integer> invalidatedRows = new ArrayList<>();
+
         public SearchViewTableModel(Session session, List<FindResult> results) {
             super();
             this.session = session;
@@ -148,7 +150,7 @@ public class SearchViewTable extends JXTable {
                 case TIER:
                     return range.tier();
                 case TEXT:
-                    return getSearchResultText(range);
+                    return invalidatedRows.contains(rowIndex) ? "INVALID" : getSearchResultText(range);
                 case Range:
                     return range.range();
             }
@@ -210,6 +212,16 @@ public class SearchViewTable extends JXTable {
         public void appendResult(FindResult result) {
             this.results.add(result);
             fireTableRowsInserted(results.size()-1, results.size()-1);
+        }
+
+        public void invalidateResultAt(int rowIndex) {
+            if(rowIndex < 0 || rowIndex >= results.size()) return;
+            invalidatedRows.add(rowIndex);
+            fireTableRowsUpdated(rowIndex, rowIndex);
+        }
+
+        public boolean isInvalid(int rowIndex) {
+            return invalidatedRows.contains(rowIndex);
         }
 
     }
