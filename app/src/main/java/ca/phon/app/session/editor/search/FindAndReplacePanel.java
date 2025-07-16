@@ -22,6 +22,7 @@ import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
+import ca.phon.app.session.editor.view.transcript.TranscriptEditorTierChangeListener;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.FormatterUtil;
@@ -633,11 +634,12 @@ public class FindAndReplacePanel extends JPanel {
 				if(insertIdx < 0 || insertIdx >= searchResults.size()) {
 					searchResults.add(result);
 				} else {
-					searchResults.add(insertIdx++, result);
+					searchResults.add(insertIdx, result);
 				}
 				if(result.range().end().charPosition() <= findNextStart) {
-					currentResultIdx++;
+					currentResultIdx = insertIdx;
 				}
+				insertIdx++;
 				final SessionEditorSelection selection = new SessionEditorSelection(result.range());
 				selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
 				getSelectionModel().addSelection(selection);
@@ -652,7 +654,7 @@ public class FindAndReplacePanel extends JPanel {
 			return;
 		}
 		final FindResult findResult = searchResults.get(currentResultIdx);
-		int insertIdx = invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
+		final int insertIdx = invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
 		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
 		final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().start());
 		final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().end());
@@ -662,22 +664,33 @@ public class FindAndReplacePanel extends JPanel {
 			transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
 			final String replaceText = getReplaceText(findResult, replaceField.getText());
 			transcriptView.getTranscriptEditor().replaceSelection(replaceText);
+
+			transcriptView.getTranscriptEditor().addTierChangeListener(new TranscriptEditorTierChangeListener() {
+				@Override
+				public void tierChanged(String tierName, Object oldValue, Object newValue) {
+					// get character position at the end of the selection
+					final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
+					final TranscriptElementLocation newLocation =
+							transcriptView.getTranscriptEditor().charPosToSessionLocation(finalReplaceEnd);
+
+					// update tier results
+					updateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier(), insertIdx, newLocation.charPosition());
+					updateSearchButtons();
+
+					findNext();
+
+					SwingUtilities.invokeLater(() -> {
+						transcriptView.getTranscriptEditor().removeTierChangeListener(this);
+					});
+				}
+			});
 			transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
 
-			// get character position at the end of the selection
-			final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
-			final TranscriptElementLocation newLocation =
-					transcriptView.getTranscriptEditor().charPosToSessionLocation(finalReplaceEnd);
-
-			// update tier results
-			updateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier(), insertIdx, newLocation.charPosition());
-			updateSearchButtons();
-
-			findNext();
 		}
 	}
 
 	public void replaceAll() {
+		getSelectionModel().clear();
 		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
 		final String replaceExpr = replaceField.getText();
 		getUndoSupport().beginUpdate("replace all occurrences of '" + searchField.getText() + "' with '" + replaceExpr + "'");
@@ -685,14 +698,6 @@ public class FindAndReplacePanel extends JPanel {
 			final FindResult findResult = searchResults.get(i);
 			final String replaceText = getReplaceText(findResult, replaceExpr);
 			final TranscriptElementRange range = findResult.range();
-
-			final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(range.start());
-			final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(range.end());
-			if (replaceStart >= 0 && replaceEnd >= 0) {
-				transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
-				transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
-				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
-			}
 
 			int eleIdx = range.transcriptElementIndex();
 			if(eleIdx < 0) continue;

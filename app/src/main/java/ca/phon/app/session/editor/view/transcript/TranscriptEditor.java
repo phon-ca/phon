@@ -1723,15 +1723,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         if (tier.getDeclaredType() == MediaSegment.class) return;
         if (doc.getTierText(tier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
 
-        if(PrefHelper.isDebugMode()) {
-            LogUtil.info("Changing tier data for " + tier.getName() + " to " + newData);
-        }
-
-//        SwingUtilities.invokeLater(() -> {
         TierEdit<?> edit = new TierEdit(getSession(), eventManager, dataModel.getTranscriber(), record, tier, dummy.getValue());
         edit.setValueAdjusting(false);
         getUndoSupport().postEdit(edit);
-//        });
     }
 
     /**
