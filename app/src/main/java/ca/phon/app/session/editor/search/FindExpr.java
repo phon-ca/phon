@@ -121,83 +121,102 @@ public record FindExpr(SearchType type, String expr, boolean caseSensitive) {
 	}
 	
 	public FindExprMatch findNextRegex(String txt, int charIdx) {
-		final Pattern regexPattern = Pattern.compile(expr(), (caseSensitive() ? 0 : Pattern.CASE_INSENSITIVE));
-		final Matcher matcher = regexPattern.matcher(txt);
-		
-		if(charIdx < txt.length() && matcher.find(charIdx)) {
-			final Range range = new Range(matcher.start(), matcher.end(), false);
-			return new FindExprMatch(range, matcher, null);
+		try {
+			final Pattern regexPattern = Pattern.compile(expr(), (caseSensitive() ? 0 : Pattern.CASE_INSENSITIVE));
+			final Matcher matcher = regexPattern.matcher(txt);
+
+			if (charIdx < txt.length() && matcher.find(charIdx)) {
+				final Range range = new Range(matcher.start(), matcher.end(), false);
+				return new FindExprMatch(range, matcher, null);
+			}
+		} catch (PatternSyntaxException e) {
+			LogUtil.warning(e);
+			// invalid regex, return empty match
 		}
 		return FindExprMatch.empty();
 	}
 	
 	public FindExprMatch findPrevRegex(String txt, int charIdx) {
-		final Pattern regexPattern = Pattern.compile(expr(), (caseSensitive() ? 0 : Pattern.CASE_INSENSITIVE));
-		final Matcher matcher = regexPattern.matcher(txt);
-		matcher.region(0, charIdx);
-		
-		int start = -1;
-		int end = -1;
-		while(matcher.find()) {
-			start = matcher.start();
-			end = matcher.end();
-		}
-		if(start >= 0 && end >= start) {
-			// reset matcher to position
-			matcher.find(start);
-			final Range range = new Range(start, end, false);
-			return new FindExprMatch(range, matcher, null);
+		try {
+			final Pattern regexPattern = Pattern.compile(expr(), (caseSensitive() ? 0 : Pattern.CASE_INSENSITIVE));
+			final Matcher matcher = regexPattern.matcher(txt);
+			matcher.region(0, charIdx);
+
+			int start = -1;
+			int end = -1;
+			while (matcher.find()) {
+				start = matcher.start();
+				end = matcher.end();
+			}
+			if (start >= 0 && end >= start) {
+				// reset matcher to position
+				matcher.find(start);
+				final Range range = new Range(start, end, false);
+				return new FindExprMatch(range, matcher, null);
+			}
+		} catch (PatternSyntaxException e) {
+			LogUtil.warning(e);
+			// invalid regex, return empty match
 		}
 		return null;
 	}
 	
 	public FindExprMatch findNextPhonex(IPATranscript ipa, int charIdx) {
-		final PhonexPattern phonexPattern = PhonexPattern.compile(expr());
-		final PhonexMatcher phonexMatcher = phonexPattern.matcher(ipa);
-		
-		// convert charIdx to ipa idx
-		final int idx = ipa.ipaIndexOf(charIdx);
-		if(idx >= 0) {
-			if(phonexMatcher.find(idx)) {
-				final int ipaStart = phonexMatcher.start();
-				final int ipaEnd = phonexMatcher.end();
-				
-				final int start = ipa.stringIndexOfElement(ipaStart);
-				final int end = ipa.stringIndexOfElement(ipaEnd);
-				
-				final Range range = new Range(start, end, false);
-				return new FindExprMatch(range, null, phonexMatcher);
+		try {
+			final PhonexPattern phonexPattern = PhonexPattern.compile(expr());
+			final PhonexMatcher phonexMatcher = phonexPattern.matcher(ipa);
+
+			// convert charIdx to ipa idx
+			final int idx = ipa.ipaIndexOf(charIdx);
+			if (idx >= 0) {
+				if (phonexMatcher.find(idx)) {
+					final int ipaStart = phonexMatcher.start();
+					final int ipaEnd = phonexMatcher.end();
+
+					final int start = ipa.stringIndexOfElement(ipaStart);
+					final int end = ipa.stringIndexOfElement(ipaEnd);
+
+					final Range range = new Range(start, end, false);
+					return new FindExprMatch(range, null, phonexMatcher);
+				}
 			}
+		} catch (PhonexPatternException e) {
+			LogUtil.warning(e);
+			// invalid phonex, return empty match
 		}
 		return FindExprMatch.empty();
 	}
 	
 	public FindExprMatch findPrevPhonex(IPATranscript ipa, int charIdx) {
-		final PhonexPattern phonexPattern = PhonexPattern.compile(expr());
-		int lastPhonexIdx = ipa.ipaIndexOf(charIdx);
-		if(lastPhonexIdx < 0 && charIdx == ipa.toString().length()) lastPhonexIdx = ipa.length();
-		
-		final PhonexMatcher phonexMatcher = phonexPattern.matcher(ipa);
-		phonexMatcher.region(0, lastPhonexIdx);
-		
-		int ipaStart = -1;
-		int ipaEnd = -1;
-		while(phonexMatcher.find()) {
-			ipaStart = phonexMatcher.start();
-			ipaEnd = phonexMatcher.end();
-		}
-		
-		if(ipaStart >= 0 && ipaEnd >= ipaStart) {
-			final int start = ipa.stringIndexOfElement(ipaStart);
-			final int end = ipa.stringIndexOfElement(ipaEnd);
-			
-			if(start >= 0 && end >= start) {
-				phonexMatcher.find(start);
-				final Range range = new Range(start, end, false);
-				return new FindExprMatch(range, null, phonexMatcher);
+		try {
+			final PhonexPattern phonexPattern = PhonexPattern.compile(expr());
+			int lastPhonexIdx = ipa.ipaIndexOf(charIdx);
+			if (lastPhonexIdx < 0 && charIdx == ipa.toString().length()) lastPhonexIdx = ipa.length();
+
+			final PhonexMatcher phonexMatcher = phonexPattern.matcher(ipa);
+			phonexMatcher.region(0, lastPhonexIdx);
+
+			int ipaStart = -1;
+			int ipaEnd = -1;
+			while (phonexMatcher.find()) {
+				ipaStart = phonexMatcher.start();
+				ipaEnd = phonexMatcher.end();
 			}
+
+			if (ipaStart >= 0 && ipaEnd >= ipaStart) {
+				final int start = ipa.stringIndexOfElement(ipaStart);
+				final int end = ipa.stringIndexOfElement(ipaEnd);
+
+				if (start >= 0 && end >= start) {
+					phonexMatcher.find(start);
+					final Range range = new Range(start, end, false);
+					return new FindExprMatch(range, null, phonexMatcher);
+				}
+			}
+		} catch (PhonexPatternException e) {
+			LogUtil.warning(e);
+			// invalid phonex, return empty match
 		}
-		
 		return FindExprMatch.empty();
 	}
 
