@@ -34,7 +34,7 @@ public class FindManager {
 	 */
 	public enum FindDirection {
 		FORWARDS,
-		BACKWARDS;
+		BACKWARDS
 	}
 
 	/**
@@ -44,17 +44,17 @@ public class FindManager {
 		HIT_END,			// searching forward, hit end of session
 		HIT_BEGINNING,		// search backward, hit beginning of session
 		HIT_RESULT,			// result found
-		INIT;				// initial state
-	};
+		INIT				// initial state
+	}
 
 	/** Session */
-	private Session session;
+	private final Session session;
 	
 	/** Search expr for all tiers (default) */
 	private FindExpr anyExpr;
 
 	/** Search expr for specific tiers */
-	private final Map<String, FindExpr> tierExprs = new HashMap<String, FindExpr>();
+	private final Map<String, FindExpr> tierExprs = new HashMap<>();
 
 	/** Current location */
 	private TranscriptElementLocation forwardsLocation = null;
@@ -67,7 +67,7 @@ public class FindManager {
 	private FindStatus findStatus = FindStatus.INIT;
 
 	/** Tiers to search */
-	private List<String> searchTiers;
+	private final List<String> searchTiers;
 	
 	/**
 	 * Last expression that matched
@@ -77,7 +77,7 @@ public class FindManager {
 	/**
 	 * Last transcript range found
 	 */
-	private TranscriptElementRange lastRange = null;
+	private FindResult lastResult = null;
 
 	/**
 	 * Include comments
@@ -92,7 +92,7 @@ public class FindManager {
 	/**
 	 * Speakers
 	 */
-	private List<Participant> speakers = new ArrayList<Participant>();
+	private final List<Participant> speakers = new ArrayList<>();
 	
 	/**
 	 * Constructor
@@ -100,7 +100,7 @@ public class FindManager {
 	public FindManager(Session session) {
 		this.session = session;
 
-		this.searchTiers = new ArrayList<String>();
+		this.searchTiers = new ArrayList<>();
 
 		for(TierViewItem toi:session.getTierView()) {
 			if(toi.isVisible()) {
@@ -135,8 +135,7 @@ public class FindManager {
 
 	public void setSearchTiers(String[] tiers) {
 		this.searchTiers.clear();
-		for(String tier:tiers)
-			this.searchTiers.add(tier);
+        Collections.addAll(this.searchTiers, tiers);
 	}
 
 	public void setSearchTiers(List<String> tiers) {
@@ -189,8 +188,8 @@ public class FindManager {
 		return this.lastExpr;
 	}
 	
-	public TranscriptElementRange getMatchedRange() {
-		return this.lastRange;
+	public FindResult getMatchedRange() {
+		return this.lastResult;
 	}
 
 	public boolean isIncludeComments() {
@@ -215,11 +214,9 @@ public class FindManager {
 	 *
 	 * @return the location of the next instance of the given pattern
 	 *
-	 * @throws FindException
-	 *
 	 */
-	public TranscriptElementRange findNext() {
-		TranscriptElementRange retVal = null;
+	public FindResult findNext() {
+		FindResult retVal = null;
 
 		final TranscriptElementLocation currentLocation = getNextLocation();
 		// start from current location and in specified direction
@@ -231,8 +228,8 @@ public class FindManager {
 
 		// update current position if we have a result
 		if(retVal != null) {
-			forwardsLocation = retVal.end();
-			backwardsLocation = retVal.start();
+			forwardsLocation = retVal.range().end();
+			backwardsLocation = retVal.range().start();
 			findStatus = FindStatus.HIT_RESULT;
 		} else {
 			if(direction == FindDirection.FORWARDS)
@@ -241,7 +238,7 @@ public class FindManager {
 				findStatus = FindStatus.HIT_BEGINNING;
 		}
 		
-		lastRange = retVal;
+		lastResult = retVal;
 
 		return retVal;
 	}
@@ -252,11 +249,9 @@ public class FindManager {
 	 *
 	 * @return the location of the next instance of the given pattern
 	 *
-	 * @throws FindException
-	 *
 	 */
-	public TranscriptElementRange findPrev() {
-		TranscriptElementRange retVal = null;
+	public FindResult findPrev() {
+		FindResult retVal = null;
 
 		final TranscriptElementLocation currentLocation = getPrevLocation();
 		// start from current location and in specified direction
@@ -268,8 +263,8 @@ public class FindManager {
 
 		// update current position if we have a result
 		if(retVal != null) {
-			forwardsLocation = retVal.end();
-			backwardsLocation = retVal.start();
+			forwardsLocation = retVal.range().end();
+			backwardsLocation = retVal.range().start();
 			findStatus = FindStatus.HIT_RESULT;
 		} else {
 			if(direction == FindDirection.BACKWARDS)
@@ -278,14 +273,13 @@ public class FindManager {
 				findStatus = FindStatus.HIT_BEGINNING;
 		}
 		
-		lastRange = retVal;
+		lastResult = retVal;
 
 		return retVal;
-
 	}
 
-	private TranscriptElementRange findForwards(TranscriptElementLocation pos) {
-		TranscriptElementRange retVal = null;
+	private FindResult findForwards(TranscriptElementLocation pos) {
+		FindResult retVal = null;
 		
 		int eleIdx = pos.transcriptElementIndex();
 		int tierIdx = searchTiers.indexOf(pos.tier());
@@ -301,11 +295,12 @@ public class FindManager {
 				final Comment comment = ele.asComment();
 				if(isIncludeComments()) {
 					if(anyExpr != null) {
-						Range range = anyExpr.findNext(comment.getValue(), charIdx);
+						final FindExprMatch findExprMatch = anyExpr.findNext(comment.getValue(), charIdx);
 						lastExpr = anyExpr;
-						if(range != null) {
-							range.setExcludesEnd(true);
-							retVal = new TranscriptElementRange(eleIdx, comment.getType().toString(), range);
+						if(findExprMatch.hasMatch()) {
+							final var transcriptElementRange = new TranscriptElementRange(eleIdx, comment.getType().toString(),
+									new Range(findExprMatch.range().getStart(), findExprMatch.range().getEnd(), true));
+							retVal = new FindResult(anyExpr, transcriptElementRange, findExprMatch.matcher(), findExprMatch.phonexMatcher());
 							break;
 						}
 					}
@@ -314,11 +309,12 @@ public class FindManager {
 				final Gem gem = ele.asGem();
 				if(isIncludeGems()) {
 					if(anyExpr != null) {
-						Range range = anyExpr.findNext(gem.getLabel(), charIdx);
+						final FindExprMatch findExprMatch = anyExpr.findNext(gem.getLabel(), charIdx);
 						lastExpr = anyExpr;
-						if(range != null) {
-							range.setExcludesEnd(true);
-							retVal = new TranscriptElementRange(eleIdx, gem.getType().toString(), range);
+						if(findExprMatch.hasMatch()) {
+							final var transcriptElementRange = new TranscriptElementRange(eleIdx, gem.getType().toString(),
+									new Range(findExprMatch.range().getStart(), findExprMatch.range().getEnd(), true));
+							retVal = new FindResult(anyExpr, transcriptElementRange, findExprMatch.matcher(), findExprMatch.phonexMatcher());
 							break;
 						}
 					}
@@ -338,9 +334,9 @@ public class FindManager {
 						continue;
 					}
 
-					Range charRange = null;
-					Range tierExprRange = null;
-					Range anyExprRange = null;
+					FindExprMatch charRange = null;
+					FindExprMatch tierExprRange = null;
+					FindExprMatch anyExprRange = null;
 
 					final FindExpr tierExpr = getExprForTier(tier.getName());
 					if (tierExpr != null) {
@@ -350,20 +346,20 @@ public class FindManager {
 						anyExprRange = anyExpr.findNext(tier.getValue(), charIdx);
 					}
 
-					lastExpr = (tierExprRange != null ? tierExpr :
-							(anyExprRange != null ? anyExpr : null));
 
-					if (tierExprRange != null && anyExprRange != null) {
+					if (tierExprRange != null && tierExprRange.hasMatch() && anyExprRange != null && anyExprRange.hasMatch()) {
 						charRange =
-								(tierExprRange.getFirst() <= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+								(tierExprRange.range().getFirst() <= anyExprRange.range().getFirst() ? tierExprRange : anyExprRange);
 					} else {
 						charRange =
-								(tierExprRange != null ? tierExprRange : anyExprRange);
+								(tierExprRange != null && tierExprRange.hasMatch() ? tierExprRange : anyExprRange);
 					}
+					lastExpr = charRange == tierExprRange ? tierExpr : anyExpr;
 
-					if (charRange != null) {
-						charRange.setExcludesEnd(true);
-						retVal = new TranscriptElementRange(eleIdx, tier.getName(), charRange);
+					if (charRange != null && charRange.hasMatch()) {
+						final var transcriptElementRange = new TranscriptElementRange(eleIdx, tier.getName(),
+								new Range(charRange.range().getStart(), charRange.range().getEnd(), true));
+						retVal = new FindResult(lastExpr, transcriptElementRange, charRange.matcher(), charRange.phonexMatcher());
 						break;
 					}
 					// reset charIdx
@@ -382,8 +378,8 @@ public class FindManager {
 		return retVal;
 	}
 
-	private TranscriptElementRange findBackwards(TranscriptElementLocation pos) {
-		TranscriptElementRange retVal = null;
+	private FindResult findBackwards(TranscriptElementLocation pos) {
+		FindResult retVal = null;
 		
 		int eleIdx = pos.transcriptElementIndex();
 		int tierIdx = searchTiers.indexOf(pos.tier());
@@ -398,11 +394,12 @@ public class FindManager {
 				final Comment comment = ele.asComment();
 				if(isIncludeComments()) {
 					if(anyExpr != null) {
-						Range range = anyExpr.findPrev(comment.getValue(), charIdx);
+						final FindExprMatch findExprMatch = anyExpr.findPrev(comment.getValue(), charIdx);
 						lastExpr = anyExpr;
-						if(range != null) {
-							range.setExcludesEnd(true);
-							retVal = new TranscriptElementRange(eleIdx, comment.getType().toString(), range);
+						if(findExprMatch.hasMatch()) {
+							final var transcriptElementRange = new TranscriptElementRange(eleIdx, comment.getType().toString(),
+									new Range(findExprMatch.range().getStart(), findExprMatch.range().getEnd(), true));
+							retVal = new FindResult(anyExpr, transcriptElementRange, findExprMatch.matcher(), findExprMatch.phonexMatcher());
 							break;
 						}
 					}
@@ -411,11 +408,12 @@ public class FindManager {
 				final Gem gem = ele.asGem();
 				if(isIncludeGems()) {
 					if(anyExpr != null) {
-						Range range = anyExpr.findPrev(gem.getLabel(), charIdx);
+						final FindExprMatch findExprMatch = anyExpr.findPrev(gem.getLabel(), charIdx);
 						lastExpr = anyExpr;
-						if(range != null) {
-							range.setExcludesEnd(true);
-							retVal = new TranscriptElementRange(eleIdx, gem.getType().toString(), range);
+						if(findExprMatch.hasMatch()) {
+							final var transcriptElementRange = new TranscriptElementRange(eleIdx, gem.getType().toString(),
+									new Range(findExprMatch.range().getStart(), findExprMatch.range().getEnd(), true));
+							retVal = new FindResult(anyExpr, transcriptElementRange, findExprMatch.matcher(), findExprMatch.phonexMatcher());
 							break;
 						}
 					}
@@ -429,9 +427,9 @@ public class FindManager {
 					final Tier<?> tier = currentUtt.getTier(searchTier);
 					if (tier == null) continue;
 
-					Range charRange = null;
-					Range tierExprRange = null;
-					Range anyExprRange = null;
+					FindExprMatch charRange = null;
+					FindExprMatch tierExprRange = null;
+					FindExprMatch anyExprRange = null;
 
 					Object grpVal = tier.getValue();
 					if (charIdx == Integer.MAX_VALUE) {
@@ -447,20 +445,19 @@ public class FindManager {
 						anyExprRange = anyExpr.findPrev(tier.getValue(), charIdx);
 					}
 
-					lastExpr = (tierExprRange != null ? tierExpr :
-							(anyExprRange != null ? anyExpr : null));
-
-					if (tierExprRange != null && anyExprRange != null) {
+					if (tierExprRange != null && tierExprRange.hasMatch() && anyExprRange != null && anyExprRange.hasMatch()) {
 						charRange =
-								(tierExprRange.getFirst() >= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+								(tierExprRange.range().getFirst() >= anyExprRange.range().getFirst() ? tierExprRange : anyExprRange);
 					} else {
 						charRange =
 								(tierExprRange != null ? tierExprRange : anyExprRange);
 					}
+					lastExpr = charRange == tierExprRange ? tierExpr : anyExpr;
 
-					if (charRange != null) {
-						charRange.setExcludesEnd(true);
-						retVal = new TranscriptElementRange(eleIdx, tier.getName(), charRange);
+					if (charRange != null && charRange.hasMatch()) {
+						final var transcriptElementRange = new TranscriptElementRange(eleIdx, tier.getName(),
+								new Range(charRange.range().getStart(), charRange.range().getEnd(), true));
+						retVal = new FindResult(lastExpr, transcriptElementRange, charRange.matcher(), charRange.phonexMatcher());
 						break;
 					}
 					// reset char idx

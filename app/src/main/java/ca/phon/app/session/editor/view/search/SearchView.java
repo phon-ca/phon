@@ -3,9 +3,9 @@ package ca.phon.app.session.editor.view.search;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.search.FindExpr;
 import ca.phon.app.session.editor.search.FindManager;
+import ca.phon.app.session.editor.search.FindResult;
 import ca.phon.app.session.editor.search.SearchType;
 import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
-import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.session.Participant;
 import ca.phon.session.TierViewItem;
@@ -24,7 +24,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.text.Highlighter;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -306,15 +305,11 @@ public class SearchView extends EditorView {
         }
         final FindManager findManager = new FindManager(getEditor().getSession());
         findManager.setCurrentLocation(new TranscriptElementLocation(0, findManager.getSearchTiers()[0], 0));
-        final FindExpr findExpr = new FindExpr(searchField.getText());
-        findExpr.setCaseSensitive(caseSensitiveButton.isSelected());
-        if(regexButton.isSelected()) {
-            findExpr.setType(SearchType.REGEX);
-        } else if(phonexButton.isSelected()) {
-            findExpr.setType(SearchType.PHONEX);
-        } else {
-            findExpr.setType(SearchType.PLAIN);
-        }
+
+        final String query = searchField.getText();
+        final SearchType searchType = regexButton.isSelected() ? SearchType.REGEX :
+                phonexButton.isSelected() ? SearchType.PHONEX : SearchType.PLAIN;
+        final FindExpr findExpr = new FindExpr(searchType, query, caseSensitiveButton.isSelected());
         findManager.setAnyExpr(findExpr);
         setupSearchTiers(findManager);
         setupRecordFilter(findManager);
@@ -327,9 +322,9 @@ public class SearchView extends EditorView {
             public void tableChanged(TableModelEvent e) {
                 if(e.getType() != TableModelEvent.INSERT) return;
                 for(int i = e.getFirstRow(); i <= e.getLastRow(); i++) {
-                    final TranscriptElementRange range = table.getSearchViewTableModel().getRangeAt(i);
-                    if(range == null) continue;
-                    final SessionEditorSelection selection = new SessionEditorSelection(range);
+                    final FindResult findResult = table.getSearchViewTableModel().getResultAt(i);
+                    if(findResult == null) continue;
+                    final SessionEditorSelection selection = new SessionEditorSelection(findResult.range());
                     selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
                     getEditor().getSelectionModel().addSelection(selection);
                 }
@@ -374,7 +369,8 @@ public class SearchView extends EditorView {
     private final ListSelectionListener tableSelectionListener =  (e) -> {
         final int row = table.getSelectedRow();
         if(row >= 0) {
-            final TranscriptElementRange range = table.getSearchViewTableModel().getRangeAt(row);
+            final FindResult findResult = table.getSearchViewTableModel().getResultAt(row);
+            final TranscriptElementRange range = findResult.range();
             final TranscriptElementLocation start = range.start();
             final TranscriptElementLocation end = range.end();
             // add selection to model

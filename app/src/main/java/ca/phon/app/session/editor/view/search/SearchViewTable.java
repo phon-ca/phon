@@ -1,16 +1,15 @@
 package ca.phon.app.session.editor.view.search;
 
 import ca.phon.app.session.editor.search.FindManager;
+import ca.phon.app.session.editor.search.FindResult;
+import ca.phon.orthography.InternalMedia;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcript;
 import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.util.Range;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +30,9 @@ public class SearchViewTable extends JXTable {
         super(model);
     }
 
-    public SearchViewTable(Session session, List<TranscriptElementRange> ranges) {
+    public SearchViewTable(Session session, List<FindResult> results) {
         super();
-        setModel(new SearchViewTableModel(session, ranges));
+        setModel(new SearchViewTableModel(session, results));
     }
 
     public void clearSearch() {
@@ -60,7 +59,7 @@ public class SearchViewTable extends JXTable {
     /**
      * Swing worker for finding results
      */
-    private class FindWorker extends SwingWorker<List<TranscriptElementRange>, TranscriptElementRange> {
+    private class FindWorker extends SwingWorker<List<FindResult>, FindResult> {
 
         private final FindManager findManager;
 
@@ -70,19 +69,19 @@ public class SearchViewTable extends JXTable {
         }
 
         @Override
-        protected List<TranscriptElementRange> doInBackground() throws Exception {
-            final List<TranscriptElementRange> retVal = new ArrayList<>();
-            TranscriptElementRange range = null;
-            while((range = findManager.findNext()) != null) {
-                retVal.add(range);
-                publish(range);
+        protected List<FindResult> doInBackground() throws Exception {
+            final List<FindResult> retVal = new ArrayList<>();
+            FindResult findResult = null;
+            while((findResult = findManager.findNext()) != null) {
+                retVal.add(findResult);
+                publish(findResult);
             }
             return retVal;
         }
 
         @Override
-        protected void process(List<TranscriptElementRange> chunks) {
-            for(TranscriptElementRange range:chunks) {
+        protected void process(List<FindResult> chunks) {
+            for(FindResult range:chunks) {
                 getSearchViewTableModel().appendResult(range);
             }
         }
@@ -119,17 +118,17 @@ public class SearchViewTable extends JXTable {
 
         }
 
-        private List<TranscriptElementRange> ranges;
+        private List<FindResult> results;
 
-        public SearchViewTableModel(Session session, List<TranscriptElementRange> ranges) {
+        public SearchViewTableModel(Session session, List<FindResult> results) {
             super();
             this.session = session;
-            this.ranges = ranges;
+            this.results = results;
         }
 
         @Override
         public int getRowCount() {
-            return ranges.size();
+            return results.size();
         }
 
         @Override
@@ -139,7 +138,8 @@ public class SearchViewTable extends JXTable {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            final TranscriptElementRange range = ranges.get(rowIndex);
+            final FindResult findResult = results.get(rowIndex);
+            final TranscriptElementRange range = findResult.range();
             final Transcript.Element element = session.getTranscript().getElementAt(range.transcriptElementIndex());
             switch(Columns.values()[columnIndex]) {
                 case RECORD:
@@ -169,6 +169,9 @@ public class SearchViewTable extends JXTable {
                 if(tier == null) return "";
                 // TODO blind transcriptions
                 String tierText = tier.toString();
+                if(tier.getDeclaredType() == MediaSegment.class) {
+                    tierText = InternalMedia.MEDIA_BULLET + tierText + InternalMedia.MEDIA_BULLET;
+                }
                 return getTokenizedText(tierText, range.range());
             }
         }
@@ -200,13 +203,13 @@ public class SearchViewTable extends JXTable {
             return super.getColumnClass(columnIndex);
         }
 
-        public TranscriptElementRange getRangeAt(int rowIndex) {
-            return ranges.get(rowIndex);
+        public FindResult getResultAt(int rowIndex) {
+            return results.get(rowIndex);
         }
 
-        public void appendResult(TranscriptElementRange range) {
-            this.ranges.add(range);
-            fireTableRowsInserted(ranges.size()-1, ranges.size()-1);
+        public void appendResult(FindResult result) {
+            this.results.add(result);
+            fireTableRowsInserted(results.size()-1, results.size()-1);
         }
 
     }
