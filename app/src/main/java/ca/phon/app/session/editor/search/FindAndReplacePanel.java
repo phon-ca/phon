@@ -654,7 +654,6 @@ public class FindAndReplacePanel extends JPanel {
 			return;
 		}
 		final FindResult findResult = searchResults.get(currentResultIdx);
-		final int insertIdx = invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
 		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
 		final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().start());
 		final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().end());
@@ -663,26 +662,34 @@ public class FindAndReplacePanel extends JPanel {
 			transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
 			transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
 			final String replaceText = getReplaceText(findResult, replaceField.getText());
-			transcriptView.getTranscriptEditor().replaceSelection(replaceText);
 
-			transcriptView.getTranscriptEditor().addTierChangeListener(new TranscriptEditorTierChangeListener() {
-				@Override
-				public void tierChanged(String tierName, Object oldValue, Object newValue) {
-					// get character position at the end of the selection
-					final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
-					final TranscriptElementLocation newLocation =
-							transcriptView.getTranscriptEditor().charPosToSessionLocation(finalReplaceEnd);
+			final String selectedText = transcriptView.getTranscriptEditor().getSelectedText();
+			if(selectedText != null && selectedText.equals(replaceText)) {
+				findNext();
+			} else {
+				final int insertIdx = invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
+				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
+				transcriptView.getTranscriptEditor().addTierChangeListener(new TranscriptEditorTierChangeListener() {
+					@Override
+					public void tierChanged(String tierName, Object oldValue, Object newValue) {
+						// get character position at the end of the selection
+						final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
+						final TranscriptElementLocation newLocation =
+								transcriptView.getTranscriptEditor().charPosToSessionLocation(finalReplaceEnd);
 
-					// update tier results
-					updateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier(), insertIdx, newLocation.charPosition());
-					updateSearchButtons();
+						// update tier results
+						updateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier(), insertIdx, newLocation.charPosition());
+						updateSearchButtons();
 
-					findNext();
+						findNext();
 
-					transcriptView.getTranscriptEditor().removeTierChangeListener(this);
-				}
-			});
-			transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
+						SwingUtilities.invokeLater(() -> {
+							transcriptView.getTranscriptEditor().removeTierChangeListener(this);
+						});
+					}
+				});
+				transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
+			}
 		}
 	}
 

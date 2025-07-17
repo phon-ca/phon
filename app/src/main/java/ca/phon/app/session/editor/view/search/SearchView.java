@@ -76,6 +76,54 @@ public class SearchView extends EditorView {
 
         init();
         setupEditorActions();
+
+        editor.getViewModel().addEditorViewModelListener(new EditorViewModelListener() {
+            @Override
+            public void viewShown(String viewName) {
+                if(viewName.equals(VIEW_NAME)) {
+                    if(table.getSearchViewTableModel().getRowCount() > 0) {
+                        getEditor().getSelectionModel().clear();
+                        addHighlights();
+                    }
+                }
+            }
+
+            @Override
+            public void viewHidden(String viewName) {
+                if(viewName.equals(VIEW_NAME)) {
+                    if(table.getSearchViewTableModel().getRowCount() > 0) {
+                        // clear highlights
+                        getEditor().getSelectionModel().clear();
+                        currentSelection = null;
+                    }
+                }
+            }
+
+            @Override
+            public void viewMinimized(String viewName) {
+
+            }
+
+            @Override
+            public void viewMaximized(String viewName) {
+
+            }
+
+            @Override
+            public void viewNormalized(String viewName) {
+
+            }
+
+            @Override
+            public void viewExternalized(String viewName) {
+
+            }
+
+            @Override
+            public void viewFocused(String viewName) {
+
+            }
+        });
     }
 
     private SessionEditorSelection currentSelection = null;
@@ -346,6 +394,16 @@ public class SearchView extends EditorView {
                 }
             }
         });
+    }
+
+    private void addHighlights() {
+        for(int i = 0; i < table.getSearchViewTableModel().getRowCount(); i++) {
+            final FindResult findResult = table.getSearchViewTableModel().getResultAt(i);
+            if(findResult == null) continue;
+            final SessionEditorSelection selection = new SessionEditorSelection(findResult.range());
+            selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
+            getEditor().getSelectionModel().addSelection(selection);
+        }
     }
 
     private void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {
