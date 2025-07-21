@@ -16,6 +16,7 @@
 package ca.phon.ui.text;
 
 import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconSize;
@@ -54,6 +55,12 @@ public class SearchField extends JPanel {
 	protected SearchFieldButton endButton;
 	
 	protected final PromptedTextField queryField;
+
+	/**
+	 * Custom menu handler for adding custom options to the context menu.
+	 */
+	protected SearchFieldMenuHandler menuHandler = null;
+
 	
 	/**
 	 * Search icon
@@ -259,18 +266,46 @@ public class SearchField extends JPanel {
 	}
 
 	/**
-	 * Setup popup menu.
+	 * Setup popup menu.  Override this method to completely customize the
+	 * context menu for the search field.  Most implementations will only
+	 * need to add custom options to the menu and should use the
+	 * {@link SearchFieldMenuHandler} interface to do so.
 	 * 
-	 * @param menu
+	 * @param menu popup menu to setup
 	 */
 	protected void setupPopupMenu(JPopupMenu menu) {
+		final MenuBuilder menuBuilder = new MenuBuilder(menu);
+		if(menuHandler != null) {
+			menuHandler.setupMenu(menuBuilder);
+		}
+		if(menu.getComponentCount() > 0) {
+			menuBuilder.addSeparator(".", "clear");
+		}
 		PhonUIAction clearFieldAct = PhonUIAction.eventConsumer(this::onClearText);
 		clearFieldAct.putValue(PhonUIAction.NAME, "Clear text");
 		JMenuItem clearTextItem = new JMenuItem(clearFieldAct);
-		
-		menu.add(clearTextItem);
+		menuBuilder.addItem(".", clearTextItem);
 	}
-	
+
+	/**
+	 * Set a custom menu handler for the search field.  May be used to add
+	 * custom options to the context menu.
+	 *
+	 * @param menuHandler custom menu handler or <code>null</code> to remove
+	 */
+	public void setMenuHandler(SearchFieldMenuHandler menuHandler) {
+		this.menuHandler = menuHandler;
+	}
+
+	/**
+	 * Get the custom menu handler for the search field.
+	 *
+	 * @return custom menu handler or <code>null</code> if none is set
+	 */
+	public SearchFieldMenuHandler getMenuHandler() {
+		return menuHandler;
+	}
+
 	public void setState(String state) {
 		queryField.setState(state);
 	}
@@ -403,6 +438,15 @@ public class SearchField extends JPanel {
 		}
 		PrefHelper.getUserPreferences().put(historyProperty, historyStr.toString());
 		return true;
+	}
+
+	public static interface SearchFieldMenuHandler {
+		/**
+		 * Perform custom changes on the context menu
+		 *
+		 * @param menu
+		 */
+		public void setupMenu(MenuBuilder menu);
 	}
 
 }

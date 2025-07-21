@@ -13,6 +13,7 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.SearchField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -29,6 +30,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Stack;
 
 /**
@@ -50,6 +52,9 @@ public class SearchView extends EditorView {
     // TODO implement search history
     private Stack<String> searchHistory;
 
+    /**
+     * Custom text field with search icon
+     */
     private SearchField searchField;
 
     private JLabel resultsLabel;
@@ -179,6 +184,7 @@ public class SearchView extends EditorView {
         this.searchField.addPropertyChangeListener("text_cleared", (e) -> {
             clearResults();
         });
+        this.searchField.setMenuHandler(this::setupSearchContextMenu);
 
         resultsLabel = new JLabel("0 results");
         resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
@@ -261,6 +267,21 @@ public class SearchView extends EditorView {
             regexButton.setSelected(false);
         }
         onQuery();
+    }
+
+    private void setupSearchContextMenu(MenuBuilder menuBuilder) {
+        final PhonUIAction<Boolean> toggleLiveUpdateAct = PhonUIAction.consumer(this::setLiveUpdate, !liveUpdate);
+        toggleLiveUpdateAct.putValue(Action.NAME, "Toggle live update");
+        toggleLiveUpdateAct.putValue(Action.SHORT_DESCRIPTION, "Toggle live update of search results");
+        toggleLiveUpdateAct.putValue(Action.SELECTED_KEY, liveUpdate);
+        final JCheckBoxMenuItem toggleLiveUpdateItem = new JCheckBoxMenuItem(toggleLiveUpdateAct);
+        menuBuilder.addItem(".", toggleLiveUpdateItem);
+    }
+
+    public void setLiveUpdate(Boolean liveUpdate) {
+        var oldVal = this.liveUpdate;
+        this.liveUpdate = liveUpdate;
+        super.firePropertyChange("liveUpdate", oldVal, this.liveUpdate);
     }
 
     private void showFilterMenu() {
@@ -712,6 +733,33 @@ public class SearchView extends EditorView {
     @Override
     public JMenu getMenu() {
         return null;
+    }
+
+    @Override
+    public Properties getStateProperties() {
+        final Properties retVal = super.getStateProperties();
+        retVal.put("caseSensitive", Boolean.toString(caseSensitiveButton.isSelected()));
+        retVal.put("regex", Boolean.toString(regexButton.isSelected()));
+        retVal.put("phonex", Boolean.toString(phonexButton.isSelected()));
+        retVal.put("liveUpdate", Boolean.toString(liveUpdate));
+        return retVal;
+    }
+
+    @Override
+    public void loadStateProperties(Properties props) {
+        super.loadStateProperties(props);
+        if(props.containsKey("caseSensitive") && caseSensitiveButton != null) {
+            caseSensitiveButton.setSelected(Boolean.parseBoolean(props.getProperty("caseSensitive")));
+        }
+        if(props.containsKey("regex") && regexButton != null) {
+            regexButton.setSelected(Boolean.parseBoolean(props.getProperty("regex")));
+        }
+        if(props.containsKey("phonex") && phonexButton != null) {
+            phonexButton.setSelected(Boolean.parseBoolean(props.getProperty("phonex")));
+        }
+        if(props.containsKey("liveUpdate")) {
+            liveUpdate = Boolean.parseBoolean(props.getProperty("liveUpdate"));
+        }
     }
 
     /**
