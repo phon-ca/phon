@@ -135,6 +135,24 @@ public class IPCCalculator {
                             placeVariegationExplanation.append(" " + t.toString());
                             placeVariegationExplanation.append(prevPlace.toString());
                         }
+                    } else {
+                        FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.getFeatureSet());
+                        if (prevPlace != null) {
+                            if (!prevPlace.equals(currentPlace)) {
+                                placeVariegationExplanation.append(" -> " + t.toString());
+                                placeVariegationExplanation.append(currentPlace.toString());
+
+                                if (P > 0) {
+                                    explanation.append(" +");
+                                }
+                                explanation.append(placeVariegationExplanation.toString());
+                                P++;
+                            }
+                        }
+                        prevPlace = currentPlace;
+                        placeVariegationExplanation.setLength(0);
+                        placeVariegationExplanation.append(" " + t.toString());
+                        placeVariegationExplanation.append(prevPlace.toString());
                     }
                 }
                 lastWasConsonant = true;
@@ -182,24 +200,6 @@ public class IPCCalculator {
                         }
                     }
                     prevPlace = currentPlace;
-                }
-            }
-
-            // if cluster is heterosyllabic, increment T
-            int lastSyllableIdx = -1;
-            for (var ele : matcher.group()) {
-                if (ele.getFeatureSet().hasFeature("consonant")) {
-                    int currentSyllableIdx = ipa.syllableIndexOf(ele);
-                    if (lastSyllableIdx == -1) {
-                        lastSyllableIdx = currentSyllableIdx;
-                    } else if (lastSyllableIdx != currentSyllableIdx) {
-                        if (T > 0) {
-                            clusterTypeExplanation.append(" +");
-                        }
-                        clusterTypeExplanation.append(" " + (new IPATranscript(matcher.group())).toString() + " (heterosyllabic)");
-                        T++;
-                        break;
-                    }
                 }
             }
         }
