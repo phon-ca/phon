@@ -85,7 +85,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	/* Since there is not one but many main-Frames, it is hard to specify which one is the root-window. The
 	 * FocusedWindowProvider always assumes that the window that is or was focused is the root-window. */
-	private FocusedWindowProvider windows = new FocusedWindowProvider();
+	private final FocusedWindowProvider windows = new FocusedWindowProvider();
 
 	/**
 	 * Dock control
@@ -185,7 +185,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void opened(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
-				if (viewName.trim().length() > 0) {
+				if (!viewName.trim().isEmpty()) {
 					EditorView view = getView(viewName);
 					if (view != null) {
 						view.onOpen();
@@ -196,7 +196,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void closed(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
-				if (viewName.trim().length() > 0) {
+				if (!viewName.trim().isEmpty()) {
 					EditorView view = getView(viewName);
 					if (view != null) {
 						view.onClose();
@@ -917,8 +917,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				}
 				for (String viewName : viewNames) {
 					final EditorView view = registeredViews.get(viewName);
-					final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
-
+					Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
+					if(viewProps == null) {
+						viewProps = new Properties();
+					}
 					if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
 						viewProps.put("mediaPlayerVisible", String.valueOf(isShowing(MediaPlayerEditorView.VIEW_NAME)));
 						System.out.println("Saving media player view state: " + viewProps);
