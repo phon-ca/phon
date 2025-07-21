@@ -33,10 +33,9 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         if(oldLocation.tier() == null) return true;
         if(oldLocation.tier().equals(newLocation.tier())) return true;
         if(editor.tierHasUncommittedChanges(oldDot)) {
-            LogUtil.info("Changing tier from " + oldLocation + " to " + newLocation);
-            editor.commitChanges(oldDot);
             this.savedTierName = oldLocation.tier();
             this.gotoLocation = newLocation;
+            editor.commitChanges(oldDot);
             return false;
         }
         return true;
@@ -48,9 +47,9 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         if(!this.savedTierName.equals(tierName)) return;
         SwingUtilities.invokeLater(() -> {
             final int newDot = editor.sessionLocationToCharPos(gotoLocation);
-            editor.getTranscriptEditorCaret().setDot(newDot);
             this.gotoLocation = null;
             this.savedTierName = null;
+            editor.getTranscriptEditorCaret().setDot(newDot);
         });
     }
 

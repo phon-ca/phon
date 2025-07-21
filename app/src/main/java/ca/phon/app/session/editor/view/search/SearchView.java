@@ -47,6 +47,7 @@ public class SearchView extends EditorView {
 
     private final static int MAX_SEARCH_HISTORY = 10;
 
+    // TODO implement search history
     private Stack<String> searchHistory;
 
     private SearchField searchField;
@@ -70,6 +71,8 @@ public class SearchView extends EditorView {
     private boolean includeComments = true;
 
     private boolean includeGems = true;
+
+    private boolean liveUpdate = true;
 
     public SearchView(SessionEditor editor) {
         super(editor);
@@ -367,6 +370,23 @@ public class SearchView extends EditorView {
     }
 
     /**
+     * Return a new FindManager with the current search settings.
+     *
+     * @return a new FindManager with the current search settings
+     */
+    private FindManager createFindManager() {
+        final FindManager findManager = new FindManager(getEditor().getSession());
+        final String query = searchField.getText();
+        final SearchType searchType = regexButton.isSelected() ? SearchType.REGEX :
+                phonexButton.isSelected() ? SearchType.PHONEX : SearchType.PLAIN;
+        final FindExpr findExpr = new FindExpr(searchType, query, caseSensitiveButton.isSelected());
+        findManager.setAnyExpr(findExpr);
+        setupSearchTiers(findManager);
+        setupRecordFilter(findManager);
+        return findManager;
+    }
+
+    /**
      * Executes query will all current filters
      *
      */
@@ -378,16 +398,8 @@ public class SearchView extends EditorView {
             clearResults();
             return;
         }
-        final FindManager findManager = new FindManager(getEditor().getSession());
+        final FindManager findManager = createFindManager();
         findManager.setCurrentLocation(new TranscriptElementLocation(0, findManager.getSearchTiers()[0], 0));
-
-        final String query = searchField.getText();
-        final SearchType searchType = regexButton.isSelected() ? SearchType.REGEX :
-                phonexButton.isSelected() ? SearchType.PHONEX : SearchType.PLAIN;
-        final FindExpr findExpr = new FindExpr(searchType, query, caseSensitiveButton.isSelected());
-        findManager.setAnyExpr(findExpr);
-        setupSearchTiers(findManager);
-        setupRecordFilter(findManager);
 
         this.resultsLabel.setText("0 results");
         this.resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
@@ -399,6 +411,7 @@ public class SearchView extends EditorView {
                 for(int i = e.getFirstRow(); i <= e.getLastRow(); i++) {
                     final FindResult findResult = table.getSearchViewTableModel().getResultAt(i);
                     if(findResult == null) continue;
+                    if(!getEditor().getViewModel().isShowing(VIEW_NAME)) return;
                     final SessionEditorSelection selection = new SessionEditorSelection(findResult.range());
                     selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
                     getEditor().getSelectionModel().addSelection(selection);
@@ -423,6 +436,7 @@ public class SearchView extends EditorView {
     }
 
     private void addHighlights() {
+        if(!getEditor().getViewModel().isShowing(VIEW_NAME)) return;
         for(int i = 0; i < table.getSearchViewTableModel().getRowCount(); i++) {
             final FindResult findResult = table.getSearchViewTableModel().getResultAt(i);
             if(findResult == null) continue;
@@ -524,8 +538,10 @@ public class SearchView extends EditorView {
     }
 
     private void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {
+        if (table.getSearchViewTableModel().getRowCount() == 0) return;
         if(ee.data().valueAdjusting()) return;
         final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        int insertIndex = -1;
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
@@ -537,14 +553,53 @@ public class SearchView extends EditorView {
             }
             if(findResult.range().transcriptElementIndex() == currentTranscriptElementIndex) {
                 if(ee.data().tier().getName().equals(findResult.range().tier())) {
+                    if(insertIndex == -1) {
+                        insertIndex = i;
+                    }
                     model.invalidateResultAt(i);
                 }
             }
         }
+        if(!liveUpdate) return;
+        model.clearInvalidatedRows();
+        if(searchField.getText().trim().isEmpty()) return;
+        final int elementIndex = getEditor().getSession().getRecordElementIndex(ee.data().record());
+        // create new find results for tier
+        final TranscriptElementLocation startLoc = new TranscriptElementLocation(elementIndex, ee.data().tier().getName(), 0);
+        final FindManager findManager = createFindManager();
+        findManager.setCurrentLocation(startLoc);
+        FindResult findResult = null;
+        final List<FindResult> results = new ArrayList<>();
+        while((findResult = findManager.findNext()) != null) {
+            if(findResult.range().transcriptElementIndex() != elementIndex) break;
+            if(!findResult.range().tier().equals(ee.data().tier().getName())) break;
+            results.add(findResult);
+        }
+        if(insertIndex == -1) {
+            insertIndex = 0;
+            // find the correct insert index based on current data
+            for(int i = 0; i < model.getRowCount(); i++) {
+                final FindResult fr = model.getResultAt(i);
+                insertIndex = i;
+                if(fr.range().transcriptElementIndex() > elementIndex) {
+                    break;
+                } else if(fr.range().transcriptElementIndex() == elementIndex) {
+                    final List<String> searchTiers = List.of(findManager.getSearchTiers());
+                    final int frTierIndex = searchTiers.indexOf(fr.range().tier());
+                    final int newTierIndex = searchTiers.indexOf(ee.data().tier().getName());
+                    if(newTierIndex < frTierIndex) {
+                        break;
+                    }
+                }
+            }
+        }
+        insertResults(results, insertIndex);
     }
 
     private void onCommentChanged(EditorEvent<EditorEventType.CommentChangedData> ee) {
+        if (table.getSearchViewTableModel().getRowCount() == 0) return;
         final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        int insertIndex = -1;
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
@@ -555,13 +610,43 @@ public class SearchView extends EditorView {
                 getEditor().getSelectionModel().removeSelection(selection);
             }
             if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
+                if(insertIndex == -1) {
+                    insertIndex = i;
+                }
                 model.invalidateResultAt(i);
             }
         }
+        if(!liveUpdate) return;
+        model.clearInvalidatedRows();
+        if(searchField.getText().trim().isEmpty()) return;
+        // create new find results for comment
+        final TranscriptElementLocation startLoc = new TranscriptElementLocation(ee.data().elementIndex(), ee.data().comment().getType().name(), 0);
+        final FindManager findManager = createFindManager();
+        findManager.setCurrentLocation(startLoc);
+        FindResult findResult = null;
+        final List<FindResult> results = new ArrayList<>();
+        while((findResult = findManager.findNext()) != null) {
+            if (findResult.range().transcriptElementIndex() != ee.data().elementIndex()) break;
+            results.add(findResult);
+        }
+        if(insertIndex == -1) {
+            insertIndex = 0;
+            // find the correct insert index based on current data
+            for(int i = 0; i < model.getRowCount(); i++) {
+                final FindResult fr = model.getResultAt(i);
+                insertIndex = i;
+                if(fr.range().transcriptElementIndex() > ee.data().elementIndex()) {
+                    break;
+                }
+            }
+        }
+        insertResults(results, insertIndex);
     }
 
     private void onGemChanged(EditorEvent<EditorEventType.GemChangedData> ee) {
+        if (table.getSearchViewTableModel().getRowCount() == 0) return;
         final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        int insertIndex = -1;
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
@@ -573,6 +658,42 @@ public class SearchView extends EditorView {
             }
             if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
                 model.invalidateResultAt(i);
+            }
+        }
+        if(!liveUpdate) return;
+        model.clearInvalidatedRows();
+        if(searchField.getText().trim().isEmpty()) return;
+        // create new find results for gem
+        final TranscriptElementLocation startLoc = new TranscriptElementLocation(ee.data().elementIndex(), ee.data().gem().getType().name(), 0);
+        final FindManager findManager = createFindManager();
+        findManager.setCurrentLocation(startLoc);
+        FindResult findResult = null;
+        final List<FindResult> results = new ArrayList<>();
+        while((findResult = findManager.findNext()) != null) {
+            if (findResult.range().transcriptElementIndex() != ee.data().elementIndex()) break;
+            results.add(findResult);
+        }
+        if(insertIndex == -1) {
+            insertIndex = 0;
+            // find the correct insert index based on current data
+            for (int i = 0; i < model.getRowCount(); i++) {
+                final FindResult fr = model.getResultAt(i);
+                insertIndex = i;
+                if(fr.range().transcriptElementIndex() > ee.data().elementIndex()) {
+                    break;
+                }
+            }
+        }
+        insertResults(results, insertIndex);
+    }
+
+    private void insertResults(List<FindResult> results, int insertIndex) {
+        table.getSearchViewTableModel().insertResults(results, insertIndex);
+        if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+            for (FindResult result : results) {
+                final SessionEditorSelection selection = new SessionEditorSelection(result.range());
+                selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
+                getEditor().getSelectionModel().addSelection(selection);
             }
         }
     }

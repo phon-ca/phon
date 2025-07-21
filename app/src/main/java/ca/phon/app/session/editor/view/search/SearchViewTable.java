@@ -233,6 +233,19 @@ public class SearchViewTable extends JXTable {
             fireTableRowsInserted(results.size()-1, results.size()-1);
         }
 
+        public void insertResults(List<FindResult> results, int index) {
+            if(index > this.results.size()) {
+                throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+            }
+            if(index < 0) {
+                this.results.addAll(results);
+                fireTableRowsInserted(this.results.size() - results.size(), this.results.size() - 1);
+            } else {
+                this.results.addAll(index, results);
+                fireTableRowsInserted(index, index + results.size() - 1);
+            }
+        }
+
         public void invalidateResultAt(int rowIndex) {
             if(rowIndex < 0 || rowIndex >= results.size()) return;
             invalidatedRows.add(rowIndex);
@@ -241,6 +254,19 @@ public class SearchViewTable extends JXTable {
 
         public boolean isInvalid(int rowIndex) {
             return invalidatedRows.contains(rowIndex);
+        }
+
+        public void clearInvalidatedRows() {
+            // remove sorted invalidated rows in reverse order
+            invalidatedRows.sort(Integer::compareTo);
+            for(int i = invalidatedRows.size() - 1; i >= 0; i--) {
+                int rowIndex = invalidatedRows.get(i);
+                if(rowIndex >= 0 && rowIndex < results.size()) {
+                    results.remove(rowIndex);
+                    fireTableRowsDeleted(rowIndex, rowIndex);
+                }
+            }
+            invalidatedRows.clear();
         }
 
         public void setResults(List<FindResult> results) {

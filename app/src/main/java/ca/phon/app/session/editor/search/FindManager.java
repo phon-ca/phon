@@ -373,6 +373,7 @@ public class FindManager {
 			if(retVal != null) break;
 			eleIdx++;
 			tierIdx = 0;
+			charIdx = 0;
 		}
 
 		return retVal;
@@ -470,6 +471,7 @@ public class FindManager {
 			if(retVal != null) break;
 			eleIdx--;
 			tierIdx = searchTiers.size() - 1;
+			// TODO update charIdx to end of element
 		}
 
 		return retVal;
