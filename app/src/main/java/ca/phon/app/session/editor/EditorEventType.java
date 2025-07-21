@@ -193,7 +193,7 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<GemTypeChangedData> GemTypeChanged =
 			new EditorEventType<>(EditorEventName.GEM_TYPE_CHANGED_EVT.getEventName(), GemTypeChangedData.class);
 
-	public record RecordAddedData(Record recrod, int elementIndex, int recordIndex) { }
+	public record RecordAddedData(Record record, int elementIndex, int recordIndex) { }
 	/**
 	 * Called when a new record is added to the open session
 	 */

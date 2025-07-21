@@ -201,6 +201,11 @@ public class SearchView extends EditorView {
 
     private void setupEditorActions() {
         getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.GemAdded, this::onGemAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+//        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+//        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordMoved, this::onRecordMoved, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     private void clearResults() {
@@ -404,6 +409,70 @@ public class SearchView extends EditorView {
             selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
             getEditor().getSelectionModel().addSelection(selection);
         }
+    }
+
+    private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> ee) {
+        final int elementIndex = getEditor().getSession().getRecordElementIndex(ee.data().record());
+        onElementAdded(elementIndex);
+    }
+
+    private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> ee) {
+        final int elementIndex = ee.data().elementIndex();
+        onElementAdded(elementIndex);
+    }
+
+    private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> ee) {
+        final int elementIndex = ee.data().elementIndex();
+        onElementAdded(elementIndex);
+    }
+
+    private void onElementAdded(int elementIndex) {
+        final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        if(model.getRowCount() == 0) return;
+        getEditor().getSelectionModel().clear();
+        // increment record index for all results as necessary
+        final List<FindResult> results = new ArrayList<>();
+        for(int i = 0; i < model.getRowCount(); i++) {
+            final FindResult findResult = model.getResultAt(i);
+            if (findResult == null) continue;
+            final TranscriptElementRange range = findResult.range();
+            if(range.transcriptElementIndex() >= elementIndex) {
+                final TranscriptElementRange newRange = new TranscriptElementRange(range.transcriptElementIndex()+1,
+                        range.tier(), range.range());
+                final FindResult newFindResult = new FindResult(findResult.expr(), newRange, findResult.matcher(), findResult.phonexMatcher());
+                results.add(newFindResult);
+            } else {
+                results.add(findResult);
+            }
+        }
+        model.setResults(results);
+        addHighlights();
+    }
+
+    private void onElementRemoved(int elementIndex) {
+        final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        if(model.getRowCount() == 0) return;
+        getEditor().getSelectionModel().clear();
+        // decrement record index for all results as necessary
+        final List<FindResult> results = new ArrayList<>();
+        for(int i = 0; i < model.getRowCount(); i++) {
+            final FindResult findResult = model.getResultAt(i);
+            if (findResult == null) continue;
+            final TranscriptElementRange range = findResult.range();
+            if(range.transcriptElementIndex() > elementIndex) {
+                final TranscriptElementRange newRange = new TranscriptElementRange(range.transcriptElementIndex()-1,
+                        range.tier(), range.range());
+                final FindResult newFindResult = new FindResult(findResult.expr(), newRange, findResult.matcher(), findResult.phonexMatcher());
+                results.add(newFindResult);
+            } else if(range.transcriptElementIndex() == elementIndex) {
+                // remove result
+                continue;
+            } else {
+                results.add(findResult);
+            }
+        }
+        model.setResults(results);
+        addHighlights();
     }
 
     private void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {

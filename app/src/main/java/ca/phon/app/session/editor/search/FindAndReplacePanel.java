@@ -506,7 +506,7 @@ public class FindAndReplacePanel extends JPanel {
 
 	private void updateSearchButtons() {
 		if(searchResults.size() > 0) {
-			resultsLabel.setText(searchResults.size() + " results");
+			resultsLabel.setText(searchResults.size() + " result" + (searchResults.size() == 1 ? "" : "s"));
 			resultsLabel.setForeground(UIManager.getColor("textText"));
 
 			findButton.setIconColor(UIManager.getColor("textText"));

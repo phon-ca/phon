@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Table for displaying quick search results
@@ -20,6 +21,8 @@ import java.util.List;
 public class SearchViewTable extends JXTable {
 
     public final static String SEARCHING_PROP = SearchViewTable.class.getName() + ".searching";
+
+    private Optional<FindWorker> findWorker = Optional.empty();
 
     public SearchViewTable(FindManager findManager) {
         super();
@@ -47,8 +50,12 @@ public class SearchViewTable extends JXTable {
     public void search(FindManager findManager) {
         final SearchViewTableModel model = new SearchViewTableModel(findManager.getSession(), new ArrayList<>());
         setModel(model);
-        final FindWorker worker = new FindWorker(findManager);
+        if(findWorker.isPresent()) {
+            findWorker.get().cancelSearch();
+        }
+        final FindWorker worker = new FindWorker(findManager, model);
         SearchViewTable.this.firePropertyChange(SEARCHING_PROP, false, true);
+        findWorker = Optional.of(worker);
         worker.execute();
     }
 
@@ -63,9 +70,14 @@ public class SearchViewTable extends JXTable {
 
         private final FindManager findManager;
 
-        public FindWorker(FindManager findManager) {
+        private final SearchViewTableModel model;
+
+        private boolean cancelled = false;
+
+        public FindWorker(FindManager findManager, SearchViewTableModel model) {
             super();
             this.findManager = findManager;
+            this.model = model;
         }
 
         @Override
@@ -73,16 +85,23 @@ public class SearchViewTable extends JXTable {
             final List<FindResult> retVal = new ArrayList<>();
             FindResult findResult = null;
             while((findResult = findManager.findNext()) != null) {
+                if(cancelled) {
+                    break;
+                }
                 retVal.add(findResult);
                 publish(findResult);
             }
             return retVal;
         }
 
+        public void cancelSearch() {
+            this.cancelled = true;
+        }
+
         @Override
         protected void process(List<FindResult> chunks) {
             for(FindResult range:chunks) {
-                getSearchViewTableModel().appendResult(range);
+                model.appendResult(range);
             }
         }
 
@@ -222,6 +241,12 @@ public class SearchViewTable extends JXTable {
 
         public boolean isInvalid(int rowIndex) {
             return invalidatedRows.contains(rowIndex);
+        }
+
+        public void setResults(List<FindResult> results) {
+            this.results = new ArrayList<>(results);
+            this.invalidatedRows.clear();
+            fireTableDataChanged();
         }
 
     }
