@@ -201,11 +201,32 @@ public class SearchView extends EditorView {
 
     private void setupEditorActions() {
         getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentDeleted, this::onCommentDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentMoved, this::onCommentMoved, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.GemChanged, this::onGemChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         getEditor().getEventManager().registerActionForEvent(EditorEventType.GemAdded, this::onGemAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.GemDeleted, this::onGemDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.GemMoved, this::onGemMoved, EditorEventManager.RunOn.AWTEventDispatchThread);
         getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
-//        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
-//        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordMoved, this::onRecordMoved, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+        getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordMoved, this::onRecordMoved, EditorEventManager.RunOn.AWTEventDispatchThread);
+    }
+
+    private void deregisterEditorActions() {
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChange, this::onTierChange);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.CommentDeleted, this::onCommentDeleted);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.CommentMoved, this::onCommentMoved);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.GemChanged, this::onGemChanged);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.GemAdded, this::onGemAdded);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.GemDeleted, this::onGemDeleted);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.GemMoved, this::onGemMoved);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted);
+        getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordMoved, this::onRecordMoved);
     }
 
     private void clearResults() {
@@ -416,14 +437,41 @@ public class SearchView extends EditorView {
         onElementAdded(elementIndex);
     }
 
+    private void onRecordMoved(EditorEvent<EditorEventType.RecordMovedData> ee) {
+        onQuery();
+    }
+
+    private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> ee) {
+        final int elementIndex = ee.data().elementIndex();
+        onElementRemoved(elementIndex);
+    }
+
     private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> ee) {
         final int elementIndex = ee.data().elementIndex();
         onElementAdded(elementIndex);
     }
 
+    private void onCommentDeleted(EditorEvent<EditorEventType.CommentDeletedData> ee) {
+        final int elementIndex = ee.data().elementIndex();
+        onElementRemoved(elementIndex);
+    }
+
+    private void onCommentMoved(EditorEvent<EditorEventType.CommentMovedData> ee) {
+        onQuery();
+    }
+
     private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> ee) {
         final int elementIndex = ee.data().elementIndex();
         onElementAdded(elementIndex);
+    }
+
+    private void onGemDeleted(EditorEvent<EditorEventType.GemDeletedData> ee) {
+        final int elementIndex = ee.data().elementIndex();
+        onElementRemoved(elementIndex);
+    }
+
+    private void onGemMoved(EditorEvent<EditorEventType.GemMovedData> ee) {
+        onQuery();
     }
 
     private void onElementAdded(int elementIndex) {
@@ -491,6 +539,40 @@ public class SearchView extends EditorView {
                 if(ee.data().tier().getName().equals(findResult.range().tier())) {
                     model.invalidateResultAt(i);
                 }
+            }
+        }
+    }
+
+    private void onCommentChanged(EditorEvent<EditorEventType.CommentChangedData> ee) {
+        final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        for(int i = 0; i < model.getRowCount(); i++) {
+            final FindResult findResult = model.getResultAt(i);
+            if(findResult == null) continue;
+
+            final List<SessionEditorSelection> selectionsForTier =
+                    getEditor().getSelectionModel().getSelectionsForTier(ee.data().elementIndex(), ee.data().comment().getType().name());
+            for(SessionEditorSelection selection : selectionsForTier) {
+                getEditor().getSelectionModel().removeSelection(selection);
+            }
+            if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
+                model.invalidateResultAt(i);
+            }
+        }
+    }
+
+    private void onGemChanged(EditorEvent<EditorEventType.GemChangedData> ee) {
+        final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
+        for(int i = 0; i < model.getRowCount(); i++) {
+            final FindResult findResult = model.getResultAt(i);
+            if(findResult == null) continue;
+
+            final List<SessionEditorSelection> selectionsForTier =
+                    getEditor().getSelectionModel().getSelectionsForTier(ee.data().elementIndex(), ee.data().gem().getType().name());
+            for(SessionEditorSelection selection : selectionsForTier) {
+                getEditor().getSelectionModel().removeSelection(selection);
+            }
+            if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
+                model.invalidateResultAt(i);
             }
         }
     }

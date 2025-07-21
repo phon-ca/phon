@@ -248,7 +248,7 @@ public class SearchViewTable extends JXTable {
             this.invalidatedRows.clear();
             fireTableDataChanged();
         }
-
+        
     }
 
 }
