@@ -1588,6 +1588,24 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
+    public void onCommentChanged(Comment comment) {
+        try {
+            final StartEnd tierRange = getCommentContentStartEnd(comment);
+            if(tierRange.start() < 0) return;
+            setBypassDocumentFilter(true);
+            remove(tierRange.start(), tierRange.end() - tierRange.start());
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
+            final SimpleAttributeSet attrs = new SimpleAttributeSet();
+            attrs.addAttributes(getTranscriptStyleContext().getCommentAttributes(comment));
+            batchBuilder.appendCommentValue(comment, attrs);
+            processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
+        }
+    }
+
     /**
      * Adds a comment to the document and the transcript at the given transcript element index
      */

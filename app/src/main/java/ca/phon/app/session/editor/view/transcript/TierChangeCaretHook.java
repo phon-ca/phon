@@ -1,10 +1,5 @@
 package ca.phon.app.session.editor.view.transcript;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.position.TranscriptElementLocation;
 
 import javax.swing.*;
@@ -41,7 +36,7 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         return true;
     }
 
-    private void tierChanged(String tierName, Object oldValue, Object newValue) {
+    private void tierChanged(int elementIndex, String tierName, Object oldValue, Object newValue) {
         if(this.gotoLocation == null) return;
         if(this.savedTierName == null) return;
         if(!this.savedTierName.equals(tierName)) return;

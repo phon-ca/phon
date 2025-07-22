@@ -334,7 +334,6 @@ public class TranscriptBatchBuilder {
         }
         labelText = formatLabelText(labelText);
 
-        TierData tierData = commentTier.getValue();
 
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
         appendBatchString(labelText, labelAttrs);
@@ -342,44 +341,7 @@ public class TranscriptBatchBuilder {
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
-        if (tierData.length() == 0) {
-            appendBatchString("", commentAttrs);
-        } else {
-            for (int i = 0; i < tierData.length(); i++) {
-                TierElement userTierElement = tierData.elementAt(i);
-                String text = null;
-                SimpleAttributeSet attrs;
-                if (userTierElement instanceof TierString tierString) {
-                    // Text
-                    text = tierString.text();
-                    attrs = styleContext.getTierStringAttributes();
-                } else if (userTierElement instanceof TierComment userTierComment) {
-                    // Comment
-                    text = userTierComment.toString();
-                    attrs = styleContext.getTierCommentAttributes();
-                } else if (userTierElement instanceof TierInternalMedia internalMedia) {
-                    // Internal media
-                    attrs = styleContext.getTierInternalMediaAttributes();
-                    appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
-                } else if (userTierElement instanceof TierLink link) {
-                    // Link
-                    text = link.toString();
-                    attrs = styleContext.getTierLinkAttributes();
-                } else {
-                    throw new RuntimeException("Invalid type");
-                }
-
-                attrs.addAttributes(commentAttrs);
-
-                if (text != null) {
-                    appendBatchString(text, attrs);
-                }
-
-                if (i < tierData.length() - 1) {
-                    appendBatchString(" ", attrs);
-                }
-            }
-        }
+        appendCommentValue(comment, commentAttrs);
 
         for (var hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.endComment());
@@ -388,6 +350,47 @@ public class TranscriptBatchBuilder {
             appendAll(additionalInsertions);
         }
 
+        return this;
+    }
+
+    public TranscriptBatchBuilder appendCommentValue(Comment comment, AttributeSet attrs) {
+        TierData tierData = comment.getValue();
+        if (tierData.length() == 0) {
+            appendBatchString("", attrs);
+        } else {
+            for (int i = 0; i < tierData.length(); i++) {
+                TierElement userTierElement = tierData.elementAt(i);
+                String text = null;
+                SimpleAttributeSet commentElementAttrs = new SimpleAttributeSet(attrs);
+                if (userTierElement instanceof TierString tierString) {
+                    // Text
+                    text = tierString.text();
+                    commentElementAttrs.addAttributes(styleContext.getTierStringAttributes());
+                } else if (userTierElement instanceof TierComment userTierComment) {
+                    // Comment
+                    text = userTierComment.toString();
+                    commentElementAttrs.addAttributes(styleContext.getTierCommentAttributes());
+                } else if (userTierElement instanceof TierInternalMedia internalMedia) {
+                    // Internal media
+                    commentElementAttrs.addAttributes(styleContext.getTierInternalMediaAttributes());
+                    appendFormattedInternalMedia(internalMedia.getInternalMedia(), commentElementAttrs);
+                } else if (userTierElement instanceof TierLink link) {
+                    // Link
+                    text = link.toString();
+                    commentElementAttrs.addAttributes(styleContext.getTierLinkAttributes());
+                } else {
+                    throw new RuntimeException("Invalid type");
+                }
+
+                if (text != null) {
+                    appendBatchString(text, commentElementAttrs);
+                }
+
+                if (i < tierData.length() - 1) {
+                    appendBatchString(" ", attrs);
+                }
+            }
+        }
         return this;
     }
 

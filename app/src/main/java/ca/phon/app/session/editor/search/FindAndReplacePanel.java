@@ -25,7 +25,6 @@ import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditorTierChangeListener;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.session.*;
@@ -35,7 +34,6 @@ import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.SearchField;
-import ca.phon.util.Range;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -49,7 +47,6 @@ import java.awt.*;
 import java.text.ParseException;
 import java.util.List;
 import java.util.*;
-import java.util.regex.Matcher;
 
 /**
  * Find and replace panel for the session editor.
@@ -661,9 +658,9 @@ public class FindAndReplacePanel extends JPanel {
 		if(replaceStart >= 0 && replaceEnd >= 0) {
 			transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
 			transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
+			final String selectedText = transcriptView.getTranscriptEditor().getSelectedText();
 			final String replaceText = getReplaceText(findResult, replaceField.getText());
 
-			final String selectedText = transcriptView.getTranscriptEditor().getSelectedText();
 			if(selectedText != null && selectedText.equals(replaceText)) {
 				findNext();
 			} else {
@@ -671,7 +668,7 @@ public class FindAndReplacePanel extends JPanel {
 				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
 				transcriptView.getTranscriptEditor().addTierChangeListener(new TranscriptEditorTierChangeListener() {
 					@Override
-					public void tierChanged(String tierName, Object oldValue, Object newValue) {
+					public void tierChanged(int elementIndex, String tierName, Object oldValue, Object newValue) {
 						// get character position at the end of the selection
 						final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
 						final TranscriptElementLocation newLocation =
