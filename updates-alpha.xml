@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.40/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_40.dmg" newVersion="4.0.0-alpha.40" newMediaFileId="macos" fileSize="392824222" md5Sum="9fb91670080330cf0116fd453f933f9c" sha256Sum="6683162442b0857d7bade8cbced1cf2c100cb06d3efff5f238d18d6c8fa6539b" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.41/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_41.dmg" newVersion="4.0.0-alpha.41" newMediaFileId="macos" fileSize="392877612" md5Sum="3a156b7290d7fe3fe04bf298787aa923" sha256Sum="2877693561616bab77e4edccc55eefaf55d4579cecffdd7b3d1861ee41d4b461" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -18,6 +18,9 @@
 - Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
 - Added a "reset layout" action to the 'more' button
 - Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
 
 ### Timeline and Interval Tiers
 - Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
@@ -54,10 +57,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.40
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_40.dmg" newVersion="4.0.0-alpha.40" newMediaFileId="macos" fileSize="392824222" md5Sum="9fb91670080330cf0116fd453f933f9c" sha256Sum="6683162442b0857d7bade8cbced1cf2c100cb06d3efff5f238d18d6c8fa6539b" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_41.dmg" newVersion="4.0.0-alpha.41" newMediaFileId="macos" fileSize="392877612" md5Sum="3a156b7290d7fe3fe04bf298787aa923" sha256Sum="2877693561616bab77e4edccc55eefaf55d4579cecffdd7b3d1861ee41d4b461" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -75,6 +78,9 @@
 - Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
 - Added a "reset layout" action to the 'more' button
 - Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
 
 ### Timeline and Interval Tiers
 - Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
@@ -111,10 +117,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.40
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_40.exe" newVersion="4.0.0-alpha.40" newMediaFileId="win64" fileSize="374757376" md5Sum="98fd86e520e290ed265f22455bd7cf83" sha256Sum="9ea92c3d3b3722f66e02672e5417493e56a7831af0f32cd3710f9349fba2ca60" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_41.exe" newVersion="4.0.0-alpha.41" newMediaFileId="win64" fileSize="374803456" md5Sum="0f783384702f0e2649a82c22a0f6db62" sha256Sum="10dd4bb3261e90cdf6c97f3e6b4dbb05901764a1e94eddd4bb6b8273b7c94ef5" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -132,6 +138,9 @@
 - Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
 - Added a "reset layout" action to the 'more' button
 - Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
 
 ### Timeline and Interval Tiers
 - Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
@@ -168,10 +177,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.40
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_40.exe" newVersion="4.0.0-alpha.40" newMediaFileId="win64" fileSize="374757376" md5Sum="98fd86e520e290ed265f22455bd7cf83" sha256Sum="9ea92c3d3b3722f66e02672e5417493e56a7831af0f32cd3710f9349fba2ca60" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_41.exe" newVersion="4.0.0-alpha.41" newMediaFileId="win64" fileSize="374803456" md5Sum="0f783384702f0e2649a82c22a0f6db62" sha256Sum="10dd4bb3261e90cdf6c97f3e6b4dbb05901764a1e94eddd4bb6b8273b7c94ef5" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -189,6 +198,9 @@
 - Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
 - Added a "reset layout" action to the 'more' button
 - Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
 
 ### Timeline and Interval Tiers
 - Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
@@ -225,10 +237,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.40
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_40.exe" newVersion="4.0.0-alpha.40" newMediaFileId="win64" fileSize="374757376" md5Sum="98fd86e520e290ed265f22455bd7cf83" sha256Sum="9ea92c3d3b3722f66e02672e5417493e56a7831af0f32cd3710f9349fba2ca60" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_41.exe" newVersion="4.0.0-alpha.41" newMediaFileId="win64" fileSize="374803456" md5Sum="0f783384702f0e2649a82c22a0f6db62" sha256Sum="10dd4bb3261e90cdf6c97f3e6b4dbb05901764a1e94eddd4bb6b8273b7c94ef5" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -246,6 +258,9 @@
 - Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
 - Added a "reset layout" action to the 'more' button
 - Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
 
 ### Timeline and Interval Tiers
 - Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
@@ -282,10 +297,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.40
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_40.zip" newVersion="4.0.0-alpha.40" newMediaFileId="win64zip" fileSize="373559789" md5Sum="05846a236b75015c32531475e38d1466" sha256Sum="fad839510d67b5ba40eebad26437707922c73c88aa91984ace1fcbef313bdd3d" bundledJre="windows-amd64-21.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_41.zip" newVersion="4.0.0-alpha.41" newMediaFileId="win64zip" fileSize="373605850" md5Sum="d97d45c27fc8543c57f63d12e3d12fc4" sha256Sum="8fb86710bc23f28134b01bb9e27ff7beb2b5a413f2fea3e01d8bec8a4d108f44" bundledJre="windows-amd64-21.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -303,6 +318,9 @@
 - Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
 - Added a "reset layout" action to the 'more' button
 - Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
 
 ### Timeline and Interval Tiers
 - Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
@@ -339,7 +357,7 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.40
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
 </comment>
   </entry>
 </updateDescriptor>
