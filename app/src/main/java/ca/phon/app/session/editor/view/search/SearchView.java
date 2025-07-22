@@ -89,7 +89,7 @@ public class SearchView extends EditorView {
             @Override
             public void viewShown(String viewName) {
                 if(viewName.equals(VIEW_NAME)) {
-                    if(table.getSearchViewTableModel().getRowCount() > 0) {
+                    if(shouldUpdateHighlights()) {
                         getEditor().getSelectionModel().clear();
                         addHighlights();
                     }
@@ -99,7 +99,7 @@ public class SearchView extends EditorView {
             @Override
             public void viewHidden(String viewName) {
                 if(viewName.equals(VIEW_NAME)) {
-                    if(table.getSearchViewTableModel().getRowCount() > 0) {
+                    if(shouldUpdateHighlights()) {
                         // clear highlights
                         getEditor().getSelectionModel().clear();
                         currentSelection = null;
@@ -457,7 +457,7 @@ public class SearchView extends EditorView {
     }
 
     private void addHighlights() {
-        if(!getEditor().getViewModel().isShowing(VIEW_NAME)) return;
+        if(!shouldUpdateHighlights()) return;
         for(int i = 0; i < table.getSearchViewTableModel().getRowCount(); i++) {
             final FindResult findResult = table.getSearchViewTableModel().getResultAt(i);
             if(findResult == null) continue;
@@ -507,6 +507,20 @@ public class SearchView extends EditorView {
 
     private void onGemMoved(EditorEvent<EditorEventType.GemMovedData> ee) {
         onQuery();
+    }
+
+    private boolean shouldUpdateHighlights() {
+        if(!getEditor().getViewModel().isShowing(VIEW_NAME)) return false;
+        if(table.getSearchViewTableModel().getRowCount() == 0) return false;
+        if(isFindAndReplaceActive()) return false; // don't update highlights while find and replace is active
+        return true;
+    }
+
+    private boolean isFindAndReplaceActive() {
+        final TranscriptView transcriptView = (TranscriptView) getEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
+        if(transcriptView == null) return false;
+
+        return transcriptView.isFindAndReplaceActive();
     }
 
     private void onElementAdded(int elementIndex) {
@@ -566,10 +580,11 @@ public class SearchView extends EditorView {
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
-            final int currentTranscriptElementIndex = getEditor().getSession().getRecordElementIndex(getEditor().currentRecord());
+            final int currentTranscriptElementIndex =
+                getEditor().getSession().getRecordElementIndex(ee.data().record());
 
             final List<SessionEditorSelection> selectionsForTier = getEditor().getSelectionModel().getSelectionsForTier(currentTranscriptElementIndex, ee.data().tier().getName());
-            if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+            if(shouldUpdateHighlights()) {
                 for (SessionEditorSelection selection : selectionsForTier) {
                     getEditor().getSelectionModel().removeSelection(selection);
                 }
@@ -629,7 +644,7 @@ public class SearchView extends EditorView {
 
             final List<SessionEditorSelection> selectionsForTier =
                     getEditor().getSelectionModel().getSelectionsForTier(ee.data().elementIndex(), ee.data().comment().getType().name());
-            if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+            if(shouldUpdateHighlights()) {
                 for (SessionEditorSelection selection : selectionsForTier) {
                     getEditor().getSelectionModel().removeSelection(selection);
                 }
@@ -678,7 +693,7 @@ public class SearchView extends EditorView {
 
             final List<SessionEditorSelection> selectionsForTier =
                     getEditor().getSelectionModel().getSelectionsForTier(ee.data().elementIndex(), ee.data().gem().getType().name());
-            if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+            if(shouldUpdateHighlights()) {
                 for (SessionEditorSelection selection : selectionsForTier) {
                     getEditor().getSelectionModel().removeSelection(selection);
                 }
@@ -715,8 +730,9 @@ public class SearchView extends EditorView {
     }
 
     private void insertResults(List<FindResult> results, int insertIndex) {
+        if(results.isEmpty()) return;
         table.getSearchViewTableModel().insertResults(results, insertIndex);
-        if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+        if(shouldUpdateHighlights()) {
             for (FindResult result : results) {
                 final SessionEditorSelection selection = new SessionEditorSelection(result.range());
                 selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());

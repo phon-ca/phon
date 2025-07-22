@@ -198,6 +198,9 @@ public class SearchViewTable extends JXTable {
         }
 
         private String getTokenizedText(String text, Range range) {
+            if(range.getStart() < 0 || range.getEnd() > text.length() || range.getStart() >= range.getEnd()) {
+                return text; // invalid range, return original text
+            }
             final String start = text.substring(0, range.getStart());
             final String middle = text.substring(range.getStart(), range.getEnd());
             final String end = text.substring(range.getEnd());

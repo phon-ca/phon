@@ -1561,6 +1561,15 @@ public class TranscriptView extends EditorView {
     // endregion Properties
 
     /**
+     * Is Find & Replace visible and has active search results
+     *
+     * @return true if Find & Replace is visible and has active search results, false otherwise
+     */
+    public boolean isFindAndReplaceActive() {
+        return isFindAndReplaceVisible() && getFindAndReplacePanel().hasSearchResults();
+    }
+
+    /**
      * The dialog that shows the metadata for the session
      * */
     private class MetadataDialog extends JDialog {

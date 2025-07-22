@@ -286,6 +286,10 @@ public class FindAndReplacePanel extends JPanel {
 		add(toggleReplaceStrip, BorderLayout.WEST);
 	}
 
+	public boolean hasSearchResults() {
+		return !searchResults.isEmpty();
+	}
+
 	public void clearResults() {
 		getSelectionModel().clear();
 		this.resultsLabel.setText("0 results");
