@@ -32,7 +32,7 @@ public class PlayCustomSegmentAction extends PlaySegmentAction {
 	private final static String ICON = "";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_F2,
+			KeyStroke.getKeyStroke(KeyEvent.VK_Y,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.ALT_MASK);
 
 	public PlayCustomSegmentAction(SessionEditor editor) {
