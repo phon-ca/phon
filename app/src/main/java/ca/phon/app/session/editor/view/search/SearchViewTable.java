@@ -260,6 +260,7 @@ public class SearchViewTable extends JXTable {
         }
 
         public void clearInvalidatedRows() {
+            if(invalidatedRows.isEmpty()) return;
             // remove sorted invalidated rows in reverse order
             invalidatedRows.sort(Integer::compareTo);
             for(int i = invalidatedRows.size() - 1; i >= 0; i--) {

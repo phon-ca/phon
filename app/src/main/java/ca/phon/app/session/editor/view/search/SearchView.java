@@ -433,9 +433,11 @@ public class SearchView extends EditorView {
                     final FindResult findResult = table.getSearchViewTableModel().getResultAt(i);
                     if(findResult == null) continue;
                     if(!getEditor().getViewModel().isShowing(VIEW_NAME)) return;
-                    final SessionEditorSelection selection = new SessionEditorSelection(findResult.range());
-                    selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
-                    getEditor().getSelectionModel().addSelection(selection);
+                    if(shouldUpdateHighlights()) {
+                        final SessionEditorSelection selection = new SessionEditorSelection(findResult.range());
+                        selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
+                        getEditor().getSelectionModel().addSelection(selection);
+                    }
                 }
                 final int range = e.getLastRow() - e.getFirstRow() + 1;
                 final int total = table.getRowCount() + range;
@@ -577,6 +579,7 @@ public class SearchView extends EditorView {
         if(ee.data().valueAdjusting()) return;
         final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
         int insertIndex = -1;
+        boolean hasInvalidated = false;
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
@@ -594,12 +597,17 @@ public class SearchView extends EditorView {
                     if(insertIndex == -1) {
                         insertIndex = i;
                     }
+                    // invalidate result
+                    hasInvalidated = true;
                     model.invalidateResultAt(i);
                 }
             }
         }
         if(!liveUpdate) return;
         model.clearInvalidatedRows();
+        if(hasInvalidated) {
+            updateResultsLabel();
+        }
         if(searchField.getText().trim().isEmpty()) return;
         final int elementIndex = getEditor().getSession().getRecordElementIndex(ee.data().record());
         // create new find results for tier
@@ -631,13 +639,17 @@ public class SearchView extends EditorView {
                 }
             }
         }
-        insertResults(results, insertIndex);
+        if(!results.isEmpty()) {
+            insertResults(results, insertIndex);
+            updateResultsLabel();
+        }
     }
 
     private void onCommentChanged(EditorEvent<EditorEventType.CommentChangedData> ee) {
         if (table.getSearchViewTableModel().getRowCount() == 0) return;
         final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
         int insertIndex = -1;
+        boolean hasInvalidated = false;
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
@@ -653,11 +665,16 @@ public class SearchView extends EditorView {
                 if(insertIndex == -1) {
                     insertIndex = i;
                 }
+                // invalidate result
+                hasInvalidated = true;
                 model.invalidateResultAt(i);
             }
         }
         if(!liveUpdate) return;
         model.clearInvalidatedRows();
+        if(hasInvalidated) {
+            updateResultsLabel();
+        }
         if(searchField.getText().trim().isEmpty()) return;
         // create new find results for comment
         final TranscriptElementLocation startLoc = new TranscriptElementLocation(ee.data().elementIndex(), ee.data().comment().getType().name(), 0);
@@ -680,13 +697,17 @@ public class SearchView extends EditorView {
                 }
             }
         }
-        insertResults(results, insertIndex);
+        if(!results.isEmpty()) {
+            insertResults(results, insertIndex);
+            updateResultsLabel();
+        }
     }
 
     private void onGemChanged(EditorEvent<EditorEventType.GemChangedData> ee) {
         if (table.getSearchViewTableModel().getRowCount() == 0) return;
         final SearchViewTable.SearchViewTableModel model = table.getSearchViewTableModel();
         int insertIndex = -1;
+        boolean hasInvalidated = false;
         for(int i = 0; i < model.getRowCount(); i++) {
             final FindResult findResult = model.getResultAt(i);
             if(findResult == null) continue;
@@ -699,11 +720,19 @@ public class SearchView extends EditorView {
                 }
             }
             if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
+                if(insertIndex == -1) {
+                    insertIndex = i;
+                }
+                // invalidate result
+                hasInvalidated = true;
                 model.invalidateResultAt(i);
             }
         }
         if(!liveUpdate) return;
         model.clearInvalidatedRows();
+        if(hasInvalidated) {
+            updateResultsLabel();
+        }
         if(searchField.getText().trim().isEmpty()) return;
         // create new find results for gem
         final TranscriptElementLocation startLoc = new TranscriptElementLocation(ee.data().elementIndex(), ee.data().gem().getType().name(), 0);
@@ -726,7 +755,10 @@ public class SearchView extends EditorView {
                 }
             }
         }
-        insertResults(results, insertIndex);
+        if(!results.isEmpty()) {
+            insertResults(results, insertIndex);
+            updateResultsLabel();
+        }
     }
 
     private void insertResults(List<FindResult> results, int insertIndex) {
@@ -738,6 +770,16 @@ public class SearchView extends EditorView {
                 selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
                 getEditor().getSelectionModel().addSelection(selection);
             }
+        }
+    }
+
+    private void updateResultsLabel() {
+        final int total = table.getSearchViewTableModel().getRowCount();
+        resultsLabel.setText(total + (total == 1 ? " result" : " results"));
+        if(total > 0) {
+            resultsLabel.setForeground(UIManager.getColor("textText"));
+        } else {
+            resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
         }
     }
 
