@@ -708,18 +708,18 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			super.playing(mediaPlayer);
-//			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, pauseIcn);
+			getPlayPauseButton().setIconName("pause");
 		}
 		
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
-//			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
+			getPlayPauseButton().setIconName("play_arrow");
 		}
-		
+
 		@Override
 		public void stopped(MediaPlayer mediaPlayer) {
-//			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
+			getPlayPauseButton().setIconName("play_arrow");
 		}
 		
 		@Override
