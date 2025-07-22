@@ -82,7 +82,7 @@ public class SegmentEditorPopup extends TimeComponent implements HasIconStrip {
                 playSegmentButton.setBgColor(UIManager.getColor("text"));
 
                 // add play segment keystrokes (F2 or menu shortcut+space)
-                final JLabel playSegmentLabel = new JLabel("F2 / " + "CTRL+SPACE");
+                final JLabel playSegmentLabel = new JLabel((OSInfo.isMacOs() ? "CMD" : "CTRL") + "+Y / " + "CTRL+SPACE");
                 playSegmentLabel.setFont(UIManager.getFont("Label.font").deriveFont(10.0f));
                 playSegmentLabel.setForeground(UIManager.getColor("textText"));
 
