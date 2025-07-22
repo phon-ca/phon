@@ -569,8 +569,10 @@ public class SearchView extends EditorView {
             final int currentTranscriptElementIndex = getEditor().getSession().getRecordElementIndex(getEditor().currentRecord());
 
             final List<SessionEditorSelection> selectionsForTier = getEditor().getSelectionModel().getSelectionsForTier(currentTranscriptElementIndex, ee.data().tier().getName());
-            for(SessionEditorSelection selection : selectionsForTier) {
-                getEditor().getSelectionModel().removeSelection(selection);
+            if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+                for (SessionEditorSelection selection : selectionsForTier) {
+                    getEditor().getSelectionModel().removeSelection(selection);
+                }
             }
             if(findResult.range().transcriptElementIndex() == currentTranscriptElementIndex) {
                 if(ee.data().tier().getName().equals(findResult.range().tier())) {
@@ -627,8 +629,10 @@ public class SearchView extends EditorView {
 
             final List<SessionEditorSelection> selectionsForTier =
                     getEditor().getSelectionModel().getSelectionsForTier(ee.data().elementIndex(), ee.data().comment().getType().name());
-            for(SessionEditorSelection selection : selectionsForTier) {
-                getEditor().getSelectionModel().removeSelection(selection);
+            if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+                for (SessionEditorSelection selection : selectionsForTier) {
+                    getEditor().getSelectionModel().removeSelection(selection);
+                }
             }
             if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
                 if(insertIndex == -1) {
@@ -674,8 +678,10 @@ public class SearchView extends EditorView {
 
             final List<SessionEditorSelection> selectionsForTier =
                     getEditor().getSelectionModel().getSelectionsForTier(ee.data().elementIndex(), ee.data().gem().getType().name());
-            for(SessionEditorSelection selection : selectionsForTier) {
-                getEditor().getSelectionModel().removeSelection(selection);
+            if(getEditor().getViewModel().isShowing(VIEW_NAME)) {
+                for (SessionEditorSelection selection : selectionsForTier) {
+                    getEditor().getSelectionModel().removeSelection(selection);
+                }
             }
             if(findResult.range().transcriptElementIndex() == ee.data().elementIndex()) {
                 model.invalidateResultAt(i);

@@ -345,7 +345,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         this.eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-//        this.eventManager.registerActionForEvent(EditorEventType.GemChanged, this::onGemChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.GemChanged, this::onGemChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.eventManager.registerActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.GemAdded, this::onGemAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -1194,7 +1194,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 LogUtil.severe(e);
             }
             final String newGemVal = sb.toString().trim();
-            final String oldGemVal = gem.toString();
+            final String oldGemVal = gem.getLabel().toString();
             if (oldGemVal == null && newGemVal.isEmpty()) {
                 return false; // no changes
             }
@@ -1662,6 +1662,28 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         for(var changeListener:this.tierChangeListeners) {
             changeListener.tierChanged(editorEvent.data().elementIndex(), comment.getType().name(),
                     editorEvent.data().oldComment(), editorEvent.data().newComment());
+        }
+    }
+
+    private void onGemChanged(EditorEvent<EditorEventType.GemChangedData> editorEvent) {
+        final Gem gem = editorEvent.data().gem();
+
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
+        boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
+        getTranscriptEditorCaret().freeze();
+        // Update the changed tier data in the doc
+        getTranscriptDocument().onGemChanged(editorEvent.data().gem());
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        getTranscriptDocument().setBypassDocumentFilter(true);
+        getTranscriptEditorCaret().setDot(newDot, true);
+        getTranscriptDocument().setBypassDocumentFilter(false);
+        if (!wasCaretFrozen) {
+            getTranscriptEditorCaret().unfreeze();
+        }
+
+        for(var changeListener:this.tierChangeListeners) {
+            changeListener.tierChanged(editorEvent.data().elementIndex(), gem.getType().name() + " Gem",
+                    editorEvent.data().oldLabel(), editorEvent.data().newLabel());
         }
     }
 

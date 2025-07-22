@@ -402,7 +402,6 @@ public class TranscriptBatchBuilder {
      * @return this builder
      */
     public TranscriptBatchBuilder appendGem(Gem gem, boolean chatTierNamesShown) {
-        String text = gem.getLabel();
         SimpleAttributeSet gemAttrs = styleContext.getGemAttributes(gem);
         appendBatchEndStart(getTrailingAttributes(), gemAttrs);
 
@@ -425,7 +424,7 @@ public class TranscriptBatchBuilder {
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
-        appendBatchString(text, gemAttrs);
+        appendGemValue(gem, gemAttrs);
 
         for (var hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.endGem());
@@ -435,6 +434,11 @@ public class TranscriptBatchBuilder {
         }
 
         return this;
+    }
+
+    public void appendGemValue(Gem gem, AttributeSet attrs) {
+        final String text = gem.getLabel();
+        appendBatchString(text, attrs);
     }
 
     /**
