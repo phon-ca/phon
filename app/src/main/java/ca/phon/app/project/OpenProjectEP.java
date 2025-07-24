@@ -17,6 +17,7 @@ package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.tree.ProjectTreeWindow;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.plugin.*;
@@ -25,12 +26,10 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 @PhonPlugin(name="default")

@@ -1,6 +1,7 @@
-package ca.phon.app.project;
+package ca.phon.app.project.tree;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.project.ProjectTreeSpecialFolder;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectPaths;
 import ca.phon.session.io.SessionInputFactory;
@@ -22,6 +23,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * JTree for displaying project files and folders.
+ */
 public class ProjectFilesTree extends JTree implements TreeWillExpandListener {
 
     /**
