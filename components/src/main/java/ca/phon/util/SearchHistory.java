@@ -15,15 +15,15 @@
  */
 package ca.phon.util;
 
-import java.io.*;
 import java.util.*;
 import java.util.prefs.Preferences;
 
 /**
  * <p>
- * Generic search history manager that stores search entries in user
+ * Search history manager that stores comprehensive search entries in user
  * preferences.
- * This class provides methods for managing a list of search terms with support
+ * This class provides methods for managing a list of search history entries
+ * with support
  * for adding, updating, deleting, and retrieving search history entries.
  * </p>
  * 
@@ -33,6 +33,17 @@ import java.util.prefs.Preferences;
  * a unique name, allowing multiple independent search histories to be
  * maintained.
  * </p>
+ * 
+ * <p>
+ * Each search history entry includes:
+ * </p>
+ * <ul>
+ * <li>Date and time of the search</li>
+ * <li>Query text that was searched</li>
+ * <li>Query type (e.g., "phonex", "regex", "plain")</li>
+ * <li>Case sensitivity setting</li>
+ * <li>Optional parameters/filter options</li>
+ * </ul>
  * 
  * <p>
  * Features:
@@ -51,19 +62,23 @@ import java.util.prefs.Preferences;
  * </p>
  * 
  * <pre>
- * SearchHistory&lt;String&gt; queryHistory = new SearchHistory&lt;&gt;("query.search", String.class);
- * queryHistory.addSearchEntry("phoneme transcription");
- * queryHistory.addSearchEntry("syllable structure");
- * List&lt;String&gt; recent = queryHistory.getSearchEntries();
+ * SearchHistory queryHistory = new SearchHistory("query.search");
+ * SearchHistoryEntry entry = SearchHistoryEntry.builder()
+ *         .queryText("phoneme transcription")
+ *         .queryType("phonex")
+ *         .caseSensitive(false)
+ *         .parameter("target", "IPA Target")
+ *         .build();
+ * queryHistory.addSearchEntry(entry);
+ * List&lt;SearchHistoryEntry&gt; recent = queryHistory.getSearchEntries();
  * </pre>
  */
-public class SearchHistory<T extends Serializable> {
+public class SearchHistory {
 
     /** Default maximum number of search entries to maintain */
     public static final int DEFAULT_MAX_ENTRIES = 20;
 
     private final String historyName;
-    private final Class<T> entryType;
     private final int maxEntries;
     private final String prefKey;
     private final Object lock = new Object();
@@ -72,33 +87,27 @@ public class SearchHistory<T extends Serializable> {
      * Creates a new search history with the default maximum number of entries.
      * 
      * @param historyName unique name for this search history
-     * @param entryType   class type of search entries
      */
-    public SearchHistory(String historyName, Class<T> entryType) {
-        this(historyName, entryType, DEFAULT_MAX_ENTRIES);
+    public SearchHistory(String historyName) {
+        this(historyName, DEFAULT_MAX_ENTRIES);
     }
 
     /**
      * Creates a new search history with a specified maximum number of entries.
      * 
      * @param historyName unique name for this search history
-     * @param entryType   class type of search entries
      * @param maxEntries  maximum number of entries to maintain (must be > 0)
      * @throws IllegalArgumentException if maxEntries <= 0
      */
-    public SearchHistory(String historyName, Class<T> entryType, int maxEntries) {
+    public SearchHistory(String historyName, int maxEntries) {
         if (historyName == null || historyName.trim().isEmpty()) {
             throw new IllegalArgumentException("History name cannot be null or empty");
-        }
-        if (entryType == null) {
-            throw new IllegalArgumentException("Entry type cannot be null");
         }
         if (maxEntries <= 0) {
             throw new IllegalArgumentException("Max entries must be greater than 0");
         }
 
         this.historyName = historyName.trim();
-        this.entryType = entryType;
         this.maxEntries = maxEntries;
         this.prefKey = SearchHistory.class.getName() + "." + this.historyName;
     }
@@ -111,13 +120,13 @@ public class SearchHistory<T extends Serializable> {
      * @param entry the search entry to add (cannot be null)
      * @throws IllegalArgumentException if entry is null
      */
-    public void addSearchEntry(T entry) {
+    public void addSearchEntry(SearchHistoryEntry entry) {
         if (entry == null) {
             throw new IllegalArgumentException("Search entry cannot be null");
         }
 
         synchronized (lock) {
-            List<T> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = getSearchEntries();
 
             // Remove existing entry if present
             entries.remove(entry);
@@ -143,13 +152,13 @@ public class SearchHistory<T extends Serializable> {
      * @param newEntry the replacement entry (cannot be null)
      * @throws IllegalArgumentException if newEntry is null
      */
-    public void updateSearchEntry(T oldEntry, T newEntry) {
+    public void updateSearchEntry(SearchHistoryEntry oldEntry, SearchHistoryEntry newEntry) {
         if (newEntry == null) {
             throw new IllegalArgumentException("New search entry cannot be null");
         }
 
         synchronized (lock) {
-            List<T> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = getSearchEntries();
 
             int index = entries.indexOf(oldEntry);
             if (index >= 0) {
@@ -174,9 +183,9 @@ public class SearchHistory<T extends Serializable> {
      * @param entry the entry to remove
      * @return true if the entry was found and removed, false otherwise
      */
-    public boolean deleteSearchEntry(T entry) {
+    public boolean deleteSearchEntry(SearchHistoryEntry entry) {
         synchronized (lock) {
-            List<T> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = getSearchEntries();
             boolean removed = entries.remove(entry);
 
             if (removed) {
@@ -194,15 +203,15 @@ public class SearchHistory<T extends Serializable> {
      * @return the removed entry
      * @throws IndexOutOfBoundsException if index is out of range
      */
-    public T deleteSearchEntry(int index) {
+    public SearchHistoryEntry deleteSearchEntry(int index) {
         synchronized (lock) {
-            List<T> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = getSearchEntries();
 
             if (index < 0 || index >= entries.size()) {
                 throw new IndexOutOfBoundsException("Index " + index + " out of range [0, " + entries.size() + ")");
             }
 
-            T removed = entries.remove(index);
+            SearchHistoryEntry removed = entries.remove(index);
             saveSearchEntries(entries);
 
             return removed;
@@ -216,7 +225,7 @@ public class SearchHistory<T extends Serializable> {
      * 
      * @return a new list containing all search entries (never null)
      */
-    public List<T> getSearchEntries() {
+    public List<SearchHistoryEntry> getSearchEntries() {
         synchronized (lock) {
             return loadSearchEntries();
         }
@@ -229,13 +238,13 @@ public class SearchHistory<T extends Serializable> {
      * @return a new list containing the most recent entries (never null)
      * @throws IllegalArgumentException if limit < 0
      */
-    public List<T> getSearchEntries(int limit) {
+    public List<SearchHistoryEntry> getSearchEntries(int limit) {
         if (limit < 0) {
             throw new IllegalArgumentException("Limit cannot be negative");
         }
 
         synchronized (lock) {
-            List<T> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> allEntries = loadSearchEntries();
             int endIndex = Math.min(limit, allEntries.size());
             return new ArrayList<>(allEntries.subList(0, endIndex));
         }
@@ -246,9 +255,9 @@ public class SearchHistory<T extends Serializable> {
      * 
      * @return the most recent entry, or null if history is empty
      */
-    public T getMostRecentEntry() {
+    public SearchHistoryEntry getMostRecentEntry() {
         synchronized (lock) {
-            List<T> entries = loadSearchEntries();
+            List<SearchHistoryEntry> entries = loadSearchEntries();
             return entries.isEmpty() ? null : entries.get(0);
         }
     }
@@ -259,10 +268,146 @@ public class SearchHistory<T extends Serializable> {
      * @param entry the entry to check for
      * @return true if the entry exists in the history
      */
-    public boolean containsEntry(T entry) {
+    public boolean containsEntry(SearchHistoryEntry entry) {
         synchronized (lock) {
             return loadSearchEntries().contains(entry);
         }
+    }
+
+    /**
+     * Finds entries that match the given query text.
+     * 
+     * @param queryText the query text to search for
+     * @return a list of matching entries (never null)
+     */
+    public List<SearchHistoryEntry> findEntriesByQueryText(String queryText) {
+        if (queryText == null) {
+            return new ArrayList<>();
+        }
+
+        synchronized (lock) {
+            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> matches = new ArrayList<>();
+
+            for (SearchHistoryEntry entry : allEntries) {
+                if (queryText.equals(entry.getQueryText())) {
+                    matches.add(entry);
+                }
+            }
+
+            return matches;
+        }
+    }
+
+    /**
+     * Finds entries that match the given query type.
+     * 
+     * @param queryType the query type to search for
+     * @return a list of matching entries (never null)
+     */
+    public List<SearchHistoryEntry> findEntriesByQueryType(String queryType) {
+        if (queryType == null) {
+            return new ArrayList<>();
+        }
+
+        synchronized (lock) {
+            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> matches = new ArrayList<>();
+
+            for (SearchHistoryEntry entry : allEntries) {
+                if (queryType.equals(entry.getQueryType())) {
+                    matches.add(entry);
+                }
+            }
+
+            return matches;
+        }
+    }
+
+    /**
+     * Finds entries that contain the specified parameter.
+     * 
+     * @param parameterKey the parameter key to search for
+     * @return a list of matching entries (never null)
+     */
+    public List<SearchHistoryEntry> findEntriesByParameter(String parameterKey) {
+        if (parameterKey == null) {
+            return new ArrayList<>();
+        }
+
+        synchronized (lock) {
+            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> matches = new ArrayList<>();
+
+            for (SearchHistoryEntry entry : allEntries) {
+                if (entry.hasParameter(parameterKey)) {
+                    matches.add(entry);
+                }
+            }
+
+            return matches;
+        }
+    }
+
+    /**
+     * Finds entries that have a specific parameter value.
+     * 
+     * @param parameterKey   the parameter key
+     * @param parameterValue the parameter value to search for
+     * @return a list of matching entries (never null)
+     */
+    public List<SearchHistoryEntry> findEntriesByParameterValue(String parameterKey, String parameterValue) {
+        if (parameterKey == null || parameterValue == null) {
+            return new ArrayList<>();
+        }
+
+        synchronized (lock) {
+            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> matches = new ArrayList<>();
+
+            for (SearchHistoryEntry entry : allEntries) {
+                String value = entry.getParameter(parameterKey);
+                if (parameterValue.equals(value)) {
+                    matches.add(entry);
+                }
+            }
+
+            return matches;
+        }
+    }
+
+    /**
+     * Adds a simple search entry with just query text and type.
+     * This is a convenience method for basic search entries.
+     * 
+     * @param queryText the query text
+     * @param queryType the query type
+     * @return the created entry that was added
+     * @throws IllegalArgumentException if queryText or queryType is null or empty
+     */
+    public SearchHistoryEntry addSimpleSearchEntry(String queryText, String queryType) {
+        return addSimpleSearchEntry(queryText, queryType, false);
+    }
+
+    /**
+     * Adds a simple search entry with query text, type, and case sensitivity.
+     * This is a convenience method for basic search entries.
+     * 
+     * @param queryText     the query text
+     * @param queryType     the query type
+     * @param caseSensitive whether the search is case sensitive
+     * @return the created entry that was added
+     * @throws IllegalArgumentException if queryText or queryType is null or empty
+     */
+    public SearchHistoryEntry addSimpleSearchEntry(String queryText, String queryType, boolean caseSensitive) {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText(queryText)
+                .queryType(queryType)
+                .caseSensitive(caseSensitive)
+                .build();
+
+        addSearchEntry(entry);
+        return entry;
     }
 
     /**
@@ -366,35 +511,31 @@ public class SearchHistory<T extends Serializable> {
      * Retrieves search entries from multiple histories that match the given prefix.
      * This is useful for aggregating search results across related histories.
      * 
-     * @param <T>                  the type of entries to retrieve
      * @param prefix               the prefix to match against history names
-     * @param entryType            the class type of search entries
      * @param maxEntriesPerHistory maximum entries to retrieve from each matching
      *                             history
      * @return a map of history names to their search entries (never null)
-     * @throws IllegalArgumentException if prefix, entryType is null, or
-     *                                  maxEntriesPerHistory < 0
+     * @throws IllegalArgumentException if prefix is null or maxEntriesPerHistory <
+     *                                  0
      */
-    public static <T extends Serializable> Map<String, List<T>> getEntriesFromHistoriesWithPrefix(
-            String prefix, Class<T> entryType, int maxEntriesPerHistory) {
+    public static Map<String, List<SearchHistoryEntry>> getEntriesFromHistoriesWithPrefix(
+            String prefix, int maxEntriesPerHistory) {
 
         if (prefix == null) {
             throw new IllegalArgumentException("Prefix cannot be null");
-        }
-        if (entryType == null) {
-            throw new IllegalArgumentException("Entry type cannot be null");
         }
         if (maxEntriesPerHistory < 0) {
             throw new IllegalArgumentException("Max entries per history cannot be negative");
         }
 
-        Map<String, List<T>> results = new HashMap<>();
+        Map<String, List<SearchHistoryEntry>> results = new HashMap<>();
         List<String> matchingNames = getHistoryNamesWithPrefix(prefix);
 
         for (String historyName : matchingNames) {
             try {
-                SearchHistory<T> history = new SearchHistory<>(historyName, entryType);
-                List<T> entries = maxEntriesPerHistory > 0 ? history.getSearchEntries(maxEntriesPerHistory)
+                SearchHistory history = new SearchHistory(historyName);
+                List<SearchHistoryEntry> entries = maxEntriesPerHistory > 0
+                        ? history.getSearchEntries(maxEntriesPerHistory)
                         : history.getSearchEntries();
 
                 if (!entries.isEmpty()) {
@@ -415,15 +556,12 @@ public class SearchHistory<T extends Serializable> {
      * prefix,
      * with unlimited entries per history.
      * 
-     * @param <T>       the type of entries to retrieve
-     * @param prefix    the prefix to match against history names
-     * @param entryType the class type of search entries
+     * @param prefix the prefix to match against history names
      * @return a map of history names to their search entries (never null)
-     * @throws IllegalArgumentException if prefix or entryType is null
+     * @throws IllegalArgumentException if prefix is null
      */
-    public static <T extends Serializable> Map<String, List<T>> getEntriesFromHistoriesWithPrefix(
-            String prefix, Class<T> entryType) {
-        return getEntriesFromHistoriesWithPrefix(prefix, entryType, 0);
+    public static Map<String, List<SearchHistoryEntry>> getEntriesFromHistoriesWithPrefix(String prefix) {
+        return getEntriesFromHistoriesWithPrefix(prefix, 0);
     }
 
     /**
@@ -486,16 +624,17 @@ public class SearchHistory<T extends Serializable> {
      * @return a mutable list of search entries
      */
     @SuppressWarnings("unchecked")
-    private List<T> loadSearchEntries() {
+    private List<SearchHistoryEntry> loadSearchEntries() {
         try {
-            ArrayList<T> defaultList = new ArrayList<>();
-            ArrayList<T> entries = PrefHelper.getSerializedObject(prefKey, ArrayList.class, defaultList);
+            ArrayList<SearchHistoryEntry> defaultList = new ArrayList<>();
+            ArrayList<SearchHistoryEntry> entries = PrefHelper.getSerializedObject(prefKey, ArrayList.class,
+                    defaultList);
 
-            // Validate that all entries are of the correct type
-            List<T> validEntries = new ArrayList<>();
+            // Validate that all entries are SearchHistoryEntry instances
+            List<SearchHistoryEntry> validEntries = new ArrayList<>();
             for (Object entry : entries) {
-                if (entryType.isInstance(entry)) {
-                    validEntries.add(entryType.cast(entry));
+                if (entry instanceof SearchHistoryEntry) {
+                    validEntries.add((SearchHistoryEntry) entry);
                 }
             }
 
@@ -511,12 +650,12 @@ public class SearchHistory<T extends Serializable> {
      * 
      * @param entries the list of entries to save
      */
-    private void saveSearchEntries(List<T> entries) {
+    private void saveSearchEntries(List<SearchHistoryEntry> entries) {
         try {
             Preferences prefs = PrefHelper.getUserPreferences();
 
             // Create a serializable ArrayList
-            ArrayList<T> serializableList = new ArrayList<>(entries);
+            ArrayList<SearchHistoryEntry> serializableList = new ArrayList<>(entries);
 
             // Serialize and encode to Base64
             String encoded = Base64.encodeObject(serializableList);
