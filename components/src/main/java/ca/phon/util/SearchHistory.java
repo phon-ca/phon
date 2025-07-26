@@ -316,6 +316,171 @@ public class SearchHistory<T extends Serializable> {
     }
 
     /**
+     * Retrieves all search history names that match the given prefix.
+     * This is useful for finding related search histories or implementing
+     * wildcard-based searches.
+     * 
+     * @param prefix the prefix to match against history names
+     * @return a list of history names that start with the given prefix (never null)
+     * @throws IllegalArgumentException if prefix is null
+     */
+    public static List<String> getHistoryNamesWithPrefix(String prefix) {
+        if (prefix == null) {
+            throw new IllegalArgumentException("Prefix cannot be null");
+        }
+
+        List<String> matchingNames = new ArrayList<>();
+        try {
+            Preferences prefs = PrefHelper.getUserPreferences();
+            String searchPrefix = SearchHistory.class.getName() + "." + prefix;
+
+            String[] keys = prefs.keys();
+            for (String key : keys) {
+                if (key.startsWith(searchPrefix)) {
+                    // Extract the history name from the full preference key
+                    String historyName = key.substring(SearchHistory.class.getName().length() + 1);
+                    matchingNames.add(historyName);
+                }
+            }
+        } catch (Exception e) {
+            // Log error but return empty list - preference reading should be non-fatal
+            java.util.logging.Logger.getLogger(SearchHistory.class.getName())
+                    .warning("Failed to retrieve history names with prefix '" + prefix + "': " + e.getMessage());
+        }
+
+        return matchingNames;
+    }
+
+    /**
+     * Retrieves all search history names stored in user preferences.
+     * This returns all SearchHistory instances that have been created and have
+     * data.
+     * 
+     * @return a list of all history names (never null)
+     */
+    public static List<String> getAllHistoryNames() {
+        return getHistoryNamesWithPrefix("");
+    }
+
+    /**
+     * Retrieves search entries from multiple histories that match the given prefix.
+     * This is useful for aggregating search results across related histories.
+     * 
+     * @param <T>                  the type of entries to retrieve
+     * @param prefix               the prefix to match against history names
+     * @param entryType            the class type of search entries
+     * @param maxEntriesPerHistory maximum entries to retrieve from each matching
+     *                             history
+     * @return a map of history names to their search entries (never null)
+     * @throws IllegalArgumentException if prefix, entryType is null, or
+     *                                  maxEntriesPerHistory < 0
+     */
+    public static <T extends Serializable> Map<String, List<T>> getEntriesFromHistoriesWithPrefix(
+            String prefix, Class<T> entryType, int maxEntriesPerHistory) {
+
+        if (prefix == null) {
+            throw new IllegalArgumentException("Prefix cannot be null");
+        }
+        if (entryType == null) {
+            throw new IllegalArgumentException("Entry type cannot be null");
+        }
+        if (maxEntriesPerHistory < 0) {
+            throw new IllegalArgumentException("Max entries per history cannot be negative");
+        }
+
+        Map<String, List<T>> results = new HashMap<>();
+        List<String> matchingNames = getHistoryNamesWithPrefix(prefix);
+
+        for (String historyName : matchingNames) {
+            try {
+                SearchHistory<T> history = new SearchHistory<>(historyName, entryType);
+                List<T> entries = maxEntriesPerHistory > 0 ? history.getSearchEntries(maxEntriesPerHistory)
+                        : history.getSearchEntries();
+
+                if (!entries.isEmpty()) {
+                    results.put(historyName, entries);
+                }
+            } catch (Exception e) {
+                // Log error but continue processing other histories
+                java.util.logging.Logger.getLogger(SearchHistory.class.getName())
+                        .warning("Failed to load history '" + historyName + "': " + e.getMessage());
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * Retrieves all search entries from multiple histories that match the given
+     * prefix,
+     * with unlimited entries per history.
+     * 
+     * @param <T>       the type of entries to retrieve
+     * @param prefix    the prefix to match against history names
+     * @param entryType the class type of search entries
+     * @return a map of history names to their search entries (never null)
+     * @throws IllegalArgumentException if prefix or entryType is null
+     */
+    public static <T extends Serializable> Map<String, List<T>> getEntriesFromHistoriesWithPrefix(
+            String prefix, Class<T> entryType) {
+        return getEntriesFromHistoriesWithPrefix(prefix, entryType, 0);
+    }
+
+    /**
+     * Deletes all search histories that match the given prefix.
+     * This is useful for bulk cleanup operations.
+     * 
+     * @param prefix the prefix to match against history names
+     * @return the number of histories that were deleted
+     * @throws IllegalArgumentException if prefix is null
+     */
+    public static int deleteHistoriesWithPrefix(String prefix) {
+        if (prefix == null) {
+            throw new IllegalArgumentException("Prefix cannot be null");
+        }
+
+        List<String> matchingNames = getHistoryNamesWithPrefix(prefix);
+        int deletedCount = 0;
+
+        try {
+            Preferences prefs = PrefHelper.getUserPreferences();
+            for (String historyName : matchingNames) {
+                String prefKey = SearchHistory.class.getName() + "." + historyName;
+                prefs.remove(prefKey);
+                deletedCount++;
+            }
+        } catch (Exception e) {
+            // Log error but return count of what was successfully deleted
+            java.util.logging.Logger.getLogger(SearchHistory.class.getName())
+                    .warning("Failed to delete some histories with prefix '" + prefix + "': " + e.getMessage());
+        }
+
+        return deletedCount;
+    }
+
+    /**
+     * Checks if any search histories exist with the given prefix.
+     * 
+     * @param prefix the prefix to match against history names
+     * @return true if at least one history exists with the given prefix
+     * @throws IllegalArgumentException if prefix is null
+     */
+    public static boolean existsHistoryWithPrefix(String prefix) {
+        return !getHistoryNamesWithPrefix(prefix).isEmpty();
+    }
+
+    /**
+     * Gets the total number of search histories that match the given prefix.
+     * 
+     * @param prefix the prefix to match against history names
+     * @return the count of matching histories
+     * @throws IllegalArgumentException if prefix is null
+     */
+    public static int getHistoryCountWithPrefix(String prefix) {
+        return getHistoryNamesWithPrefix(prefix).size();
+    }
+
+    /**
      * Loads the search entries from user preferences.
      * 
      * @return a mutable list of search entries
