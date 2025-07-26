@@ -290,7 +290,7 @@ public class SearchHistory {
             List<SearchHistoryEntry> matches = new ArrayList<>();
 
             for (SearchHistoryEntry entry : allEntries) {
-                if (queryText.equals(entry.getQueryText())) {
+                if (queryText.equals(entry.queryText())) {
                     matches.add(entry);
                 }
             }
@@ -315,7 +315,7 @@ public class SearchHistory {
             List<SearchHistoryEntry> matches = new ArrayList<>();
 
             for (SearchHistoryEntry entry : allEntries) {
-                if (queryType.equals(entry.getQueryType())) {
+                if (queryType.equals(entry.queryType())) {
                     matches.add(entry);
                 }
             }

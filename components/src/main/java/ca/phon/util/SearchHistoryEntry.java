@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * <p>
@@ -29,7 +28,7 @@ import java.util.Objects;
  * </p>
  * 
  * <p>
- * This class is immutable to ensure thread safety and data integrity.
+ * This record is immutable to ensure thread safety and data integrity.
  * Use the {@link Builder} to create new instances or modify existing ones.
  * </p>
  * 
@@ -47,71 +46,48 @@ import java.util.Objects;
  *         .build();
  * </pre>
  */
-public final class SearchHistoryEntry implements Serializable {
+public record SearchHistoryEntry(
+        LocalDateTime date,
+        String queryText,
+        String queryType,
+        boolean caseSensitive,
+        Map<String, String> parameters) implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final LocalDateTime date;
-    private final String queryText;
-    private final String queryType;
-    private final boolean caseSensitive;
-    private final Map<String, String> parameters;
-
     /**
-     * Private constructor - use Builder to create instances.
+     * Compact constructor with validation and defensive copying.
      */
-    private SearchHistoryEntry(Builder builder) {
-        this.date = builder.date != null ? builder.date : LocalDateTime.now();
-        this.queryText = builder.queryText;
-        this.queryType = builder.queryType;
-        this.caseSensitive = builder.caseSensitive;
-        this.parameters = new HashMap<>(builder.parameters);
-    }
+    public SearchHistoryEntry {
+        if (queryText == null || queryText.trim().isEmpty()) {
+            throw new IllegalArgumentException("Query text cannot be null or empty");
+        }
+        if (queryType == null || queryType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Query type cannot be null or empty");
+        }
 
-    /**
-     * Gets the date and time when this search was performed.
-     * 
-     * @return the search date (never null)
-     */
-    public LocalDateTime getDate() {
-        return date;
-    }
+        // Use current time if date is null
+        date = date != null ? date : LocalDateTime.now();
 
-    /**
-     * Gets the query text that was searched for.
-     * 
-     * @return the query text (never null)
-     */
-    public String getQueryText() {
-        return queryText;
-    }
+        // Trim and validate required fields
+        queryText = queryText.trim();
+        queryType = queryType.trim();
 
-    /**
-     * Gets the type of query (e.g., "phonex", "regex", "plain").
-     * 
-     * @return the query type (never null)
-     */
-    public String getQueryType() {
-        return queryType;
-    }
-
-    /**
-     * Checks if the search was case sensitive.
-     * 
-     * @return true if case sensitive, false otherwise
-     */
-    public boolean isCaseSensitive() {
-        return caseSensitive;
-    }
-
-    /**
-     * Gets a copy of the search parameters/filter options.
-     * The returned map is a copy and modifications will not affect this entry.
-     * 
-     * @return a copy of the parameters map (never null)
-     */
-    public Map<String, String> getParameters() {
-        return new HashMap<>(parameters);
+        // Defensive copy of parameters map
+        if (parameters == null) {
+            parameters = Map.of();
+        } else {
+            // Validate no null keys or values
+            for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                if (entry.getKey() == null) {
+                    throw new IllegalArgumentException("Parameter key cannot be null");
+                }
+                if (entry.getValue() == null) {
+                    throw new IllegalArgumentException("Parameter value cannot be null");
+                }
+            }
+            parameters = Map.copyOf(parameters);
+        }
     }
 
     /**
@@ -150,38 +126,11 @@ public final class SearchHistoryEntry implements Serializable {
      */
     public Builder toBuilder() {
         return new Builder()
-                .date(this.date)
-                .queryText(this.queryText)
-                .queryType(this.queryType)
-                .caseSensitive(this.caseSensitive)
-                .parameters(this.parameters);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        SearchHistoryEntry that = (SearchHistoryEntry) obj;
-        return caseSensitive == that.caseSensitive &&
-                Objects.equals(date, that.date) &&
-                Objects.equals(queryText, that.queryText) &&
-                Objects.equals(queryType, that.queryType) &&
-                Objects.equals(parameters, that.parameters);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, queryText, queryType, caseSensitive, parameters);
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "SearchHistoryEntry{date=%s, queryText='%s', queryType='%s', caseSensitive=%s, parameters=%s}",
-                date, queryText, queryType, caseSensitive, parameters);
+                .date(this.date())
+                .queryText(this.queryText())
+                .queryType(this.queryType())
+                .caseSensitive(this.caseSensitive())
+                .parameters(this.parameters());
     }
 
     /**
@@ -328,7 +277,7 @@ public final class SearchHistoryEntry implements Serializable {
             if (queryType == null) {
                 throw new IllegalStateException("Query type is required");
             }
-            return new SearchHistoryEntry(this);
+            return new SearchHistoryEntry(date, queryText, queryType, caseSensitive, parameters);
         }
     }
 }

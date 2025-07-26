@@ -358,10 +358,10 @@ public class SearchHistoryTest {
     public void testAddSimpleSearchEntry() {
         SearchHistoryEntry entry = searchHistory.addSimpleSearchEntry("simple query", "plain");
 
-        assertEquals("simple query", entry.getQueryText());
-        assertEquals("plain", entry.getQueryType());
-        assertFalse(entry.isCaseSensitive());
-        assertTrue(entry.getParameters().isEmpty());
+        assertEquals("simple query", entry.queryText());
+        assertEquals("plain", entry.queryType());
+        assertFalse(entry.caseSensitive());
+        assertTrue(entry.parameters().isEmpty());
         assertTrue(searchHistory.containsEntry(entry));
     }
 
@@ -369,9 +369,9 @@ public class SearchHistoryTest {
     public void testAddSimpleSearchEntryWithCaseSensitive() {
         SearchHistoryEntry entry = searchHistory.addSimpleSearchEntry("case query", "regex", true);
 
-        assertEquals("case query", entry.getQueryText());
-        assertEquals("regex", entry.getQueryType());
-        assertTrue(entry.isCaseSensitive());
+        assertEquals("case query", entry.queryText());
+        assertEquals("regex", entry.queryType());
+        assertTrue(entry.caseSensitive());
     }
 
     @Test(expected = IllegalArgumentException.class)
