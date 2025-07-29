@@ -116,10 +116,26 @@ public final class SearchHistory {
     }
 
     /**
-     * Adds a new search entry to the history for the given prefix. If the entry
-     * already exists,
-     * it is moved to the front of the list. If the history exceeds the
-     * maximum size, the oldest entries are removed.
+     * Checks if two search history entries have the same query text and parameters.
+     * This is used to determine if entries are duplicates for deduplication
+     * purposes.
+     * 
+     * @param entry1 the first entry to compare
+     * @param entry2 the second entry to compare
+     * @return true if both entries have the same query text and parameters
+     */
+    private static boolean entriesMatch(SearchHistoryEntry entry1, SearchHistoryEntry entry2) {
+        return entry1.queryText().equals(entry2.queryText()) &&
+                entry1.parameters().equals(entry2.parameters());
+    }
+
+    /**
+     * Adds a new search entry to the history for the given prefix. If an entry with
+     * the same query text and parameters already exists, it is removed before
+     * adding
+     * the new entry to the front of the list. If the history exceeds the maximum
+     * size,
+     * the oldest entries are removed.
      * 
      * @param prefix the prefix for the search history context
      * @param entry  the search entry to add (cannot be null)
@@ -132,8 +148,10 @@ public final class SearchHistory {
     /**
      * Adds a new search entry to the history for the given prefix with a specific
      * maximum size.
-     * If the entry already exists, it is moved to the front of the list. If the
-     * history exceeds the
+     * If an entry with the same query text and parameters already exists, it is
+     * removed
+     * before adding the new entry to the front of the list. If the history exceeds
+     * the
      * maximum size, the oldest entries are removed.
      * 
      * @param prefix     the prefix for the search history context
@@ -156,8 +174,8 @@ public final class SearchHistory {
         synchronized (lock) {
             List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
 
-            // Remove existing entry if present
-            entries.remove(entry);
+            // Remove any existing entries with same query text and parameters
+            entries.removeIf(existingEntry -> entriesMatch(existingEntry, entry));
 
             // Add to front
             entries.add(0, entry);
