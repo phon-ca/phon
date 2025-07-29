@@ -12,6 +12,7 @@ import ca.phon.session.TierViewItem;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.ui.FlatButton;
+import ca.phon.ui.SearchHistoryListView;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.SearchField;
@@ -30,9 +31,6 @@ import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -306,192 +304,24 @@ public class SearchView extends EditorView {
     }
 
     private void showSearchHistoryPopup() {
-        // Get search history entries
-        final List<SearchHistoryEntry> historyEntries = SearchHistory.getSearchEntries(
-                SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY);
+        SearchHistoryListView historyView = new SearchHistoryListView(SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY);
+        historyView.setSelectionCallback(entry -> {
+            // Set search field text
+            searchField.setText(entry.queryText());
 
-        final DefaultListModel<String> listModel = new DefaultListModel<>();
+            // Set search parameters based on history entry
+            caseSensitiveButton.setSelected(entry.caseSensitive());
 
-        if (historyEntries.isEmpty()) {
-            listModel.addElement("No search history");
-        } else {
-            final LocalDateTime now = LocalDateTime.now();
-            final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMM d");
+            String queryType = entry.queryType();
+            regexButton.setSelected("regex".equals(queryType));
+            phonexButton.setSelected("phonex".equals(queryType));
 
-            // Group entries by time period
-            final List<SearchHistoryEntry> todayEntries = new ArrayList<>();
-            final List<SearchHistoryEntry> thisWeekEntries = new ArrayList<>();
-            final List<SearchHistoryEntry> thisMonthEntries = new ArrayList<>();
-            final List<SearchHistoryEntry> olderEntries = new ArrayList<>();
-
-            for (SearchHistoryEntry entry : historyEntries) {
-                final LocalDateTime entryDate = entry.date();
-                final long daysDiff = ChronoUnit.DAYS.between(entryDate.toLocalDate(), now.toLocalDate());
-
-                if (daysDiff == 0) {
-                    todayEntries.add(entry);
-                } else if (daysDiff <= 7) {
-                    thisWeekEntries.add(entry);
-                } else if (daysDiff <= 30) {
-                    thisMonthEntries.add(entry);
-                } else {
-                    olderEntries.add(entry);
-                }
-            }
-
-            // Add entries with headings for each non-empty group
-            if (!todayEntries.isEmpty()) {
-                listModel.addElement("Today");
-                for (SearchHistoryEntry entry : todayEntries) {
-                    final String displayText = String.format("  [%s] %s",
-                            entry.date().format(timeFormatter), entry.queryText());
-                    listModel.addElement(displayText);
-                }
-            }
-
-            if (!thisWeekEntries.isEmpty()) {
-                listModel.addElement("This week");
-                for (SearchHistoryEntry entry : thisWeekEntries) {
-                    final String displayText = String.format("  [%s] %s",
-                            entry.date().format(dateFormatter), entry.queryText());
-                    listModel.addElement(displayText);
-                }
-            }
-
-            if (!thisMonthEntries.isEmpty()) {
-                listModel.addElement("This month");
-                for (SearchHistoryEntry entry : thisMonthEntries) {
-                    final String displayText = String.format("  [%s] %s",
-                            entry.date().format(dateFormatter), entry.queryText());
-                    listModel.addElement(displayText);
-                }
-            }
-
-            if (!olderEntries.isEmpty()) {
-                listModel.addElement("> 30 days");
-                for (SearchHistoryEntry entry : olderEntries) {
-                    final String displayText = String.format("  [%s] %s",
-                            entry.date().format(dateFormatter), entry.queryText());
-                    listModel.addElement(displayText);
-                }
-            }
-        }
-
-        final JList<String> historyList = new JList<>(listModel);
-        historyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        historyList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        // Custom cell renderer to distinguish headers from entries
-        historyList.setCellRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                    boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-                String text = value.toString();
-                // Headers don't start with spaces, entries do
-                boolean isHeader = !text.startsWith("  ") && !text.equals("No search history");
-
-                if (isHeader) {
-                    setFont(getFont().deriveFont(Font.BOLD));
-                    setForeground(UIManager.getColor("textInactiveText"));
-                    if (isSelected) {
-                        setBackground(list.getBackground());
-                        setOpaque(false);
-                    }
-                } else {
-                    setFont(getFont().deriveFont(Font.PLAIN));
-                    if (!isSelected) {
-                        setForeground(UIManager.getColor("textText"));
-                    }
-                }
-
-                return this;
-            }
+            // Trigger search
+            onQuery();
         });
 
-        // Custom selection model that prevents selection of headers
-        historyList.setSelectionModel(new DefaultListSelectionModel() {
-            @Override
-            public void setSelectionInterval(int index0, int index1) {
-                if (isSelectableIndex(index0)) {
-                    super.setSelectionInterval(index0, index1);
-                }
-            }
-
-            @Override
-            public void addSelectionInterval(int index0, int index1) {
-                if (isSelectableIndex(index0)) {
-                    super.addSelectionInterval(index0, index1);
-                }
-            }
-
-            private boolean isSelectableIndex(int index) {
-                if (index < 0 || index >= listModel.getSize()) {
-                    return false;
-                }
-                String text = listModel.getElementAt(index);
-                // Headers don't start with spaces, entries do
-                return text.startsWith("  ") || text.equals("No search history");
-            }
-        });
-
-        // Set preferred size for the list - adjust height based on content
-        final int listHeight = Math.min(200, Math.max(80, listModel.getSize() * 20 + 10));
-        historyList.setPreferredSize(new Dimension(250, listHeight));
-
-        // Create popup and show it
-        final JPopupMenu popup = new JPopupMenu();
-        popup.add(new JScrollPane(historyList));
-
-        // Add selection listener to handle clicks on history entries
-        historyList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                int selectedIndex = historyList.getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    String selectedText = listModel.getElementAt(selectedIndex);
-                    if (selectedText.startsWith("  ") && !selectedText.equals("No search history")) {
-                        // Extract query text from the display text
-                        // Format is " [time/date] query"
-                        int bracketEnd = selectedText.indexOf("] ");
-                        if (bracketEnd > 0 && bracketEnd + 2 < selectedText.length()) {
-                            String queryText = selectedText.substring(bracketEnd + 2);
-
-                            // Find the corresponding history entry to get search parameters
-                            SearchHistoryEntry matchingEntry = null;
-                            for (SearchHistoryEntry entry : historyEntries) {
-                                if (entry.queryText().equals(queryText)) {
-                                    matchingEntry = entry;
-                                    break;
-                                }
-                            }
-
-                            if (matchingEntry != null) {
-                                // Set search field text
-                                searchField.setText(queryText);
-
-                                // Set search parameters based on history entry
-                                caseSensitiveButton.setSelected(matchingEntry.caseSensitive());
-
-                                String queryType = matchingEntry.queryType();
-                                regexButton.setSelected("regex".equals(queryType));
-                                phonexButton.setSelected("phonex".equals(queryType));
-
-                                // Close the popup
-                                popup.setVisible(false);
-
-                                // Trigger search
-                                onQuery();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Position the popup relative to the search field
-        popup.show(searchField, 0, searchField.getHeight());
+        // Show the popup below the search field
+        historyView.showBelowComponent(searchField);
     }
 
     public void setLiveUpdate(Boolean liveUpdate) {
