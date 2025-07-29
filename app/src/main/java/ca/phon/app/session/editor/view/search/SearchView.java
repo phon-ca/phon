@@ -319,30 +319,62 @@ public class SearchView extends EditorView {
             final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
             final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMM d");
 
-            // Group entries by time period and display query text
+            // Group entries by time period
+            final List<SearchHistoryEntry> todayEntries = new ArrayList<>();
+            final List<SearchHistoryEntry> thisWeekEntries = new ArrayList<>();
+            final List<SearchHistoryEntry> thisMonthEntries = new ArrayList<>();
+            final List<SearchHistoryEntry> olderEntries = new ArrayList<>();
+
             for (SearchHistoryEntry entry : historyEntries) {
                 final LocalDateTime entryDate = entry.date();
-                final String queryText = entry.queryText();
-                final String displayText;
-
-                // Determine time category
                 final long daysDiff = ChronoUnit.DAYS.between(entryDate.toLocalDate(), now.toLocalDate());
 
                 if (daysDiff == 0) {
-                    // Today - show time and query
-                    displayText = String.format("[%s] %s", entryDate.format(timeFormatter), queryText);
+                    todayEntries.add(entry);
                 } else if (daysDiff <= 7) {
-                    // This week - show date and query
-                    displayText = String.format("[%s] %s", entryDate.format(dateFormatter), queryText);
+                    thisWeekEntries.add(entry);
                 } else if (daysDiff <= 30) {
-                    // This month - show date and query
-                    displayText = String.format("[%s] %s", entryDate.format(dateFormatter), queryText);
+                    thisMonthEntries.add(entry);
                 } else {
-                    // > 30 days - show date and query
-                    displayText = String.format("[%s] %s", entryDate.format(dateFormatter), queryText);
+                    olderEntries.add(entry);
                 }
+            }
 
-                listModel.addElement(displayText);
+            // Add entries with headings for each non-empty group
+            if (!todayEntries.isEmpty()) {
+                listModel.addElement("Today");
+                for (SearchHistoryEntry entry : todayEntries) {
+                    final String displayText = String.format("  [%s] %s",
+                            entry.date().format(timeFormatter), entry.queryText());
+                    listModel.addElement(displayText);
+                }
+            }
+
+            if (!thisWeekEntries.isEmpty()) {
+                listModel.addElement("This week");
+                for (SearchHistoryEntry entry : thisWeekEntries) {
+                    final String displayText = String.format("  [%s] %s",
+                            entry.date().format(dateFormatter), entry.queryText());
+                    listModel.addElement(displayText);
+                }
+            }
+
+            if (!thisMonthEntries.isEmpty()) {
+                listModel.addElement("This month");
+                for (SearchHistoryEntry entry : thisMonthEntries) {
+                    final String displayText = String.format("  [%s] %s",
+                            entry.date().format(dateFormatter), entry.queryText());
+                    listModel.addElement(displayText);
+                }
+            }
+
+            if (!olderEntries.isEmpty()) {
+                listModel.addElement("> 30 days");
+                for (SearchHistoryEntry entry : olderEntries) {
+                    final String displayText = String.format("  [%s] %s",
+                            entry.date().format(dateFormatter), entry.queryText());
+                    listModel.addElement(displayText);
+                }
             }
         }
 
@@ -350,19 +382,58 @@ public class SearchView extends EditorView {
         historyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         historyList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // Make items non-clickable for now (could be enhanced later to populate search
-        // field)
-        historyList.setEnabled(false);
-        historyList.setFocusable(false);
+        // Custom cell renderer to distinguish headers from entries
+        historyList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                String text = value.toString();
+                // Headers don't start with spaces, entries do
+                boolean isHeader = !text.startsWith("  ") && !text.equals("No search history");
+
+                if (isHeader) {
+                    setFont(getFont().deriveFont(Font.BOLD));
+                    setForeground(UIManager.getColor("textInactiveText"));
+                    if (isSelected) {
+                        setBackground(list.getBackground());
+                        setOpaque(false);
+                    }
+                } else {
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                    if (!isSelected) {
+                        setForeground(UIManager.getColor("textText"));
+                    }
+                }
+
+                return this;
+            }
+        });
+
+        // Custom selection model that prevents selection of headers
         historyList.setSelectionModel(new DefaultListSelectionModel() {
             @Override
             public void setSelectionInterval(int index0, int index1) {
-                // Do nothing - prevent selection
+                if (isSelectableIndex(index0)) {
+                    super.setSelectionInterval(index0, index1);
+                }
             }
 
             @Override
             public void addSelectionInterval(int index0, int index1) {
-                // Do nothing - prevent selection
+                if (isSelectableIndex(index0)) {
+                    super.addSelectionInterval(index0, index1);
+                }
+            }
+
+            private boolean isSelectableIndex(int index) {
+                if (index < 0 || index >= listModel.getSize()) {
+                    return false;
+                }
+                String text = listModel.getElementAt(index);
+                // Headers don't start with spaces, entries do
+                return text.startsWith("  ") || text.equals("No search history");
             }
         });
 
@@ -373,6 +444,51 @@ public class SearchView extends EditorView {
         // Create popup and show it
         final JPopupMenu popup = new JPopupMenu();
         popup.add(new JScrollPane(historyList));
+
+        // Add selection listener to handle clicks on history entries
+        historyList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedIndex = historyList.getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    String selectedText = listModel.getElementAt(selectedIndex);
+                    if (selectedText.startsWith("  ") && !selectedText.equals("No search history")) {
+                        // Extract query text from the display text
+                        // Format is " [time/date] query"
+                        int bracketEnd = selectedText.indexOf("] ");
+                        if (bracketEnd > 0 && bracketEnd + 2 < selectedText.length()) {
+                            String queryText = selectedText.substring(bracketEnd + 2);
+
+                            // Find the corresponding history entry to get search parameters
+                            SearchHistoryEntry matchingEntry = null;
+                            for (SearchHistoryEntry entry : historyEntries) {
+                                if (entry.queryText().equals(queryText)) {
+                                    matchingEntry = entry;
+                                    break;
+                                }
+                            }
+
+                            if (matchingEntry != null) {
+                                // Set search field text
+                                searchField.setText(queryText);
+
+                                // Set search parameters based on history entry
+                                caseSensitiveButton.setSelected(matchingEntry.caseSensitive());
+
+                                String queryType = matchingEntry.queryType();
+                                regexButton.setSelected("regex".equals(queryType));
+                                phonexButton.setSelected("phonex".equals(queryType));
+
+                                // Close the popup
+                                popup.setVisible(false);
+
+                                // Trigger search
+                                onQuery();
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
         // Position the popup relative to the search field
         popup.show(searchField, 0, searchField.getHeight());
