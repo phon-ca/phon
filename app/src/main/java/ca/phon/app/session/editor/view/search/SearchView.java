@@ -15,6 +15,8 @@ import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.SearchField;
+import ca.phon.util.SearchHistory;
+import ca.phon.util.SearchHistoryEntry;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -28,10 +30,12 @@ import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Stack;
 
 /**
  * Search view for session editor. Allows users to search for text in the
@@ -50,9 +54,6 @@ public class SearchView extends EditorView {
     private final static String SEARCH_HISTORY_PROP_PREFIX = "SessionEditor.searchHistory";
 
     private final static int MAX_SEARCH_HISTORY = 10;
-
-    // TODO implement search history
-    private Stack<String> searchHistory;
 
     /**
      * Custom text field with search icon
@@ -295,35 +296,86 @@ public class SearchView extends EditorView {
         // Separator after live update option
         menuBuilder.addSeparator(".", "search_history_separator");
 
-        // Search history submenu
-        final PhonUIAction<Void> todayAct = PhonUIAction.runnable(() -> {
-            // TODO: Implement today search history
-        });
-        todayAct.putValue(Action.NAME, "Today");
-        final JMenuItem todayItem = new JMenuItem(todayAct);
-        menuBuilder.addItem("Search history", todayItem);
+        // Search history button
+        final PhonUIAction<Void> searchHistoryAct = PhonUIAction.runnable(this::showSearchHistoryPopup);
+        searchHistoryAct.putValue(Action.NAME, "Search history");
+        searchHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Show search history");
+        final JMenuItem searchHistoryItem = new JMenuItem(searchHistoryAct);
+        menuBuilder.addItem(".", searchHistoryItem);
 
-        final PhonUIAction<Void> thisWeekAct = PhonUIAction.runnable(() -> {
-            // TODO: Implement this week search history
-        });
-        thisWeekAct.putValue(Action.NAME, "This week");
-        final JMenuItem thisWeekItem = new JMenuItem(thisWeekAct);
-        menuBuilder.addItem("Search history", thisWeekItem);
+    }
 
-        final PhonUIAction<Void> thisMonthAct = PhonUIAction.runnable(() -> {
-            // TODO: Implement this month search history
-        });
-        thisMonthAct.putValue(Action.NAME, "This month");
-        final JMenuItem thisMonthItem = new JMenuItem(thisMonthAct);
-        menuBuilder.addItem("Search history", thisMonthItem);
+    private void showSearchHistoryPopup() {
+        // Get search history entries
+        final List<SearchHistoryEntry> historyEntries = SearchHistory.getSearchEntries(
+                SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY);
 
-        final PhonUIAction<Void> olderAct = PhonUIAction.runnable(() -> {
-            // TODO: Implement > 30 days search history
-        });
-        olderAct.putValue(Action.NAME, "> 30 days");
-        final JMenuItem olderItem = new JMenuItem(olderAct);
-        menuBuilder.addItem("Search history", olderItem);
+        final DefaultListModel<String> listModel = new DefaultListModel<>();
 
+        if (historyEntries.isEmpty()) {
+            listModel.addElement("No search history");
+        } else {
+            final LocalDateTime now = LocalDateTime.now();
+            final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMM d");
+
+            // Group entries by time period and display query text
+            for (SearchHistoryEntry entry : historyEntries) {
+                final LocalDateTime entryDate = entry.date();
+                final String queryText = entry.queryText();
+                final String displayText;
+
+                // Determine time category
+                final long daysDiff = ChronoUnit.DAYS.between(entryDate.toLocalDate(), now.toLocalDate());
+
+                if (daysDiff == 0) {
+                    // Today - show time and query
+                    displayText = String.format("[%s] %s", entryDate.format(timeFormatter), queryText);
+                } else if (daysDiff <= 7) {
+                    // This week - show date and query
+                    displayText = String.format("[%s] %s", entryDate.format(dateFormatter), queryText);
+                } else if (daysDiff <= 30) {
+                    // This month - show date and query
+                    displayText = String.format("[%s] %s", entryDate.format(dateFormatter), queryText);
+                } else {
+                    // > 30 days - show date and query
+                    displayText = String.format("[%s] %s", entryDate.format(dateFormatter), queryText);
+                }
+
+                listModel.addElement(displayText);
+            }
+        }
+
+        final JList<String> historyList = new JList<>(listModel);
+        historyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        historyList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // Make items non-clickable for now (could be enhanced later to populate search
+        // field)
+        historyList.setEnabled(false);
+        historyList.setFocusable(false);
+        historyList.setSelectionModel(new DefaultListSelectionModel() {
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
+                // Do nothing - prevent selection
+            }
+
+            @Override
+            public void addSelectionInterval(int index0, int index1) {
+                // Do nothing - prevent selection
+            }
+        });
+
+        // Set preferred size for the list - adjust height based on content
+        final int listHeight = Math.min(200, Math.max(80, listModel.getSize() * 20 + 10));
+        historyList.setPreferredSize(new Dimension(250, listHeight));
+
+        // Create popup and show it
+        final JPopupMenu popup = new JPopupMenu();
+        popup.add(new JScrollPane(historyList));
+
+        // Position the popup relative to the search field
+        popup.show(searchField, 0, searchField.getHeight());
     }
 
     public void setLiveUpdate(Boolean liveUpdate) {
@@ -471,6 +523,17 @@ public class SearchView extends EditorView {
             clearResults();
             return;
         }
+
+        // Add search entry to history
+        final String queryType = regexButton.isSelected() ? "regex"
+                : phonexButton.isSelected() ? "phonex" : "plain";
+        final SearchHistoryEntry historyEntry = SearchHistoryEntry.builder()
+                .queryText(queryText.trim())
+                .queryType(queryType)
+                .caseSensitive(caseSensitiveButton.isSelected())
+                .build();
+        SearchHistory.addSearchEntry(SEARCH_HISTORY_PROP_PREFIX, historyEntry, MAX_SEARCH_HISTORY);
+
         final FindManager findManager = createFindManager();
         findManager.setCurrentLocation(new TranscriptElementLocation(0, findManager.getSearchTiers()[0], 0));
 
