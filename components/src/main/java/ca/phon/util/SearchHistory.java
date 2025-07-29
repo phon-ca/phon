@@ -16,22 +16,24 @@
 package ca.phon.util;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.prefs.Preferences;
 
 /**
  * <p>
  * Search history manager that stores comprehensive search entries in user
- * preferences.
- * This class provides methods for managing a list of search history entries
- * with support
- * for adding, updating, deleting, and retrieving search history entries.
+ * preferences using context-based prefixes.
+ * This class provides static methods for managing search history entries
+ * with support for adding, updating, deleting, and retrieving search history
+ * entries
+ * across different contexts using prefix-based organization.
  * </p>
  * 
  * <p>
  * The search history is stored using the Java Preferences API and persists
- * across application sessions. Each search history instance is identified by
- * a unique name, allowing multiple independent search histories to be
- * maintained.
+ * across application sessions. Different search contexts can maintain separate
+ * histories by using unique prefixes (e.g., "query.phonex",
+ * "search.participant").
  * </p>
  * 
  * <p>
@@ -49,6 +51,8 @@ import java.util.prefs.Preferences;
  * Features:
  * </p>
  * <ul>
+ * <li>Static utility methods with context prefixes for multiple independent
+ * histories</li>
  * <li>Configurable maximum history size with automatic cleanup</li>
  * <li>Most recently used ordering - new entries are added to the front</li>
  * <li>Duplicate detection - existing entries are moved to front when
@@ -62,71 +66,95 @@ import java.util.prefs.Preferences;
  * </p>
  * 
  * <pre>
- * SearchHistory queryHistory = new SearchHistory("query.search");
+ * String prefix = "query.phonex";
  * SearchHistoryEntry entry = SearchHistoryEntry.builder()
  *         .queryText("phoneme transcription")
  *         .queryType("phonex")
  *         .caseSensitive(false)
  *         .parameter("target", "IPA Target")
  *         .build();
- * queryHistory.addSearchEntry(entry);
- * List&lt;SearchHistoryEntry&gt; recent = queryHistory.getSearchEntries();
+ * SearchHistory.addSearchEntry(prefix, entry);
+ * List&lt;SearchHistoryEntry&gt; recent = SearchHistory.getSearchEntries(prefix);
  * </pre>
  */
-public class SearchHistory {
+public final class SearchHistory {
 
     /** Default maximum number of search entries to maintain */
     public static final int DEFAULT_MAX_ENTRIES = 20;
 
-    private final String historyName;
-    private final int maxEntries;
-    private final String prefKey;
-    private final Object lock = new Object();
+    /** Cache for locks per prefix to ensure thread safety */
+    private static final Map<String, Object> prefixLocks = new ConcurrentHashMap<>();
 
     /**
-     * Creates a new search history with the default maximum number of entries.
-     * 
-     * @param historyName unique name for this search history
+     * Private constructor to prevent instantiation of utility class.
      */
-    public SearchHistory(String historyName) {
-        this(historyName, DEFAULT_MAX_ENTRIES);
+    private SearchHistory() {
+        throw new UnsupportedOperationException("SearchHistory is a utility class and cannot be instantiated");
     }
 
     /**
-     * Creates a new search history with a specified maximum number of entries.
+     * Gets or creates a lock object for the given prefix to ensure thread safety.
      * 
-     * @param historyName unique name for this search history
-     * @param maxEntries  maximum number of entries to maintain (must be > 0)
-     * @throws IllegalArgumentException if maxEntries <= 0
+     * @param prefix the prefix to get a lock for
+     * @return a lock object for the prefix
      */
-    public SearchHistory(String historyName, int maxEntries) {
-        if (historyName == null || historyName.trim().isEmpty()) {
-            throw new IllegalArgumentException("History name cannot be null or empty");
+    private static Object getLockForPrefix(String prefix) {
+        return prefixLocks.computeIfAbsent(prefix, k -> new Object());
+    }
+
+    /**
+     * Creates a preference key for the given prefix.
+     * 
+     * @param prefix the prefix for the search history
+     * @return the preference key
+     */
+    private static String createPrefKey(String prefix) {
+        if (prefix == null || prefix.trim().isEmpty()) {
+            throw new IllegalArgumentException("Prefix cannot be null or empty");
+        }
+        return SearchHistory.class.getName() + "." + prefix.trim();
+    }
+
+    /**
+     * Adds a new search entry to the history for the given prefix. If the entry
+     * already exists,
+     * it is moved to the front of the list. If the history exceeds the
+     * maximum size, the oldest entries are removed.
+     * 
+     * @param prefix the prefix for the search history context
+     * @param entry  the search entry to add (cannot be null)
+     * @throws IllegalArgumentException if prefix or entry is null
+     */
+    public static void addSearchEntry(String prefix, SearchHistoryEntry entry) {
+        addSearchEntry(prefix, entry, DEFAULT_MAX_ENTRIES);
+    }
+
+    /**
+     * Adds a new search entry to the history for the given prefix with a specific
+     * maximum size.
+     * If the entry already exists, it is moved to the front of the list. If the
+     * history exceeds the
+     * maximum size, the oldest entries are removed.
+     * 
+     * @param prefix     the prefix for the search history context
+     * @param entry      the search entry to add (cannot be null)
+     * @param maxEntries maximum number of entries to maintain (must be > 0)
+     * @throws IllegalArgumentException if prefix or entry is null, or maxEntries <=
+     *                                  0
+     */
+    public static void addSearchEntry(String prefix, SearchHistoryEntry entry, int maxEntries) {
+        if (entry == null) {
+            throw new IllegalArgumentException("Search entry cannot be null");
         }
         if (maxEntries <= 0) {
             throw new IllegalArgumentException("Max entries must be greater than 0");
         }
 
-        this.historyName = historyName.trim();
-        this.maxEntries = maxEntries;
-        this.prefKey = SearchHistory.class.getName() + "." + this.historyName;
-    }
-
-    /**
-     * Adds a new search entry to the history. If the entry already exists,
-     * it is moved to the front of the list. If the history exceeds the
-     * maximum size, the oldest entries are removed.
-     * 
-     * @param entry the search entry to add (cannot be null)
-     * @throws IllegalArgumentException if entry is null
-     */
-    public void addSearchEntry(SearchHistoryEntry entry) {
-        if (entry == null) {
-            throw new IllegalArgumentException("Search entry cannot be null");
-        }
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
 
         synchronized (lock) {
-            List<SearchHistoryEntry> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
 
             // Remove existing entry if present
             entries.remove(entry);
@@ -139,26 +167,54 @@ public class SearchHistory {
                 entries.remove(entries.size() - 1);
             }
 
-            saveSearchEntries(entries);
+            saveSearchEntries(prefKey, entries);
         }
     }
 
     /**
-     * Updates an existing search entry. If the old entry exists, it is replaced
-     * with the new entry at the same position. If the old entry doesn't exist,
+     * Updates an existing search entry in the history for the given prefix. If the
+     * old entry exists,
+     * it is replaced with the new entry at the same position. If the old entry
+     * doesn't exist,
      * the new entry is added to the front.
      * 
+     * @param prefix   the prefix for the search history context
      * @param oldEntry the entry to replace
      * @param newEntry the replacement entry (cannot be null)
-     * @throws IllegalArgumentException if newEntry is null
+     * @throws IllegalArgumentException if prefix or newEntry is null
      */
-    public void updateSearchEntry(SearchHistoryEntry oldEntry, SearchHistoryEntry newEntry) {
+    public static void updateSearchEntry(String prefix, SearchHistoryEntry oldEntry, SearchHistoryEntry newEntry) {
+        updateSearchEntry(prefix, oldEntry, newEntry, DEFAULT_MAX_ENTRIES);
+    }
+
+    /**
+     * Updates an existing search entry in the history for the given prefix with a
+     * specific maximum size.
+     * If the old entry exists, it is replaced with the new entry at the same
+     * position. If the old entry doesn't exist,
+     * the new entry is added to the front.
+     * 
+     * @param prefix     the prefix for the search history context
+     * @param oldEntry   the entry to replace
+     * @param newEntry   the replacement entry (cannot be null)
+     * @param maxEntries maximum number of entries to maintain (must be > 0)
+     * @throws IllegalArgumentException if prefix or newEntry is null, or maxEntries
+     *                                  <= 0
+     */
+    public static void updateSearchEntry(String prefix, SearchHistoryEntry oldEntry, SearchHistoryEntry newEntry,
+            int maxEntries) {
         if (newEntry == null) {
             throw new IllegalArgumentException("New search entry cannot be null");
         }
+        if (maxEntries <= 0) {
+            throw new IllegalArgumentException("Max entries must be greater than 0");
+        }
+
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
 
         synchronized (lock) {
-            List<SearchHistoryEntry> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
 
             int index = entries.indexOf(oldEntry);
             if (index >= 0) {
@@ -173,23 +229,28 @@ public class SearchHistory {
                 }
             }
 
-            saveSearchEntries(entries);
+            saveSearchEntries(prefKey, entries);
         }
     }
 
     /**
-     * Removes a search entry from the history.
+     * Removes a search entry from the history for the given prefix.
      * 
-     * @param entry the entry to remove
+     * @param prefix the prefix for the search history context
+     * @param entry  the entry to remove
      * @return true if the entry was found and removed, false otherwise
+     * @throws IllegalArgumentException if prefix is null
      */
-    public boolean deleteSearchEntry(SearchHistoryEntry entry) {
+    public static boolean deleteSearchEntry(String prefix, SearchHistoryEntry entry) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
             boolean removed = entries.remove(entry);
 
             if (removed) {
-                saveSearchEntries(entries);
+                saveSearchEntries(prefKey, entries);
             }
 
             return removed;
@@ -197,96 +258,127 @@ public class SearchHistory {
     }
 
     /**
-     * Removes a search entry at the specified index.
+     * Removes a search entry at the specified index for the given prefix.
      * 
-     * @param index the index of the entry to remove
+     * @param prefix the prefix for the search history context
+     * @param index  the index of the entry to remove
      * @return the removed entry
+     * @throws IllegalArgumentException  if prefix is null
      * @throws IndexOutOfBoundsException if index is out of range
      */
-    public SearchHistoryEntry deleteSearchEntry(int index) {
+    public static SearchHistoryEntry deleteSearchEntry(String prefix, int index) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> entries = getSearchEntries();
+            List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
 
             if (index < 0 || index >= entries.size()) {
                 throw new IndexOutOfBoundsException("Index " + index + " out of range [0, " + entries.size() + ")");
             }
 
             SearchHistoryEntry removed = entries.remove(index);
-            saveSearchEntries(entries);
+            saveSearchEntries(prefKey, entries);
 
             return removed;
         }
     }
 
     /**
-     * Retrieves all search entries in most-recently-used order.
+     * Retrieves all search entries for the given prefix in most-recently-used
+     * order.
      * The returned list is a copy and modifications will not affect the stored
      * history.
      * 
+     * @param prefix the prefix for the search history context
      * @return a new list containing all search entries (never null)
+     * @throws IllegalArgumentException if prefix is null
      */
-    public List<SearchHistoryEntry> getSearchEntries() {
+    public static List<SearchHistoryEntry> getSearchEntries(String prefix) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            return loadSearchEntries();
+            return loadSearchEntries(prefKey);
         }
     }
 
     /**
-     * Retrieves up to the specified number of most recent search entries.
+     * Retrieves up to the specified number of most recent search entries for the
+     * given prefix.
      * 
-     * @param limit maximum number of entries to return
+     * @param prefix the prefix for the search history context
+     * @param limit  maximum number of entries to return
      * @return a new list containing the most recent entries (never null)
-     * @throws IllegalArgumentException if limit < 0
+     * @throws IllegalArgumentException if prefix is null or limit < 0
      */
-    public List<SearchHistoryEntry> getSearchEntries(int limit) {
+    public static List<SearchHistoryEntry> getSearchEntries(String prefix, int limit) {
         if (limit < 0) {
             throw new IllegalArgumentException("Limit cannot be negative");
         }
 
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> allEntries = loadSearchEntries(prefKey);
             int endIndex = Math.min(limit, allEntries.size());
             return new ArrayList<>(allEntries.subList(0, endIndex));
         }
     }
 
     /**
-     * Gets the most recent search entry.
+     * Gets the most recent search entry for the given prefix.
      * 
+     * @param prefix the prefix for the search history context
      * @return the most recent entry, or null if history is empty
+     * @throws IllegalArgumentException if prefix is null
      */
-    public SearchHistoryEntry getMostRecentEntry() {
+    public static SearchHistoryEntry getMostRecentEntry(String prefix) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> entries = loadSearchEntries();
+            List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
             return entries.isEmpty() ? null : entries.get(0);
         }
     }
 
     /**
-     * Checks if the history contains the specified entry.
+     * Checks if the history for the given prefix contains the specified entry.
      * 
-     * @param entry the entry to check for
+     * @param prefix the prefix for the search history context
+     * @param entry  the entry to check for
      * @return true if the entry exists in the history
+     * @throws IllegalArgumentException if prefix is null
      */
-    public boolean containsEntry(SearchHistoryEntry entry) {
+    public static boolean containsEntry(String prefix, SearchHistoryEntry entry) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            return loadSearchEntries().contains(entry);
+            return loadSearchEntries(prefKey).contains(entry);
         }
     }
 
     /**
-     * Finds entries that match the given query text.
+     * Finds entries that match the given query text for the given prefix.
      * 
+     * @param prefix    the prefix for the search history context
      * @param queryText the query text to search for
      * @return a list of matching entries (never null)
+     * @throws IllegalArgumentException if prefix is null
      */
-    public List<SearchHistoryEntry> findEntriesByQueryText(String queryText) {
+    public static List<SearchHistoryEntry> findEntriesByQueryText(String prefix, String queryText) {
         if (queryText == null) {
             return new ArrayList<>();
         }
 
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> allEntries = loadSearchEntries(prefKey);
             List<SearchHistoryEntry> matches = new ArrayList<>();
 
             for (SearchHistoryEntry entry : allEntries) {
@@ -300,18 +392,23 @@ public class SearchHistory {
     }
 
     /**
-     * Finds entries that match the given query type.
+     * Finds entries that match the given query type for the given prefix.
      * 
+     * @param prefix    the prefix for the search history context
      * @param queryType the query type to search for
      * @return a list of matching entries (never null)
+     * @throws IllegalArgumentException if prefix is null
      */
-    public List<SearchHistoryEntry> findEntriesByQueryType(String queryType) {
+    public static List<SearchHistoryEntry> findEntriesByQueryType(String prefix, String queryType) {
         if (queryType == null) {
             return new ArrayList<>();
         }
 
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> allEntries = loadSearchEntries(prefKey);
             List<SearchHistoryEntry> matches = new ArrayList<>();
 
             for (SearchHistoryEntry entry : allEntries) {
@@ -325,18 +422,23 @@ public class SearchHistory {
     }
 
     /**
-     * Finds entries that contain the specified parameter.
+     * Finds entries that contain the specified parameter for the given prefix.
      * 
+     * @param prefix       the prefix for the search history context
      * @param parameterKey the parameter key to search for
      * @return a list of matching entries (never null)
+     * @throws IllegalArgumentException if prefix is null
      */
-    public List<SearchHistoryEntry> findEntriesByParameter(String parameterKey) {
+    public static List<SearchHistoryEntry> findEntriesByParameter(String prefix, String parameterKey) {
         if (parameterKey == null) {
             return new ArrayList<>();
         }
 
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> allEntries = loadSearchEntries(prefKey);
             List<SearchHistoryEntry> matches = new ArrayList<>();
 
             for (SearchHistoryEntry entry : allEntries) {
@@ -350,19 +452,25 @@ public class SearchHistory {
     }
 
     /**
-     * Finds entries that have a specific parameter value.
+     * Finds entries that have a specific parameter value for the given prefix.
      * 
+     * @param prefix         the prefix for the search history context
      * @param parameterKey   the parameter key
      * @param parameterValue the parameter value to search for
      * @return a list of matching entries (never null)
+     * @throws IllegalArgumentException if prefix is null
      */
-    public List<SearchHistoryEntry> findEntriesByParameterValue(String parameterKey, String parameterValue) {
+    public static List<SearchHistoryEntry> findEntriesByParameterValue(String prefix, String parameterKey,
+            String parameterValue) {
         if (parameterKey == null || parameterValue == null) {
             return new ArrayList<>();
         }
 
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            List<SearchHistoryEntry> allEntries = loadSearchEntries();
+            List<SearchHistoryEntry> allEntries = loadSearchEntries(prefKey);
             List<SearchHistoryEntry> matches = new ArrayList<>();
 
             for (SearchHistoryEntry entry : allEntries) {
@@ -377,65 +485,88 @@ public class SearchHistory {
     }
 
     /**
-     * Adds a simple search entry with just query text and type.
+     * Adds a simple search entry with just query text and type for the given
+     * prefix.
      * This is a convenience method for basic search entries.
      * 
+     * @param prefix    the prefix for the search history context
      * @param queryText the query text
      * @param queryType the query type
      * @return the created entry that was added
-     * @throws IllegalArgumentException if queryText or queryType is null or empty
+     * @throws IllegalArgumentException if prefix, queryText or queryType is null or
+     *                                  empty
      */
-    public SearchHistoryEntry addSimpleSearchEntry(String queryText, String queryType) {
-        return addSimpleSearchEntry(queryText, queryType, false);
+    public static SearchHistoryEntry addSimpleSearchEntry(String prefix, String queryText, String queryType) {
+        return addSimpleSearchEntry(prefix, queryText, queryType, false);
     }
 
     /**
-     * Adds a simple search entry with query text, type, and case sensitivity.
+     * Adds a simple search entry with query text, type, and case sensitivity for
+     * the given prefix.
      * This is a convenience method for basic search entries.
      * 
+     * @param prefix        the prefix for the search history context
      * @param queryText     the query text
      * @param queryType     the query type
      * @param caseSensitive whether the search is case sensitive
      * @return the created entry that was added
-     * @throws IllegalArgumentException if queryText or queryType is null or empty
+     * @throws IllegalArgumentException if prefix, queryText or queryType is null or
+     *                                  empty
      */
-    public SearchHistoryEntry addSimpleSearchEntry(String queryText, String queryType, boolean caseSensitive) {
+    public static SearchHistoryEntry addSimpleSearchEntry(String prefix, String queryText, String queryType,
+            boolean caseSensitive) {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText(queryText)
                 .queryType(queryType)
                 .caseSensitive(caseSensitive)
                 .build();
 
-        addSearchEntry(entry);
+        addSearchEntry(prefix, entry);
         return entry;
     }
 
     /**
-     * Gets the current number of entries in the history.
+     * Gets the current number of entries in the history for the given prefix.
      * 
+     * @param prefix the prefix for the search history context
      * @return the number of entries
+     * @throws IllegalArgumentException if prefix is null
      */
-    public int size() {
+    public static int size(String prefix) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            return loadSearchEntries().size();
+            return loadSearchEntries(prefKey).size();
         }
     }
 
     /**
-     * Checks if the history is empty.
+     * Checks if the history for the given prefix is empty.
      * 
+     * @param prefix the prefix for the search history context
      * @return true if the history contains no entries
+     * @throws IllegalArgumentException if prefix is null
      */
-    public boolean isEmpty() {
+    public static boolean isEmpty(String prefix) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
-            return loadSearchEntries().isEmpty();
+            return loadSearchEntries(prefKey).isEmpty();
         }
     }
 
     /**
-     * Removes all entries from the search history.
+     * Removes all entries from the search history for the given prefix.
+     * 
+     * @param prefix the prefix for the search history context
+     * @throws IllegalArgumentException if prefix is null
      */
-    public void clear() {
+    public static void clear(String prefix) {
+        String prefKey = createPrefKey(prefix);
+        Object lock = getLockForPrefix(prefix);
+
         synchronized (lock) {
             Preferences prefs = PrefHelper.getUserPreferences();
             prefs.remove(prefKey);
@@ -443,188 +574,116 @@ public class SearchHistory {
     }
 
     /**
-     * Gets the maximum number of entries this history will maintain.
-     * 
-     * @return the maximum number of entries
-     */
-    public int getMaxEntries() {
-        return maxEntries;
-    }
-
-    /**
-     * Gets the name of this search history.
-     * 
-     * @return the history name
-     */
-    public String getHistoryName() {
-        return historyName;
-    }
-
-    /**
-     * Retrieves all search history names that match the given prefix.
+     * Retrieves all search history prefixes that match the given prefix pattern.
      * This is useful for finding related search histories or implementing
      * wildcard-based searches.
      * 
-     * @param prefix the prefix to match against history names
-     * @return a list of history names that start with the given prefix (never null)
-     * @throws IllegalArgumentException if prefix is null
+     * @param prefixPattern the prefix pattern to match against history prefixes
+     * @return a list of history prefixes that start with the given pattern (never
+     *         null)
+     * @throws IllegalArgumentException if prefixPattern is null
      */
-    public static List<String> getHistoryNamesWithPrefix(String prefix) {
-        if (prefix == null) {
-            throw new IllegalArgumentException("Prefix cannot be null");
+    public static List<String> getHistoryPrefixesWithPattern(String prefixPattern) {
+        if (prefixPattern == null) {
+            throw new IllegalArgumentException("Prefix pattern cannot be null");
         }
 
-        List<String> matchingNames = new ArrayList<>();
+        List<String> matchingPrefixes = new ArrayList<>();
         try {
             Preferences prefs = PrefHelper.getUserPreferences();
-            String searchPrefix = SearchHistory.class.getName() + "." + prefix;
+            String searchPrefix = SearchHistory.class.getName() + "." + prefixPattern;
 
             String[] keys = prefs.keys();
             for (String key : keys) {
                 if (key.startsWith(searchPrefix)) {
-                    // Extract the history name from the full preference key
-                    String historyName = key.substring(SearchHistory.class.getName().length() + 1);
-                    matchingNames.add(historyName);
+                    // Extract the history prefix from the full preference key
+                    String historyPrefix = key.substring(SearchHistory.class.getName().length() + 1);
+                    matchingPrefixes.add(historyPrefix);
                 }
             }
         } catch (Exception e) {
             // Log error but return empty list - preference reading should be non-fatal
             java.util.logging.Logger.getLogger(SearchHistory.class.getName())
-                    .warning("Failed to retrieve history names with prefix '" + prefix + "': " + e.getMessage());
+                    .warning("Failed to retrieve history prefixes with pattern '" + prefixPattern + "': "
+                            + e.getMessage());
         }
 
-        return matchingNames;
+        return matchingPrefixes;
     }
 
     /**
-     * Retrieves all search history names stored in user preferences.
-     * This returns all SearchHistory instances that have been created and have
-     * data.
+     * Retrieves all search history prefixes stored in user preferences.
+     * This returns all SearchHistory prefixes that have been created and have data.
      * 
-     * @return a list of all history names (never null)
+     * @return a list of all history prefixes (never null)
      */
-    public static List<String> getAllHistoryNames() {
-        return getHistoryNamesWithPrefix("");
+    public static List<String> getAllHistoryPrefixes() {
+        return getHistoryPrefixesWithPattern("");
     }
 
     /**
-     * Retrieves search entries from multiple histories that match the given prefix.
-     * This is useful for aggregating search results across related histories.
-     * 
-     * @param prefix               the prefix to match against history names
-     * @param maxEntriesPerHistory maximum entries to retrieve from each matching
-     *                             history
-     * @return a map of history names to their search entries (never null)
-     * @throws IllegalArgumentException if prefix is null or maxEntriesPerHistory <
-     *                                  0
-     */
-    public static Map<String, List<SearchHistoryEntry>> getEntriesFromHistoriesWithPrefix(
-            String prefix, int maxEntriesPerHistory) {
-
-        if (prefix == null) {
-            throw new IllegalArgumentException("Prefix cannot be null");
-        }
-        if (maxEntriesPerHistory < 0) {
-            throw new IllegalArgumentException("Max entries per history cannot be negative");
-        }
-
-        Map<String, List<SearchHistoryEntry>> results = new HashMap<>();
-        List<String> matchingNames = getHistoryNamesWithPrefix(prefix);
-
-        for (String historyName : matchingNames) {
-            try {
-                SearchHistory history = new SearchHistory(historyName);
-                List<SearchHistoryEntry> entries = maxEntriesPerHistory > 0
-                        ? history.getSearchEntries(maxEntriesPerHistory)
-                        : history.getSearchEntries();
-
-                if (!entries.isEmpty()) {
-                    results.put(historyName, entries);
-                }
-            } catch (Exception e) {
-                // Log error but continue processing other histories
-                java.util.logging.Logger.getLogger(SearchHistory.class.getName())
-                        .warning("Failed to load history '" + historyName + "': " + e.getMessage());
-            }
-        }
-
-        return results;
-    }
-
-    /**
-     * Retrieves all search entries from multiple histories that match the given
-     * prefix,
-     * with unlimited entries per history.
-     * 
-     * @param prefix the prefix to match against history names
-     * @return a map of history names to their search entries (never null)
-     * @throws IllegalArgumentException if prefix is null
-     */
-    public static Map<String, List<SearchHistoryEntry>> getEntriesFromHistoriesWithPrefix(String prefix) {
-        return getEntriesFromHistoriesWithPrefix(prefix, 0);
-    }
-
-    /**
-     * Deletes all search histories that match the given prefix.
+     * Deletes all search histories that match the given prefix pattern.
      * This is useful for bulk cleanup operations.
      * 
-     * @param prefix the prefix to match against history names
+     * @param prefixPattern the prefix pattern to match against history prefixes
      * @return the number of histories that were deleted
-     * @throws IllegalArgumentException if prefix is null
+     * @throws IllegalArgumentException if prefixPattern is null
      */
-    public static int deleteHistoriesWithPrefix(String prefix) {
-        if (prefix == null) {
-            throw new IllegalArgumentException("Prefix cannot be null");
+    public static int deleteHistoriesWithPattern(String prefixPattern) {
+        if (prefixPattern == null) {
+            throw new IllegalArgumentException("Prefix pattern cannot be null");
         }
 
-        List<String> matchingNames = getHistoryNamesWithPrefix(prefix);
+        List<String> matchingPrefixes = getHistoryPrefixesWithPattern(prefixPattern);
         int deletedCount = 0;
 
         try {
             Preferences prefs = PrefHelper.getUserPreferences();
-            for (String historyName : matchingNames) {
-                String prefKey = SearchHistory.class.getName() + "." + historyName;
+            for (String historyPrefix : matchingPrefixes) {
+                String prefKey = SearchHistory.class.getName() + "." + historyPrefix;
                 prefs.remove(prefKey);
                 deletedCount++;
             }
         } catch (Exception e) {
             // Log error but return count of what was successfully deleted
             java.util.logging.Logger.getLogger(SearchHistory.class.getName())
-                    .warning("Failed to delete some histories with prefix '" + prefix + "': " + e.getMessage());
+                    .warning("Failed to delete some histories with pattern '" + prefixPattern + "': " + e.getMessage());
         }
 
         return deletedCount;
     }
 
     /**
-     * Checks if any search histories exist with the given prefix.
+     * Checks if any search histories exist with the given prefix pattern.
      * 
-     * @param prefix the prefix to match against history names
-     * @return true if at least one history exists with the given prefix
-     * @throws IllegalArgumentException if prefix is null
+     * @param prefixPattern the prefix pattern to match against history prefixes
+     * @return true if at least one history exists with the given pattern
+     * @throws IllegalArgumentException if prefixPattern is null
      */
-    public static boolean existsHistoryWithPrefix(String prefix) {
-        return !getHistoryNamesWithPrefix(prefix).isEmpty();
+    public static boolean existsHistoryWithPattern(String prefixPattern) {
+        return !getHistoryPrefixesWithPattern(prefixPattern).isEmpty();
     }
 
     /**
-     * Gets the total number of search histories that match the given prefix.
+     * Gets the total number of search histories that match the given prefix
+     * pattern.
      * 
-     * @param prefix the prefix to match against history names
+     * @param prefixPattern the prefix pattern to match against history prefixes
      * @return the count of matching histories
-     * @throws IllegalArgumentException if prefix is null
+     * @throws IllegalArgumentException if prefixPattern is null
      */
-    public static int getHistoryCountWithPrefix(String prefix) {
-        return getHistoryNamesWithPrefix(prefix).size();
+    public static int getHistoryCountWithPattern(String prefixPattern) {
+        return getHistoryPrefixesWithPattern(prefixPattern).size();
     }
 
     /**
-     * Loads the search entries from user preferences.
+     * Loads the search entries from user preferences for the given preference key.
      * 
+     * @param prefKey the preference key to load from
      * @return a mutable list of search entries
      */
     @SuppressWarnings("unchecked")
-    private List<SearchHistoryEntry> loadSearchEntries() {
+    private static List<SearchHistoryEntry> loadSearchEntries(String prefKey) {
         try {
             ArrayList<SearchHistoryEntry> defaultList = new ArrayList<>();
             ArrayList<SearchHistoryEntry> entries = PrefHelper.getSerializedObject(prefKey, ArrayList.class,
@@ -646,11 +705,12 @@ public class SearchHistory {
     }
 
     /**
-     * Saves the search entries to user preferences.
+     * Saves the search entries to user preferences for the given preference key.
      * 
+     * @param prefKey the preference key to save to
      * @param entries the list of entries to save
      */
-    private void saveSearchEntries(List<SearchHistoryEntry> entries) {
+    private static void saveSearchEntries(String prefKey, List<SearchHistoryEntry> entries) {
         try {
             Preferences prefs = PrefHelper.getUserPreferences();
 
@@ -666,7 +726,7 @@ public class SearchHistory {
         } catch (Exception e) {
             // Log error but don't throw - preference saving should be non-fatal
             java.util.logging.Logger.getLogger(SearchHistory.class.getName())
-                    .warning("Failed to save search history '" + historyName + "': " + e.getMessage());
+                    .warning("Failed to save search history: " + e.getMessage());
         }
     }
 }
