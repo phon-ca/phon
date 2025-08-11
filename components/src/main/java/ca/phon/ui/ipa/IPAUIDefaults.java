@@ -15,25 +15,25 @@ public class IPAUIDefaults implements UIDefaultsHandler, IPluginExtensionPoint<U
      * Syllable constituent type colors
      */
     public final static String SYLLABLE_CONSTITUENT_LEFT_APPENDIX_COLOR = "Phon.syllableConstituent.leftAppendixColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_LEFT_APPENDIX_COLOR = Color.decode("0xffe13c");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_LEFT_APPENDIX_COLOR = Color.decode("0xD1B45F");
 
     public final static String SYLLABLE_CONSTITUENT_ONSET_COLOR = "Phon.syllableConstituent.onsetColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_ONSET_COLOR = Color.decode("0x307ECC");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_ONSET_COLOR = Color.decode("0x6A8EAE");
 
     public final static String SYLLABLE_CONSTITUENT_NUCLEUS_COLOR = "Phon.syllableConstituent.nucleusColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_NUCLEUS_COLOR = Color.decode("0xFE3C3C");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_NUCLEUS_COLOR = Color.decode("0xB85C5C");
 
     public final static String SYLLABLE_CONSTITUENT_CODA_COLOR = "Phon.syllableConstituent.codaColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_CODA_COLOR =  Color.decode("0x5BA151");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_CODA_COLOR =  Color.decode("0x7A947A");
 
     public final static String SYLLABLE_CONSTITUENT_RIGHT_APPENDIX_COLOR = "Phon.syllableConstituent.rightAppendixColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_RIGHT_APPENDIX_COLOR = Color.decode("0xFF8A3C");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_RIGHT_APPENDIX_COLOR = Color.decode("0xD98C5F");
 
     public final static String SYLLABLE_CONSTITUENT_OEHS_COLOR = "Phon.syllableConstituent.oehsColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_OEHS_COLOR = Color.decode("0x3cd3c3");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_OEHS_COLOR = Color.decode("0x5F9EA0");
 
     public final static String SYLLABLE_CONSTITUENT_AMBISYLLABIC_COLOR = "Phon.syllableConstituent.ambisyllabicColor";
-    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_AMBISYLLABIC_COLOR = Color.decode("0x6C9BA1");
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_AMBISYLLABIC_COLOR = Color.decode("0x607D8B");
 
     public final static String SYLLABLE_CONSTITUENT_UNKNOWN_COLOR = "Phon.syllableConstituent.unknownColor";
     public final static Color DEFAULT_SYLLABLE_CONSTITUENT_UNKNOWN_COLOR = UIManager.getColor("text");

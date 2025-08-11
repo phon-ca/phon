@@ -508,7 +508,11 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void showDynamicDockable(String title, JComponent comp, ViewPosition position) {
-		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public JFrame showViewInAccessoryWindow(String viewName) {
+		return null;
 	}
 
 	/**

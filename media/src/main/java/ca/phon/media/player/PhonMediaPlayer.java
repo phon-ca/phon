@@ -17,6 +17,7 @@
 package ca.phon.media.player;
 
 import ca.phon.media.*;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.*;
 import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -34,6 +35,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.beans.PropertyChangeListener;
@@ -54,15 +56,15 @@ public class PhonMediaPlayer extends JPanel {
 
 	/** UI  components */
 	/* Play/pause button */
-	private JButton playPauseBtn;
+	private FlatButton playPauseBtn;
 	
-	private JButton replayBtn;
+	private FlatButton replayBtn;
 
 	/* Position slider */
 	private TimeSlider positionSlider;
 
 	/* Menu button */
-	private JButton menuBtn;
+	private FlatButton menuBtn;
 
 	/* Container for media controls */
 	private JPanel mediaControlPanel;
@@ -74,12 +76,6 @@ public class PhonMediaPlayer extends JPanel {
 
 	/* Media player listener */
 	private final MediaPlayerListener mediaListener = new MediaPlayerListener();
-	
-	/* Icons */
-	private ImageIcon playIcn;
-	private ImageIcon replayIcn;
-	private ImageIcon pauseIcn;
-	private ImageIcon menuIcn;
 	
 	/* Background images */
 	private final static String NO_MEDIA_IMAGE = "no_media.png";
@@ -124,7 +120,6 @@ public class PhonMediaPlayer extends JPanel {
 		this.volumeModel = volumeModel;
 		this.volumeModel.addPropertyChangeListener(volumeModelListener);
 		
-		loadIcons();
 		init();
 	}
 	
@@ -143,18 +138,6 @@ public class PhonMediaPlayer extends JPanel {
 			mediaPlayer = null;
 		}
 	}
-	
-	/*
-	 * Load icons
-	 */
-	private void loadIcons() {
-		IconManager icnMgr = IconManager.getInstance();
-		IconSize icnSize = IconSize.SMALL;
-		playIcn = icnMgr.getIcon("actions/media-playback-start", icnSize);
-		pauseIcn = icnMgr.getIcon("actions/media-playback-pause", icnSize);
-		menuIcn = icnMgr.getIcon("misc/layer_lowerlayer", icnSize);
-		replayIcn = icnMgr.getIcon("actions/media-replay-30", icnSize);
-	}
 
 	/*
 	 * Init display
@@ -169,8 +152,6 @@ public class PhonMediaPlayer extends JPanel {
 		addMediaMenuFilter(new MediaMenuFilter());
 		
 		mediaPlayerCanvas = new PhonPlayerComponent();
-		mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
-		
 		mediaPlayerCanvas.setTransferHandler(new FileSelectionTransferHandler());
 				
 		add(mediaPlayerCanvas, BorderLayout.CENTER);
@@ -199,8 +180,6 @@ public class PhonMediaPlayer extends JPanel {
 			replayBtn = getReplayButton();
 			replayBtn.setEnabled(false);
 			positionSlider = getPositionSlider();
-			positionSlider.setEnabled(false);
-			positionSlider.setUI(new TimeSliderUI());
 			menuBtn = getMenuButton();
 			volumeSlider = getVolumeSlider();
 
@@ -220,12 +199,12 @@ public class PhonMediaPlayer extends JPanel {
 			++gbc.gridx;
 			retVal.add(replayBtn, gbc);
 			++gbc.gridx;
-			retVal.add(menuBtn, gbc);
-			++gbc.gridx;
 			gbc.weightx = 1.0;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			retVal.add(positionSlider, gbc);
+			++gbc.gridx;
 			gbc.weightx = 0.0;
+			retVal.add(menuBtn, gbc);
 			gbc.fill = GridBagConstraints.NONE;
 			++gbc.gridx;
 			retVal.add(volumeSlider, gbc);
@@ -237,25 +216,27 @@ public class PhonMediaPlayer extends JPanel {
 		return this.mediaPlayerCanvas;
 	}
 
-	public JButton getPlayPauseButton() {
-		JButton retVal = playPauseBtn;
+	public FlatButton getPlayPauseButton() {
+		FlatButton retVal = playPauseBtn;
 		if(retVal == null) {
 			PhonUIAction playPauseAct = PhonUIAction.eventConsumer(this::onPlayPause);
-			playPauseAct.putValue(Action.SMALL_ICON, playIcn);
-			retVal = new JButton();
-			retVal.setAction(playPauseAct);
+			playPauseAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+			playPauseAct.putValue(FlatButton.ICON_NAME_PROP, "play_arrow");
+			playPauseAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+			retVal = new FlatButton(playPauseAct);
 			playPauseBtn = retVal;
 		}
 		return retVal;
 	}
 	
-	public JButton getReplayButton() {
-		JButton retVal = replayBtn;
+	public FlatButton getReplayButton() {
+		FlatButton retVal = replayBtn;
 		if(retVal == null) {
 			PhonUIAction replayAct = PhonUIAction.eventConsumer(this::onReplay30);
-			replayAct.putValue(Action.SMALL_ICON, replayIcn);
-			retVal = new JButton();
-			retVal.setAction(replayAct);
+			replayAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+			replayAct.putValue(FlatButton.ICON_NAME_PROP, "replay_30");
+			replayAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+			retVal = new FlatButton(replayAct);
 			replayBtn = retVal;
 		}
 		return retVal;
@@ -269,24 +250,19 @@ public class PhonMediaPlayer extends JPanel {
 			retVal.setPaintLabels(false);
 			retVal.setPaintTicks(false);
 			retVal.setOrientation(SwingConstants.HORIZONTAL);
-			retVal.addChangeListener(new PositionListener());
+			retVal.setUI(new TimeSliderUI());
+			retVal.addManualChangeListener( (timeSlider, value) -> {
+				final MediaPlayer mediaPlayer = getMediaPlayer();
+				if(mediaPlayer == null) return;
+				float pos = (float)value / getPositionSlider().getMaximum();
+				if(pos < 1.0f) {
+					mediaPlayer.controls().setPosition(pos);
+				}
+			});
 			positionSlider = retVal;
 		}
 		return retVal;
 	}
-
-//	public JButton getVolumeButton() {
-//		JButton retVal = volumeBtn;
-//		if(retVal == null) {
-//			PhonUIAction toggleMuteAct =
-//					new PhonUIAction(this, "onVolumeBtn");
-//			toggleMuteAct.putValue(Action.SMALL_ICON, volIcn);
-//			retVal = new JButton();
-//			retVal.setAction(toggleMuteAct);
-//			volumeBtn = retVal;
-//		}
-//		return retVal;
-//	}
 
 	public VolumeSlider getVolumeSlider() {
 		VolumeSlider retVal = this.volumeSlider;
@@ -298,13 +274,14 @@ public class PhonMediaPlayer extends JPanel {
 		return retVal;
 	}
 
-	public JButton getMenuButton() {
-		JButton retVal = menuBtn;
+	public FlatButton getMenuButton() {
+		FlatButton retVal = menuBtn;
 		if(retVal == null) {
 			PhonUIAction showMenuAct = PhonUIAction.eventConsumer(this::showMediaMenu);
-			showMenuAct.putValue(Action.SMALL_ICON, menuIcn);
-			retVal = new JButton();
-			retVal.setAction(showMenuAct);
+			showMenuAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+			showMenuAct.putValue(FlatButton.ICON_NAME_PROP, "more_vert");
+			showMenuAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+			retVal = new FlatButton(showMenuAct);
 			menuBtn = retVal;
 		}
 		return retVal;
@@ -362,8 +339,6 @@ public class PhonMediaPlayer extends JPanel {
 			
 			mediaPlayerCanvas.setBufferedImage(noMediaImage);
 			mediaPlayerCanvas.repaint();
-			
-			mediaPlayerCanvas.setToolTipText("No media");
 		} else if(VLCHelper.isLoaded()) {
 			try {
 				mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access", "--no-plugins-cache");
@@ -380,13 +355,9 @@ public class PhonMediaPlayer extends JPanel {
 					mediaPlayer.events().addMediaPlayerEventListener(loadListener);
 					mediaPlayer.controls().play();
 					mediaPlayer.audio().setMute(true);
-
-					mediaPlayerCanvas.setToolTipText(getMediaFile());
 				} else {
 					mediaPlayerCanvas.setBufferedImage(noMediaImage);
 					mediaPlayerCanvas.repaint();
-					
-					mediaPlayerCanvas.setToolTipText("Unable to load media");
 				}
 			} catch (UnsatisfiedLinkError | Exception e) {
 				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
@@ -487,7 +458,7 @@ public class PhonMediaPlayer extends JPanel {
 	
 	public void onReplay30(PhonActionEvent<Void> pae) {
 		final MediaPlayer player = getMediaPlayer();
-		if(player != null) {
+		if (player != null) {
 			long currentPos = player.status().time();
 			long newPos = Math.max(0, currentPos - (30 * 1000));
 			player.controls().setTime(newPos);
@@ -548,7 +519,7 @@ public class PhonMediaPlayer extends JPanel {
 				player.snapshots().save(new File(saveTo));
 			}
 		}
-		
+
 	}
 	
 	private SegmentListener segmentListener;
@@ -587,25 +558,30 @@ public class PhonMediaPlayer extends JPanel {
 		}
 	}
 
+	public boolean isVideoVisible() {
+		return mediaPlayerCanvas.isVisible();
+	}
+
+	public void setVideoVisible(boolean visible) {
+		mediaPlayerCanvas.setVisible(visible);
+	}
+
 	/**
 	 * Listener for user changes to the position slider
 	 *
 	 */
 	private class PositionListener implements ChangeListener {
-
 		@Override
 		public void stateChanged(ChangeEvent ce) {
-			if(getPositionSlider().getValueIsAdjusting()) {
-				final MediaPlayer mediaPlayer = getMediaPlayer();
-				if(mediaPlayer == null) return;
-				int sliderPos = getPositionSlider().getValue();
-				float pos = (float)sliderPos / getPositionSlider().getMaximum();
-				if(pos < 1.0f) {
-					mediaPlayer.controls().setPosition(pos);
-				}
+			if(getPositionSlider().getValueIsAdjusting()) return;
+			final MediaPlayer mediaPlayer = getMediaPlayer();
+			if(mediaPlayer == null) return;
+			int sliderPos = getPositionSlider().getValue();
+			float pos = (float)sliderPos / getPositionSlider().getMaximum();
+			if(pos < 1.0f) {
+				mediaPlayer.controls().setPosition(pos);
 			}
 		}
-
 	}
 
 	/**
@@ -700,7 +676,7 @@ public class PhonMediaPlayer extends JPanel {
 				}
 			
 				mediaPlayerCanvas.repaint((long)(1/30.0f * 1000.0f));
-			}			
+			}
 		}
 		
 	}
@@ -732,18 +708,18 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			super.playing(mediaPlayer);
-			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, pauseIcn);
+			getPlayPauseButton().setIconName("pause");
 		}
 		
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
-			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
+			getPlayPauseButton().setIconName("play_arrow");
 		}
-		
+
 		@Override
 		public void stopped(MediaPlayer mediaPlayer) {
-			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
+			getPlayPauseButton().setIconName("play_arrow");
 		}
 		
 		@Override
@@ -755,25 +731,6 @@ public class PhonMediaPlayer extends JPanel {
 		}
 		
 	}
-	
-	private MouseInputAdapter mediaPlayerCanvasMouseAdapter = new MouseInputAdapter() {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 1) {
-				if(getMediaPlayer() != null && getMediaPlayer().media().isValid()) {
-					if(getMediaPlayer().status().isPlaying()) {
-						getMediaPlayer().controls().pause();
-					} else {
-						getMediaPlayer().controls().play();
-					}
-				}
-			}
-		}
-		
-		
-		
-	};
 
 	/*
 	 * Media player delegate methods

@@ -34,8 +34,8 @@ public class RedoCommand extends AbstractAction {
 		this.undoManager = manager;
 		
 		putValue(NAME, manager.getRedoPresentationName());
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Y,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK));
 	}
 	
 	@Override

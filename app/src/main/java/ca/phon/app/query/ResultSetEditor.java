@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.query.report.*;
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditorUIProps;
 import ca.phon.project.Project;
@@ -742,10 +743,10 @@ public class ResultSetEditor extends ProjectFrame {
 								new SessionEditorSelection(r.getRecordIndex(), rv.getTierName(), range);
 						
 						if(rvIdx >= numPrimaryRvs) {
-							// draw secondary highlights with a box instead of 
+							// draw secondary highlights with a box instead of
 							// default highlight painter
-							selection.putExtension(HighlightPainter.class, 
-									new OutlineHighlightPainter(PhonGuiConstants.PHON_SELECTED));
+							selection.putExtension(HighlightPainter.class,
+									new BoxSelectHighlightPainter());
 						}
 						
 						selectionModel.addSelection(selection);
@@ -761,44 +762,6 @@ public class ResultSetEditor extends ProjectFrame {
 			}
 		}
 	};
-	
-	private class OutlineHighlightPainter implements HighlightPainter {
-		
-		private final Color color;
-		
-		public OutlineHighlightPainter(Color color) {
-			this.color = color;
-		}
-
-		@Override
-		public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-			final TranscriptEditor component = (TranscriptEditor) c;
-
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setColor(UIManager.getColor(TranscriptEditorUIProps.SEGMENT_SELECTION));
-
-			try {
-				var p0Rect = component.modelToView2D(p0);
-				var p1Rect = component.modelToView2D(p1);
-
-				Element ele = component.getTranscriptDocument().getCharacterElement(p0);
-				int actualLineHeight = g.getFontMetrics().getHeight();
-				if(ele != null) {
-					final AttributeSet attrs = ele.getAttributes();
-					if(StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
-						int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) |
-								(StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
-						final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
-						actualLineHeight = g.getFontMetrics(f).getHeight();
-					}
-				}
-
-				g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()), actualLineHeight-1);
-			} catch (BadLocationException e) {
-				LogUtil.severe(e);
-			}
-		}
-	}
 	
 	/**
 	 * Excluded table filter

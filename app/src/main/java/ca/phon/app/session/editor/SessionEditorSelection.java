@@ -32,19 +32,31 @@ import java.util.Set;
 public class SessionEditorSelection implements IExtendable {
 	
 	private final TranscriptElementRange range;
+
+	private final Object owner;
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorSelection.class, this);
 
 	public SessionEditorSelection(int elementIndex, String tierName, Range range) {
+		this(elementIndex, tierName, range, null);
+	}
+
+	public SessionEditorSelection(int elementIndex, String tierName, Range range, Object owner) {
 		super();
 		this.range = new TranscriptElementRange(elementIndex, tierName, range);
-		
+		this.owner = owner;
+
 		extSupport.initExtensions();
 	}
 
 	public SessionEditorSelection(TranscriptElementRange range) {
+		this(range, null);
+	}
+
+	public SessionEditorSelection(TranscriptElementRange range, Object owner) {
 		super();
 		this.range = range;
+		this.owner = owner;
 
 		extSupport.initExtensions();
 	}
@@ -56,6 +68,8 @@ public class SessionEditorSelection implements IExtendable {
 	public int getElementIndex() {
 		return range.transcriptElementIndex();
 	}
+
+	public Object getOwner() { return owner; }
 
 	public String getTierName() {
 		return range.tier();

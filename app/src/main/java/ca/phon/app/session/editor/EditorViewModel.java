@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import bibliothek.gui.dock.common.SingleCDockable;
 import ca.phon.app.session.ViewPosition;
 
 import javax.swing.*;
@@ -163,6 +164,7 @@ public interface EditorViewModel {
 	 * @param y
 	 * @param w
 	 * @param h
+	 * @deprecated Use {@link #showDynamicDockable(String, JComponent, ViewPosition)} instead.
 	 */
 	@Deprecated
 	public void showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
@@ -175,6 +177,13 @@ public interface EditorViewModel {
 	 * @param position
 	 */
 	public void showDynamicDockable(String title, JComponent comp, ViewPosition position);
+
+	/**
+	 * Open a given viewName as a new accessory window.
+	 *
+	 * @param viewName
+	 */
+	public JFrame showViewInAccessoryWindow(String viewName);
 	
 	/**
 	 * Hide the specified view

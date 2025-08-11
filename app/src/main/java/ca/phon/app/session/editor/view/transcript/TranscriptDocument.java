@@ -1565,7 +1565,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             int recordIndex = session.getRecordIndex(record);
             final StartEnd tierRange = getTierContentStartEnd(recordIndex, tier.getName());
-            if(tierRange.start() < 0) return;
+            if(!tierRange.valid()) return;
             final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
 
             final TierViewItem tvi = session.getTierView().stream().filter(t -> t.getTierName().equals(tier.getName()))
@@ -1580,6 +1580,52 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendTierContent(record, tier, transcriber, tierAttrs);
 
+            processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
+        }
+    }
+
+    /**
+     * Updates the content of a comment in the document
+     *
+     * @param comment the comment whose content is being updated
+     */
+    public void onCommentChanged(Comment comment) {
+        try {
+            final StartEnd tierRange = getCommentContentStartEnd(comment);
+            if(!tierRange.valid()) return;
+            setBypassDocumentFilter(true);
+            remove(tierRange.start(), tierRange.end() - tierRange.start());
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
+            final SimpleAttributeSet attrs = new SimpleAttributeSet();
+            attrs.addAttributes(getTranscriptStyleContext().getCommentAttributes(comment));
+            batchBuilder.appendCommentValue(comment, attrs);
+            processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
+        }
+    }
+
+    /**
+     * Updates the content of a gem in the document
+     *
+     * @param gem the gem whose content is being updated
+     */
+    public void onGemChanged(Gem gem) {
+        try {
+            final StartEnd tierRange = getGemContentStartEnd(gem);
+            if(!tierRange.valid()) return;
+            setBypassDocumentFilter(true);
+            remove(tierRange.start(), tierRange.end() - tierRange.start());
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
+            final SimpleAttributeSet attrs = new SimpleAttributeSet();
+            attrs.addAttributes(getTranscriptStyleContext().getGemAttributes(gem));
+            batchBuilder.appendGemValue(gem, attrs);
             processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);

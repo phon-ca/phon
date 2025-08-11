@@ -131,6 +131,7 @@ function query_record(recordIndex, record) {
 		for(var eleIdx = 0; eleIdx < selectedElements.length; eleIdx++) {
 			var elementData = selectedElements[eleIdx];
 			var element = elementData.word;
+			if(element == null) continue;
 
 			var elementAlignedMeta = new java.util.LinkedHashMap();
 			elementAlignedMeta.putAll(tierAlignedMeta);

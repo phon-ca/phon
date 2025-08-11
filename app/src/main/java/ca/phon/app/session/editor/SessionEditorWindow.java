@@ -23,9 +23,27 @@ public class SessionEditorWindow extends ProjectFrame implements EditMenuModifie
 
     private final SessionEditor sessionEditor;
 
+    class TransparentGlassPane extends JComponent {
+        public TransparentGlassPane() {
+            setOpaque(false);
+        }
+
+        @Override
+        public boolean contains(int x, int y) {
+            boolean retVal = false;
+            for(Component comp : getComponents()) {
+                if(comp.getBounds().contains(x, y)) {
+                    retVal = true;
+                    break;
+                }
+            }
+            return retVal;
+        }
+    }
+
     public SessionEditorWindow(Project project, Session session, Transcriber transcriber) {
         super(project);
-
+        setGlassPane(new TransparentGlassPane());
         this.sessionEditor = new SessionEditor(project, session, transcriber);
         init();
     }

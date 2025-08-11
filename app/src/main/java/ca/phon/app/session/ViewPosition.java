@@ -7,7 +7,10 @@ public enum ViewPosition {
     RIGHT_TOP(75, 0, 25, 50, "right-top"),
     RIGHT_BOTTOM(75, 50, 25, 50, "right-bottom"),
     BOTTOM_LEFT(0, 100, 50, 50, "bottom-left"),
-    BOTTOM_RIGHT(50, 100, 50, 50, "bottom-right");
+    BOTTOM_RIGHT(50, 100, 50, 50, "bottom-right"),
+    EXTERNAL(0, 0, 0, 0, "external"),
+    // embedded into the bottom of the transcript view
+    EMBEDDED(0, 0, 0, 0, "embedded");
 
     private final int x;
     private final int y;

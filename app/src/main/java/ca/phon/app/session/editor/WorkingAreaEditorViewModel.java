@@ -15,7 +15,6 @@
  */
 package ca.phon.app.session.editor;
 
-import bibliothek.extension.gui.dock.theme.FlatTheme;
 import bibliothek.gui.DockStation;
 import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.action.*;
@@ -38,6 +37,7 @@ import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.undo.ShowHideViewEdit;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
@@ -85,7 +85,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	/* Since there is not one but many main-Frames, it is hard to specify which one is the root-window. The
 	 * FocusedWindowProvider always assumes that the window that is or was focused is the root-window. */
-	private FocusedWindowProvider windows = new FocusedWindowProvider();
+	private final FocusedWindowProvider windows = new FocusedWindowProvider();
 
 	/**
 	 * Dock control
@@ -185,7 +185,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void opened(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
-				if (viewName.trim().length() > 0) {
+				if (!viewName.trim().isEmpty()) {
 					EditorView view = getView(viewName);
 					if (view != null) {
 						view.onOpen();
@@ -196,7 +196,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			@Override
 			public void closed(CControl arg0, CDockable arg1) {
 				String viewName = arg1.intern().getTitleText();
-				if (viewName.trim().length() > 0) {
+				if (!viewName.trim().isEmpty()) {
 					EditorView view = getView(viewName);
 					if (view != null) {
 						view.onClose();
@@ -271,6 +271,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		// first add all ViewPosition placeholders
 		for (ViewPosition pos : ViewPosition.values()) {
+			if(pos == ViewPosition.EXTERNAL || pos == ViewPosition.EMBEDDED) continue; // external position is not a dockable
 			final SingleCDockablePerspective dockable =
 					new SingleCDockablePerspective(pos.getName());
 			dockables.put(pos.getName(), dockable);
@@ -411,6 +412,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public boolean isShowing(String viewName) {
+		if (viewName == null || viewName.trim().length() == 0) {
+			return false;
+		}
+		return isShowingInDock(viewName) || isShowingEmbedded(viewName) || isShowingExternal(viewName);
+	}
+
+	public boolean isShowingInDock(String viewName) {
 		boolean retVal = false;
 		final CControlRegister register = dockControl.getRegister();
 		for (CDockable currentDockable : register.getDockables()) {
@@ -419,6 +427,25 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			}
 		}
 		return retVal;
+	}
+
+	public boolean isShowingEmbedded(String viewName) {
+		final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+		final EditorView view = registeredViews.get(viewName);
+		return view != null && SwingUtilities.isDescendingFrom(view, transcriptView);
+	}
+
+	public boolean isShowingExternal(String viewName) {
+		for(AccessoryWindow window: accessoryWindows) {
+			final var dockableArea = window.contentArea.getCenter();
+			for(int i = 0;  i < dockableArea.getDockableCount(); i++) {
+				final var dockable = dockableArea.getDockable(i);
+				if(dockable.getTitleText().equals(viewName)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -557,15 +584,36 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		if (dockable != null) {
 			ViewPosition dockPosition = dockPositions.get(viewName);
+			if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
+				final MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView) dockable.getView();
+				if(!mediaPlayerView.isEmbedded()) {
+					dockPosition = ViewPosition.EXTERNAL;
+				}
+			}
 			if (dockPosition == ViewPosition.WORK) {
 				workingArea.show(dockable);
+				dockable.setVisible(true);
+			} else if(dockPosition == ViewPosition.EMBEDDED) {
+				// special case for media player views
+
+				// embedded into the transcript view
+				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+				transcriptView.add(dockable.getView(), BorderLayout.SOUTH);
+				transcriptView.revalidate();
+				fireViewShown(viewName);
+			} else if(dockPosition == ViewPosition.EXTERNAL) {
+				dockControl.addDockable(dockable);
+				// open in a new accessory window
+				final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
+				window.getArea().getCenter().drop(dockable.intern());
+				window.pack();
+				window.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+				window.setVisible(true);
 			} else {
 				dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", dockPosition.getName())));
 				dockControl.addDockable(dockable);
+				dockable.setVisible(true);
 			}
-			dockable.setVisible(true);
-
-//			PhonWorker.getInstance().invokeLater(this::savePreviousPerspective);
 
 			Window parentWin = SwingUtilities.getWindowAncestor(getEditor());
 			if (parentWin instanceof CommonModuleFrame commonModuleFrame) {
@@ -579,16 +627,38 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void hideView(String viewName) {
-		if (!isShowing(viewName)) return;
-//		if (!dockControl.getSingleDockable(viewName).isCloseable()) return;
-
-		dockControl.removeDockable(dockControl.getSingleDockable(viewName));
+		final EditorView view = registeredViews.get(viewName);
+		if (view == null) {
+			LogUtil.warning("View '" + viewName + "' not registered, cannot hide");
+			return;
+		}
+		// save view properties when opened again
+		final Properties viewProps = view.getStateProperties();
+		if (viewProps != null) {
+			viewStateProperties.put(viewName, viewProps);
+		}
+		if (isShowingInDock(viewName) || isShowingExternal(viewName)) {
+			dockControl.removeDockable(dockControl.getSingleDockable(viewName));
+		} else if(isShowingEmbedded(viewName)) {
+			// remove from transcript view
+			final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+			if (view != null) {
+				transcriptView.remove(view);
+				transcriptView.revalidate();
+				fireViewHidden(viewName);
+			}
+		}
 	}
 
 	@Override
 	public void showDynamicFloatingDockable(String title, JComponent comp,
 											int x, int y, int w, int h) {
-		throw new UnsupportedOperationException("Dynamic floating dockables not supported by this view model");
+		final DynamicViewFactory factory = new DynamicViewFactory(comp);
+		final SingleCDockable dockable = factory.createBackup(title);
+
+		dockControl.addDockable(dockable);
+		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
+		dynamicViews.put(title, comp);
 	}
 
 	@Override
@@ -599,6 +669,39 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockControl.addDockable(dockable);
 		dockable.setVisible(true);
 	}
+
+	@Override
+	public JFrame showViewInAccessoryWindow(String viewName) {
+		if(registeredViews.containsKey(viewName)) {
+			hideView(viewName);
+		}
+		final EditorView view = getView(viewName);
+		if(view == null) {
+			LogUtil.warning("View '" + viewName + "' not registered, cannot show in accessory window");
+			return null;
+		}
+		final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
+		final var editorViewDockable = (EditorViewDockable) factory.createBackup(viewName);
+		dockControl.addDockable(editorViewDockable);
+		final AccessoryWindow accessoryWindow = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
+		accessoryWindow.contentArea.getCenter().drop(editorViewDockable.intern());
+		accessoryWindow.pack();
+		accessoryWindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+		accessoryWindow.setVisible(true);
+
+		fireViewShown(viewName);
+
+		return accessoryWindow;
+	}
+
+	/**
+	 * During setupWindows is may be detected that the media player should be shown embedded
+	 * in the transcript view.  This property is used to determine if the media player should
+	 * be manually opened.
+	 */
+	private boolean mediaPlayerEmbedded = false;
+
+	private boolean mediaPlayerVisible = false;
 
 	@Override
 	public void setupWindows(RecordEditorPerspective editorPerspective) {
@@ -683,6 +786,20 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 								viewProps.setProperty(propName, propValue);
 							}
 							viewStateProperties.put(viewName, viewProps);
+
+							if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
+								if(viewProps.containsKey("embedded")) {
+									mediaPlayerEmbedded = Boolean.parseBoolean(viewProps.getProperty("embedded"));
+								} else {
+									mediaPlayerEmbedded = false;
+								}
+								if(viewProps.containsKey("mediaPlayerVisible")) {
+									mediaPlayerVisible = Boolean.parseBoolean(viewProps.getProperty("mediaPlayerVisible"));
+								} else {
+									mediaPlayerVisible = false;
+								}
+							}
+
 							// if view is already registered, load state properties
 							if (view != null)
 								view.loadStateProperties(viewProps);
@@ -714,6 +831,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		for (String viewName : dockables.keySet()) {
 			final ViewPosition dockPosition = dockPositions.get(viewName);
+			if(dockPosition == ViewPosition.EXTERNAL || dockPosition == ViewPosition.EMBEDDED) continue;
 			if (dockPosition == ViewPosition.WORK) {
 				if (TranscriptView.VIEW_NAME.equals(viewName)) {
 					workingPerspective.gridAdd(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), dockables.get(viewName));
@@ -746,6 +864,23 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				}
 			}
 		}
+
+		if(mediaPlayerVisible) {
+			if(mediaPlayerEmbedded) {
+				// open media player embedded in transcript view
+				final TranscriptView transcriptView = (TranscriptView) getView(TranscriptView.VIEW_NAME);
+				if (transcriptView != null) {
+					final MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView) getView(MediaPlayerEditorView.VIEW_NAME);
+					if (mediaPlayerView != null) {
+						transcriptView.add(mediaPlayerView, BorderLayout.SOUTH);
+						transcriptView.revalidate();
+						fireViewShown(MediaPlayerEditorView.VIEW_NAME);
+					}
+				}
+			}
+		}
+		mediaPlayerEmbedded = false; // reset flag for next time
+		mediaPlayerVisible = false; // reset flag for next time
 	}
 
 	@Override
@@ -782,7 +917,15 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				}
 				for (String viewName : viewNames) {
 					final EditorView view = registeredViews.get(viewName);
-					final Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
+					Properties viewProps = view != null ? view.getStateProperties() : viewStateProperties.get(viewName);
+					if(viewProps == null) {
+						viewProps = new Properties();
+					}
+					if(MediaPlayerEditorView.VIEW_NAME.equals(viewName)) {
+						viewProps.put("mediaPlayerVisible", String.valueOf(isShowing(MediaPlayerEditorView.VIEW_NAME)));
+						System.out.println("Saving media player view state: " + viewProps);
+					}
+
 					if (viewProps != null && !viewProps.isEmpty()) {
 						final XElement viewEle = viewsEle.addElement("view");
 						final XAttribute nameAttr = new XAttribute("name");
@@ -1050,16 +1193,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				externalizeAct.setText("Open view in new window");
 				externalizeAct.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_new", IconSize.SMALL, Color.darkGray));
 				externalizeAct.addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent e) {
-
 						final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
 						window.getArea().getCenter().drop(EditorViewDockable.this.intern());
 						window.pack();
 						window.setVisible(true);
 					}
-
 				});
 				actionSource.add(externalizeAct);
 			}
@@ -1489,6 +1629,31 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 			accessoryWindows.add(this);
 
+			dockControl.addControlListener(new CControlListener() {
+				@Override
+				public void added(CControl cControl, CDockable cDockable) {
+
+				}
+
+				@Override
+				public void removed(CControl cControl, CDockable cDockable) {
+					if(contentArea.getCenter().getDockableCount() == 0) {
+						// no dockables left in content area, close window
+						dispose();
+					}
+				}
+
+				@Override
+				public void opened(CControl cControl, CDockable cDockable) {
+
+				}
+
+				@Override
+				public void closed(CControl cControl, CDockable cDockable) {
+
+				}
+			});
+
 			addWindowListener(new WindowListener() {
 
 				@Override
@@ -1558,4 +1723,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 
 	}
+
+
 }

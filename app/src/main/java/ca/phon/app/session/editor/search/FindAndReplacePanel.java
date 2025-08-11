@@ -16,38 +16,33 @@
 package ca.phon.app.session.editor.search;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.search.FindManager.*;
-import ca.phon.app.session.editor.search.actions.*;
 import ca.phon.app.session.editor.undo.ChangeCommentEdit;
 import ca.phon.app.session.editor.undo.ChangeGemEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
+import ca.phon.app.session.editor.view.transcript.TranscriptEditorTierChangeListener;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.session.Record;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.session.*;
 import ca.phon.session.position.*;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.SearchField;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Highlighter;
-import javax.swing.undo.UndoableEditSupport;
 import java.awt.*;
 import java.text.ParseException;
 import java.util.List;
@@ -92,7 +87,7 @@ public class FindAndReplacePanel extends JPanel {
 
 	private JButton replaceAllButton;
 
-	// region - filter settings
+	// region filter settings
 	private List<String> filterTiers = new ArrayList<>();
 
 	private List<Participant> filterSpeakers = new ArrayList<>();
@@ -110,7 +105,7 @@ public class FindAndReplacePanel extends JPanel {
 	private final EditorEventManager editorEventManager;
 	private final SessionEditUndoSupport undoableEditSupport;
 
-	private List<TranscriptElementRange> searchResults = new ArrayList<>();
+	private List<FindResult> searchResults = new ArrayList<>();
 	private int currentResultIdx = -1;
 	private SessionEditorSelection currentSelection = null;
 
@@ -291,6 +286,10 @@ public class FindAndReplacePanel extends JPanel {
 		add(toggleReplaceStrip, BorderLayout.WEST);
 	}
 
+	public boolean hasSearchResults() {
+		return !searchResults.isEmpty();
+	}
+
 	public void clearResults() {
 		getSelectionModel().clear();
 		this.resultsLabel.setText("0 results");
@@ -464,30 +463,26 @@ public class FindAndReplacePanel extends JPanel {
 		final TranscriptElementLocation startLocation = new TranscriptElementLocation(0, findManager.getSearchTiers()[0], 0);
 		findManager.setCurrentLocation(startLocation);
 
-		final FindExpr findExpr = new FindExpr(queryText);
-		findExpr.setCaseSensitive(caseSensitiveButton.isSelected());
-		if(regexButton.isSelected()) {
-			findExpr.setType(SearchType.REGEX);
-		} else if(phonexButton.isSelected()) {
-			findExpr.setType(SearchType.PHONEX);
-		} else {
-			findExpr.setType(SearchType.PLAIN);
-		}
+		final SearchType searchType =
+				regexButton.isSelected() ? SearchType.REGEX :
+				phonexButton.isSelected() ? SearchType.PHONEX :
+				SearchType.PLAIN;
+		final FindExpr findExpr = new FindExpr(searchType, queryText, caseSensitiveButton.isSelected());
 		findManager.setAnyExpr(findExpr);
 		setupSearchTiers(findManager);
 		setupRecordFilter(findManager);
 
 		searchResults.clear();
 		currentResultIdx = -1;
-		TranscriptElementRange result = null;
+		FindResult result = null;
 		while((result = findManager.findNext()) != null) {
 			searchResults.add(result);
 		}
 		updateSearchButtons();
 
 		// setup search result highlights in editor
-		for(TranscriptElementRange range:searchResults) {
-			final SessionEditorSelection selection = new SessionEditorSelection(range);
+		for(FindResult findResult:searchResults) {
+			final SessionEditorSelection selection = new SessionEditorSelection(findResult.range());
 			selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
 			getSelectionModel().addSelection(selection);
 		}
@@ -495,7 +490,8 @@ public class FindAndReplacePanel extends JPanel {
 		// find out where the current location is in the search results
 		if(currentLocation.valid()) {
 			for(int i = 0; i < searchResults.size(); i++) {
-				final TranscriptElementRange range = searchResults.get(i);
+				final FindResult findResult = searchResults.get(i);
+				final TranscriptElementRange range = findResult.range();
 				final int comparison = range.start().compareTo(currentLocation, Arrays.asList(findManager.getSearchTiers()));
 
 				// if the current location is before the current search result, set the current result index to the previous result
@@ -511,7 +507,7 @@ public class FindAndReplacePanel extends JPanel {
 
 	private void updateSearchButtons() {
 		if(searchResults.size() > 0) {
-			resultsLabel.setText(searchResults.size() + " results");
+			resultsLabel.setText(searchResults.size() + " result" + (searchResults.size() == 1 ? "" : "s"));
 			resultsLabel.setForeground(UIManager.getColor("textText"));
 
 			findButton.setIconColor(UIManager.getColor("textText"));
@@ -557,42 +553,156 @@ public class FindAndReplacePanel extends JPanel {
 	public SessionEditUndoSupport getUndoSupport() {
 		return undoableEditSupport;
 	}
-	// end region
+	// endregion
+
+	// region replace methods
+	public String getReplaceText(FindResult findResult, String replaceText) {
+		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
+		if(findResult.isPlainMatch()) {
+			return replaceText;
+		} else if(findResult.isRegexMatch()) {
+			// get current text for tier
+			final StringBuffer sb = new StringBuffer();
+			findResult.matcher().appendReplacement(sb, replaceText);
+			final String result = sb.toString();
+			return result.substring(findResult.range().start().charPosition());
+		} else if(findResult.isPhonexMatch()) {
+			final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+			try {
+				final IPATranscript replaceIpa = IPATranscript.parseIPATranscript(replaceText);
+				findResult.phonexMatcher().appendReplacement(builder, replaceIpa);
+				final String result = builder.toIPATranscript().toString();
+				return result.substring(findResult.range().start().charPosition());
+			} catch (ParseException e) {
+				return "";
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Remove results for the specified element index and tier name.  Returns the index of the first
+	 * result that was removed, or -1 if no results were removed.
+	 *
+	 * @param elementIndex index of the transcript element to remove results for
+	 * @param tierName name of the tier to remove results for
+	 * @return index of first result removed, or -1 if no results were removed
+	 */
+	private int invalidateTierResults(int elementIndex, String tierName) {
+		removeSelectionsForTier(elementIndex, tierName);
+		final Iterator<FindResult> resultIterator = searchResults.iterator();
+		int idx = 0;
+		int retVal = -1;
+		while(resultIterator.hasNext()) {
+			final FindResult result = resultIterator.next();
+			if(result.range().transcriptElementIndex() == elementIndex && result.range().tier().equals(tierName)) {
+				resultIterator.remove();
+				if(currentResultIdx >= idx) currentResultIdx--;
+				if(retVal < 0) retVal = idx;
+			} else {
+				idx++;
+			}
+		}
+		return retVal;
+	}
+
+	private void removeSelectionsForTier(int elementIndex, String tierName) {
+		final List<SessionEditorSelection> selections = getSelectionModel().getSelectionsForTier(elementIndex, tierName);
+		for(SessionEditorSelection selection:selections) {
+			getSelectionModel().removeSelection(selection);
+		}
+	}
+
+	/**
+	 * Update tier results after a replacement has been made.  This will update all results for the
+	 * specified element index and tier name.  It will also update the current result index to be the
+	 * index of the first result that was found after the replacement.
+	 *
+	 * @param elementIndex index of the transcript element to update results for
+	 * @param tierName name of the tier to update results for
+	 * @param insertIdx search results index to insert the new results at (if applicable)
+	 * @param findNextStart character position to start searching for the next result
+	 *
+	 * @return the number of results that were added
+	 */
+	private void updateTierResults(int elementIndex, String tierName, int insertIdx, int findNextStart) {
+		final TranscriptElementLocation tierStart = new TranscriptElementLocation(elementIndex, tierName, 0);
+		final FindManager findManager = getFindManager();
+		findManager.setCurrentLocation(tierStart);
+		FindResult result = null;
+		while((result = findManager.findNext()) != null) {
+			if(result.range().transcriptElementIndex() == elementIndex && result.range().tier().equals(tierName)) {
+				if(insertIdx < 0 || insertIdx >= searchResults.size()) {
+					searchResults.add(result);
+				} else {
+					searchResults.add(insertIdx, result);
+				}
+				if(result.range().end().charPosition() <= findNextStart) {
+					currentResultIdx = insertIdx;
+				}
+				insertIdx++;
+				final SessionEditorSelection selection = new SessionEditorSelection(result.range());
+				selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
+				getSelectionModel().addSelection(selection);
+			} else {
+				break;
+			}
+		}
+	}
 
 	public void replaceCurrent() {
-		if(currentSelection != null) {
+		if(currentResultIdx < 0 || currentResultIdx >= searchResults.size() || currentSelection == null) {
+			return;
+		}
+		final FindResult findResult = searchResults.get(currentResultIdx);
+		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
+		final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().start());
+		final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().end());
+		removeCurrentSelection();
+		if(replaceStart >= 0 && replaceEnd >= 0) {
+			transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
+			transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
+			final String selectedText = transcriptView.getTranscriptEditor().getSelectedText();
+			final String replaceText = getReplaceText(findResult, replaceField.getText());
 
-			final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
-
-			final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().start());
-			final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(currentSelection.getTranscriptElementRange().end());
-			removeCurrentSelection();
-			if(replaceStart >= 0 && replaceEnd >= 0) {
-				transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
-				transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
-				final String replaceText = replaceField.getText();
-				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
-				transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
-
+			if(selectedText != null && selectedText.equals(replaceText)) {
 				findNext();
+			} else {
+				final int insertIdx = invalidateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier());
+				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
+				transcriptView.getTranscriptEditor().addTierChangeListener(new TranscriptEditorTierChangeListener() {
+					@Override
+					public void tierChanged(int elementIndex, String tierName, Object oldValue, Object newValue) {
+						// get character position at the end of the selection
+						final int finalReplaceEnd = transcriptView.getTranscriptEditor().getSelectionEnd();
+						final TranscriptElementLocation newLocation =
+								transcriptView.getTranscriptEditor().charPosToSessionLocation(finalReplaceEnd);
+
+						// update tier results
+						updateTierResults(findResult.range().transcriptElementIndex(), findResult.range().tier(), insertIdx, newLocation.charPosition());
+						updateSearchButtons();
+
+						findNext();
+
+						SwingUtilities.invokeLater(() -> {
+							transcriptView.getTranscriptEditor().removeTierChangeListener(this);
+						});
+					}
+				});
+				transcriptView.getTranscriptEditor().commitChanges(transcriptView.getTranscriptEditor().getCaretPosition());
 			}
 		}
 	}
 
 	public void replaceAll() {
+		getSelectionModel().clear();
 		final TranscriptView transcriptView = (TranscriptView) editorViewModel.getView(TranscriptView.VIEW_NAME);
-		final String replaceText = replaceField.getText();
-		getUndoSupport().beginUpdate("replace all occurrences of '" + searchField.getText() + "' with '" + replaceText + "'");
+		final String replaceExpr = replaceField.getText();
+		getUndoSupport().beginUpdate("replace all occurrences of '" + searchField.getText() + "' with '" + replaceExpr + "'");
 		for(int i = searchResults.size()-1; i >= 0; i--) {
-			final TranscriptElementRange range = searchResults.get(i);
-
-			final int replaceStart = transcriptView.getTranscriptEditor().sessionLocationToCharPos(range.start());
-			final int replaceEnd = transcriptView.getTranscriptEditor().sessionLocationToCharPos(range.end());
-			if (replaceStart >= 0 && replaceEnd >= 0) {
-				transcriptView.getTranscriptEditor().setSelectionStart(replaceStart);
-				transcriptView.getTranscriptEditor().setSelectionEnd(replaceEnd);
-				transcriptView.getTranscriptEditor().replaceSelection(replaceText);
-			}
+			final FindResult findResult = searchResults.get(i);
+			final String replaceText = getReplaceText(findResult, replaceExpr);
+			final TranscriptElementRange range = findResult.range();
 
 			int eleIdx = range.transcriptElementIndex();
 			if(eleIdx < 0) continue;
@@ -645,7 +755,7 @@ public class FindAndReplacePanel extends JPanel {
 		}
 		getUndoSupport().endUpdate();
 		clearResults();
-//		onQuery();
+		onQuery();
 	}
 
 	private void removeCurrentSelection() {
@@ -654,13 +764,15 @@ public class FindAndReplacePanel extends JPanel {
 		}
 		currentSelection = null;
 	}
+	// endregion
 
 	public void findNext() {
 		removeCurrentSelection();
 		final int resultIdx = currentResultIdx + 1;
 		if(resultIdx < searchResults.size()) {
 			currentResultIdx = resultIdx;
-			final TranscriptElementRange range = searchResults.get(resultIdx);
+			final FindResult findResult = searchResults.get(resultIdx);
+			final TranscriptElementRange range = findResult.range();
 			final SessionEditorSelection selection = new SessionEditorSelection(range);
 			getSelectionModel().addSelection(selection);
 			currentSelection = selection;
@@ -707,7 +819,8 @@ public class FindAndReplacePanel extends JPanel {
 		final int resultIdx = currentResultIdx - 1;
 		if(resultIdx >= 0) {
 			currentResultIdx = resultIdx;
-			final TranscriptElementRange range = searchResults.get(resultIdx);
+			final FindResult findResult = searchResults.get(resultIdx);
+			final TranscriptElementRange range = findResult.range();
 			final SessionEditorSelection selection = new SessionEditorSelection(range);
 			getSelectionModel().addSelection(selection);
 			currentSelection = selection;

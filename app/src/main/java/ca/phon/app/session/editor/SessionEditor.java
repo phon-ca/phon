@@ -206,6 +206,35 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		this.mediaModelRef = 
 				new AtomicReference<SessionMediaModel>(new SessionMediaModel(this));
 
+		getSelectionModel().addSelectionModelListener(new EditorSelectionModelListener() {
+			@Override
+			public void selectionAdded(EditorSelectionModel model, SessionEditorSelection selection) {
+
+			}
+
+			@Override
+			public void selectionRemoved(EditorSelectionModel model, SessionEditorSelection selection) {
+
+			}
+
+			@Override
+			public void selectionSet(EditorSelectionModel model, SessionEditorSelection selection) {
+
+			}
+
+			@Override
+			public void selectionsCleared(EditorSelectionModel model) {
+
+			}
+
+			@Override
+			public void requestSwitchToRecord(EditorSelectionModel model, int recordIndex) {
+				if(recordIndex != getCurrentRecordIndex()) {
+					SessionEditor.this.currentRecord = recordIndex;
+				}
+			}
+		});
+
 		// check to ensure that the session has a tier view
 		if(session.getTierView() == null || session.getTierView().size() == 0) {
 			session.setTierView(SessionFactory.newFactory().createDefaultTierView(session));

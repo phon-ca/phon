@@ -27,17 +27,16 @@ import java.awt.geom.*;
 
 public class TimeSliderUI extends SliderUI {
 	
-	private JSlider slider;
+	private TimeSlider slider;
 
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		
-		this.slider = (JSlider)c;
+		this.slider = (TimeSlider) c;
 		slider.addMouseMotionListener(mouseOverListener);
 		slider.addMouseListener(mouseOverListener);
 		this.slider.addChangeListener(new ChangeListener() {
-			
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				slider.repaint();
@@ -141,75 +140,74 @@ public class TimeSliderUI extends SliderUI {
 		@Override
 		public void mousePressed(MouseEvent me) {
 			if(!slider.isEnabled()) return;
+			dragging = true;
 			slider.setValueIsAdjusting(true);
 			slider.setValue((int)posToTime(me.getX()));
-			slider.setValueIsAdjusting(false);
-			
-			dragging = true;
 		}
-		
 		@Override
+
 		public void mouseReleased(MouseEvent me) {
 			if(!slider.isEnabled()) return;
 			if(dragging) {
 				dragging = false;
 			}
+			slider.setValueIsAdjusting(false);
+			slider.setValue((int)posToTime(me.getX()));
+
+			// notify listeners of manual change
+			slider.notifyManualChange(slider.getValue());
 		}
 		
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			if(!slider.isEnabled()) return;
-			slider.repaint();
-			if(timeFrame == null || !timeFrame.isVisible()) {
-				timeFrame = new JFrame();
-				timeFrame.setFocusable(false);
-				timeFrame.setFocusableWindowState(false);
-				timeFrame.setUndecorated(true);
-				timeFrame.getRootPane().putClientProperty("Window.shadow", Boolean.FALSE);
-				
-				timeLbl = new JLabel(" 000:00.00 ");
-				timeLbl.setFont(timeLbl.getFont().deriveFont(10.0f));
-				
-				timeFrame.add(timeLbl);
-				timeFrame.pack();
-				
-				mouseMoved(e);
-			}
-			timeFrame.setVisible(true);
+//			if(!slider.isEnabled()) return;
+//			if(timeFrame == null || !timeFrame.isVisible()) {
+//				timeFrame = new JFrame();
+//				timeFrame.setFocusable(false);
+//				timeFrame.setFocusableWindowState(false);
+//				timeFrame.setUndecorated(true);
+//				timeFrame.getRootPane().putClientProperty("Window.shadow", Boolean.FALSE);
+//
+//				timeLbl = new JLabel(" 000:00.00 ");
+//				timeLbl.setFont(timeLbl.getFont().deriveFont(10.0f));
+//
+//				timeFrame.add(timeLbl);
+//				timeFrame.pack();
+//
+//				mouseMoved(e);
+//			}
+//			timeFrame.setVisible(true);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			if(!slider.isEnabled()) return;
-			if(timeFrame != null) {
-				timeFrame.setVisible(false);
-			}
+//			if(!slider.isEnabled()) return;
+//			if(timeFrame != null) {
+//				timeFrame.setVisible(false);
+//			}
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			if(!slider.isEnabled()) return;
-			if(timeFrame != null) {
-				Point p = e.getPoint();
-				
-				long time = posToTime(p.x);
-				
-				p.y = 0 - timeFrame.getHeight();
-				p.x -= timeFrame.getWidth()/2;
-				
-				timeLbl.setText(MsFormatter.msToDisplayString(time));
-				SwingUtilities.convertPointToScreen(p, slider);
-				timeFrame.setLocation(p.x, p.y);
-			}
+//			if(!slider.isEnabled()) return;
+//			if(timeFrame != null) {
+//				Point p = e.getPoint();
+//
+//				long time = posToTime(p.x);
+//
+//				p.y = 0 - timeFrame.getHeight();
+//				p.x -= timeFrame.getWidth()/2;
+//
+//				timeLbl.setText(MsFormatter.msToDisplayString(time));
+//				SwingUtilities.convertPointToScreen(p, slider);
+//				timeFrame.setLocation(p.x, p.y);
+//			}
 		}
 		
 		@Override
 		public void mouseDragged(MouseEvent me) {
-			mouseMoved(me);
 			if(dragging) {
-				slider.setValueIsAdjusting(true);
 				slider.setValue((int)posToTime(me.getX()));
-				slider.setValueIsAdjusting(false);
 			}
 		}
 		

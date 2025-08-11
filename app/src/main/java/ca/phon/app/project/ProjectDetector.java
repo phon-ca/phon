@@ -87,15 +87,4 @@ public class ProjectDetector {
 		return false;
 	}
 
-	public boolean isPhonProjectFolder(File folder) {
-		List<Function<File, Boolean>> checks = new ArrayList<>();
-//		checks.add(this::hasPropertiesFiles);
-//		checks.add(this::hasResourcesFolder);
-//		checks.add(this::hasBackupsZip);
-		checks.add(this::hasSessionFilesInChildFolders);
-
-		int score = (int)checks.parallelStream().filter(check -> check.apply(folder)).count();
-		return score >= 1;
-	}
-
 }

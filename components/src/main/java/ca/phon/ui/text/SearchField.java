@@ -16,6 +16,7 @@
 package ca.phon.ui.text;
 
 import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconSize;
@@ -32,9 +33,7 @@ import java.util.List;
 
 /**
  * A search field with optional context button.
- * The field displayes a prompt when the text field
- * text is empty.
- *
+ * The field displays a prompt when the text field text is empty.
  */
 public class SearchField extends JPanel {
 	
@@ -54,7 +53,12 @@ public class SearchField extends JPanel {
 	protected SearchFieldButton endButton;
 	
 	protected final PromptedTextField queryField;
-	
+
+	/**
+	 * Custom menu handler for adding custom options to the context menu.
+	 */
+	protected SearchFieldMenuHandler menuHandler = null;
+
 	/**
 	 * Search icon
 	 * 
@@ -117,42 +121,31 @@ public class SearchField extends JPanel {
 	private BufferedImage searchIcn = null;
 	public BufferedImage createSearchIcon() {
 		if(searchIcn == null) {
-		BufferedImage retVal = new BufferedImage(IconSize.SMALL.getWidth()+8, IconSize.SMALL.getHeight(),
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D)retVal.getGraphics();
-		
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		Ellipse2D circle = new Ellipse2D.Float(2, 2, 
-				10, 10);
-		Line2D stem = new Line2D.Float(11, 11,
-				IconSize.SMALL.getWidth()-2, IconSize.SMALL.getHeight()-2);
-		
-		Polygon tri = new Polygon();
-		tri.addPoint(16, 8);
-		tri.addPoint(24, 8);
-		tri.addPoint(20, 12);
-		
-//		Line2D triA = new Line2D.Float(14.0f, 9.0f, 17.0f, 9.0f);
-//		Line2D triB = new Line2D.Float(17.0f, 9.0f, 15.5f, 11.0f);
-//		Line2D triC = new Line2D.Float(15.5f, 11.0f, 14.0f, 9.0f);
-		
-		Stroke s = new BasicStroke(2.3f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-		g2d.setStroke(s);
-		g2d.setColor(Color.gray);
-		
-		g2d.draw(circle);
-		g2d.draw(stem);
-		
-		g2d.fillPolygon(tri);
+			BufferedImage retVal = new BufferedImage(IconSize.SMALL.getWidth()+8, IconSize.SMALL.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = (Graphics2D)retVal.getGraphics();
 
-//		s = new BasicStroke(0.5f);
-//		g2d.setStroke(s);
-//		
-//		g2d.draw(triA);
-//		g2d.draw(triB);
-//		g2d.draw(triC);
-		searchIcn = retVal;
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+			Ellipse2D circle = new Ellipse2D.Float(2, 2,
+					10, 10);
+			Line2D stem = new Line2D.Float(11, 11,
+					IconSize.SMALL.getWidth()-2, IconSize.SMALL.getHeight()-2);
+
+			Polygon tri = new Polygon();
+			tri.addPoint(16, 8);
+			tri.addPoint(24, 8);
+			tri.addPoint(20, 12);
+
+			Stroke s = new BasicStroke(2.3f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+			g2d.setStroke(s);
+			g2d.setColor(Color.gray);
+
+			g2d.draw(circle);
+			g2d.draw(stem);
+
+			g2d.fillPolygon(tri);
+			searchIcn = retVal;
 		}
 		return searchIcn;
 	}
@@ -259,18 +252,46 @@ public class SearchField extends JPanel {
 	}
 
 	/**
-	 * Setup popup menu.
+	 * Setup popup menu.  Override this method to completely customize the
+	 * context menu for the search field.  Most implementations will only
+	 * need to add custom options to the menu and should use the
+	 * {@link SearchFieldMenuHandler} interface to do so.
 	 * 
-	 * @param menu
+	 * @param menu popup menu to setup
 	 */
 	protected void setupPopupMenu(JPopupMenu menu) {
+		final MenuBuilder menuBuilder = new MenuBuilder(menu);
+		if(menuHandler != null) {
+			menuHandler.setupMenu(menuBuilder);
+		}
+		if(menu.getComponentCount() > 0) {
+			menuBuilder.addSeparator(".", "clear");
+		}
 		PhonUIAction clearFieldAct = PhonUIAction.eventConsumer(this::onClearText);
 		clearFieldAct.putValue(PhonUIAction.NAME, "Clear text");
 		JMenuItem clearTextItem = new JMenuItem(clearFieldAct);
-		
-		menu.add(clearTextItem);
+		menuBuilder.addItem(".", clearTextItem);
 	}
-	
+
+	/**
+	 * Set a custom menu handler for the search field.  May be used to add
+	 * custom options to the context menu.
+	 *
+	 * @param menuHandler custom menu handler or <code>null</code> to remove
+	 */
+	public void setMenuHandler(SearchFieldMenuHandler menuHandler) {
+		this.menuHandler = menuHandler;
+	}
+
+	/**
+	 * Get the custom menu handler for the search field.
+	 *
+	 * @return custom menu handler or <code>null</code> if none is set
+	 */
+	public SearchFieldMenuHandler getMenuHandler() {
+		return menuHandler;
+	}
+
 	public void setState(String state) {
 		queryField.setState(state);
 	}
@@ -403,6 +424,15 @@ public class SearchField extends JPanel {
 		}
 		PrefHelper.getUserPreferences().put(historyProperty, historyStr.toString());
 		return true;
+	}
+
+	public static interface SearchFieldMenuHandler {
+		/**
+		 * Perform custom changes on the context menu
+		 *
+		 * @param menu
+		 */
+		public void setupMenu(MenuBuilder menu);
 	}
 
 }

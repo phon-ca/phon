@@ -1,19 +1,19 @@
 package ca.phon.app.session.editor.view.search;
 
 import ca.phon.app.session.editor.search.FindManager;
+import ca.phon.app.session.editor.search.FindResult;
+import ca.phon.orthography.InternalMedia;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcript;
 import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.util.Range;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Table for displaying quick search results
@@ -21,6 +21,8 @@ import java.util.List;
 public class SearchViewTable extends JXTable {
 
     public final static String SEARCHING_PROP = SearchViewTable.class.getName() + ".searching";
+
+    private Optional<FindWorker> findWorker = Optional.empty();
 
     public SearchViewTable(FindManager findManager) {
         super();
@@ -31,9 +33,9 @@ public class SearchViewTable extends JXTable {
         super(model);
     }
 
-    public SearchViewTable(Session session, List<TranscriptElementRange> ranges) {
+    public SearchViewTable(Session session, List<FindResult> results) {
         super();
-        setModel(new SearchViewTableModel(session, ranges));
+        setModel(new SearchViewTableModel(session, results));
     }
 
     public void clearSearch() {
@@ -48,8 +50,12 @@ public class SearchViewTable extends JXTable {
     public void search(FindManager findManager) {
         final SearchViewTableModel model = new SearchViewTableModel(findManager.getSession(), new ArrayList<>());
         setModel(model);
-        final FindWorker worker = new FindWorker(findManager);
+        if(findWorker.isPresent()) {
+            findWorker.get().cancelSearch();
+        }
+        final FindWorker worker = new FindWorker(findManager, model);
         SearchViewTable.this.firePropertyChange(SEARCHING_PROP, false, true);
+        findWorker = Optional.of(worker);
         worker.execute();
     }
 
@@ -60,30 +66,42 @@ public class SearchViewTable extends JXTable {
     /**
      * Swing worker for finding results
      */
-    private class FindWorker extends SwingWorker<List<TranscriptElementRange>, TranscriptElementRange> {
+    private class FindWorker extends SwingWorker<List<FindResult>, FindResult> {
 
         private final FindManager findManager;
 
-        public FindWorker(FindManager findManager) {
+        private final SearchViewTableModel model;
+
+        private boolean cancelled = false;
+
+        public FindWorker(FindManager findManager, SearchViewTableModel model) {
             super();
             this.findManager = findManager;
+            this.model = model;
         }
 
         @Override
-        protected List<TranscriptElementRange> doInBackground() throws Exception {
-            final List<TranscriptElementRange> retVal = new ArrayList<>();
-            TranscriptElementRange range = null;
-            while((range = findManager.findNext()) != null) {
-                retVal.add(range);
-                publish(range);
+        protected List<FindResult> doInBackground() throws Exception {
+            final List<FindResult> retVal = new ArrayList<>();
+            FindResult findResult = null;
+            while((findResult = findManager.findNext()) != null) {
+                if(cancelled) {
+                    break;
+                }
+                retVal.add(findResult);
+                publish(findResult);
             }
             return retVal;
         }
 
+        public void cancelSearch() {
+            this.cancelled = true;
+        }
+
         @Override
-        protected void process(List<TranscriptElementRange> chunks) {
-            for(TranscriptElementRange range:chunks) {
-                getSearchViewTableModel().appendResult(range);
+        protected void process(List<FindResult> chunks) {
+            for(FindResult range:chunks) {
+                model.appendResult(range);
             }
         }
 
@@ -119,17 +137,19 @@ public class SearchViewTable extends JXTable {
 
         }
 
-        private List<TranscriptElementRange> ranges;
+        private List<FindResult> results;
 
-        public SearchViewTableModel(Session session, List<TranscriptElementRange> ranges) {
+        private List<Integer> invalidatedRows = new ArrayList<>();
+
+        public SearchViewTableModel(Session session, List<FindResult> results) {
             super();
             this.session = session;
-            this.ranges = ranges;
+            this.results = results;
         }
 
         @Override
         public int getRowCount() {
-            return ranges.size();
+            return results.size();
         }
 
         @Override
@@ -139,7 +159,8 @@ public class SearchViewTable extends JXTable {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            final TranscriptElementRange range = ranges.get(rowIndex);
+            final FindResult findResult = results.get(rowIndex);
+            final TranscriptElementRange range = findResult.range();
             final Transcript.Element element = session.getTranscript().getElementAt(range.transcriptElementIndex());
             switch(Columns.values()[columnIndex]) {
                 case RECORD:
@@ -148,7 +169,7 @@ public class SearchViewTable extends JXTable {
                 case TIER:
                     return range.tier();
                 case TEXT:
-                    return getSearchResultText(range);
+                    return invalidatedRows.contains(rowIndex) ? "INVALID" : getSearchResultText(range);
                 case Range:
                     return range.range();
             }
@@ -169,11 +190,17 @@ public class SearchViewTable extends JXTable {
                 if(tier == null) return "";
                 // TODO blind transcriptions
                 String tierText = tier.toString();
+                if(tier.getDeclaredType() == MediaSegment.class) {
+                    tierText = InternalMedia.MEDIA_BULLET + tierText + InternalMedia.MEDIA_BULLET;
+                }
                 return getTokenizedText(tierText, range.range());
             }
         }
 
         private String getTokenizedText(String text, Range range) {
+            if(range.getStart() < 0 || range.getEnd() > text.length() || range.getStart() >= range.getEnd()) {
+                return text; // invalid range, return original text
+            }
             final String start = text.substring(0, range.getStart());
             final String middle = text.substring(range.getStart(), range.getEnd());
             final String end = text.substring(range.getEnd());
@@ -200,15 +227,58 @@ public class SearchViewTable extends JXTable {
             return super.getColumnClass(columnIndex);
         }
 
-        public TranscriptElementRange getRangeAt(int rowIndex) {
-            return ranges.get(rowIndex);
+        public FindResult getResultAt(int rowIndex) {
+            return results.get(rowIndex);
         }
 
-        public void appendResult(TranscriptElementRange range) {
-            this.ranges.add(range);
-            fireTableRowsInserted(ranges.size()-1, ranges.size()-1);
+        public void appendResult(FindResult result) {
+            this.results.add(result);
+            fireTableRowsInserted(results.size()-1, results.size()-1);
         }
 
+        public void insertResults(List<FindResult> results, int index) {
+            if(index > this.results.size()) {
+                throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+            }
+            if(index < 0) {
+                this.results.addAll(results);
+                fireTableRowsInserted(this.results.size() - results.size(), this.results.size() - 1);
+            } else {
+                this.results.addAll(index, results);
+                fireTableRowsInserted(index, index + results.size() - 1);
+            }
+        }
+
+        public void invalidateResultAt(int rowIndex) {
+            if(rowIndex < 0 || rowIndex >= results.size()) return;
+            invalidatedRows.add(rowIndex);
+            fireTableRowsUpdated(rowIndex, rowIndex);
+        }
+
+        public boolean isInvalid(int rowIndex) {
+            return invalidatedRows.contains(rowIndex);
+        }
+
+        public void clearInvalidatedRows() {
+            if(invalidatedRows.isEmpty()) return;
+            // remove sorted invalidated rows in reverse order
+            invalidatedRows.sort(Integer::compareTo);
+            for(int i = invalidatedRows.size() - 1; i >= 0; i--) {
+                int rowIndex = invalidatedRows.get(i);
+                if(rowIndex >= 0 && rowIndex < results.size()) {
+                    results.remove(rowIndex);
+                    fireTableRowsDeleted(rowIndex, rowIndex);
+                }
+            }
+            invalidatedRows.clear();
+        }
+
+        public void setResults(List<FindResult> results) {
+            this.results = new ArrayList<>(results);
+            this.invalidatedRows.clear();
+            fireTableDataChanged();
+        }
+        
     }
 
 }

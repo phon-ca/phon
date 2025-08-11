@@ -73,6 +73,8 @@ public class TranscriptView extends EditorView {
     private JPanel transcriptTreePanel = null;
     private JXTree transcriptTree = null;
 
+    private TranscriptStatusBar transcriptStatusBar;
+
     /**
      * Constructor
      * */
@@ -182,7 +184,12 @@ public class TranscriptView extends EditorView {
         transcriptScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         centerPanel.add(transcriptScrollPane, BorderLayout.CENTER);
-        centerPanel.add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
+        transcriptStatusBar = new TranscriptStatusBar(transcriptEditor);
+        centerPanel.add(transcriptStatusBar, BorderLayout.SOUTH);
+    }
+
+    public TranscriptScrollPane getTranscriptScrollPane() {
+        return this.transcriptScrollPane;
     }
 
     /**
@@ -343,6 +350,10 @@ public class TranscriptView extends EditorView {
         NavigationPanel navPanel = new NavigationPanel(getEditor());
         iconStrip.add(navPanel, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.LEFT);
+    }
+
+    public JComponent getStatusBar() {
+        return this.transcriptStatusBar;
     }
 
     private void onSegmentPlaybackChange(PropertyChangeEvent evt) {
@@ -1548,6 +1559,15 @@ public class TranscriptView extends EditorView {
 
 
     // endregion Properties
+
+    /**
+     * Is Find & Replace visible and has active search results
+     *
+     * @return true if Find & Replace is visible and has active search results, false otherwise
+     */
+    public boolean isFindAndReplaceActive() {
+        return isFindAndReplaceVisible() && getFindAndReplacePanel().hasSearchResults();
+    }
 
     /**
      * The dialog that shows the metadata for the session

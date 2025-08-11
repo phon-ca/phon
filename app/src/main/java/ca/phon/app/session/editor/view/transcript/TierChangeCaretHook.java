@@ -1,10 +1,5 @@
 package ca.phon.app.session.editor.view.transcript;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.view.transcript.extensions.SyllabificationExtension;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.position.TranscriptElementLocation;
 
 import javax.swing.*;
@@ -33,24 +28,23 @@ public class TierChangeCaretHook extends TranscriptEditorCaretHookAdapter {
         if(oldLocation.tier() == null) return true;
         if(oldLocation.tier().equals(newLocation.tier())) return true;
         if(editor.tierHasUncommittedChanges(oldDot)) {
-            LogUtil.info("Changing tier from " + oldLocation + " to " + newLocation);
-            editor.commitChanges(oldDot);
             this.savedTierName = oldLocation.tier();
             this.gotoLocation = newLocation;
+            editor.commitChanges(oldDot);
             return false;
         }
         return true;
     }
 
-    private void tierChanged(String tierName, Object oldValue, Object newValue) {
+    private void tierChanged(int elementIndex, String tierName, Object oldValue, Object newValue) {
         if(this.gotoLocation == null) return;
         if(this.savedTierName == null) return;
         if(!this.savedTierName.equals(tierName)) return;
         SwingUtilities.invokeLater(() -> {
             final int newDot = editor.sessionLocationToCharPos(gotoLocation);
-            editor.getTranscriptEditorCaret().setDot(newDot);
             this.gotoLocation = null;
             this.savedTierName = null;
+            editor.getTranscriptEditorCaret().setDot(newDot);
         });
     }
 

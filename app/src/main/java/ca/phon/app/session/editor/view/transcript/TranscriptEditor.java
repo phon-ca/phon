@@ -157,7 +157,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     /**
      * The session location of the current caret position
      */
-    private TranscriptElementLocation currentTranscriptLocation = null;
+    private TranscriptElementLocation currentTranscriptLocation = new TranscriptElementLocation(-1, null, 0);
 
     /**
      * Reference to our custom transcript editor kit
@@ -344,6 +344,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         this.eventManager.registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.GemChanged, this::onGemChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.eventManager.registerActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.GemAdded, this::onGemAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -1114,52 +1116,91 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     public boolean tierHasUncommittedChanges(int charPos) {
         final Element charElem = getTranscriptDocument().getCharacterElement(charPos);
         final AttributeSet attrs = charElem.getAttributes();
-        final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-        if(tier == null) return false;
-        if(tier.getDeclaredType() == MediaSegment.class) {
-            return false;
-        }
-        if(SystemTierType.TargetSyllables.getName().equals(tier.getName()) ||
-            SystemTierType.ActualSyllables.getName().equals(tier.getName()) ||
-            SystemTierType.PhoneAlignment.getName().equals(tier.getName())) {
-            return false; // no changes to syllabification tiers
-        }
-        if(tier == null) return false;
-        // get text in document for tier
-        final Element parentElem = charElem.getParentElement();
-        if(parentElem == null) return false;
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < parentElem.getElementCount(); i++) {
-            Element innerElem = parentElem.getElement(i);
-            AttributeSet innerAttrs = innerElem.getAttributes();
-            if(TranscriptStyleConstants.isLabel(innerAttrs)) continue;
-            if(TranscriptStyleConstants.isNewParagraph(innerAttrs)) continue;
-            final String elementType = TranscriptStyleConstants.getElementType(innerAttrs);
-            if(elementType == null) break;
+
+        final String elementType = TranscriptStyleConstants.getElementType(attrs);
+        if (elementType == null) return false;
+
+        if(TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType)) {
+            final Record record = TranscriptStyleConstants.getRecord(attrs);
+            if(record == null) return false;
+            final int recordIndex = getSession().getRecordIndex(record);
+            if(recordIndex < 0) return false;
+            final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+            if (tier == null) return false;
+            if (tier.getDeclaredType() == MediaSegment.class) {
+                return false;
+            }
+            if (SystemTierType.TargetSyllables.getName().equals(tier.getName()) ||
+                    SystemTierType.ActualSyllables.getName().equals(tier.getName()) ||
+                    SystemTierType.PhoneAlignment.getName().equals(tier.getName())) {
+                return false; // no changes to syllabification tiers
+            }
+
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
+            if (!startEnd.valid()) return false;
+            final StringBuilder sb = new StringBuilder();
             try {
-                String text = getTranscriptDocument().getText(innerElem.getStartOffset(), innerElem.getEndOffset() - innerElem.getStartOffset());
+                String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
                 sb.append(text);
             } catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
-        }
-        final String newTierVal = sb.toString().trim();
-        boolean currentTextIsFromValidatedBlindTier =
-                getDataModel().getTranscriber() != Transcriber.VALIDATOR
-                    && tier.isBlind()
-                    && StyleConstants.isItalic(attrs);
-        if(currentTextIsFromValidatedBlindTier) {
-            String validatedValue = getTranscriptDocument().getTierText(tier, Transcriber.VALIDATOR.getUsername());
-            if(!validatedValue.equals(newTierVal)) {
-                currentTextIsFromValidatedBlindTier = false;
+            final String newTierVal = sb.toString().trim();
+
+            boolean currentTextIsFromValidatedBlindTier =
+                    getDataModel().getTranscriber() != Transcriber.VALIDATOR
+                            && tier.isBlind()
+                            && StyleConstants.isItalic(attrs);
+            if (currentTextIsFromValidatedBlindTier) {
+                String validatedValue = getTranscriptDocument().getTierText(tier, Transcriber.VALIDATOR.getUsername());
+                if (!validatedValue.equals(newTierVal)) {
+                    currentTextIsFromValidatedBlindTier = false;
+                }
             }
+            final String oldTierVal = getTranscriptDocument().getTierText(tier,
+                    currentTextIsFromValidatedBlindTier ? Transcriber.VALIDATOR.getUsername() : getDataModel().getTranscriber().getUsername());
+            if (oldTierVal == null && newTierVal.isEmpty()) {
+                return false; // no changes
+            }
+            return !Objects.equals(oldTierVal, newTierVal);
+        } else if(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT.equals(elementType)) {
+            final Comment comment = TranscriptStyleConstants.getComment(attrs);
+            if (comment == null) return false;
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getCommentContentStartEnd(comment);
+            if (!startEnd.valid()) return false;
+            final StringBuilder sb = new StringBuilder();
+            try {
+                String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                sb.append(text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+            final String newCommentVal = sb.toString().trim();
+            final String oldCommentVal = comment.getValue().toString();
+            if (oldCommentVal == null && newCommentVal.isEmpty()) {
+                return false; // no changes
+            }
+            return !Objects.equals(oldCommentVal, newCommentVal);
+        } else if(TranscriptStyleConstants.ELEMENT_TYPE_GEM.equals(elementType)) {
+            final Gem gem = TranscriptStyleConstants.getGem(attrs);
+            if (gem == null) return false;
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getGemContentStartEnd(gem);
+            if (!startEnd.valid()) return false;
+            final StringBuilder sb = new StringBuilder();
+            try {
+                String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                sb.append(text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+            final String newGemVal = sb.toString().trim();
+            final String oldGemVal = gem.getLabel().toString();
+            if (oldGemVal == null && newGemVal.isEmpty()) {
+                return false; // no changes
+            }
+            return !Objects.equals(oldGemVal, newGemVal);
         }
-        final String oldTierVal = getTranscriptDocument().getTierText(tier,
-                currentTextIsFromValidatedBlindTier ? Transcriber.VALIDATOR.getUsername() : getDataModel().getTranscriber().getUsername());
-        if(oldTierVal == null && newTierVal.isEmpty()) {
-            return false; // no changes
-        }
-        return !Objects.equals(oldTierVal, newTierVal);
+        return false;
     }
 
     // endregion
@@ -1302,6 +1343,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param editorEvent the event that adds the comment to the transcript
      */
     private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> editorEvent) {
+        if(!isAutoInsertRecordElements()) return;
         var data = editorEvent.data();
         getTranscriptDocument().addComment(data.comment(), data.elementIndex());
 
@@ -1340,6 +1382,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param editorEvent the event that adds the gem to the transcript
      */
     private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> editorEvent) {
+        if(!isAutoInsertRecordElements()) return;
         var data = editorEvent.data();
         getTranscriptDocument().addGem(data.gem(), data.elementIndex());
 
@@ -1564,17 +1607,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         int start = -1;
         int end = -1;
 
+        int recordIndex = doc.getSession().getRecordIndex(editorEvent.data().record());
+        if (recordIndex < 0) return;
+        int elementIndex = doc.getSession().getTranscript().getElementIndex(editorEvent.data().record());
         if (changedTier.isUnvalidated()) {
-            int recordIndex = doc.getSession().getRecordIndex(editorEvent.data().record());
-            if (recordIndex < 0) return;
             TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, changedTier.getName());
             start = se.start() + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
             end = se.start() + changedTier.getUnvalidatedValue().getValue().length();
         }
 
         final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
-        final int currentDot = getTranscriptEditorCaret().getDot();
-
         boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
         getTranscriptEditorCaret().freeze();
         // Update the changed tier data in the doc
@@ -1588,7 +1630,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         }
 
         for(var changeListener:this.tierChangeListeners) {
-            changeListener.tierChanged(changedTier.getName(), editorEvent.data().oldValue(), editorEvent.data().newValue());
+            changeListener.tierChanged(elementIndex, changedTier.getName(), editorEvent.data().oldValue(), editorEvent.data().newValue());
         }
 
         if (changedTier.isUnvalidated()) {
@@ -1598,6 +1640,50 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             } catch (BadLocationException e) {
                 LogUtil.warning(e);
             }
+        }
+    }
+
+    private void onCommentChanged(EditorEvent<EditorEventType.CommentChangedData> editorEvent) {
+        final Comment comment = editorEvent.data().comment();
+
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
+        boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
+        getTranscriptEditorCaret().freeze();
+        // Update the changed tier data in the doc
+        getTranscriptDocument().onCommentChanged(editorEvent.data().comment());
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        getTranscriptDocument().setBypassDocumentFilter(true);
+        getTranscriptEditorCaret().setDot(newDot, true);
+        getTranscriptDocument().setBypassDocumentFilter(false);
+        if (!wasCaretFrozen) {
+            getTranscriptEditorCaret().unfreeze();
+        }
+
+        for(var changeListener:this.tierChangeListeners) {
+            changeListener.tierChanged(editorEvent.data().elementIndex(), comment.getType().name(),
+                    editorEvent.data().oldComment(), editorEvent.data().newComment());
+        }
+    }
+
+    private void onGemChanged(EditorEvent<EditorEventType.GemChangedData> editorEvent) {
+        final Gem gem = editorEvent.data().gem();
+
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
+        boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
+        getTranscriptEditorCaret().freeze();
+        // Update the changed tier data in the doc
+        getTranscriptDocument().onGemChanged(editorEvent.data().gem());
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        getTranscriptDocument().setBypassDocumentFilter(true);
+        getTranscriptEditorCaret().setDot(newDot, true);
+        getTranscriptDocument().setBypassDocumentFilter(false);
+        if (!wasCaretFrozen) {
+            getTranscriptEditorCaret().unfreeze();
+        }
+
+        for(var changeListener:this.tierChangeListeners) {
+            changeListener.tierChanged(editorEvent.data().elementIndex(), gem.getType().name() + " Gem",
+                    editorEvent.data().oldLabel(), editorEvent.data().newLabel());
         }
     }
 
@@ -1723,15 +1809,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         if (tier.getDeclaredType() == MediaSegment.class) return;
         if (doc.getTierText(tier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
 
-        if(PrefHelper.isDebugMode()) {
-            LogUtil.info("Changing tier data for " + tier.getName() + " to " + newData);
-        }
-
-//        SwingUtilities.invokeLater(() -> {
         TierEdit<?> edit = new TierEdit(getSession(), eventManager, dataModel.getTranscriber(), record, tier, dummy.getValue());
         edit.setValueAdjusting(false);
         getUndoSupport().postEdit(edit);
-//        });
     }
 
     /**
@@ -2359,7 +2439,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 TranscriptEditor.this.paste();
                 TranscriptEditor.this.addTierChangeListener(new TranscriptEditorTierChangeListener() {
                     @Override
-                    public void tierChanged(String tierName, Object oldValue, Object newValue) {
+                    public void tierChanged(int elementIndex, String tierName, Object oldValue, Object newValue) {
                         SwingUtilities.invokeLater(() -> {
                             if(currentLocation.tier() != null && !currentLocation.tier().equals(tierName)) return;
                             if(markers.size() == 1) {

@@ -34,7 +34,7 @@ public class IPCCalculator {
         int D = 0;
         explanation.append("\n\tD=");
         for (IPAElement t : ipa) {
-            if (t.featureSet().hasFeature("dorsal")) {
+            if (t.getFeatureSet().hasFeature("dorsal")) {
                 if (D > 0) {
                     explanation.append(" +");
                 }
@@ -48,7 +48,7 @@ public class IPCCalculator {
         int M = 0;
         explanation.append("\n\tM=");
         for (IPAElement t : ipa) {
-            if (t.featureSet().hasFeature("fricative") || t.featureSet().hasFeature("affricate") || t.featureSet().hasFeature("liquid")) {
+            if (t.getFeatureSet().hasFeature("fricative") || t.getFeatureSet().hasFeature("affricate") || t.getFeatureSet().hasFeature("liquid")) {
                 if (M > 0) {
                     explanation.append(" +");
                 }
@@ -62,7 +62,7 @@ public class IPCCalculator {
         int V = 0;
         explanation.append("\n\tV=");
         for (IPAElement t : ipa) {
-            if (t.featureSet().hasFeature("v") && t.featureSet().hasFeature("rhotic")) {
+            if (t.getFeatureSet().hasFeature("v") && t.getFeatureSet().hasFeature("rhotic")) {
                 if (V > 0) {
                     explanation.append(" +");
                 }
@@ -73,7 +73,7 @@ public class IPCCalculator {
         explanation.append(" = " + V);
 
         // Word shape (S)
-        int S = ipa.elementAt(ipa.length() - 1).featureSet().hasFeature("consonant") ? 1 : 0;
+        int S = ipa.elementAt(ipa.length() - 1).getFeatureSet().hasFeature("consonant") ? 1 : 0;
         explanation.append("\n\tS=");
         if (S > 0) {
             explanation.append(" ends with consonant");
@@ -105,19 +105,19 @@ public class IPCCalculator {
         StringBuilder placeVariegationExplanation = new StringBuilder();
         for (int i = 0; i < ipa.audiblePhones().length(); i++) {
             IPAElement t = ipa.audiblePhones().elementAt(i);
-            if (t.featureSet().hasFeature("consonant")) {
+            if (t.getFeatureSet().hasFeature("consonant")) {
                 if (lastWasConsonant) {
                     // cluster reset our place
                     prevPlace = null;
                 } else {
                     if (i < ipa.audiblePhones().length() - 1) {
                         IPAElement next = ipa.audiblePhones().elementAt(i + 1);
-                        if (next.featureSet().hasFeature("consonant")) {
+                        if (next.getFeatureSet().hasFeature("consonant")) {
                             prevPlace = null;
                             lastWasConsonant = false;
                             ++i; // move past next non-consonant
                         } else {
-                            FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.featureSet());
+                            FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.getFeatureSet());
                             if (prevPlace != null) {
                                 if (!prevPlace.equals(currentPlace)) {
                                     placeVariegationExplanation.append(" -> " + t.toString());
@@ -135,6 +135,24 @@ public class IPCCalculator {
                             placeVariegationExplanation.append(" " + t.toString());
                             placeVariegationExplanation.append(prevPlace.toString());
                         }
+                    } else {
+                        FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), t.getFeatureSet());
+                        if (prevPlace != null) {
+                            if (!prevPlace.equals(currentPlace)) {
+                                placeVariegationExplanation.append(" -> " + t.toString());
+                                placeVariegationExplanation.append(currentPlace.toString());
+
+                                if (P > 0) {
+                                    explanation.append(" +");
+                                }
+                                explanation.append(placeVariegationExplanation.toString());
+                                P++;
+                            }
+                        }
+                        prevPlace = currentPlace;
+                        placeVariegationExplanation.setLength(0);
+                        placeVariegationExplanation.append(" " + t.toString());
+                        placeVariegationExplanation.append(prevPlace.toString());
                     }
                 }
                 lastWasConsonant = true;
@@ -169,8 +187,8 @@ public class IPCCalculator {
             // if place variegation is present, increment T
             prevPlace = null;
             for (var ele : matcher.group()) {
-                if (ele.featureSet().hasFeature("consonant")) {
-                    FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), ele.featureSet());
+                if (ele.getFeatureSet().hasFeature("consonant")) {
+                    FeatureSet currentPlace = FeatureSet.intersect(PhoneDimension.PLACE.getPrimaryFeatures(), ele.getFeatureSet());
                     if (prevPlace != null) {
                         if (!prevPlace.equals(currentPlace)) {
                             if (T > 0) {
@@ -182,24 +200,6 @@ public class IPCCalculator {
                         }
                     }
                     prevPlace = currentPlace;
-                }
-            }
-
-            // if cluster is heterosyllabic, increment T
-            int lastSyllableIdx = -1;
-            for (var ele : matcher.group()) {
-                if (ele.featureSet().hasFeature("consonant")) {
-                    int currentSyllableIdx = ipa.syllableIndexOf(ele);
-                    if (lastSyllableIdx == -1) {
-                        lastSyllableIdx = currentSyllableIdx;
-                    } else if (lastSyllableIdx != currentSyllableIdx) {
-                        if (T > 0) {
-                            clusterTypeExplanation.append(" +");
-                        }
-                        clusterTypeExplanation.append(" " + (new IPATranscript(matcher.group())).toString() + " (heterosyllabic)");
-                        T++;
-                        break;
-                    }
                 }
             }
         }
