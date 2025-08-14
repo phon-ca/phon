@@ -22,6 +22,14 @@ import ca.phon.ipa.features.*;
  */
 public abstract class Sandhi extends IPAElement {
 
+    public Sandhi() {
+        this(null, null);
+    }
+
+    public Sandhi(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo);
+    }
+
 	@Override
 	protected FeatureSet _getFeatureSet() {
 		final String text = getText();

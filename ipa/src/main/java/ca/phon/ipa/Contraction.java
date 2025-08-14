@@ -15,13 +15,28 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.features.FeatureSet;
+
+/**
+ * An IPAElement that represents a contraction in an IPA transcription.
+ *
+ */
 public class Contraction extends Sandhi {
 
-	Contraction() {}
+    private final static char CONTRACTION_CHAR = '\u203f';
+
+	public Contraction() {
+        this(null, null);
+    }
+
+    public Contraction(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo);
+    }
+
 	
 	@Override
 	public String getText() {
-		return "\u203f";
+        return String.valueOf(CONTRACTION_CHAR);
 	}
 
 }
