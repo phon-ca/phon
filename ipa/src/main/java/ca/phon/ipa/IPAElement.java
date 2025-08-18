@@ -225,24 +225,6 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 		return extensionSupport;
 	}
 	
-	/*
-	 * XXX These methods cause issues if implemented.  Need to track down what code
-	 * uses equals in a non-content way
-	@Override
-	public int hashCode() {
-		String hashTxt = getText() + ":" + getScType().getIdChar();
-		return hashTxt.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object ele) {
-		if(!(ele instanceof IPAElement)) return false;
-		String s1 = getText() + ":" + getScType().getIdChar();
-		String s2 = ((IPAElement)ele).getText() + ":" + ((IPAElement)ele).getScType().getIdChar();
-		return s1.contentEquals(s2);
-	}
-	*/
-	
 	public boolean contentEquals(IPAElement ele) {
 		String s1 = getText() + ":" + getScType().getIdChar();
 		String s2 = ((IPAElement)ele).getText() + ":" + ((IPAElement)ele).getScType().getIdChar();
