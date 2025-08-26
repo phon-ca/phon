@@ -15,6 +15,9 @@
  */
 package ca.phon.ipa;
 
+/**
+ * An interface for IPA elements that can have combining diacritics.
+ */
 public interface CombiningDiacritics {
 	
 	public Diacritic[] getCombiningDiacritics();

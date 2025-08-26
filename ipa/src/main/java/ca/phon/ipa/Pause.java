@@ -19,7 +19,13 @@ import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.features.FeatureSet;
 
 /**
- * Represents a pause in an IPA transcription.
+ * Represents a pause in an IPA transcription between words.  These
+ * can be simple pauses, long pauses, very long pauses, or numeric
+ * pauses (in seconds). The syntax for these pauses are:
+ * - simple pause: (.)
+ * - long pause: (..)
+ * - very long pause: (...)
+ * - numeric pause: (x.xx)
  * 
  */
 public final class Pause extends IPAElement {
@@ -32,10 +38,15 @@ public final class Pause extends IPAElement {
 	private final float length;
 
 	Pause(PauseLength type) {
-		this(type, 0.0f);
+		this(type, 0.0f, null, null);
 	}
 
-	Pause(PauseLength type, float seconds) {
+    Pause(float length) {
+        this(PauseLength.NUMERIC, length, null, null);
+    }
+
+	Pause(PauseLength type, float seconds, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
 		this.type = type;
 		this.length = seconds;
 	}

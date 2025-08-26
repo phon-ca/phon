@@ -10,7 +10,7 @@ public final class PhoneticGroupMarker extends IPAElement {
     private final PhoneticGroupMarkerType type;
 
     public PhoneticGroupMarker(PhoneticGroupMarkerType type) {
-        super();
+        super(null, new SyllableInfo(SyllableConstituentType.WORDBOUNDARYMARKER));
         this.type = type;
     }
 

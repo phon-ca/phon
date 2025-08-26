@@ -26,7 +26,7 @@ public class IntonationGroup extends IPAElement {
 	/**
 	 * group type
 	 */
-	private IntonationGroupType type;
+	private final IntonationGroupType type;
 	
 	/**
 	 * Constructor
@@ -34,10 +34,13 @@ public class IntonationGroup extends IPAElement {
 	 * @param type
 	 */
 	public IntonationGroup(IntonationGroupType type) {
-		this.type = type;
-		
-		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
+		this(type, null, null);
 	}
+
+    public IntonationGroup(IntonationGroupType type, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
+        this.type = type;
+    }
 	
 	public IntonationGroupType getType() {
 		return this.type;

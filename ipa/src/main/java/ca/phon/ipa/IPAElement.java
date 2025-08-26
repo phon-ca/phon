@@ -27,8 +27,8 @@ import java.util.Set;
  * {@link IPAElementFactory}.</p>
  */
 public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
-	
-	/**
+
+    /**
 	 * Forced {@link FeatureSet}.  If not <code>null</code>, this
 	 * set of features will be returned by {@link #featureSet()}
 	 */
@@ -103,7 +103,7 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	 * @return the syllable constituent type for the phone (if assigned)
 	 */
 	public SyllableConstituentType constituentType() {
-		return syllableInfo.constituentType();
+		return syllableInfo != null ? syllableInfo.constituentType() : SyllableConstituentType.UNKNOWN;
 	}
 
 	/**
@@ -112,7 +112,7 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	 * @return the syllable stress for the phone
 	 */
 	public SyllableStress stress() {
-		return syllableInfo.stress();
+		return syllableInfo != null ? syllableInfo.stress() : SyllableStress.NoStress;
 	}
 
 	//

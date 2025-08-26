@@ -168,11 +168,11 @@ public class IPAElementFactory {
 	 * @return
 	 */
 	public Diacritic createDiacritic(Diacritic[] prefix, Character dia, Diacritic[] suffix) {
-		return new Diacritic(prefix, dia, suffix);
+		return new Diacritic(prefix, dia, suffix, null, null);
 	}
 
 	public Diacritic copyDiacritic(Diacritic dia) {
-		return new Diacritic(dia.getPrefixDiacritics(), dia.getCharacter(), dia.getSuffixDiacritics());
+		return new Diacritic(dia.getPrefixDiacritics(), dia.getCharacter(), dia.getSuffixDiacritics(), dia.overrideFeatureSet(), dia.syllableInfo());
 	}
 	
 	/**

@@ -28,11 +28,11 @@ public class Diacritic extends IPAElement {
 	/**
 	 * The diacritic character
 	 */
-	private Character character;
+	private final Character character;
 	
-	private Diacritic[] prefixDiacritics = new Diacritic[0];
+	private final Diacritic[] prefixDiacritics;
 	
-	private Diacritic[] suffixDiacritics = new Diacritic[0];
+	private final Diacritic[] suffixDiacritics;
 	
 	/**
 	 * Constructor
@@ -40,19 +40,14 @@ public class Diacritic extends IPAElement {
 	 * @param ch
 	 */
 	Diacritic(Character ch) {
-		super();
-		setCharacter(ch);
+		this(new Diacritic[0], ch, new Diacritic[0], null, null);
 	}
 	
-	Diacritic(Diacritic[] prefix, Character ch, Diacritic[] suffix) {
-		super();
-		setCharacter(ch);
-		setPrefixDiacritics(prefix);
-		setSuffixDiacritics(suffix);
-	}
-	
-	public void setCharacter(Character ch) {
-		this.character = ch;
+	Diacritic(Diacritic[] prefix, Character ch, Diacritic[] suffix, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo);
+        this.character = ch;
+        this.prefixDiacritics = prefix;
+        this.suffixDiacritics = suffix;
 	}
 	
 	public Character getCharacter() {
@@ -63,18 +58,10 @@ public class Diacritic extends IPAElement {
 		return prefixDiacritics;
 	}
 	
-	public void setPrefixDiacritics(Diacritic[] prefixDiacritics) {
-		this.prefixDiacritics = prefixDiacritics;
-	}
-	
 	public Diacritic[] getSuffixDiacritics() {
 		return suffixDiacritics;
 	}
 
-	public void setSuffixDiacritics(Diacritic[] suffixDiacritics) {
-		this.suffixDiacritics = suffixDiacritics;
-	}
-	
 	@Override
 	protected FeatureSet _getFeatureSet() {
 		FeatureSet fs = getFeatures(character);

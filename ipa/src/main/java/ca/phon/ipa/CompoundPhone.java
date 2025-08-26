@@ -61,7 +61,7 @@ public final class CompoundPhone extends Phone {
      * @param syllableInfo
      */
     CompoundPhone(Phone firstPhone, Phone secondPhone, Character ligature, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-        super(overrideFeatureSet, syllableInfo);
+        super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo());
         this.firstPhone = firstPhone;
         this.secondPhone = secondPhone;
         this.ligature = ligature;

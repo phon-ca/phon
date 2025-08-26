@@ -33,7 +33,7 @@ public class PhoneticProfile {
 	public PhoneticProfile() {
 		super();
 
-		this.ele = new IPAElement() {
+		this.ele = new IPAElement(null, new SyllableInfo()) {
 
 			@Override
 			public String getText() {

@@ -20,19 +20,22 @@ import ca.phon.ipa.features.FeatureSet;
 import java.util.*;
 
 /**
- * Phonetic dimensions
+ * A single dimension in the PhoneticProfile of a Phone.  For consonants, these
+ * are voicing, place, and manner.  For vowels, these are height, backness,
+ * and roundness.  Each dimension has a weight used for alignment as well as a
+ * set of primary and a set of terminal features.
  *
  */
 public enum PhoneDimension {
 	PLACE(2, new String[] {
-			"labial,coronal,dorsal,guttural",
-			"labiodental,bilabial,anterior,posterior,interdental,alveolar,alveopalatal,palatal,retroflex,velar,uvular,pharyngeal,laryngeal,distributed,grooved"}
+            "labial, coronal, dorsal, lingual, anterior, posterior, guttural",
+            "bilabial, labiodental, interdental, alveolar, alveopalatal, retroflex, palatal, velar, uvular, pharyngeal, laryngeal, epiglottal, dental, apical, laminal, distributed, grooved, subapical, velopharyngeal"}
 		),
 	MANNER(2, new String[]{
-			"obstruent,approximant,consonant,vowel",
-			"stop,fricative,affricate,oral,nasal,sonorant,lateral,rhotic,flap,trill,glide"}
+            "obstruent, nasal, liquid, glide, approximant, continuant, sonorant",
+            "stop, affricate, fricative, nasal, oral, lateral, rhotic, click, implosive, flap, trill, ejective, prenasalized, strident, quasiresonant, semiresonant, raspberry, transition, narealfricative, percussive"}
 		),
-	VOICING(1, new String[]{ "voiced,voiceless,aspirated,plain" }),
+	VOICING(1, new String[]{ "voiced,voiceless", "aspirated, plain, unreleased, weaklyaspirated, unaspirated" }),
 
 	/* Vowels */
 	HEIGHT(3, new String[]{ "high,mid,low" }),
@@ -40,11 +43,11 @@ public enum PhoneDimension {
 	TENSENESS(2, new String[]{ "tense,lax" }),
 	ROUNDING(1, new String[]{ "rounded,unrounded" });
 
-	private int weight;
+	private final int weight;
 
-	private List<FeatureSet> featureSets;
+	private final List<FeatureSet> featureSets;
 
-	private PhoneDimension(int weight, String[] featuresLists) {
+	PhoneDimension(int weight, String[] featuresLists) {
 		this.weight = weight;
 
 		this.featureSets = new ArrayList<>();
@@ -65,7 +68,7 @@ public enum PhoneDimension {
 	}
 
 	public FeatureSet getPrimaryFeatures() {
-		return featureSets.size() > 0 ? featureSets.get(0) : new FeatureSet();
+		return !featureSets.isEmpty() ? featureSets.getFirst() : new FeatureSet();
 	}
 
 	public FeatureSet getTerminalFeatures() {

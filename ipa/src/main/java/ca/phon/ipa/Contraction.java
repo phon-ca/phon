@@ -30,13 +30,13 @@ public class Contraction extends Sandhi {
     }
 
     public Contraction(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-        super(overrideFeatureSet, syllableInfo);
+        super(overrideFeatureSet, syllableInfo != null ? syllableInfo :
+                new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
     }
 
-	
 	@Override
 	public String getText() {
-        return String.valueOf(CONTRACTION_CHAR);
+        return Character.toString(CONTRACTION_CHAR);
 	}
 
 }

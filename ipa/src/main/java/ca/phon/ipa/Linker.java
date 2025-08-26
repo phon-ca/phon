@@ -15,15 +15,27 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.features.FeatureSet;
+
+/**
+ * An IPAElement that represents a linker in an IPA transcription.  This is a character that
+ * ties syllables together.
+ */
 public class Linker extends Sandhi {
 	
 	public final static Character LINKER_CHAR = '\u2040';
 
-	Linker() {}
+	Linker() {
+        this(null, null);
+    }
+
+    public Linker(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.UNKNOWN));
+    }
 	
 	@Override
 	public String getText() {
-		return new StringBuilder().append(LINKER_CHAR).toString();
+		return Character.toString(LINKER_CHAR);
 	}
 
 }

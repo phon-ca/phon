@@ -16,7 +16,6 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.parser.IPATokenType;
 
 /**
  * A special type of IPAElement which represents a
@@ -26,23 +25,32 @@ import ca.phon.ipa.parser.IPATokenType;
  */
 public class PhonexMatcherReference extends IPAElement implements PrefixDiacritics, SuffixDiacritics, CombiningDiacritics {
 	
-	private Integer groupIndex;
+	private final Integer groupIndex;
 	
-	private String groupName;
+	private final String groupName;
 	
-	private Diacritic[] prefixDiacritics = new Diacritic[0];
+	private final Diacritic[] prefixDiacritics;
 	
-	private Diacritic[] suffixDiacritics = new Diacritic[0];
+	private final Diacritic[] suffixDiacritics;
 	
-	private Diacritic[] combiningDiacritics = new Diacritic[0];
+	private final Diacritic[] combiningDiacritics;
 	
 	public PhonexMatcherReference(Integer groupIndex) {
-		this.groupIndex = groupIndex;
+		this(null, groupIndex, null, null, null);
 	}
 	
 	public PhonexMatcherReference(String groupName) {
-		this.groupName = groupName;
+		this(groupName, null, null, null, null);
 	}
+
+    public PhonexMatcherReference(String groupName, Integer groupIndex, Diacritic[] prefixDiacritics, Diacritic[] combiningDiacritics, Diacritic[] suffixDiacritics) {
+        super(null, null);
+        this.groupName = groupName;
+        this.groupIndex = groupIndex;
+        this.prefixDiacritics = (prefixDiacritics == null ? new Diacritic[0] : prefixDiacritics);
+        this.combiningDiacritics = (combiningDiacritics == null ? new Diacritic[0] : combiningDiacritics);
+        this.suffixDiacritics = (suffixDiacritics == null ? new Diacritic[0] : suffixDiacritics);
+    }
 	
 	public int getGroupIndex() {
 		return (groupIndex == null ? -1 : groupIndex);
@@ -58,18 +66,9 @@ public class PhonexMatcherReference extends IPAElement implements PrefixDiacriti
 	}
 
 	/**
-	 * Set the prefix diacritics for this Phone.
-	 * 
-	 * @param prefixDiacritics
-	 */
-	public void setPrefixDiacritics(Diacritic[] prefixDiacritics) {
-		this.prefixDiacritics = prefixDiacritics;
-	}
-	
-	/**
 	 * Get the string representing this phone's prefix.
 	 * 
-	 * @return
+	 * @return the prefix string
 	 */
 	public String getPrefix() {
 		final StringBuilder sb = new StringBuilder();
@@ -90,23 +89,6 @@ public class PhonexMatcherReference extends IPAElement implements PrefixDiacriti
 	}
 
 	/**
-	 * <p>Set the combining diacritics for this phone.  Each character
-	 * must have a the {@link IPATokenType#COMBINING_DIACRITIC} token
-	 * type.</p>
-	 * 
-	 * @param combiningDiacritics
-	 * @throws IllegalArgumentException if one of the given diacritics
-	 *  is not a combining diacritic
-	 */
-	public void setCombiningDiacritics(Diacritic[] combiningDiacritics) {
-		for(Diacritic dc:combiningDiacritics) {
-			if(dc.getType() != DiacriticType.COMBINING)
-				throw new IllegalArgumentException();
-		}
-		this.combiningDiacritics = combiningDiacritics;
-	}
-	
-	/**
 	 * Get the string for the combining diacritic portion of the 
 	 * phone.
 	 * 
@@ -125,15 +107,6 @@ public class PhonexMatcherReference extends IPAElement implements PrefixDiacriti
 		return suffixDiacritics;
 	}
 
-	/**
-	 * Set the prefix diacritics for this Phone.
-	 * 
-	 * @param prefixDiacritics
-	 */
-	public void setSuffixDiacritics(Diacritic[] suffixDiacritics) {
-		this.suffixDiacritics = suffixDiacritics;
-	}
-	
 	/**
 	 * Get the string for this phone's suffix.
 	 * 
@@ -157,12 +130,11 @@ public class PhonexMatcherReference extends IPAElement implements PrefixDiacriti
 	public String getText() {
 		var image = "\\" +
 				(groupName != null ? "{" + groupName + "}" : groupIndex);
-		final StringBuilder sb = new StringBuilder();
-		sb.append(getPrefix());
-		sb.append(image);
-		sb.append(getCombining());
-		sb.append(getSuffix());
-		return sb.toString();
+        String sb = getPrefix() +
+                image +
+                getCombining() +
+                getSuffix();
+		return sb;
 	}
 
 }

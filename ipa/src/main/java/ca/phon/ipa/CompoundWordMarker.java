@@ -19,7 +19,7 @@ import ca.phon.ipa.features.FeatureSet;
 
 /**
  * An IPAElement that represents a compound word marker in an IPA transcription.
- *
+ * Represents either a '+' or '~' character.
  */
 public class CompoundWordMarker extends IPAElement {
 
@@ -34,7 +34,7 @@ public class CompoundWordMarker extends IPAElement {
 	}
 
 	public CompoundWordMarker(char cwm, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-		super(overrideFeatureSet, syllableInfo);
+		super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
 		if(cwm != '+' && cwm != '~')
 			throw new IllegalArgumentException("Invalid compound word marker '" + cwm + "'");
 		this.cwmChar = cwm;

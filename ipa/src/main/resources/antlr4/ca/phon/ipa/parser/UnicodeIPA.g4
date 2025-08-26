@@ -60,6 +60,7 @@ ipa_element
 	| sandhi
 	| intra_word_pause
 	| phonex_matcher_ref
+	| tone_melody
 	| alignment
 	;
 	
@@ -95,8 +96,9 @@ suffix_section
 	| phone_length? suffix_diacritic* tone_number?
 	;
 
-tone_number
+tone_melody
 	:   TONE_NUMBER+
+	|   TONE_ERROR
 	;
 
 suffix_diacritic
@@ -174,4 +176,8 @@ INT
 
 COLON
     :   ':'
+    ;
+
+TONE_ERROR
+    :   '\u02e3\u02e3'
     ;

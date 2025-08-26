@@ -33,7 +33,7 @@ public class AlignmentMarker extends IPAElement {
 	}
 
 	public AlignmentMarker(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-		super(overrideFeatureSet, syllableInfo);
+		super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.WORDBOUNDARYMARKER));
 	}
 
 	@Override

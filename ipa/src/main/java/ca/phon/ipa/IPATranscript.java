@@ -43,8 +43,6 @@ import java.util.logging.Logger;
  */
 public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable, Comparable<IPATranscript> {
 
-	private static final long serialVersionUID = 8942864962427274326L;
-
 	private final ExtensionSupport extSupport = new ExtensionSupport(IPATranscript.class, this);
 
 	private final IPAElement[] transcription;
@@ -633,15 +631,36 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	/**
-	 * Reset syllabification for the transcript.
+	 * Return a new transcript with syllabification information
+     * reset to UNKNOWN.
 	 *
 	 */
 	public void resetSyllabification() {
-		final PunctuationFilter filter = new PunctuationFilter();
-		accept(filter);
-		for(IPAElement ele:filter.getIPATranscript()) {
-			ele.setScType(SyllableConstituentType.UNKNOWN);
-		}
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		for(IPAElement ele:this) {
+            if(ele instanceof Phone) {
+                final Phone p = (Phone)ele;
+                final Phone np = new Phone(
+                        p.getPrefixDiacritics(),
+                        p.getBasePhone(),
+                        p.getCombiningDiacritics(),
+                        p.getSuffixDiacritics(),
+                        p.overrideFeatureSet(),
+                        new SyllableInfo());
+                builder.append(np);
+            } else if(ele instanceof CompoundPhone) {
+                final CompoundPhone cp = (CompoundPhone)ele;
+                final Phone firstP = cp.getFirstPhone();
+                final Phone secondP = cp.getSecondPhone();
+                final CompoundPhone ncp = new CompoundPhone(
+                        firstP, secondP, cp.getLigature(),
+                        cp.overrideFeatureSet(),
+                        new SyllableInfo());
+                builder.append(ncp);
+            } else {
+                builder.append(ele);
+            }
+        }
 	}
 
 	/**

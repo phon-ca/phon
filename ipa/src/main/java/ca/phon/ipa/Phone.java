@@ -17,7 +17,6 @@ package ca.phon.ipa;
 
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
-import ca.phon.syllable.SyllabificationInfo;
 
 import java.util.*;
 
@@ -41,19 +40,6 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	private final Diacritic[] combiningDiacritics;
 	
 	private final Character basePhone;
-
-	public Phone() {
-		this(null, new SyllableInfo());
-	}
-
-	/**
-	 * Create a new empty phone object.
-	 * 
-	 */
-	public Phone(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-		super(overrideFeatureSet, syllableInfo);
-		this.basePhone = null;
-	}
 
 	/**
 	 * Create a new Phone for the given base phone.
@@ -86,7 +72,7 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	Phone(Diacritic[] prefixDiacritics, Character basePhone,
 			Diacritic[] combiningDiacritics,
 			Diacritic[] suffixDiacritics, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-		super(overrideFeatureSet, syllableInfo);
+		super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.UNKNOWN));
 		this.prefixDiacritics = prefixDiacritics != null ? prefixDiacritics : new Diacritic[0];
 		this.basePhone = basePhone;
 		this.combiningDiacritics = combiningDiacritics != null ? combiningDiacritics : new Diacritic[0];
@@ -166,21 +152,6 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 		return combiningDiacritics;
 	}
 
-	/**
-	 * Get the tone diacritics for this phone.
-	 * 
-	 * @return tone diacritics
-	 */
-	public Diacritic[] getToneNumberDiacritics() {
-		final List<Diacritic> retVal = new ArrayList<Diacritic>();
-		for(Diacritic dia:getSuffixDiacritics()) {
-			if(dia.getType() == DiacriticType.TONE_NUMBER) {
-				retVal.add(dia);
-			}
-		}
-		return retVal.toArray(new Diacritic[0]);
-	}
-	
 	public Diacritic[] getLengthDiacritics() {
 		final List<Diacritic> retVal = new ArrayList<Diacritic>();
 		for(Diacritic dia:getSuffixDiacritics()) {

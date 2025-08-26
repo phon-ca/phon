@@ -17,12 +17,21 @@ package ca.phon.ipa;
 
 import ca.phon.ipa.features.FeatureSet;
 
+/**
+ * Represents an intra-word pause.  A short pause within a word
+ * represented by the caret character '^'.
+ *
+ */
 public final class IntraWordPause extends IPAElement {
 	
 	public static final Character INTRA_WORD_PAUSE_CHAR = '^';
-	
-	public IntraWordPause() {
-		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
+
+    public IntraWordPause() {
+        this(null, null);
+    }
+
+	public IntraWordPause(FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
 	}
 
 	@Override
@@ -32,7 +41,7 @@ public final class IntraWordPause extends IPAElement {
 
 	@Override
 	public String getText() {
-		return new StringBuilder().append(INTRA_WORD_PAUSE_CHAR).toString();
+		return String.valueOf(INTRA_WORD_PAUSE_CHAR);
 	}
 
 }
