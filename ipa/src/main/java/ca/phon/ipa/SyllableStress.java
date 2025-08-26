@@ -19,8 +19,7 @@ package ca.phon.ipa;
 import ca.phon.extensions.Extension;
 
 /**
- * Represents syllable stress.
- * @author ghedlund
+ * Represents syllable stress, part of {@link SyllableInfo}
  *
  */
 @Extension(IPATranscript.class)
@@ -30,9 +29,9 @@ public enum SyllableStress {
 	AnyStress("S", (char)0),
 	NoStress("U", (char)0);
 	
-	private String idString;
+	private final String idString;
 	
-	private char ipa;
+	private final char ipa;
 	
 	private SyllableStress(String s, char ipa) {
 		idString = s;

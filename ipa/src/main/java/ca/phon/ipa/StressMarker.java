@@ -26,7 +26,7 @@ public final class StressMarker extends IPAElement {
 	/**
 	 * Stress type
 	 */
-	private StressType type;
+	private final StressType type;
 	
 	/**
 	 * Constructor
@@ -34,9 +34,8 @@ public final class StressMarker extends IPAElement {
 	 * @param stress
 	 */
 	StressMarker(StressType stress) {
+        super(null, new SyllableInfo(SyllableConstituentType.SYLLABLESTRESSMARKER));
 		this.type = stress;
-		
-		setScType(SyllableConstituentType.SYLLABLESTRESSMARKER);
 	}
 
 	/**
@@ -46,15 +45,6 @@ public final class StressMarker extends IPAElement {
 	 */
 	public StressType getType() {
 		return this.type;
-	}
-	
-	/**
-	 * Set the type
-	 * 
-	 * @param type
-	 */
-	public void setType(StressType type) {
-		this.type = type;
 	}
 	
 	@Override

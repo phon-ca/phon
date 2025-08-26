@@ -31,7 +31,8 @@ public enum SyllableConstituentType {
 	UNKNOWN("UK", "U"),
 	SYLLABLEBOUNDARYMARKER("SB", "B"),
 	SYLLABLESTRESSMARKER("SS", "S"),
-	WORDBOUNDARYMARKER("WB", "W");
+	WORDBOUNDARYMARKER("WB", "W"),
+    TONENUMBER("TN", "T");
 	
 	private String shortHand;
 	
