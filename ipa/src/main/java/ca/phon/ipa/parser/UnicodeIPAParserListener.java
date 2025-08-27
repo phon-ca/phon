@@ -7,7 +7,6 @@ import ca.phon.ipa.parser.UnicodeIPAParser.*;
 import ca.phon.ipa.parser.exceptions.HangingLigatureException;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
-import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.ipa.SyllableConstituentType;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -24,7 +23,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     private final List<Diacritic> prefixCache = new ArrayList<>();
 
     private final List<Diacritic> suffixCache = new ArrayList<>();
-    private List<IPAParserException> parserErrors = new ArrayList<>();
+    private final List<IPAParserException> parserErrors = new ArrayList<>();
 
     public IPATranscriptBuilder getBuilder() {
         return this.builder;
@@ -99,7 +98,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     public void exitSinglePhone(SinglePhoneContext ctx) {
         // parse error
         if (ctx.base_phone() == null
-                || ctx.base_phone().getText().length() == 0) return;
+                || ctx.base_phone().getText().isEmpty()) return;
 
         Character basePhone = ctx.base_phone().getText().charAt(0);
         Diacritic[] combining = null;
@@ -321,22 +320,17 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     public void exitGroupNumberRef(GroupNumberRefContext ctx) {
         Integer groupIndex = Integer.parseInt(ctx.INT().getText());
 
-        Diacritic[] combining = null;
-
+        Diacritic[] combining = new Diacritic[0];
         if (ctx.COMBINING_DIACRITIC() != null) {
             combining = ctx.COMBINING_DIACRITIC().stream()
                     .map(tn -> factory.createDiacritic(tn.getText().charAt(0)))
                     .collect(Collectors.toList())
                     .toArray(Diacritic[]::new);
         }
+        final Diacritic[] prefixDias = prefixCache.toArray(new Diacritic[0]);
+        final Diacritic[] suffixDias = suffixCache.toArray(new Diacritic[0]);
 
-        PhonexMatcherReference phonexMatcherReference = factory.createPhonexMatcherReference(groupIndex);
-        if (combining != null)
-            phonexMatcherReference.setCombiningDiacritics(combining);
-
-        phonexMatcherReference.setPrefixDiacritics(prefixCache.toArray(new Diacritic[0]));
-        phonexMatcherReference.setSuffixDiacritics(suffixCache.toArray(new Diacritic[0]));
-
+        final PhonexMatcherReference phonexMatcherReference = factory.createPhonexMatcherReference(null, groupIndex, prefixDias, combining, suffixDias);
         builder.append(phonexMatcherReference);
 
         prefixCache.clear();
@@ -347,22 +341,17 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     public void exitGroupNameRef(GroupNameRefContext ctx) {
         String groupName = ctx.GROUP_NAME().getText().substring(1, ctx.GROUP_NAME().getText().length() - 1);
 
-        Diacritic[] combining = null;
-
+        Diacritic[] combining = new Diacritic[0];
         if (ctx.COMBINING_DIACRITIC() != null) {
             combining = ctx.COMBINING_DIACRITIC().stream()
                     .map(tn -> factory.createDiacritic(tn.getText().charAt(0)))
                     .collect(Collectors.toList())
                     .toArray(Diacritic[]::new);
         }
+        final Diacritic[] prefixDias = prefixCache.toArray(new Diacritic[0]);
+        final Diacritic[] suffixDias = suffixCache.toArray(new Diacritic[0]);
 
-        PhonexMatcherReference phonexMatcherReference = factory.createPhonexMatcherReference(groupName);
-        if (combining != null)
-            phonexMatcherReference.setCombiningDiacritics(combining);
-
-        phonexMatcherReference.setPrefixDiacritics(prefixCache.toArray(new Diacritic[0]));
-        phonexMatcherReference.setSuffixDiacritics(suffixCache.toArray(new Diacritic[0]));
-
+        final PhonexMatcherReference phonexMatcherReference = factory.createPhonexMatcherReference(groupName, -1, prefixDias, combining, suffixDias);
         builder.append(phonexMatcherReference);
 
         prefixCache.clear();
@@ -373,10 +362,11 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     public void exitSctype(SctypeContext ctx) {
         SyllableConstituentType scType = SyllableConstituentType.fromString(ctx.getText().charAt(1) + "");
         if (builder.size() > 0) {
-            builder.last().setScType(scType);
-            if (scType == SyllableConstituentType.NUCLEUS && ctx.getText().matches(":[dD]")) {
-                SyllabificationInfo sinfo = builder.last().getExtension(SyllabificationInfo.class);
-                sinfo.setDiphthongMember(true);
+            if(builder.last() instanceof Phone ph) {
+                final boolean isDiphthong = (scType == SyllableConstituentType.NUCLEUS && ctx.getText().matches(":[dD]"));
+                final Phone clonedPhone = isDiphthong ? factory.clonePhoneAsDiphthong(ph) : factory.clonePhoneWithScType(ph, scType);
+                builder.removeLast();
+                builder.append(clonedPhone);
             }
         }
     }
@@ -427,16 +417,6 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
     @Override
     public void exitWhiteSpace(UnicodeIPAParser.WhiteSpaceContext ctx) {
-        // check for error with syllable boundary at end of previous word
-//		if(builder.size() > 0) {
-//			IPAElement ele = builder.last();
-//			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
-//					|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-//				int idx = ctx.getStop().getCharPositionInLine();
-//				if(ctx.getStop().getType() == CommonToken.EOF) --idx;
-//				throw new StrayDiacriticException("Expecting next syllable", idx);
-//			}
-//		}
         builder.appendWordBoundary();
     }
 
@@ -450,10 +430,17 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     }
 
     @Override
-    public void exitTone_number(UnicodeIPAParser.Tone_numberContext ctx) {
-        for (char ch : ctx.getText().toCharArray()) {
-            Diacritic toneNumberDia = factory.createDiacritic(ch);
-            suffixCache.add(toneNumberDia);
+    public void exitTone_melody(Tone_melodyContext ctx) {
+        try {
+            if (ctx.getText().length() == 1) {
+                builder.append(factory.createToneNumber(ctx.getText().charAt(0)));
+            } else {
+                builder.append(factory.createToneMelody(ctx.getText()));
+            }
+        } catch (IllegalArgumentException e) {
+            IPAParserException ex = new IPAParserException("Invalid tone melody: " + e.getMessage());
+            ex.setPositionInLine(ctx.getStart().getCharPositionInLine());
+            throw ex;
         }
     }
 

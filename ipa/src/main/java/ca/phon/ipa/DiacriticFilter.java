@@ -80,8 +80,7 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
 				.collect(Collectors.toList())
 				.toArray(new Diacritic[0]);
 		
-		Phone p = factory.createPhone(prefix,  base, combining, suffix);
-		factory.copySyllabification(phone, p);
+		Phone p = factory.createPhone(prefix,  base, combining, suffix, phone.overrideFeatureSet(), phone.syllableInfo());
 		builder.append(p);
 	}
 	
@@ -105,10 +104,10 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
 		
 		builder.makeCompoundPhone(phone.getLigature());
 		CompoundPhone cp = (CompoundPhone)builder.last();
-		cp.setPrefixDiacritics(prefix);
-		cp.setSuffixDiacritics(suffix);
-		cp.setCombiningDiacritics(combining);
-		factory.copySyllabification(phone, cp);
+        CompoundPhone withDiacritics =
+                factory.createCompoundPhone(cp.getFirstPhone(), cp.getSecondPhone(), cp.getLigature(), prefix, suffix, combining, phone.overrideFeatureSet(), phone.syllableInfo());
+        builder.removeLast();
+        builder.append(withDiacritics);
 	}
 	
 }

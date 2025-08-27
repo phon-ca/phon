@@ -20,6 +20,10 @@ public class ToneMelody extends IPAElement {
         this.melody = melody;
     }
 
+    public ToneNumber[] toneNumbers() {
+        return melody;
+    }
+
     @Override
     protected FeatureSet _getFeatureSet() {
         FeatureSet retVal = new FeatureSet();

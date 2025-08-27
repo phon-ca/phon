@@ -92,8 +92,8 @@ prefix_diacritic
 	;
 
 suffix_section
-	: suffix_diacritic* phone_length? tone_number?
-	| phone_length? suffix_diacritic* tone_number?
+	: suffix_diacritic* phone_length?
+	| phone_length? suffix_diacritic*
 	;
 
 tone_melody

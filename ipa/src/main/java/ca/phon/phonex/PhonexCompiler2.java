@@ -21,6 +21,7 @@ import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ipa.SyllableStress;
 import ca.phon.ipa.features.*;
 import ca.phon.phonex.plugins.*;
+import ca.phon.phonexg4.PhonexListener;
 import ca.phon.phonexg4.PhonexParser;
 import ca.phon.syllable.phonex.*;
 import ca.phon.util.Tuple;
@@ -37,7 +38,7 @@ import java.util.regex.PatternSyntaxException;
  * This class is used internally by PhonexPattern to compile phonex
  * strings into and FSA which can process IPAElements.
  */
-public class  PhonexCompiler2 implements PhonexListener {
+public class PhonexCompiler2 implements PhonexListener {
 
 	private PhonexFSA primaryFSA;
 

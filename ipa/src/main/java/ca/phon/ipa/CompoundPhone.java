@@ -16,10 +16,6 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.parser.IPATokenType;
-import ca.phon.ipa.parser.IPATokens;
-
-import java.util.ArrayList;
 
 /**
  * A compound Phone consists of two phones connected
@@ -61,7 +57,16 @@ public final class CompoundPhone extends Phone {
      * @param syllableInfo
      */
     CompoundPhone(Phone firstPhone, Phone secondPhone, Character ligature, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
-        super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo());
+        super('\u0000', overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo());
+        this.firstPhone = firstPhone;
+        this.secondPhone = secondPhone;
+        this.ligature = ligature;
+    }
+
+    CompoundPhone(Phone firstPhone, Phone secondPhone, Character ligature,
+                  Diacritic[] prefix, Diacritic[] combining, Diacritic[] suffix,
+                  FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        super(prefix, '\u0000', combining, suffix, overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo());
         this.firstPhone = firstPhone;
         this.secondPhone = secondPhone;
         this.ligature = ligature;
@@ -103,22 +108,6 @@ public final class CompoundPhone extends Phone {
      */
     public Phone getSecondPhone() {
         return this.secondPhone;
-    }
-
-    @Override
-    public Diacritic[] getToneNumberDiacritics() {
-        ArrayList<Diacritic> diacritics = new ArrayList<>();
-
-        Diacritic[] p1Diacritics = getFirstPhone().getToneNumberDiacritics();
-        for (Diacritic d : p1Diacritics) diacritics.add(d);
-
-        Diacritic[] p2Diacritics = getSecondPhone().getToneNumberDiacritics();
-        for (Diacritic d : p2Diacritics) diacritics.add(d);
-
-        Diacritic[] selfDiacritics = super.getToneNumberDiacritics();
-        for (Diacritic d : selfDiacritics) diacritics.add(d);
-
-        return diacritics.toArray(new Diacritic[0]);
     }
 
     @Override

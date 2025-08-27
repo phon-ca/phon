@@ -34,7 +34,7 @@ public final class StressMarker extends IPAElement {
 	 * @param stress
 	 */
 	StressMarker(StressType stress) {
-        super(null, new SyllableInfo(SyllableConstituentType.SYLLABLESTRESSMARKER));
+        super(null, new SyllableInfo(SyllableConstituentType.SYLLABLESTRESSMARKER, stress == StressType.PRIMARY ? SyllableStress.PrimaryStress : SyllableStress.SecondaryStress));
 		this.type = stress;
 	}
 

@@ -28,9 +28,7 @@ import ca.phon.ipa.features.FeatureSet;
 public final class SyllableBoundary extends IPAElement {
 	
 	public SyllableBoundary() {
-		super();
-		
-		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
+		super(null, new SyllableInfo(SyllableConstituentType.SYLLABLEBOUNDARYMARKER));
 	}
 
 	@Override

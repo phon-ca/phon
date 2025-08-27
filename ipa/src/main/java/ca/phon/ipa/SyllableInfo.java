@@ -11,18 +11,22 @@ package ca.phon.ipa;
 public record SyllableInfo(SyllableConstituentType constituentType,
                            boolean isDiphthong,
                            SyllableStress stress,
-                           int syllableIndex) {
+                           int syllableIndex,
+                           boolean segregated,
+                           int sonority,
+                           int sonorityDistance,
+                           ToneMelody tone) {
 
     public SyllableInfo() {
-        this(SyllableConstituentType.UNKNOWN, false, SyllableStress.NoStress, -1);
+        this(SyllableConstituentType.UNKNOWN, false, SyllableStress.NoStress, -1, false, -1, -1, null);
     }
 
     public SyllableInfo(SyllableConstituentType constituentType) {
-        this(constituentType, false, SyllableStress.NoStress, -1);
+        this(constituentType, false, SyllableStress.NoStress, -1, false, -1, -1, null);
     }
 
     public SyllableInfo(SyllableConstituentType constituentType, SyllableStress stress) {
-        this(constituentType, false, stress, -1);
+        this(constituentType, false, stress, -1, false, -1, -1, null);
     }
 
 }

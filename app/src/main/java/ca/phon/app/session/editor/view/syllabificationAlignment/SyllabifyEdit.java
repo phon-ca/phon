@@ -86,13 +86,14 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 
 	@Override
 	public void doIt() {
-		final IPATranscript ipa = tier.isBlind()
+		IPATranscript ipa = tier.isBlind()
 			? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
 			: tier.getValue();
 		oldVal = ipa.toString(true);
 		
 		final StripSyllabifcationVisitor visitor = new StripSyllabifcationVisitor();
 		ipa.accept(visitor);
+        ipa = visitor.getTranscript();
 		
 		syllabifier.syllabify(ipa.toList());
 

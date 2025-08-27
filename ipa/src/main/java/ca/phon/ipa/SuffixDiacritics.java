@@ -15,6 +15,9 @@
  */
 package ca.phon.ipa;
 
+/**
+ * Interface for elements that can have suffix diacritics.
+ */
 public interface SuffixDiacritics {
 
 	public Diacritic[] getSuffixDiacritics();

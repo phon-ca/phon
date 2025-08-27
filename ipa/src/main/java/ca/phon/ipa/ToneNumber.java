@@ -10,7 +10,7 @@ import ca.phon.ipa.features.FeatureSet;
  */
 public class ToneNumber extends IPAElement {
 
-    private final char toneNumber;
+    private final char toneChar;
 
     /**
      * Get tone number character from integer value.
@@ -32,25 +32,28 @@ public class ToneNumber extends IPAElement {
         this(fromNumber(number));
     }
 
-    public ToneNumber(char toneNumber) {
+    public ToneNumber(char toneChar) {
         super(null, null);
-        this.toneNumber = toneNumber;
+        this.toneChar = toneChar;
     }
 
-    public ToneNumber(char toneNumber, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+    public ToneNumber(char toneChar, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
         super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.TONENUMBER));
-        this.toneNumber = toneNumber;
+        this.toneChar = toneChar;
     }
 
+    public char toneChar() {
+        return toneChar;
+    }
 
     @Override
     protected FeatureSet _getFeatureSet() {
-        return FeatureMatrix.getInstance().getFeatureSet(toneNumber);
+        return FeatureMatrix.getInstance().getFeatureSet(toneChar);
     }
 
     @Override
     public String getText() {
-        return String.valueOf(toneNumber);
+        return String.valueOf(toneChar);
     }
 
 }

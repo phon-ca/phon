@@ -15,8 +15,10 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
+import ca.phon.phonex.PhonexMatcher;
 import ca.phon.syllable.*;
 
 /**
@@ -31,7 +33,7 @@ public class IPAElementFactory {
 	 * New basic phone
 	 */
 	public Phone createPhone() {
-		return new Phone();
+		return new Phone('\u0000');
 	}
 	
 	/**
@@ -45,7 +47,7 @@ public class IPAElementFactory {
 	}
 	
 	public Phone createPhone(Character basePhone, Diacritic[] combiningDiacritics) {
-		return new Phone(new Diacritic[0], basePhone, combiningDiacritics, new Diacritic[0]);
+		return new Phone(new Diacritic[0], basePhone, combiningDiacritics, new Diacritic[0], null, null);
 	}
 	
 	/**
@@ -55,7 +57,7 @@ public class IPAElementFactory {
 	 * @param basePhone
 	 */
 	public Phone createPhone(Diacritic prefix, Character basePhone) {
-		return new Phone(new Diacritic[]{prefix}, basePhone, new Diacritic[0], new Diacritic[0]);
+		return new Phone(new Diacritic[]{prefix}, basePhone, new Diacritic[0], new Diacritic[0], null, null);
 	}
 	
 	/**
@@ -66,7 +68,7 @@ public class IPAElementFactory {
 	 * @param suffix
 	 */
 	public Phone createPhone(Diacritic prefix, Character basePhone, Diacritic suffix) {
-		return new Phone(new Diacritic[]{prefix}, basePhone, new Diacritic[0], new Diacritic[]{suffix});
+		return new Phone(new Diacritic[]{prefix}, basePhone, new Diacritic[0], new Diacritic[]{suffix}, null, null);
 	}
 	
 	/**
@@ -78,7 +80,7 @@ public class IPAElementFactory {
 	 * @param suffix
 	 */
 	public Phone createPhone(Diacritic prefix, Character basePhone, Diacritic[] combining, Diacritic suffix) {
-		return new Phone(new Diacritic[]{prefix}, basePhone, combining, new Diacritic[]{suffix});
+		return new Phone(new Diacritic[]{prefix}, basePhone, combining, new Diacritic[]{suffix}, null, null);
 	}
 	
 	/**
@@ -90,15 +92,42 @@ public class IPAElementFactory {
 	 * @param suffix
 	 */
 	public Phone createPhone(Diacritic[] prefix, Character basePhone, Diacritic[] combining, Diacritic[] suffix) {
-		return new Phone(prefix, basePhone, combining, suffix);
+		return new Phone(prefix, basePhone, combining, suffix, null, null);
 	}
+
+    /**
+     * Create a new basic phone with feature overrides and syllable info
+     *
+     * @param prefix prefix diacritics
+     * @param basePhone base phone character
+     * @param combining combining diacritics
+     * @param suffix suffix diacritics
+     * @param overrides feature overrides
+     * @param syllInfo syllable info
+     * @return the created {@link IPAElement} object
+     */
+    public Phone createPhone(Diacritic[] prefix, Character basePhone, Diacritic[] combining, Diacritic[] suffix, FeatureSet overrides, SyllableInfo syllInfo) {
+        return new Phone(prefix, basePhone, combining, suffix, overrides, syllInfo);
+    }
 		
 	public Phone clonePhone(Phone p) {
 		if(p instanceof CompoundPhone)
 			return cloneCompoundPhone((CompoundPhone)p);
 		else
-			return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics());
+			return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(), p.syllableInfo());
 	}
+
+    public Phone clonePhoneAsDiphthong(Phone p) {
+        final SyllableInfo syllInfo = p.syllableInfo();
+        return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
+                new SyllableInfo(SyllableConstituentType.NUCLEUS, true, syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
+    }
+
+    public Phone clonePhoneWithScType(Phone p, SyllableConstituentType scType) {
+        final SyllableInfo syllInfo = p.syllableInfo();
+        return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
+                new SyllableInfo(scType, syllInfo.isDiphthong(), syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
+    }
 
 	/**
 	 * <p>Create diacritic from given string.
@@ -190,11 +219,23 @@ public class IPAElementFactory {
 	 * @param ligature
 	 */
 	public CompoundPhone createCompoundPhone(Phone phone1, Phone phone2, Character ligature) {
-		return new CompoundPhone(phone1, phone2, ligature);
+		return new CompoundPhone(phone1, phone2, ligature, null, null);
 	}
-	
-	public CompoundPhone cloneCompoundPhone(CompoundPhone cp) {
-		return new CompoundPhone(clonePhone(cp.getFirstPhone()), clonePhone(cp.getSecondPhone()), cp.getLigature());
+
+    public CompoundPhone createCompoundPhone(Phone phone1, Phone phone2, Character ligature, FeatureSet overrides, SyllableInfo syllInfo) {
+        return new CompoundPhone(phone1, phone2, ligature, overrides, syllInfo);
+    }
+
+    public CompoundPhone createCompoundPhone(Phone phone1, Phone phone2, Character ligature,
+                                             Diacritic[] prefixDiacritics, Diacritic[] combiningDiacritics, Diacritic[] suffixDiacritics,
+                                             FeatureSet overrides, SyllableInfo syllInfo) {
+        return new CompoundPhone(phone1, phone2, ligature, prefixDiacritics, combiningDiacritics, suffixDiacritics, overrides, syllInfo);
+    }
+
+    public CompoundPhone cloneCompoundPhone(CompoundPhone cp) {
+		return new CompoundPhone(clonePhone(cp.getFirstPhone()), clonePhone(cp.getSecondPhone()), cp.getLigature(),
+                cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(),
+                cp.overrideFeatureSet(), cp.syllableInfo());
 	}
 	
 	/**
@@ -291,11 +332,11 @@ public class IPAElementFactory {
 	}
 
 	public Pause createPause(float secs) {
-		return new Pause(PauseLength.NUMERIC, secs);
+		return new Pause(PauseLength.NUMERIC, secs, null, null);
 	}
 	
 	public Pause clonePause(Pause pause) {
-		return new Pause(pause.getType(), pause.getLength());
+		return new Pause(pause.getType(), pause.getLength(), pause.overrideFeatureSet(), pause.syllableInfo());
 	}
 	
 	/**
@@ -380,12 +421,13 @@ public class IPAElementFactory {
 	public PhonexMatcherReference createPhonexMatcherReference(String groupName) {
 		return new PhonexMatcherReference(groupName);
 	}
-	
+
+    public PhonexMatcherReference createPhonexMatcherReference(String groupName, Integer groupIndex, Diacritic[] prefixDiacritics, Diacritic[] combiningDiacritics, Diacritic[] suffixDiacritics) {
+        return new PhonexMatcherReference(groupName, groupIndex, prefixDiacritics, combiningDiacritics, suffixDiacritics);
+    }
+
 	public PhonexMatcherReference clonePhonexMatcherReference(PhonexMatcherReference ref) {
-		if(ref.getGroupIndex() >= 0)
-			return new PhonexMatcherReference(ref.getGroupIndex());
-		else
-			return new PhonexMatcherReference(ref.getGroupName());
+        return new PhonexMatcherReference(ref.getGroupName(), (ref.getGroupIndex() >= 0 ? ref.getGroupIndex() : null), ref.getPrefixDiacritics(), ref.getCombiningDiacritics(), ref.getSuffixDiacritics());
 	}
 	
 	/**
@@ -438,28 +480,45 @@ public class IPAElementFactory {
 			retVal = clonePhonexMatcherReference((PhonexMatcherReference)ele);
 		} else if(ele instanceof AlignmentMarker) {
 			retVal = createAlignmentMarker();
-		}
-		
-		copySyllabification(ele, retVal);
+ 		} else if(ele instanceof ToneNumber) {
+            retVal = cloneToneNumber((ToneNumber)ele);
+        } else if(ele instanceof ToneMelody) {
+            retVal = cloneToneMelody((ToneMelody)ele);
+        }
 		
 		return retVal;
 	}
-	
-	/**
-	 * Copy syllabification information from ele1 to ele2
-	 * 
-	 * @param ele1
-	 * @param ele2
-	 */
-	public void copySyllabification(IPAElement ele1, IPAElement ele2) {
-		// copy syllabification info
-		SyllabificationInfo syllInfo = ele1.getExtension(SyllabificationInfo.class);
-		SyllabificationInfo retInfo = ele2.getExtension(SyllabificationInfo.class);
-		
-		retInfo.setConstituentType(syllInfo.getConstituentType());
-		retInfo.setDiphthongMember(syllInfo.isDiphthongMember());
-		retInfo.setStress(syllInfo.getStress());
-		retInfo.setToneNumber(syllInfo.getToneNumber());
-	}
-	
+
+    /**
+     * Create a tone number element
+     *
+     * @param toneChar tone character (0-9 in superscript)
+     * @return tone number element
+     */
+    public ToneNumber createToneNumber(char toneChar) {
+        return new ToneNumber(toneChar);
+    }
+
+    public ToneNumber cloneToneNumber(ToneNumber tn) {
+        return new ToneNumber(tn.toneChar());
+    }
+
+    /**
+     * Create a tone melody from a string of tone characters
+     *
+     * @param melody string of tone characters (0-9 in superscript)
+     * @return tone melody element
+     */
+    public ToneMelody createToneMelody(String melody) {
+        ToneNumber[] toneNumbers = new ToneNumber[melody.length()];
+        for(int i = 0; i < melody.length(); i++) {
+            toneNumbers[i] = createToneNumber(melody.charAt(i));
+        }
+    	return new ToneMelody(toneNumbers);
+    }
+
+    public ToneMelody cloneToneMelody(ToneMelody tm) {
+        return new ToneMelody(tm.toneNumbers());
+    }
+
 }
