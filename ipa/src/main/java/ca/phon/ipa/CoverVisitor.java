@@ -16,8 +16,6 @@
 package ca.phon.ipa;
 
 import ca.phon.phonex.PhoneMatcher;
-import ca.phon.syllable.Segregated;
-import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -259,10 +257,15 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
             List<IPATranscript> sylls = retVal.syllables();
             for (int syllIdx = 0; syllIdx < sylls.size(); syllIdx++) {
                 final IPATranscript syll = sylls.get(syllIdx);
-                final Segregated seg = syll.getExtension(Segregated.class);
-                if (seg.isSegregated())
+                final Phone firstPhone = syll.firstPhone();
+                if(firstPhone == null) {
+                    buffer.append(syll);
+                    continue;
+                }
+                boolean segregated = firstPhone.segregated();
+                if (segregated)
                     buffer.append(new IntraWordPause());
-                if (syllIdx > 0 && !seg.isSegregated() && !syll.matches("^\\s.+")) {
+                if (syllIdx > 0 && !segregated && !syll.matches("^\\s.+")) {
                     buffer.appendSyllableBoundary();
                 }
                 buffer.append(syll);

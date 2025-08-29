@@ -15,7 +15,6 @@ import ca.phon.session.Record;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;

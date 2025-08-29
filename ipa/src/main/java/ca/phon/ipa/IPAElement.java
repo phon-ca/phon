@@ -115,7 +115,31 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 		return syllableInfo != null ? syllableInfo.stress() : SyllableStress.NoStress;
 	}
 
-	//
+    public boolean segregated() {
+        return syllableInfo != null ? syllableInfo.segregated() : false;
+    }
+
+    public int sonorityDistance() {
+        return syllableInfo != null ? syllableInfo.sonorityDistance() : 0;
+    }
+
+    public int sonority() {
+        return syllableInfo != null ? syllableInfo.sonority() : 0;
+    }
+
+    public ToneMelody tone() {
+        return syllableInfo != null ? syllableInfo.tone() : null;
+    }
+
+    public boolean isDiphthong() {
+        return syllableInfo != null ? syllableInfo.isDiphthong() : false;
+    }
+
+    public int syllableIndex() {
+        return syllableInfo != null ? syllableInfo.syllableIndex() : -1;
+    }
+
+    //
 	// Extensions
 	//
 	private ExtensionSupport getExtensionSupport() {

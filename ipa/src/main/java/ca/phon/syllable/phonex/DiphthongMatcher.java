@@ -17,6 +17,7 @@ package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.SyllableConstituentType;
+import ca.phon.ipa.SyllableInfo;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.syllable.*;
 
@@ -38,10 +39,10 @@ public class DiphthongMatcher implements PhoneMatcher {
 
 	@Override
 	public boolean matches(IPAElement p) {
-		final SyllabificationInfo info = p.getExtension(SyllabificationInfo.class);
+		final SyllableInfo info = p.syllableInfo();
 		if(info == null) return false;
 		
-		return info.getConstituentType() == SyllableConstituentType.NUCLEUS && info.isDiphthongMember();
+		return info.constituentType() == SyllableConstituentType.NUCLEUS && info.isDiphthong();
 	}
 
 	@Override

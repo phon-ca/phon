@@ -17,6 +17,7 @@ package ca.phon.syllable.phonex;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.SyllableConstituentType;
+import ca.phon.ipa.SyllableInfo;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.plugins.CombinableMatcher;
 import ca.phon.syllable.*;
@@ -66,18 +67,18 @@ public final class SyllableConstituentMatcher implements PhoneMatcher, Combinabl
 		if(matchesAnything()) return true;
 		
 		boolean retVal = true;
-		SyllabificationInfo scInfo = p.getExtension(SyllabificationInfo.class);
+		SyllableInfo scInfo = p.getExtension(SyllableInfo.class);
 		if(scInfo != null) {
 			if(allowedTypes.size() > 0) {
-				if(scInfo.getConstituentType() == SyllableConstituentType.AMBISYLLABIC) {
+				if(scInfo.constituentType() == SyllableConstituentType.AMBISYLLABIC) {
 					retVal &= (allowedTypes.contains(SyllableConstituentType.AMBISYLLABIC)
 							|| allowedTypes.contains(SyllableConstituentType.ONSET)
 							|| allowedTypes.contains(SyllableConstituentType.CODA));
 				} else 
-					retVal &= allowedTypes.contains(scInfo.getConstituentType());
+					retVal &= allowedTypes.contains(scInfo.constituentType());
 			}
 			if(disallowedTypes.size() > 0)
-				retVal &= !disallowedTypes.contains(scInfo.getConstituentType());
+				retVal &= !disallowedTypes.contains(scInfo.constituentType());
 		} else {
 			retVal = false;
 		}

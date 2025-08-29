@@ -22,14 +22,9 @@ import ca.phon.visitor.annotation.Visits;
 import java.util.*;
 
 /**
- * A phone visitor that breaks a list of phones
- * into syllable.  Requires that the {@link SyllabificationInfo}
- * capability is present for each {@link IPAElement}.
- *
+ * A phone visitor that breaks an {@link IPATranscript} into syllables.
  */
 public class SyllableVisitor extends VisitorAdapter<IPAElement> {
-	
-	private boolean segregated = false;
 	
 	/**
 	 * list of detected syllables
@@ -74,26 +69,12 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 	@Visits
 	public void visitIntraWordPause(IntraWordPause intraWordPause) {
 		breakSyllable();
-		segregated = true;
 	}
 	
 	protected void breakSyllable() {
 		final IPATranscript currentSyllable = currentSyllableBuilder.toIPATranscript();
 		if(currentSyllable.length() > 0) {
-			// check for stress marker
-			final IPAElement firstEle = currentSyllable.elementAt(0);
-			SyllableStress stress = SyllableStress.NoStress;
-			if(firstEle.constituentType() == SyllableConstituentType.SYLLABLESTRESSMARKER) {
-				final StressType st = StressMarker.class.cast(firstEle).getType();
-				stress = (st == StressType.PRIMARY ? SyllableStress.PrimaryStress : SyllableStress.SecondaryStress);
-			}
-			currentSyllable.putExtension(SyllableStress.class, stress);
-			
-			currentSyllable.putExtension(Segregated.class, new Segregated(segregated));
-			
 			syllables.add(currentSyllable);
-			
-			segregated = false;
 			currentSyllableBuilder = new IPATranscriptBuilder();
 		}
 	}
@@ -130,12 +111,9 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 				
 			case NUCLEUS:
 				if(currentType == SyllableConstituentType.NUCLEUS) {
-					final SyllabificationInfo info = p.getExtension(SyllabificationInfo.class);
-					if(info != null) {
-						if(!info.isDiphthongMember()) {
-							breakSyllable();
-						}
-					}
+                    if(!p.isDiphthong()) {
+                        breakSyllable();
+                    }
 				} else if(currentType != SyllableConstituentType.CODA) {
 					breakSyllable();
 				}

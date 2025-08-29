@@ -1,10 +1,7 @@
 package ca.phon.syllabifier;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.Phone;
+import ca.phon.ipa.*;
 import ca.phon.phonex.PhonexPattern;
-import ca.phon.syllabifier.phonex.SonorityInfo;
-import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Language;
 import ca.phon.visitor.Visitor;
 
@@ -17,6 +14,9 @@ import java.util.List;
  * sonority and syllable constituent information.  The syllabifier then uses
  * a series of phonex expressions to identify syllable constituents and syllable
  * boundaries.</p>
+ *
+ * <p>The returned transcript is a new, annotated version of the transcript
+ * object being syllabified.</p>
  */
 public class BasicSyllabifier implements Syllabifier {
 
@@ -43,43 +43,86 @@ public class BasicSyllabifier implements Syllabifier {
     }
 
     @Override
-    public void syllabify(List<IPAElement> phones) {
-        markSonority(phones);
-        for (SyllabifierStep step : syllabifierSteps) {
-            runStep(step, phones);
+    public IPATranscript syllabify(IPATranscript transcript) {
+        IPATranscript retVal = markSonority(transcript);
+        for(SyllabifierStep step:syllabifierSteps) {
+            retVal = runStep(step, retVal);
         }
+        return retVal;
     }
 
-    private void markSonority(List<IPAElement> elements) {
+    /**
+     * Mark sonority on given elements.  This function will return a new
+     * IPATranscript object where the sonority information has been added
+     * to each phone in it's SyllableInfo data.
+     *
+     * @param transcript
+     * @return new IPATranscript with sonority information added
+     */
+    private IPATranscript markSonority(IPATranscript transcript) {
         final SonorityVisitor visitor = new SonorityVisitor();
-        for (IPAElement ele : elements) {
-            ele.accept(visitor);
-        }
+        transcript.accept(visitor);
+        return visitor.builder.toIPATranscript();
     }
 
-    private void runStep(SyllabifierStep step, List<IPAElement> elements) {
+    /**
+     * Run a syllabifier step on the given elements.  The executes a phonex pattern
+     * match and marks the SyllableConstituentType on any phones in named groups
+     * in the pattern. The name of the group should be one of the SyllableConstituentType
+     * enum values (case insensitive). If the group name is "D" then the phones in that
+     * group will also be marked as diphthong members.
+     *
+     * @param step the syllabifier step
+     * @param transcript the transcript
+     * @return the modified transcript with syllable constituent information added.  This is
+     * a new object, the original transcript is not modified.
+     */
+    private IPATranscript runStep(SyllabifierStep step, IPATranscript transcript) {
         final PhonexPattern pattern = step.pattern();
-        final var m = pattern.matcher(elements);
+        final var m = pattern.matcher(transcript);
 
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        int lastEnd = 0;
         while(m.find()) {
             for(int i = 1; i <= pattern.numberOfGroups(); i++) {
                 final String name = pattern.groupName(i);
                 if(name != null) {
                     final SyllableConstituentType scType = SyllableConstituentType.fromString(name);
                     if(scType != null) {
+                        // add all elements before match
+                        for(int j = lastEnd; j < m.start(); j++) {
+                            builder.append(transcript.elementAt(j));
+                        }
                         final List<IPAElement> group = m.group(i);
                         for(IPAElement ele:group) {
                             if(ele instanceof Phone phone) {
-                                phone.setScType(scType);
-                                if("D".equalsIgnoreCase(name)) {
-                                    phone.setDiphthongMember(true);
-                                }
+                                boolean isDiphthongMember = "D".equalsIgnoreCase(name);
+                                final SyllableInfo syllableInfo = new SyllableInfo(
+                                    scType,
+                                    isDiphthongMember,
+                                    phone.syllableInfo().stress(),
+                                    phone.syllableInfo().syllableIndex(),
+                                    phone.syllableInfo().segregated(),
+                                    phone.syllableInfo().sonority(),
+                                    phone.syllableInfo().sonorityDistance(),
+                                    phone.syllableInfo().tone()
+                                );
+                                builder.append((new IPAElementFactory()).clonePhoneWithSyllableInfo(phone, syllableInfo));
+                            } else {
+                                builder.append(ele);
                             }
                         }
+                        // update end
+                        lastEnd = m.end();
                     }
                 }
             }
         }
+        // add remaining elements
+        for(int j = lastEnd; j < transcript.length(); j++) {
+            builder.append(transcript.elementAt(j));
+        }
+        return builder.toIPATranscript();
     }
 
     public record SonorityClass(int sonorityValue, PhonexPattern pattern) {
@@ -90,12 +133,16 @@ public class BasicSyllabifier implements Syllabifier {
 
     private class SonorityVisitor implements Visitor<IPAElement> {
 
+        private final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+
         private int lastSonority = 0;
 
         @Override
         public void visit(IPAElement obj) {
             if (obj instanceof Phone phone) {
                 attachSonority(phone);
+            } else {
+                builder.append(obj);
             }
         }
 
@@ -114,8 +161,18 @@ public class BasicSyllabifier implements Syllabifier {
             final int distance = value - lastSonority;
             lastSonority = value;
 
-            final var info = new SonorityInfo(value, distance);
-            p.putExtension(SonorityInfo.class, info);
+
+            final SyllableInfo syllInfo = new SyllableInfo(
+                SyllableConstituentType.UNKNOWN,
+                false,
+                SyllableStress.NoStress,
+                0,
+                false,
+                value,
+                distance,
+                    null
+            );
+            builder.append((new IPAElementFactory()).clonePhoneWithSyllableInfo(p, syllInfo));
         }
 
     }

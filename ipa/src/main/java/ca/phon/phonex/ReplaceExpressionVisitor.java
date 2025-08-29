@@ -56,26 +56,6 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 
 		IPATranscript grpValue = new IPATranscript(matcher.group(groupIndex));
 
-		// check for tone swapping
-		List<Diacritic> newToneNumber = new ArrayList<>();
-		for(Diacritic dia:pmr.getSuffixDiacritics()) {
-			if(IPATokens.getSharedInstance().getTokenType(dia.getCharacter()) == IPATokenType.TONE_NUMBER) {
-				newToneNumber.add(dia);
-			}
-		}
-
-		List<Diacritic> oldToneNumber = new ArrayList<>();
-		if(grpValue.length() > 0) {
-			IPAElement lastEle = grpValue.elementAt(grpValue.length()-1);
-			if(lastEle instanceof Phone) {
-				oldToneNumber = List.of(((Phone)lastEle).getToneNumberDiacritics());
-
-				// swapping tones, remove current tone
-				if (newToneNumber.size() > 0 && oldToneNumber.size() > 0)
-					grpValue = grpValue.stripDiacritics(oldToneNumber);
-			}
-		}
-
 		builder.append(pmr.getPrefix());
 		builder.append(grpValue);
 

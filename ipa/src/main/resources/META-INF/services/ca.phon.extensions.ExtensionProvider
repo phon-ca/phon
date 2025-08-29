@@ -1,4 +1,3 @@
-ca.phon.syllable.SyllabificationInfoProvider
 ca.phon.ipa.LevenshteinDistanceProvider
 ca.phon.ipa.alignment.pmlu.PMLUProvider
 ca.phon.ipa.alignment.pmlu.EPMLUProvider

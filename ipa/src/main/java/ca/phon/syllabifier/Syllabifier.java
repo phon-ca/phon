@@ -16,6 +16,7 @@
 package ca.phon.syllabifier;
 
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.util.Language;
 
@@ -44,11 +45,12 @@ public interface Syllabifier {
 	public Language getLanguage();
 	
 	/**
-	 * Apply consituent type annotations
-	 * on given phones.
+	 * Apply constituent type annotation on given phones.
 	 * 
-	 * @param phones
+	 * @param transcript
+     * @return syllabified transcript, this is a new object the
+     * original transcript is not modified
 	 */
-	public void syllabify(List<IPAElement> phones);
+	public IPATranscript syllabify(IPATranscript transcript);
 	
 }

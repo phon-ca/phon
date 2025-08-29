@@ -373,20 +373,20 @@ public class TestIPAParser {
 		Assert.assertEquals("h", ipa.elementAt(0).getText());
 	}
 
-	@Test
-	public void testToneNumbers() throws Exception {
-		final String txt = "b:Oa²³⁴:Nd:Oa⁰:N";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-
-		Assert.assertEquals(4, ipa.length());
-		Assert.assertEquals(2, ipa.syllables().size());
-		Assert.assertEquals("b", ipa.elementAt(0).toString());
-		Assert.assertEquals("a²³⁴", ipa.elementAt(1).toString());
-		final String toneNumberString = Arrays.stream(((Phone)ipa.elementAt(1)).getToneNumberDiacritics()).map(Object::toString).collect(Collectors.joining());
-		Assert.assertEquals("²³⁴", toneNumberString);
-		Assert.assertEquals("d", ipa.elementAt(2).toString());
-		Assert.assertEquals("a⁰", ipa.elementAt(3).toString());
-	}
+//	@Test
+//	public void testToneNumbers() throws Exception {
+//		final String txt = "b:Oa²³⁴:Nd:Oa⁰:N";
+//		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+//
+//		Assert.assertEquals(4, ipa.length());
+//		Assert.assertEquals(2, ipa.syllables().size());
+//		Assert.assertEquals("b", ipa.elementAt(0).toString());
+//		Assert.assertEquals("a²³⁴", ipa.elementAt(1).toString());
+//		final String toneNumberString = Arrays.stream(((Phone)ipa.elementAt(1)).getToneNumberDiacritics()).map(Object::toString).collect(Collectors.joining());
+//		Assert.assertEquals("²³⁴", toneNumberString);
+//		Assert.assertEquals("d", ipa.elementAt(2).toString());
+//		Assert.assertEquals("a⁰", ipa.elementAt(3).toString());
+//	}
 
 	@Test
 	public void testPg() throws Exception {

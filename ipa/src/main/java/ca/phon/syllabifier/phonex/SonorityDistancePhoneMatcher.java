@@ -51,11 +51,7 @@ public class SonorityDistancePhoneMatcher implements PhoneMatcher {
 	public boolean matches(IPAElement p) {
 		boolean retVal = false;
 		
-		int distance = 0;
-		SonorityInfo info = p.getExtension(SonorityInfo.class);
-		if(info != null) {
-			distance = info.getDistance();
-		}
+		int distance = p.syllableInfo().sonorityDistance();
 		if(Math.abs(distance) > 0) {
 			if(this.minDistance < 0) {
 				retVal = distance <= this.minDistance;

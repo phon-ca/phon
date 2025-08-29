@@ -49,18 +49,10 @@ public class StressMatcher implements PhoneMatcher {
 
 	@Override
 	public boolean matches(IPAElement p) {
-		boolean retVal = false;
-		
-		SyllabificationInfo info = 
-				p.getExtension(SyllabificationInfo.class);
-		if(info != null) {
-			SyllableStress phoneStress = info.getStress();
-			retVal = stressTypes.contains(phoneStress)
-					|| (stressTypes.contains(SyllableStress.AnyStress) &&
-							(info.getStress() == SyllableStress.PrimaryStress || info.getStress() == SyllableStress.SecondaryStress));
-		}
-		
-		return retVal;
+        SyllableStress phoneStress = p.stress();
+        return stressTypes.contains(phoneStress)
+                || (stressTypes.contains(SyllableStress.AnyStress) &&
+                        (phoneStress == SyllableStress.PrimaryStress || phoneStress == SyllableStress.SecondaryStress));
 	}
 
 	@Override

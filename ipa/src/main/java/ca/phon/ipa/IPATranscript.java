@@ -212,7 +212,22 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return transcription[index];
 	}
 
-	/**
+    /**
+     * Get the first audible phone in the transcription, this will skip any stress
+     * or syllable boundary markers at the beginning of the transcription.
+     *
+     * @return the first audible phone or <code>null</code> if no audible phones
+     */
+    public Phone firstPhone() {
+        for(IPAElement ele:this) {
+            if(ele instanceof Phone phone) {
+                return phone;
+            }
+        }
+        return null;
+    }
+
+    /**
 	 * Return the ipa element index of
 	 * the given string index.
 	 *
@@ -1074,11 +1089,10 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 			buffer.append(p.toString());
 			if(includeScType) {
 				buffer.append(":");
-				final SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
-				if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())
+				if(p.syllableInfo().constituentType() == SyllableConstituentType.NUCLEUS && p.syllableInfo().isDiphthong())
 					buffer.append("D");
 				else
-					buffer.append(sInfo.getConstituentType().getIdChar());
+					buffer.append(p.syllableInfo().constituentType().getIdChar());
 			}
 		}
 		

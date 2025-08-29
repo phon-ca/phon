@@ -129,6 +129,10 @@ public class IPAElementFactory {
                 new SyllableInfo(scType, syllInfo.isDiphthong(), syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
     }
 
+    public Phone clonePhoneWithSyllableInfo(Phone p, SyllableInfo syllInfo) {
+        return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(), syllInfo);
+    }
+
 	/**
 	 * <p>Create diacritic from given string.
 	 * Given string must match one of:

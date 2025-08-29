@@ -16,7 +16,6 @@
 package ca.phon.phonex;
 
 import ca.phon.ipa.*;
-import ca.phon.syllable.SyllabificationInfo;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -157,10 +156,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 		for(IPAElement ele:input) builder.append(ele);
 		IPATranscript transcript = builder.toIPATranscript();
-
-		SyllabificationInfo.setupSyllabificationInfo(transcript);
 		List<IPAElement> tape = transcript.toList();
-
 		return new PhonexMatcher(this, tape, flags);
 	}
 
