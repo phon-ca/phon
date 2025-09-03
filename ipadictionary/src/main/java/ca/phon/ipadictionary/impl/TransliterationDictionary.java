@@ -169,9 +169,9 @@ public class TransliterationDictionary implements IPADictionarySPI,
 
 		for(var postPhonexFind:postPhonexFindList) {
 			try {
-				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
+				IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
 				if(syllabifier != null) {
-					syllabifier.syllabify(ipa.toList());
+					ipa = syllabifier.syllabify(ipa);
 				}
 				
 				var pattern = postPhonexFind.getObj1();
@@ -191,8 +191,8 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		if (syllabifier != null) {
 			// convert to a transcript and return with syllabifiation
 			try {
-				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
-					syllabifier.syllabify(ipa.toList());
+				IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
+                ipa = syllabifier.syllabify(ipa);
 				builderStr = ipa.toString(true);
 			} catch (ParseException e) {
 				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);

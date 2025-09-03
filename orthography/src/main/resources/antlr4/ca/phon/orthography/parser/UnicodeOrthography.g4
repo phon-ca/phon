@@ -572,6 +572,9 @@ CA_ELEMENT
     |   '\u2191'        // pitch up
     |   '\u02c8'        // primary stress
     |   '\u02cc'        // secondary stress
+    |   '⁑'             // harndening
+    |   '⤇'             // hurried start
+    |   '⤆'             // sudden stop
     ;
 
 CA_DELIMITER

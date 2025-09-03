@@ -438,9 +438,9 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 
 				for (var postPhonexFind : postPhonexFindList) {
 					try {
-						final IPATranscript ipa = IPATranscript.parseIPATranscript(str);
+						IPATranscript ipa = IPATranscript.parseIPATranscript(str);
 						if (syllabifier != null) {
-							syllabifier.syllabify(ipa.toList());
+							ipa = syllabifier.syllabify(ipa);
 						}
 
 						var pattern = postPhonexFind.getObj1();
@@ -460,8 +460,8 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 				if (syllabifier != null) {
 					// convert to a transcript and return with syllabifiation
 					try {
-						final IPATranscript ipa = IPATranscript.parseIPATranscript(str);
-							syllabifier.syllabify(ipa.toList());
+						IPATranscript ipa = IPATranscript.parseIPATranscript(str);
+                        ipa = syllabifier.syllabify(ipa);
 						str = ipa.toString(true);
 					} catch (ParseException e) {
 						Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
