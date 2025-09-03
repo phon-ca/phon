@@ -450,7 +450,9 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
      * @return ipa
      */
     public IPATranscript getTranscript() {
-        return builder.toIPATranscript();
+        final IPATranscript parsedTranscript = builder.toIPATranscript();
+        final List<IPAElement> elements = SyllableInfo.annotateElements(parsedTranscript.toList());
+        return new IPATranscript(elements);
     }
 
 }

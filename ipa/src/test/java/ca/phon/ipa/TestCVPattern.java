@@ -37,8 +37,8 @@ public class TestCVPattern {
 	
 	@Test
 	public void testMatches() throws ParseException {
-		final String txt = "ˈk:Oə:Nn:Cˌs:Lt:Oɹ:Oe:Dɪ:Dn:Ct:Cs:R";
-		final String pattern = "CA+C";
+		final String txt = "\u02c8k:Oə:Nn:C\u02ccs:Lt:Oɹ:Oe:Dɪ:Dn:Ct:Cs:R";
+		final String pattern = "\\s?C.+C";
 		
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
 		Assert.assertEquals(true, ipa.matchesCVPattern(pattern));

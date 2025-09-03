@@ -1,5 +1,10 @@
 package ca.phon.ipa;
 
+import ca.phon.syllable.SyllableVisitor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Syllable information for {@link IPAElement}s.
  *
@@ -27,6 +32,22 @@ public record SyllableInfo(SyllableConstituentType constituentType,
 
     public SyllableInfo(SyllableConstituentType constituentType, SyllableStress stress) {
         this(constituentType, false, stress, -1, false, -1, -1, null);
+    }
+
+    /**
+     * Return a list of elements where the syllable info has been set.  It's assumed that syllable constituent
+     * type information has been applied to the elements already.
+     *
+     * @param elems list of elements
+     * @return list of elements with syllable info set - these elements have been cloned with
+     *  new SyllableInfo information
+     */
+    public static List<IPAElement> annotateElements(List<IPAElement> elems) {
+        final SyllableInfoVisitor visitor = new SyllableInfoVisitor();
+        for (IPAElement elem : elems) {
+            elem.accept(visitor);
+        }
+        return visitor.toIPATranscript().toList();
     }
 
 }

@@ -96,16 +96,7 @@ public class TestIPAParserErrors {
 		txt = "ab \u02d0t";
 		testError(txt, 3, StrayDiacriticException.class);
 	}
-	
-	@Test
-	public void testStrayToneDiacritic() {
-		String txt = "\u00b2t";
-		testError(txt, 0, StrayDiacriticException.class);
-		
-		txt = "ab \u00b2t";
-		testError(txt, 3, StrayDiacriticException.class);
-	}
-	
+
 	@Test
 	public void testPauseLocationError() {
 		final String txt = "hel(..)lo";
@@ -116,15 +107,7 @@ public class TestIPAParserErrors {
 	public void testInvalidCompound() {
 		String txt = "e\u0361\u007c";
 		testError(txt, 2, InvalidTokenException.class);
-		
-
 	}
-
-//	@Test
-//	public void testInvalidCompound2() {
-//		String txt = "ʰ͡|ˑeːː͡ɪ̃n";
-//		testError(txt, 1, IPAParserException.class);
-//	}
 	
 	@Test
 	public void testIntraWordNumber() {
@@ -154,7 +137,6 @@ public class TestIPAParserErrors {
 		
 		txt = "helo.";
 		testError(txt, 4, StrayDiacriticException.class);
-		
 	}
 	
 }

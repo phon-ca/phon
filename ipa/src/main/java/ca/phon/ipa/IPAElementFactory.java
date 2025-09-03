@@ -118,19 +118,33 @@ public class IPAElementFactory {
 	}
 
     public Phone clonePhoneAsDiphthong(Phone p) {
-        final SyllableInfo syllInfo = p.syllableInfo();
-        return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
-                new SyllableInfo(SyllableConstituentType.NUCLEUS, true, syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
+        if(p instanceof CompoundPhone cp) {
+            return new CompoundPhone(cp.getFirstPhone(), cp.getSecondPhone(), cp.getLigature(), cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(), cp.overrideFeatureSet(),
+                    new SyllableInfo(SyllableConstituentType.NUCLEUS, true, cp.syllableInfo().stress(), cp.syllableInfo().syllableIndex(), cp.syllableInfo().segregated(), cp.syllableInfo().sonority(), cp.syllableInfo().sonorityDistance(), cp.syllableInfo().tone()));
+        } else {
+            final SyllableInfo syllInfo = p.syllableInfo();
+            return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
+                    new SyllableInfo(SyllableConstituentType.NUCLEUS, true, syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
+        }
     }
 
     public Phone clonePhoneWithScType(Phone p, SyllableConstituentType scType) {
-        final SyllableInfo syllInfo = p.syllableInfo();
-        return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
-                new SyllableInfo(scType, syllInfo.isDiphthong(), syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
+        if(p instanceof CompoundPhone cp) {
+            return new CompoundPhone(cp.getFirstPhone(), cp.getSecondPhone(), cp.getLigature(), cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(), cp.overrideFeatureSet(),
+                    new SyllableInfo(scType, cp.syllableInfo().isDiphthong(), cp.syllableInfo().stress(), cp.syllableInfo().syllableIndex(), cp.syllableInfo().segregated(), cp.syllableInfo().sonority(), cp.syllableInfo().sonorityDistance(), cp.syllableInfo().tone()));
+        } else {
+            final SyllableInfo syllInfo = p.syllableInfo();
+            return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
+                    new SyllableInfo(scType, syllInfo.isDiphthong(), syllInfo.stress(), syllInfo.syllableIndex(), syllInfo.segregated(), syllInfo.sonority(), syllInfo.sonorityDistance(), syllInfo.tone()));
+        }
     }
 
     public Phone clonePhoneWithSyllableInfo(Phone p, SyllableInfo syllInfo) {
-        return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(), syllInfo);
+        if(p instanceof CompoundPhone cp) {
+            return new CompoundPhone(cp.getFirstPhone(), cp.getSecondPhone(), cp.getLigature(), cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(), cp.overrideFeatureSet(), syllInfo);
+        } else {
+            return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(), syllInfo);
+        }
     }
 
 	/**
@@ -265,6 +279,10 @@ public class IPAElementFactory {
 	public StressMarker cloneStress(StressMarker sm) {
 		return new StressMarker(sm.getType());
 	}
+
+    public StressMarker cloneStressWithSyllableInfo(StressMarker sm, SyllableInfo syllInfo) {
+        return new StressMarker(sm.getType(), sm.overrideFeatureSet(), syllInfo);
+    }
 	
 	/**
 	 * Create a primary stress marker
@@ -492,6 +510,56 @@ public class IPAElementFactory {
 		
 		return retVal;
 	}
+
+    /**
+     * Clone the given {@link IPAElement} the returned element will have the
+     * exact content and same {@link SyllableConstituentType} as the
+     * original element with new syllable info
+     *
+     * @param ele
+     * @param syllableInfo
+     * @return a copy of the given element
+     *
+     * @throws NullPointerException if ele is <code>null</code>
+     */
+    public IPAElement cloneElementWithSyllableInfo(IPAElement ele, SyllableInfo syllableInfo) {
+        IPAElement retVal = null;
+
+        if(ele == null)
+            throw new NullPointerException();
+
+        if(ele instanceof Phone ph) {
+            retVal = clonePhoneWithSyllableInfo(ph, syllableInfo);
+        } else if(ele instanceof Diacritic) {
+            retVal = copyDiacritic((Diacritic)ele);
+        } else if(ele instanceof SyllableBoundary) {
+            retVal = createSyllableBoundary();
+        } else if(ele instanceof StressMarker) {
+            retVal = cloneStressWithSyllableInfo((StressMarker)ele, syllableInfo);
+        } else if(ele instanceof IntonationGroup) {
+            retVal = cloneIntonationGroup((IntonationGroup)ele);
+        } else if(ele instanceof WordBoundary) {
+            retVal = createWordBoundary();
+        } else if(ele instanceof Pause) {
+            retVal = clonePause((Pause)ele);
+        } else if(ele instanceof IntraWordPause) {
+            retVal = createIntraWordPause();
+        } else if(ele instanceof CompoundWordMarker) {
+            retVal = createCompoundWordMarker();
+        } else if(ele instanceof Sandhi) {
+            retVal = cloneSandhi((Sandhi)ele);
+        } else if(ele instanceof PhonexMatcherReference) {
+            retVal = clonePhonexMatcherReference((PhonexMatcherReference)ele);
+        } else if(ele instanceof AlignmentMarker) {
+            retVal = createAlignmentMarker();
+        } else if(ele instanceof ToneNumber) {
+            retVal = cloneToneNumber((ToneNumber)ele);
+        } else if(ele instanceof ToneMelody) {
+            retVal = cloneToneMelody((ToneMelody)ele);
+        }
+
+        return retVal;
+    }
 
     /**
      * Create a tone number element

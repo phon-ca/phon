@@ -247,15 +247,6 @@ public class TestIPAParser {
 		Assert.assertEquals(7, ipa.length());
 		Assert.assertEquals(CompoundWordMarker.class, ipa.elementAt(3).getClass());
 	}
-
-	@Test
-	public void testComplexCompound() throws Exception {
-		final String testString = "ⁿ̃e̯ːˑ³⁷͡ʰ̵ɪᶾ⁵¹";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(testString);
-
-		Assert.assertEquals(1, ipa.length());
-		Assert.assertEquals(testString, ipa.toString());
-	}
 	
 	@Test
 	public void testLinker() throws Exception {

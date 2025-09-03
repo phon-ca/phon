@@ -67,7 +67,7 @@ public final class SyllableConstituentMatcher implements PhoneMatcher, Combinabl
 		if(matchesAnything()) return true;
 		
 		boolean retVal = true;
-		SyllableInfo scInfo = p.getExtension(SyllableInfo.class);
+		SyllableInfo scInfo = p.syllableInfo();
 		if(scInfo != null) {
 			if(allowedTypes.size() > 0) {
 				if(scInfo.constituentType() == SyllableConstituentType.AMBISYLLABIC) {

@@ -38,6 +38,11 @@ public final class StressMarker extends IPAElement {
 		this.type = stress;
 	}
 
+    StressMarker(StressType stress, FeatureSet overrideFeatureSet, SyllableInfo syllInfo) {
+        super(overrideFeatureSet, syllInfo);
+        this.type = stress;
+    }
+
 	/**
 	 * Get the type
 	 * 

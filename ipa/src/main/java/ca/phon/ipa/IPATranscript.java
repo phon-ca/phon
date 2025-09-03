@@ -15,13 +15,11 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.cvseq.*;
 import ca.phon.extensions.*;
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.phonex.*;
-import ca.phon.stresspattern.*;
 import ca.phon.syllable.*;
 import ca.phon.util.*;
 import ca.phon.visitor.*;
@@ -764,83 +762,176 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return before.toString().length();
 	}
 
+    /**
+     * Get the stress of the first syllable in this transcript.
+     *
+     * @return the stress of the first syllable or NoStress if no syllables
+     */
+    public SyllableStress initialStress() {
+        if(this.transcription.length == 0) return SyllableStress.NoStress;
+        if(this.transcription[0] instanceof StressMarker sm) {
+            switch(sm.getType()) {
+                case PRIMARY:
+                    return SyllableStress.PrimaryStress;
+                case SECONDARY:
+                    return SyllableStress.SecondaryStress;
+                default:
+                    return SyllableStress.NoStress;
+            }
+        }
+        return SyllableStress.NoStress;
+    }
+
+    /**
+     * Get the stress pattern for this transcript.
+     * The stress pattern is a string of characters where '1' indicates
+     * primary stress, '2' indicates secondary stress, 'U' indicates
+     * unstressed.
+     *
+     * @return the stress pattern
+     */
 	public String getStressPattern() {
-		return StressPattern.getStressPattern(this.toList());
+        final StringBuffer sb = new StringBuffer();
+        for(IPATranscript syllable:syllables()) {
+            final Phone firstPhone = syllable.firstPhone();
+            if(firstPhone != null) {
+                final SyllableInfo sInfo = firstPhone.syllableInfo();
+                switch (sInfo.stress()) {
+                    case PrimaryStress:
+                        sb.append('1');
+                        break;
+                    case SecondaryStress:
+                        sb.append('2');
+                        break;
+                    case NoStress:
+                        sb.append('U');
+                        break;
+                    default:
+                        sb.append('U');
+                }
+            }
+        }
+        return sb.toString();
 	}
 
-	/**
-	 * Does this transcript's stress pattern match the given
-	 * {@link StressPattern}
+    /**
+     * Convert a stress pattern expr into a phonex pattern.
+     * This will convert all '1' into 'σ!1', '2' into 'σ!2', and, 'U' into 'σ!U', and 'A' into 'σ'.
+     * The remainder of the pattern is unchanged.
+     *
+     * @param expr the stress pattern expression
+     * @return the phonex pattern expr
+     */
+    public String convertStressExpr(String expr) {
+        final String oneReplace = "σ!1";
+        final String twoReplace = "σ!2";
+        final String uReplace = "σ!U";
+        final String aReplace = "σ";
+
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < expr.length(); i++) {
+            char ch = expr.charAt(i);
+            switch (ch) {
+                case '1':
+                    buffer.append(oneReplace);
+                    break;
+                case '2':
+                    buffer.append(twoReplace);
+                    break;
+                case 'U':
+                    buffer.append(uReplace);
+                    break;
+                case 'A':
+                    buffer.append(aReplace);
+                    break;
+                default:
+                    buffer.append(ch);
+            }
+        }
+        return buffer.toString();
+    }
+
+    /**
+	 * Does this transcript's stress pattern match the given stress pattern.
 	 *
 	 * @param pattern
 	 *
 	 * @return <code>true</code> if pattern matches, <code>false</code> otherwise
 	 */
 	public boolean matchesStressPattern(String pattern) {
-		boolean retVal = false;
-		try {
-			final StressPattern sp = StressPattern.compile(pattern);
-			final String mySp = StressPattern.getStressPattern(this.toList());
-			final List<StressMatcherType> stTypes =
-					StressMatcherType.toStressMatcherList(mySp);
-
-			retVal = sp.matches(stTypes);
-		} catch (ParseException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
-		}
-		return retVal;
+		final String phonexExpr = convertStressExpr(pattern);
+        return matches(phonexExpr);
 	}
 
 	/**
-	 * Does this transcript contain the given {@link StressPattern}
-	 *
+	 * Does this transcript contain the given stress pattern.
+     *
 	 * @param pattern
 	 * @return <code>true</code> if this transcript contains the stress
 	 *  pattern, <code>false</code> otherwise
 	 */
 	public boolean containsStressPattern(String pattern) {
-		boolean retVal = false;
-		try {
-			final StressPattern sp = StressPattern.compile(pattern);
-			final String mySp = StressPattern.getStressPattern(this.toList());
-			final List<StressMatcherType> stTypes =
-					StressMatcherType.toStressMatcherList(mySp);
-
-			retVal = sp.findWithin(stTypes);
-		} catch (ParseException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
-		}
-		return retVal;
+        final String phonexExpr = convertStressExpr(pattern);
+        return contains(phonexExpr);
 	}
 
 	/**
-	 * Find all occurrences of the given {@link StressPattern}
+	 * Find all occurrences of the given stress pattern.
 	 *
 	 * @param pattern
 	 * @return
 	 */
 	public List<IPATranscript> findStressPattern(String pattern) {
-		List<IPATranscript> retVal = new ArrayList<IPATranscript>();
+        final String phonexExpr = convertStressExpr(pattern);
+        final List<IPATranscript> retVal = new ArrayList<IPATranscript>();
 
-		try {
-			final StressPattern sp = StressPattern.compile(pattern);
-			final String mySp = StressPattern.getStressPattern(this.toList());
-			final List<StressMatcherType> stTypes =
-					StressMatcherType.toStressMatcherList(mySp);
+        PhonexPattern phonex = PhonexPattern.compile(phonexExpr);
+        PhonexMatcher matcher = phonex.matcher(this);
+        while(matcher.find()) {
+            final IPATranscript subT = subsection(matcher.start(), matcher.end());
+            retVal.add(subT);
+        }
 
-			final List<Range> ranges = sp.findRanges(stTypes);
-			for(Range range:ranges) {
-				final Range phoneRange =
-						StressPattern.convertSPRToPR(this.toList(), mySp, range);
-				final IPATranscript subT = subsection(phoneRange.getStart(), phoneRange.getEnd());
-				retVal.add(subT);
-			}
-		} catch (ParseException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
-		}
-
-		return retVal;
+        return retVal;
 	}
+
+    /**
+     * Convert a given 'CV' pattern to a PhonexPattern.
+     * This pattern will turn all 'C' into '{c}', V into '{v}', and G into '{c, glide}'.
+     *
+     * The remainder of the pattern is unchanged.
+     *
+     * @param expr the CV pattern expression
+     * @return the phonex pattern
+     */
+    public String convertCVExpr(String expr) {
+        final String aReplace = "\\w";
+        final String cReplace = "{c}";
+        final String vReplace = "{v}";
+        final String gReplace = "{c, glide}";
+
+        StringBuffer buffer = new StringBuffer();
+        for(int i = 0; i < expr.length(); i++) {
+            char ch = expr.charAt(i);
+            switch(ch) {
+                case 'A':
+                    buffer.append(aReplace);
+                    break;
+                case 'C':
+                    buffer.append(cReplace);
+                    break;
+                case 'V':
+                    buffer.append(vReplace);
+                    break;
+                case 'G':
+                    buffer.append(gReplace);
+                    break;
+                default:
+                    buffer.append(ch);
+            }
+        }
+        return buffer.toString();
+    }
 
 	public String getCvPattern() {
 		final CoverVisitor visitor = new CoverVisitor("G=\\g; C=\\c; V=\\v");
@@ -849,57 +940,27 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	public boolean matchesCVPattern(String pattern) {
-		boolean retVal = false;
-
-		try {
-			final CVSeqPattern cvPattern = CVSeqPattern.compile(pattern);
-			final String myCVPattern = CVSeqPattern.getCVSeq(this.toList());
-			final List<CVSeqType> cvTypes = CVSeqType.toCVSeqMatcherList(myCVPattern);
-
-			retVal = cvPattern.matches(cvTypes);
-		} catch (ParseException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
-		}
-
-		return retVal;
+        final String phonexExpr = convertCVExpr(pattern);
+        return matches(phonexExpr);
 	}
 
 	public boolean containsCVPattern(String pattern) {
-		boolean retVal = false;
-
-		try {
-			final CVSeqPattern cvPattern = CVSeqPattern.compile(pattern);
-			final String myCVPattern = CVSeqPattern.getCVSeq(this.toList());
-			final List<CVSeqType> cvTypes = CVSeqType.toCVSeqMatcherList(myCVPattern);
-
-			retVal = cvPattern.findWithin(cvTypes);
-		} catch (ParseException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
-		}
-
-		return retVal;
+        final String phonexExpr = convertCVExpr(pattern);
+        return contains(phonexExpr);
 	}
 
 	public List<IPATranscript> findCVPattern(String pattern) {
-		final List<IPATranscript> retVal = new ArrayList<IPATranscript>();
+        final String phonexExpr = convertCVExpr(pattern);
+        final List<IPATranscript> retVal = new ArrayList<IPATranscript>();
 
-		try {
-			final CVSeqPattern cvPattern = CVSeqPattern.compile(pattern);
-			final String myCVPattern = CVSeqPattern.getCVSeq(this.toList());
-			final List<CVSeqType> cvTypes = CVSeqType.toCVSeqMatcherList(myCVPattern);
+        PhonexPattern phonex = PhonexPattern.compile(phonexExpr);
+        PhonexMatcher matcher = phonex.matcher(this);
+        while(matcher.find()) {
+            final IPATranscript subT = subsection(matcher.start(), matcher.end());
+            retVal.add(subT);
+        }
 
-			final List<Range> ranges = cvPattern.findRanges(cvTypes);
-			for(Range range:ranges) {
-				final Range phoneRange =
-						CVSeqPattern.convertCVRangeToPhoneRange(this.toList(), range);
-				final IPATranscript subT = subsection(phoneRange.getStart(), phoneRange.getEnd());
-				retVal.add(subT);
-			}
-		} catch (ParseException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
-		}
-
-		return retVal;
+        return retVal;
 	}
 
 	/**

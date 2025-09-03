@@ -363,7 +363,6 @@ public class TestPhonex extends PhonexTest {
 		IPATranscript[][] answers = {
 				{ ipa.subsection(1, 3), ipa.subsection(1, 2), ipa.subsection(2, 3) }, 
 				{ ipa.subsection(4, 5), ipa.subsection(4, 5), ipa.subsection(0, 0) }
-				
 		};
 		testGroups(ipa, phonex, answers);
 	}
