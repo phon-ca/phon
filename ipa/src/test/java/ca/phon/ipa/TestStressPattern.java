@@ -49,7 +49,7 @@ public class TestStressPattern {
 	@Test
 	public void testFind() throws ParseException {
 		final String txt = "ˈtæktfəl ˈbʌtəɹiː kənˈstɹeɪnts";
-		final String sp = "U 1";
+		final String sp = "U\\b1";
 		final String expected = "l ˈb";
 		
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);

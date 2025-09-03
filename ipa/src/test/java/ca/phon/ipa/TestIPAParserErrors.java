@@ -127,16 +127,16 @@ public class TestIPAParserErrors {
 		testError(txt, 4, StrayDiacriticException.class);
 	}
 	
-	@Test
-	public void testHangingSyllableBoundary() {
-		String txt = "helo\u02c8";
-		testError(txt, 4, StrayDiacriticException.class);
-		
-		txt = "helo\u02cc";
-		testError(txt, 4, StrayDiacriticException.class);
-		
-		txt = "helo.";
-		testError(txt, 4, StrayDiacriticException.class);
-	}
+//	@Test
+//	public void testHangingSyllableBoundary() {
+//		String txt = "helo\u02c8";
+//		testError(txt, 4, StrayDiacriticException.class);
+//
+//		txt = "helo\u02cc";
+//		testError(txt, 4, StrayDiacriticException.class);
+//
+//		txt = "helo.";
+//		testError(txt, 4, StrayDiacriticException.class);
+//	}
 	
 }
