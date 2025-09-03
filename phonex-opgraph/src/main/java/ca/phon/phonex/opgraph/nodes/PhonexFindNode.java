@@ -102,8 +102,8 @@ public class PhonexFindNode extends MacroNode implements PhonexNode {
 	/**
 	 * Maps published outputs from a given context mapping to a given context.
 	 * 
-	 * @param contextsMap  the context mapping to map outputs from
-	 * @param context  the context to map outputs to
+	 * @param context  the context mapping to map outputs from
+	 * @param iteration  the current iteration
 	 */
 	private void mapOutputs(OpContext context, int iteration) {
 		// Grab mapped outputs and put them in our context

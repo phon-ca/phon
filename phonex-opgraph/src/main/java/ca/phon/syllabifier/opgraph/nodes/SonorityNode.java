@@ -103,7 +103,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		ipa.accept(visitor);
 		
 		// set output
-		context.put(ipaOut, ipa);
+		context.put(ipaOut, visitor.toIPATranscript());
 	}
 	
 	/**
@@ -200,6 +200,9 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		private int lastSonority = 0;
 
 		private Map<PhonexPattern, Integer> sonorityMap;
+
+        private final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        private final IPAElementFactory factory = new IPAElementFactory();
 		
 		public SonorityVisitor(Map<PhonexPattern, Integer> sonorityMap) {
 			super();
@@ -210,6 +213,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 		public void fallbackVisit(IPAElement obj) {
 			// reset sonority
 			lastSonority = 0;
+            builder.append(obj);
 		}
 		
 		@Visits
@@ -235,9 +239,23 @@ public class SonorityNode extends OpNode implements NodeSettings {
 			
 			final int distance = value - lastSonority;
 			lastSonority = value;
-			
-			final SonorityInfo info = new SonorityInfo(value, distance);
-			p.putExtension(SonorityInfo.class, info);
+
+            final SyllableInfo syllInfo = new SyllableInfo(
+                    p.constituentType(),
+                    p.isDiphthong(),
+                    p.stress(),
+                    p.syllableIndex(),
+                    p.segregated(),
+                    value,
+                    distance,
+                    p.tone()
+            );
+            final IPAElement newElem = factory.cloneElementWithSyllableInfo(p, syllInfo);
+            builder.append(newElem);
 		}
+
+        public IPATranscript toIPATranscript() {
+            return builder.toIPATranscript();
+        }
 	}
 }

@@ -40,7 +40,7 @@ public final class OpGraphSyllabifier implements Syllabifier {
 	/**
 	 * Create a new syllabifier from the given stream.
 	 * 
-	 * @param stream
+	 * @param is
 	 */
 	public static OpGraphSyllabifier createSyllabifier(InputStream is)
 		throws IOException {
@@ -92,13 +92,14 @@ public final class OpGraphSyllabifier implements Syllabifier {
 	}
 
 	@Override
-	public void syllabify(List<IPAElement> phones) {
+	public IPATranscript syllabify(IPATranscript transcript) {
 		final Processor processor = new Processor(graph);
 		final OpContext ctx = processor.getContext();
-		final IPATranscript transcript = new IPATranscript(phones);
 		ctx.put(IPA_CONTEXT_KEY, transcript);
 		
 		processor.stepAll();
+
+        return (IPATranscript)ctx.get(IPA_CONTEXT_KEY);
 	}
 
 	@Override

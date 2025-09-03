@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,110 +20,132 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.phonex.opgraph.nodes.PhonexNode;
 import ca.phon.phonex.opgraph.nodes.PhonexSettingsPanel;
-import ca.phon.syllable.*;
 
 import java.awt.*;
 import java.util.List;
-import java.util.*;
+import java.util.Properties;
 
 @OpNodeInfo(
-		name="Mark Constituent Type",
-		description="Use phonex expressions to mark constituent type for phones. Use group names to determine syllabification information.",
-		category="Syllabifier"
+        name = "Mark Constituent Type",
+        description = "Use phonex expressions to mark constituent type for phones. Use group names to determine syllabification information.",
+        category = "Syllabifier"
 )
 public class MarkConstituentNode extends OpNode implements PhonexNode {
 
-	// input field
-	private final static InputField ipaInput = 
-			new InputField("ipa", "ipa input", IPATranscript.class);
-	// pass-through output
-	private final static OutputField ipaOut =
-			new OutputField("ipa out", "pass-through ipa ouptput", true, IPATranscript.class);
-	
-	/**
-	 * Compiled phonex pattern
-	 */
-	private PhonexPattern pattern;
-	
-	public MarkConstituentNode() {
-		super();
-		
-		putField(ipaInput);
-		putField(ipaOut);
-		
-		putExtension(NodeSettings.class, this);
-	}
+    // input field
+    private final static InputField ipaInput =
+            new InputField("ipa", "ipa input", IPATranscript.class);
+    // pass-through output
+    private final static OutputField ipaOut =
+            new OutputField("ipa out", "pass-through ipa ouptput", true, IPATranscript.class);
+    private final String PHONEX_KEY =
+            getClass().getName() + ".phonex";
+    /**
+     * Compiled phonex pattern
+     */
+    private PhonexPattern pattern;
+    private PhonexSettingsPanel settingsPanel;
 
-	@Override
-	public void operate(OpContext context) throws ProcessingException {
-		if(pattern == null)
-			throw new ProcessingException(null, "No pattern");
-		final IPATranscript ipa = (IPATranscript)context.get(ipaInput);
-		
-		final PhonexMatcher matcher = pattern.matcher(ipa);
-		while(matcher.find()) {
-			for(int i = 1; i <= matcher.groupCount(); i++) {
-				final String grpName = pattern.groupName(i);
-				if(grpName != null) {
-					final SyllableConstituentType scType = 
-							(SyllableConstituentType.fromString(grpName) != null ? SyllableConstituentType.fromString(grpName) : SyllableConstituentType.UNKNOWN);
-					final List<IPAElement> grp = matcher.group(i);
-					grp.forEach( (e) -> e.setScType(scType) );
-					
-					if(grpName.equalsIgnoreCase("D")) {
-						for(int eleIdx = 1; eleIdx < grp.size(); eleIdx++) {
-							grp.get(eleIdx).getExtension(SyllabificationInfo.class).setDiphthongMember(true);
-						}
-					}
-				}
-			}
-		}
-		
-		context.put(ipaOut, ipa);
-	}
+    public MarkConstituentNode() {
+        super();
 
-	@Override
-	public String getPhonex() {
-		String retVal = "";
-		if(pattern != null)
-			retVal = pattern.pattern();
-		return retVal;
-	}
+        putField(ipaInput);
+        putField(ipaOut);
 
-	private PhonexSettingsPanel settingsPanel;
-	@Override
-	public Component getComponent(GraphDocument arg0) {
-		if(settingsPanel == null) {
-			settingsPanel = new PhonexSettingsPanel(arg0, this);
-		}
-		return settingsPanel;
-	}
-	
-	private final String PHONEX_KEY = 
-			getClass().getName() + ".phonex";
+        putExtension(NodeSettings.class, this);
+    }    @Override
+    public String getPhonex() {
+        String retVal = "";
+        if (pattern != null)
+            retVal = pattern.pattern();
+        return retVal;
+    }
 
-	@Override
-	public Properties getSettings() {
-		final Properties retVal = new Properties();
-		if(pattern != null) {
-			retVal.setProperty(PHONEX_KEY, pattern.pattern());
-		}
-		return retVal;
-	}
+    @Override
+    public void operate(OpContext context) throws ProcessingException {
+        if (pattern == null)
+            throw new ProcessingException(null, "No pattern");
+        final IPATranscript ipa = (IPATranscript) context.get(ipaInput);
 
-	@Override
-	public void loadSettings(Properties arg0) {
-		if(arg0.containsKey(PHONEX_KEY)) {
-			setPhonex(arg0.getProperty(PHONEX_KEY));
-		}
-	}
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        final IPAElementFactory factory = new IPAElementFactory();
+        final PhonexMatcher matcher = pattern.matcher(ipa);
+        int lastEnd = 0;
+        while (matcher.find()) {
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                final String grpName = pattern.groupName(i);
+                if (grpName != null) {
+                    final SyllableConstituentType scType =
+                            (SyllableConstituentType.fromString(grpName) != null ? SyllableConstituentType.fromString(grpName) : SyllableConstituentType.UNKNOWN);
+                    boolean diphthong = scType == SyllableConstituentType.NUCLEUS && grpName.equals("D");
+                    // add any unprocessed elements
+                    for (int j = lastEnd; j < matcher.start(i); j++) {
+                        builder.append(ipa.elementAt(j));
+                    }
+                    final List<IPAElement> grp = matcher.group(i);
+                    for (IPAElement grpElem : grp) {
+                        final SyllableInfo syllableInfo = new SyllableInfo(
+                                scType,
+                                diphthong,
+                                grpElem.stress(),
+                                grpElem.syllableIndex(),
+                                grpElem.segregated(),
+                                grpElem.sonority(),
+                                grpElem.sonorityDistance(),
+                                grpElem.tone()
+                        );
+                        final IPAElement newElem = factory.cloneElementWithSyllableInfo(grpElem, syllableInfo);
+                        builder.append(newElem);
+                    }
+                    lastEnd = matcher.end(i);
+                }
+            }
+        }
+        // add any remaining elements
+        for (int j = lastEnd; j < ipa.length(); j++) {
+            builder.append(ipa.elementAt(j));
+        }
 
-	@Override
-	public void setPhonex(String phonex) throws PhonexPatternException {
-		pattern = PhonexPattern.compile(phonex);
-		
-	}
+        final IPATranscript retVal = builder.toIPATranscript();
+        context.put(ipaOut, retVal);
+        // update global variable for syllabifier output
+        context.put("__ipa", retVal);
+    }
+
+    @Override
+    public Component getComponent(GraphDocument arg0) {
+        if (settingsPanel == null) {
+            settingsPanel = new PhonexSettingsPanel(arg0, this);
+        }
+        return settingsPanel;
+    }
+
+    @Override
+    public Properties getSettings() {
+        final Properties retVal = new Properties();
+        if (pattern != null) {
+            retVal.setProperty(PHONEX_KEY, pattern.pattern());
+        }
+        return retVal;
+    }
+
+    @Override
+    public void loadSettings(Properties arg0) {
+        if (arg0.containsKey(PHONEX_KEY)) {
+            setPhonex(arg0.getProperty(PHONEX_KEY));
+        }
+    }
+
+
+
+    @Override
+    public void setPhonex(String phonex) throws PhonexPatternException {
+        pattern = PhonexPattern.compile(phonex);
+
+    }
 }

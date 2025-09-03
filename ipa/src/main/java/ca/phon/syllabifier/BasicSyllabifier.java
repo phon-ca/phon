@@ -48,6 +48,10 @@ public class BasicSyllabifier implements Syllabifier {
         for(SyllabifierStep step:syllabifierSteps) {
             retVal = runStep(step, retVal);
         }
+        // add SyllableInfo
+        final SyllableInfoVisitor visitor = new SyllableInfoVisitor();
+        retVal.accept(visitor);
+        retVal = visitor.toIPATranscript();
         return retVal;
     }
 
