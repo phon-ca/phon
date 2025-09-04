@@ -47,6 +47,9 @@ public class IPAUIDefaults implements UIDefaultsHandler, IPluginExtensionPoint<U
     public final static String SYLLABLE_CONSTITUENT_WORD_BOUNDARY_MARKER_COLOR = "Phon.syllableConstituent.wordBoundaryMarkerColor";
     public final static Color DEFAULT_SYLLABLE_CONSTITUENT_WORD_BOUNDARY_MARKER_COLOR = UIManager.getColor("text");
 
+    public final static String SYLLABLE_CONSTITUENT_TONENUMBER_COLOR = "Phon.syllableConstituent.toneNumberColor";
+    public final static Color DEFAULT_SYLLABLE_CONSTITUENT_TONENUMBER_COLOR = UIManager.getColor("text");
+
     public IPAUIDefaults() {
         super();
     }
@@ -64,6 +67,7 @@ public class IPAUIDefaults implements UIDefaultsHandler, IPluginExtensionPoint<U
         defaults.put(SYLLABLE_CONSTITUENT_SYLLABLE_BOUNDARY_MARKER_COLOR, DEFAULT_SYLLABLE_CONSTITUENT_SYLLABLE_BOUNDARY_MARKER_COLOR);
         defaults.put(SYLLABLE_CONSTITUENT_SYLLABLE_STRESS_MARKER_COLOR, DEFAULT_SYLLABLE_CONSTITUENT_SYLLABLE_STRESS_MARKER_COLOR);
         defaults.put(SYLLABLE_CONSTITUENT_WORD_BOUNDARY_MARKER_COLOR, DEFAULT_SYLLABLE_CONSTITUENT_WORD_BOUNDARY_MARKER_COLOR);
+        defaults.put(SYLLABLE_CONSTITUENT_TONENUMBER_COLOR, DEFAULT_SYLLABLE_CONSTITUENT_TONENUMBER_COLOR);
     }
 
     public static Color getColorForConstituentType(SyllableConstituentType type) {
@@ -79,6 +83,7 @@ public class IPAUIDefaults implements UIDefaultsHandler, IPluginExtensionPoint<U
             case SYLLABLEBOUNDARYMARKER -> UIManager.getColor(SYLLABLE_CONSTITUENT_SYLLABLE_BOUNDARY_MARKER_COLOR);
             case SYLLABLESTRESSMARKER -> UIManager.getColor(SYLLABLE_CONSTITUENT_SYLLABLE_STRESS_MARKER_COLOR);
             case WORDBOUNDARYMARKER -> UIManager.getColor(SYLLABLE_CONSTITUENT_WORD_BOUNDARY_MARKER_COLOR);
+            case TONENUMBER -> UIManager.getColor(SYLLABLE_CONSTITUENT_TONENUMBER_COLOR);
         };
     }
 
