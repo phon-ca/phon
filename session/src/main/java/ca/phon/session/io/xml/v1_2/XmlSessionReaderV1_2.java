@@ -36,8 +36,6 @@ import ca.phon.session.io.xml.v12.WordType;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.syllable.*;
 import ca.phon.util.Language;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.*;
@@ -64,12 +62,11 @@ import java.util.regex.Pattern;
 /**
  * Session XML reader for session files with
  * version 'PB1.2'
- *
  * When reading in this older format alignment may be fixed.
- *
  * Fixing alignment
- *
- * Small pinchers for phonetic groups have been added to the IPA parser.  This was necessary for one-to-one alignment and is our solution for upgrading Phon data.  Currently, I don't do anything when reading the older version 1.3 files when alignment is not complete in groups.  We previously discussed using ',' but I think now that is a mistake. Here are some siuations.  In each example, I'm using upper case letters for words in orthography and smaller case for ipa.
+ * Small pinchers for phonetic groups have been added to the IPA parser.
+ * This was necessary for one-to-one alignment and is our solution for upgrading Phon data.
+ * Currently, I don't do anything when reading the older version 1.3 files when alignment is not complete in groups.  We previously discussed using ',' but I think now that is a mistake. Here are some siuations.  In each example, I'm using upper case letters for words in orthography and smaller case for ipa.
  *
  * Old Phon:
  * ```
@@ -895,6 +892,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			final IPATranscript groupTranscript = groupBuilder.toIPATranscript();
 			// only assign syllabification if possible
 			if(pt.getSb() != null && groupTranscript.length() == pt.getSb().getPh().size()) {
+                final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 				for(int i = 0; i < pt.getSb().getPh().size(); i++) {
 					var ph = pt.getSb().getPh().get(i);
 					final SyllableConstituentType scType = switch (ph.getScType()) {
@@ -911,69 +909,18 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 						case UK -> SyllableConstituentType.UNKNOWN;
 					};
 					final IPAElement element = groupTranscript.elementAt(i);
-					final SyllabificationInfo info = element.getExtension(SyllabificationInfo.class);
-					info.setConstituentType(scType);
-					if(scType == SyllableConstituentType.NUCLEUS) {
-						info.setDiphthongMember(!ph.isHiatus());
-					}
+                    final boolean diphthong = scType == SyllableConstituentType.NUCLEUS && !ph.isHiatus();
+                    final SyllableInfo syllableInfo = new SyllableInfo(scType, diphthong, SyllableStress.NoStress, -1, false, 0, 0, null);
+                    builder.append((new IPAElementFactory()).cloneElementWithSyllableInfo(element, syllableInfo));
 				}
-			}
-			retVal.add(groupTranscript);
+                final SyllableInfoVisitor visitor = new SyllableInfoVisitor();
+                builder.toIPATranscript().accept(visitor);
+                retVal.add(visitor.toIPATranscript());
+			} else {
+                retVal.add(groupTranscript);
+            }
 		}
 		return retVal;
-	}
-
-	public class CopyTranscriptVisitor extends VisitorAdapter<IPAElement> {
-
-		int eleIdx = 0;
-
-		final List<ConstituentType> syllabification;
-
-		public CopyTranscriptVisitor(List<ConstituentType> syllabification) {
-			super();
-			this.syllabification = syllabification;
-		}
-
-		@Override
-		public void fallbackVisit(IPAElement obj) {
-			eleIdx++;
-		}
-
-		@Visits
-		public void visitPhone(Phone phone) {
-			final ConstituentType ct =
-					(eleIdx < syllabification.size() ? syllabification.get(eleIdx++) : null);
-			if(ct != null) {
-				final ConstituentTypeType ctt = ct.getScType();
-				final SyllableConstituentType scType = SyllableConstituentType.fromString(ctt.toString());
-				final SyllabificationInfo info = phone.getExtension(SyllabificationInfo.class);
-				if(scType != null) {
-					info.setConstituentType(scType);
-					if(scType == SyllableConstituentType.NUCLEUS) {
-						info.setDiphthongMember(!ct.isHiatus());
-					}
-					phone.putExtension(SyllabificationInfo.class, info);
-				}
-			}
-		}
-
-		@Visits
-		public void visitCompoundPhone(CompoundPhone cp) {
-			final ConstituentType ct =
-					(eleIdx < syllabification.size() ? syllabification.get(eleIdx++) : null);
-			if(ct != null) {
-				final ConstituentTypeType ctt = ct.getScType();
-				final SyllabificationInfo info = cp.getExtension(SyllabificationInfo.class);
-				final SyllableConstituentType scType = SyllableConstituentType.fromString(ctt.toString());
-				if(scType != null) {
-					info.setConstituentType(scType);
-					if(scType == SyllableConstituentType.NUCLEUS) {
-						info.setDiphthongMember(!ct.isHiatus());
-					}
-				}
-			}
-		}
-
 	}
 
 	/**

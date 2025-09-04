@@ -103,7 +103,7 @@ I don't know +...
 I have &=$ &=5 million .
 I have &=foo&bar .
 I have &=foo:bar:baz .
-I have &foo .
+I have &~foo .
 I need band-aids .
 I read section <four b@l> [= (4)(b)] yesterday .
 I want (s)ome cookies .
@@ -142,7 +142,6 @@ a ball ?
 a chicken !
 a constriction∾ .
 a foo3 stupid .
-a hash# word and another# .
 a in∙halation .
 a ladder I guess .
 a lauἩgh in word .
@@ -246,7 +245,7 @@ falling to mid ↘
 foo &=1 bar .
 foo &=head [= head] bar .
 foo &=head:no bar .
-foo &au^bg bar &foo::bar &foo:: .
+foo &au^bg bar &~foo::bar &~foo:: .
 foo .
 foo bar +.
 foo bar .
@@ -287,7 +286,7 @@ here .
 here comes the little girl .
 here i am !
 here is a &=thing .
-here is a &frag .
+here is a &-frag .
 here is a (.) pause .
 here is an 0for word .
 hey
@@ -359,7 +358,7 @@ kof .
 kof kof kof .
 kova kova .
 ku ku ku .
-kɛstɰə˞@u [:: giftware] [* n:k] no [//] &in &=shakes:head
+kɛstɰə˞@u [:: giftware] [* n:k] no [//] &+in &=shakes:head
 lalalalala .
 lashir , lashir .
 lashir lashir .
@@ -405,7 +404,7 @@ mom:my@b .
 mommy &+≠w [//] we [//] ↫a↫and .
 mor a'a ia .
 more cookie . [+ IMP]
-my &car is stupid .
+my &-car is stupid .
 my car [= foo] .
 my car [% comment stuff] .
 my car is stupid .
@@ -438,10 +437,6 @@ od pa'am od pa'am .
 oh !
 oh look at that .
 only_one_allowed [: foo] .
-ooh &piNb &k &grr .
-ooh &pinb &k &grr .
-ooh &pinb &k3 &grr5 .
-ooh &pinb &k:3 &grr:5 .
 op(en) !
 oto .
 oto shelanu .
@@ -624,7 +619,7 @@ zhei4+ge hello .
 °softer° [/] .
 ⌈ a b c d .
 ⌈ a b⌉ c d .
-“ &foo and more ” .
+“ &~foo and more ” .
 ‹A B› C .
 ‹Mommy sa [?]› .
 ʔat tešví po we- tesaprí .

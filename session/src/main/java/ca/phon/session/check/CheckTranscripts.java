@@ -95,14 +95,14 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				// reset syllabification for all ipa tiers
 				IPATranscript ipaT = transcriptElement.asRecord().getIPATarget();
 				if(ipaT != null) {
-					syllabifier.syllabify(ipaT.toList());
+					ipaT = syllabifier.syllabify(ipaT);
 					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
 							SystemTierType.IPATarget.getName(), "IPA target syllabification reset for record #" + rIdx);
 					validator.fireValidationEvent(evt);
 				}
 				IPATranscript ipaA = transcriptElement.asRecord().getIPAActual();
 				if(ipaA != null) {
-					syllabifier.syllabify(ipaA.toList());
+					ipaA = syllabifier.syllabify(ipaA);
 					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
 							SystemTierType.IPAActual.getName(), "IPA actual syllabification reset for record #" + rIdx);
 					validator.fireValidationEvent(evt);
@@ -118,7 +118,8 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				for(Tier<IPATranscript> ipaUserTier: transcriptElement.asRecord().getTiersOfType(IPATranscript.class)) {
 					if(ipaUserTier.isUnvalidated()) continue;
 					if(ipaUserTier.getExtension(UnvalidatedValue.class) != null) continue;
-					syllabifier.syllabify(ipaUserTier.getValue().toList());
+					final IPATranscript newIpa = syllabifier.syllabify(ipaUserTier.getValue());
+                    ipaUserTier.setValue(newIpa);
 					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
 							ipaUserTier.getName(), ipaUserTier.getName() + " syllabification reset for record #" + rIdx);
 					validator.fireValidationEvent(evt);

@@ -57,12 +57,12 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		if(phone.getCombiningDiacritics().length > 0)
 			Arrays.stream(phone.getCombiningDiacritics()).map(Diacritic::getText).forEach(phoneType.getCombining()::add);
 		String phLen = Arrays.stream(phone.getLengthDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
-		if(phLen.length() > 0) phoneType.setPhlen(phLen);
-		String toneNum = Arrays.stream(phone.getToneNumberDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
-		if(toneNum.length() > 0) phoneType.setToneNumber(toneNum);
+		if(!phLen.isEmpty()) phoneType.setPhlen(phLen);
+//		String toneNum = Arrays.stream(phone.getToneNumberDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
+//		if(toneNum.length() > 0) phoneType.setToneNumber(toneNum);
 		final List<Diacritic> filteredSuffixDiacritics =
 				Arrays.stream(phone.getSuffixDiacritics()).filter(d -> d.getType() == DiacriticType.SUFFIX).toList();
-		if(filteredSuffixDiacritics.size() > 0)
+		if(!filteredSuffixDiacritics.isEmpty())
 			filteredSuffixDiacritics.stream().map(Diacritic::getText).forEach(phoneType.getSuffix()::add);
 		if(phone.constituentType() != SyllableConstituentType.UNKNOWN) {
 			XmlSyllableConstituentType scType = switch (phone.constituentType()) {
@@ -73,12 +73,10 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 				case OEHS -> XmlSyllableConstituentType.OEHS;
 				case ONSET -> XmlSyllableConstituentType.ONSET;
 				case RIGHTAPPENDIX -> XmlSyllableConstituentType.RIGHT_APPENDIX;
-				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
+                case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER, TONENUMBER -> null;
 			};
-			if(scType == XmlSyllableConstituentType.NUCLEUS) {
-				final SyllabificationInfo info = phone.getExtension(SyllabificationInfo.class);
-				if(info.isDiphthongMember())
-					scType = XmlSyllableConstituentType.DIPHTHONG;
+			if(scType == XmlSyllableConstituentType.NUCLEUS && phone.isDiphthong()) {
+                scType = XmlSyllableConstituentType.DIPHTHONG;
 			}
 			phoneType.setScType(scType);
 		}
@@ -117,12 +115,10 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 				case OEHS -> XmlSyllableConstituentType.OEHS;
 				case ONSET -> XmlSyllableConstituentType.ONSET;
 				case RIGHTAPPENDIX -> XmlSyllableConstituentType.RIGHT_APPENDIX;
-				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
+                case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER, TONENUMBER -> null;
 			};
-			if(scType == XmlSyllableConstituentType.NUCLEUS) {
-				final SyllabificationInfo info = cmpPhone.getExtension(SyllabificationInfo.class);
-				if(info.isDiphthongMember())
-					scType = XmlSyllableConstituentType.DIPHTHONG;
+			if(scType == XmlSyllableConstituentType.NUCLEUS && cmpPhone.isDiphthong()) {
+                scType = XmlSyllableConstituentType.DIPHTHONG;
 			}
 			xmlCompoundPhoneType.setScType(scType);
 		}
@@ -145,10 +141,10 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	@Visits
 	public void visitIntraWordPause(IntraWordPause pause) {
 		final XmlPhoneticProsodyType pp = factory.createXmlPhoneticProsodyType();
-		if(this.currentWord.getStressOrPhOrCmph().size() == 0)
-			pp.setType(XmlPhoneticProsodyTypeType.BLOCKING.BLOCKING);
+		if(this.currentWord.getStressOrPhOrCmph().isEmpty())
+			pp.setType(XmlPhoneticProsodyTypeType.BLOCKING);
 		else
-			pp.setType(XmlPhoneticProsodyTypeType.PAUSE.PAUSE);
+			pp.setType(XmlPhoneticProsodyTypeType.PAUSE);
 		this.currentWord.getStressOrPhOrCmph().add(pp);
 	}
 

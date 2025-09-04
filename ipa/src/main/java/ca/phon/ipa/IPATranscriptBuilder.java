@@ -16,6 +16,7 @@
 package ca.phon.ipa;
 
 import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.ipa.features.FeatureSet;
 
 import java.text.ParseException;
 import java.util.*;
@@ -116,6 +117,29 @@ public class IPATranscriptBuilder {
 
 		return this;
 	}
+
+    public IPATranscriptBuilder makeCompoundPhone(Character lig, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        if(size() < 2) {
+            throw new IllegalStateException("No previous phone");
+        }
+        final IPAElement ele1 = buffer.get(buffer.size()-2);
+        if(!(ele1 instanceof Phone)) {
+            throw new IllegalStateException("Previous element not a phone");
+        }
+        final IPAElement ele2 = buffer.get(buffer.size()-1);
+        if(!(ele2 instanceof Phone)) {
+            throw new IllegalStateException("Element must be a phone.");
+        }
+
+        final Phone p1 = (Phone)ele1;
+        final Phone p2 = (Phone)ele2;
+        final CompoundPhone newPhone = factory.createCompoundPhone(p1, p2, lig, overrideFeatureSet, syllableInfo);
+        buffer.remove(p1);
+        buffer.remove(p2);
+        buffer.add(newPhone);
+
+        return this;
+    }
 	
 	/**
 	 * Append all elements
@@ -215,6 +239,21 @@ public class IPATranscriptBuilder {
 		append(factory.createPhone(prefixDiacritics, basePhone, combiningDiacritics, suffixDiacritics));
 		return this;
 	}
+
+    /**
+     * Append a phone
+     *
+     * @param prefixDiacritics
+     * @param basePhone
+     * @param combiningDiacritics
+     * @param suffixDiacritics
+     */
+    public IPATranscriptBuilder appendPhone(Diacritic[] prefixDiacritics, Character basePhone,
+                                            Diacritic[] combiningDiacritics,
+                                            Diacritic[] suffixDiacritics, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+        append(factory.createPhone(prefixDiacritics, basePhone, combiningDiacritics, suffixDiacritics, overrideFeatureSet, syllableInfo));
+        return this;
+    }
 
 	public IPATranscriptBuilder appendPause(PauseLength len) {
 		append(factory.createPause(len));

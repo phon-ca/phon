@@ -1,5 +1,6 @@
 package ca.phon.ipa;
 
+import ca.phon.ipa.alignment.SyllableAligner;
 import ca.phon.syllable.SyllableVisitor;
 
 import java.util.ArrayList;
@@ -28,6 +29,10 @@ public record SyllableInfo(SyllableConstituentType constituentType,
 
     public SyllableInfo(SyllableConstituentType constituentType) {
         this(constituentType, false, SyllableStress.NoStress, -1, false, -1, -1, null);
+    }
+
+    public SyllableInfo(SyllableConstituentType constituentType, boolean isDiphthong) {
+        this(constituentType, isDiphthong, SyllableStress.NoStress, -1, false, -1, -1, null);
     }
 
     public SyllableInfo(SyllableConstituentType constituentType, SyllableStress stress) {
