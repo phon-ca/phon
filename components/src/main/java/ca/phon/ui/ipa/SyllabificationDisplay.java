@@ -146,13 +146,34 @@ public class SyllabificationDisplay extends JComponent {
 	public void setSyllabificationAtIndex(int pIdx, SyllableConstituentType scType) {
 		IPAElement p = getPhoneAtIndex(pIdx);
 		if(p != null) {
+            final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 			final int realPhonexIndex = getTranscript().indexOf(p);
+
+            for(int i = 0; i < realPhonexIndex && i < this.transcript.length(); i++) {
+                builder.append(this.transcript.elementAt(i));
+            }
+            final boolean diphthong = (scType == SyllableConstituentType.NUCLEUS) && p.isDiphthong();
+            final SyllableInfo syllableInfo = new SyllableInfo(
+                scType,
+                diphthong,
+                p.stress(),
+                p.syllableIndex(),
+                p.segregated(),
+                p.sonority(),
+                p.sonorityDistance(),
+                p.tone()
+            );
+            builder.append((new IPAElementFactory()).cloneElementWithSyllableInfo(p, syllableInfo));
+            for(int i = realPhonexIndex+1; i < this.transcript.length(); i++) {
+                builder.append(this.transcript.elementAt(i));
+            }
+            setTranscript(builder.toIPATranscript());
+
 			SyllabificationChangeData oldData =
 					new SyllabificationChangeData(realPhonexIndex, p.constituentType());
 			SyllabificationChangeData newData =
 					new SyllabificationChangeData(realPhonexIndex, scType);
-			
-			p.setScType(scType);
+
 
 			super.firePropertyChange(SYLLABIFICATION_PROP_ID, oldData, newData);
 		}
@@ -161,18 +182,49 @@ public class SyllabificationDisplay extends JComponent {
 	public void toggleHiatus(int pIdx1, int pIdx2) {
 		final IPAElement ele1 = getPhoneAtIndex(pIdx1);
 		final IPAElement ele2 = getPhoneAtIndex(pIdx2);
-		final SyllabificationInfo info = ele1.getExtension(SyllabificationInfo.class);
-		final SyllabificationInfo prevInfo = ele2.getExtension(SyllabificationInfo.class);
-		if(info != null) {
-			boolean wasHiatus = info.getConstituentType() == SyllableConstituentType.NUCLEUS && !info.isDiphthongMember();
-			final int eleIdx1 = getTranscript().indexOf(ele1);
-			final int eleIdx2 = getTranscript().indexOf(ele2);
-			HiatusChangeData oldData = new HiatusChangeData(eleIdx1, eleIdx2, wasHiatus);
-			HiatusChangeData newData = new HiatusChangeData(eleIdx1, eleIdx2, !wasHiatus);
-			info.setDiphthongMember(wasHiatus);
-			prevInfo.setDiphthongMember(wasHiatus);
-			super.firePropertyChange(HIATUS_CHANGE_PROP_ID, oldData, newData);
-		}
+		final SyllableInfo info = ele1.syllableInfo();
+		final SyllableInfo prevInfo = ele2.syllableInfo();
+        boolean wasHiatus = info.constituentType() == SyllableConstituentType.NUCLEUS && !info.isDiphthong();
+        final int eleIdx1 = getTranscript().indexOf(ele1);
+        final int eleIdx2 = getTranscript().indexOf(ele2);
+
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        for(int i = 0; i < eleIdx1 && i < this.transcript.length(); i++) {
+            builder.append(this.transcript.elementAt(i));
+        }
+        final SyllableInfo newInfo = new SyllableInfo(
+            info.constituentType(),
+            !wasHiatus,
+            info.stress(),
+            info.syllableIndex(),
+            info.segregated(),
+            info.sonority(),
+            info.sonorityDistance(),
+            info.tone()
+        );
+        builder.append((new IPAElementFactory()).cloneElementWithSyllableInfo(ele1, newInfo));
+        for(int i = eleIdx1+1; i < eleIdx2 && i < this.transcript.length(); i++) {
+            builder.append(this.transcript.elementAt(i));
+        }
+        final SyllableInfo newPrevInfo = new SyllableInfo(
+            prevInfo.constituentType(),
+            !wasHiatus,
+            prevInfo.stress(),
+            prevInfo.syllableIndex(),
+            prevInfo.segregated(),
+            prevInfo.sonority(),
+            prevInfo.sonorityDistance(),
+            prevInfo.tone()
+        );
+        builder.append((new IPAElementFactory()).cloneElementWithSyllableInfo(ele2, newPrevInfo));
+        for(int i = eleIdx2+1; i < this.transcript.length(); i++) {
+            builder.append(this.transcript.elementAt(i));
+        }
+        setTranscript(builder.toIPATranscript());
+
+        HiatusChangeData oldData = new HiatusChangeData(eleIdx1, eleIdx2, wasHiatus);
+        HiatusChangeData newData = new HiatusChangeData(eleIdx1, eleIdx2, !wasHiatus);
+        super.firePropertyChange(HIATUS_CHANGE_PROP_ID, oldData, newData);
 	}
 
 	@Override
