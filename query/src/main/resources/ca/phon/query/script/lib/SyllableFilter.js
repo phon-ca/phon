@@ -200,9 +200,9 @@ exports.SyllableFilter = function (id) {
 
 	this.checkStress = function (syll) {
 		var stressOk =
-		(this.sNone == true && syll.syllableStress == "NoStress") ||
-		(this.sPrimary == true && syll.syllableStress == "PrimaryStress") ||
-		(this.sSecondary == true && syll.syllableStress == "SecondaryStress");
+		(this.sNone == true && syll.initialStress() == "NoStress") ||
+		(this.sPrimary == true && syll.initialStress() == "PrimaryStress") ||
+		(this.sSecondary == true && syll.initialStress() == "SecondaryStress");
 		return stressOk;
 	};
 
