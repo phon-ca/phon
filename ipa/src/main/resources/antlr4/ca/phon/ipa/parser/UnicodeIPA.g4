@@ -60,7 +60,7 @@ ipa_element
 	| sandhi
 	| intra_word_pause
 	| phonex_matcher_ref
-	| tone_melody
+	| tone_number
 	| alignment
 	;
 	
@@ -96,7 +96,7 @@ suffix_section
 	| phone_length? suffix_diacritic*
 	;
 
-tone_melody
+tone_number
 	:   TONE_NUMBER+
 	|   TONE_ERROR
 	;

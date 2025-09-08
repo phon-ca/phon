@@ -1,9 +1,5 @@
 package ca.phon.ipa;
 
-import ca.phon.ipa.alignment.SyllableAligner;
-import ca.phon.syllable.SyllableVisitor;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +17,7 @@ public record SyllableInfo(SyllableConstituentType constituentType,
                            boolean segregated,
                            int sonority,
                            int sonorityDistance,
-                           ToneMelody tone) {
+                           ToneNumber tone) {
 
     public SyllableInfo() {
         this(SyllableConstituentType.UNKNOWN, false, SyllableStress.NoStress, -1, false, -1, -1, null);

@@ -18,7 +18,6 @@ package ca.phon.ipa;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
-import ca.phon.phonex.PhonexMatcher;
 import ca.phon.syllable.*;
 
 /**
@@ -504,8 +503,6 @@ public class IPAElementFactory {
 			retVal = createAlignmentMarker();
  		} else if(ele instanceof ToneNumber) {
             retVal = cloneToneNumber((ToneNumber)ele);
-        } else if(ele instanceof ToneMelody) {
-            retVal = cloneToneMelody((ToneMelody)ele);
         }
 		
 		return retVal;
@@ -554,8 +551,6 @@ public class IPAElementFactory {
             retVal = createAlignmentMarker();
         } else if(ele instanceof ToneNumber) {
             retVal = cloneToneNumber((ToneNumber)ele);
-        } else if(ele instanceof ToneMelody) {
-            retVal = cloneToneMelody((ToneMelody)ele);
         }
 
         return retVal;
@@ -564,33 +559,15 @@ public class IPAElementFactory {
     /**
      * Create a tone number element
      *
-     * @param toneChar tone character (0-9 in superscript)
+     * @param toneChars tone character (0-9 in superscript)
      * @return tone number element
      */
-    public ToneNumber createToneNumber(char toneChar) {
-        return new ToneNumber(toneChar);
+    public ToneNumber createToneNumber(char[] toneChars) {
+        return new ToneNumber(toneChars);
     }
 
     public ToneNumber cloneToneNumber(ToneNumber tn) {
-        return new ToneNumber(tn.toneChar());
-    }
-
-    /**
-     * Create a tone melody from a string of tone characters
-     *
-     * @param melody string of tone characters (0-9 in superscript)
-     * @return tone melody element
-     */
-    public ToneMelody createToneMelody(String melody) {
-        ToneNumber[] toneNumbers = new ToneNumber[melody.length()];
-        for(int i = 0; i < melody.length(); i++) {
-            toneNumbers[i] = createToneNumber(melody.charAt(i));
-        }
-    	return new ToneMelody(toneNumbers);
-    }
-
-    public ToneMelody cloneToneMelody(ToneMelody tm) {
-        return new ToneMelody(tm.toneNumbers());
+        return new ToneNumber(tn.toneChars());
     }
 
 }

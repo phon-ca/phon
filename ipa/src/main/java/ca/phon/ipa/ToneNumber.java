@@ -4,13 +4,14 @@ import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
 
 /**
- * Represents a single tone number in an IPA transcription.
- * This is a number from 0 to 9 in superscript form, indicating
- * the tone of a syllable.
+ * Represents a tone number in an IPA transcription.
+ * Tone numbers are represented as superscript numbers
+ * from 0 to 9 at the end of a syllable.  A tone melody
+ * is a sequence of tone numbers.
  */
 public class ToneNumber extends IPAElement {
 
-    private final char toneChar;
+    private final char[] toneChars;
 
     /**
      * Get tone number character from integer value.
@@ -19,41 +20,104 @@ public class ToneNumber extends IPAElement {
      * @param number the tone number
      * @return the corresponding superscript character
      */
-    public static char fromNumber(int number) {
-        if(number == 0) return '\u2070';
-        else if(number == 1) return '\u00B9';
-        else if(number == 2) return '\u00B2';
-        else if(number == 3) return '\u00B3';
-        else if(number >= 4 && number <= 9) return (char)('\u2070' + number);
-        else throw new IllegalArgumentException("Tone number must be between 0 and 9");
+    public static char[] fromNumber(int number) {
+        final StringBuffer sb = new StringBuffer();
+        while(number > 0) {
+            final int firstDigit = number % 10;
+            final char ch = switch(firstDigit) {
+                case 0 -> '\u2070';
+                case 1 -> '\u00B9';
+                case 2 -> '\u00B2';
+                case 3 -> '\u00B3';
+                case 4, 5, 6, 7, 8, 9 -> (char)('\u2070' + firstDigit);
+                default -> throw new IllegalArgumentException("Tone number must be between 0 and 9");
+            };
+            sb.append(ch);
+            number = (number - firstDigit) / 10;
+        }
+        return sb.reverse().toString().toCharArray();
     }
 
     public ToneNumber(int number) {
         this(fromNumber(number));
     }
 
-    public ToneNumber(char toneChar) {
-        super(null, null);
-        this.toneChar = toneChar;
+    public ToneNumber(char[] toneChars) {
+        this(toneChars, null, new SyllableInfo(SyllableConstituentType.TONENUMBER));
     }
 
-    public ToneNumber(char toneChar, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+    public ToneNumber(char[] toneChars, FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
         super(overrideFeatureSet, syllableInfo != null ? syllableInfo : new SyllableInfo(SyllableConstituentType.TONENUMBER));
-        this.toneChar = toneChar;
+        this.toneChars = toneChars;
     }
 
-    public char toneChar() {
-        return toneChar;
+    /**
+     * Get the tone number characters.
+     *
+     * @return the tone number characters
+     */
+    public char[] toneChars() {
+        return toneChars;
+    }
+
+    /**
+     * Get the length of the tone number character array.
+     *
+     * @return the length of the tone number character array
+     */
+    public int length() {
+    	return toneChars.length;
+    }
+
+    /**
+     * Check if this tone number is a melody (i.e. has more than one tone number).
+     *
+     * @return true if this is a melody, false otherwise
+     */
+    public boolean isMelody() {
+        return toneChars.length > 1;
     }
 
     @Override
     protected FeatureSet _getFeatureSet() {
-        return FeatureMatrix.getInstance().getFeatureSet(toneChar);
+        FeatureSet fs = new FeatureSet();
+        for(char toneChar: toneChars) {
+            fs = FeatureSet.union(fs, FeatureMatrix.getInstance().getFeatureSet(toneChar));
+        }
+        return fs;
     }
 
     @Override
     public String getText() {
-        return String.valueOf(toneChar);
+        return new String(toneChars);
+    }
+
+    /**
+     * Get tone number as integer value.
+     * If the tone number is a sequence of digits, the
+     * integer value is the concatenation of the digits.
+     *
+     * @return the tone number as an integer
+     */
+    public int asInt() {
+        int retVal = 0;
+        for(char toneChar:toneChars) {
+            final int digit = switch(toneChar) {
+                case '\u2070' -> 0;
+                case '\u00B9' -> 1;
+                case '\u00B2' -> 2;
+                case '\u00B3' -> 3;
+                case '\u2074' -> 4;
+                case '\u2075' -> 5;
+                case '\u2076' -> 6;
+                case '\u2077' -> 7;
+                case '\u2078' -> 8;
+                case '\u2079' -> 9;
+                default -> throw new IllegalArgumentException("Tone number must be between 0 and 9");
+            };
+            retVal = retVal * 10 + digit;
+        }
+        return retVal;
     }
 
 }

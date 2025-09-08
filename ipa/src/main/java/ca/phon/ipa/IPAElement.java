@@ -92,9 +92,7 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	 *  implementing type or custom features if defined.
 	 */
 	public FeatureSet featureSet() {
-		FeatureSet retVal = 
-				(overrideFeatureSet != null ? overrideFeatureSet : _getFeatureSet());
-		return retVal;
+        return (overrideFeatureSet != null ? overrideFeatureSet : _getFeatureSet());
 	}
 	
 	/**
@@ -116,7 +114,7 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	}
 
     public boolean segregated() {
-        return syllableInfo != null ? syllableInfo.segregated() : false;
+        return syllableInfo != null && syllableInfo.segregated();
     }
 
     public int sonorityDistance() {
@@ -127,12 +125,12 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
         return syllableInfo != null ? syllableInfo.sonority() : 0;
     }
 
-    public ToneMelody tone() {
+    public ToneNumber tone() {
         return syllableInfo != null ? syllableInfo.tone() : null;
     }
 
     public boolean isDiphthong() {
-        return syllableInfo != null ? syllableInfo.isDiphthong() : false;
+        return syllableInfo != null && syllableInfo.isDiphthong();
     }
 
     public int syllableIndex() {

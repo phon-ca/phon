@@ -430,15 +430,13 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
     }
 
     @Override
-    public void exitTone_melody(Tone_melodyContext ctx) {
+    public void exitTone_number(UnicodeIPAParser.Tone_numberContext ctx) {
+        final String toneNumStr = ctx.getText();
         try {
-            if (ctx.getText().length() == 1) {
-                builder.append(factory.createToneNumber(ctx.getText().charAt(0)));
-            } else {
-                builder.append(factory.createToneMelody(ctx.getText()));
-            }
+            final ToneNumber tn = factory.createToneNumber(toneNumStr.toCharArray());
+            builder.append(tn);
         } catch (IllegalArgumentException e) {
-            IPAParserException ex = new IPAParserException("Invalid tone melody: " + e.getMessage());
+            IPAParserException ex = new IPAParserException("Invalid tone number: " + e.getMessage());
             ex.setPositionInLine(ctx.getStart().getCharPositionInLine());
             throw ex;
         }

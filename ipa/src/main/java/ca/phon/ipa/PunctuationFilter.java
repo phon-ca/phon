@@ -70,11 +70,6 @@ public class PunctuationFilter extends VisitorAdapter<IPAElement> {
     public void visitToneNumber(ToneNumber toneNumber) {
         // don't add
     }
-
-    @Visits
-    public void visitToneMelody(ToneMelody toneMelody) {
-        // don't add
-    }
 	
 	@Visits
 	public void visitWordBoundary(WordBoundary wb) {
