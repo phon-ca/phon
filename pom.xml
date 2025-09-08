@@ -146,6 +146,9 @@
 		<module>orthography</module>
 		<module>autotranscribe</module>
 		<module>session</module>
+        <module>session-xml-1_2</module>
+        <module>session-xml-2_0</module>
+        <module>session-xml-2_1</module>
 		<module>project</module>
 		<module>script</module>
 		<module>media</module>
