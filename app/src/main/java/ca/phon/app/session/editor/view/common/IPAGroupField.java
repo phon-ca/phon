@@ -60,9 +60,11 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 		super._init();
 		addTierEditorListener((Tier<IPATranscript> tier, IPATranscript newValue, IPATranscript oldValue, boolean valueIsAdjusting) -> {
 			if(syllabifier != null) {
-				final IPATranscript transcript = (IPATranscript)newValue;
-				if(transcript != null && syllabifier != null)
-					syllabifier.syllabify(transcript.toList());
+				IPATranscript transcript = (IPATranscript)newValue;
+				if(transcript != null && syllabifier != null) {
+                    transcript = syllabifier.syllabify(transcript);
+                    setValidatedObject(transcript);
+                }
 			}
 		});
 
@@ -124,7 +126,8 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 					final AlternativeTranscript alts = validatedObj.getExtension(AlternativeTranscript.class);
 					ipa = alts.get(getTranscriber().getUsername());
 				}
-				syllabifier.syllabify(ipa.toList());
+				ipa = syllabifier.syllabify(ipa);
+                setValidatedObject(ipa);
 			}
 		}
 		super.update();

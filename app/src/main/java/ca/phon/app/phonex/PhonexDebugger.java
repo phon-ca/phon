@@ -186,7 +186,7 @@ public class PhonexDebugger extends JComponent {
 			IPATranscript transcript = IPATranscript.parseIPATranscript(transcriptionField.getText());
 			Syllabifier syllabifier = (Syllabifier)syllabifierBox.getSelectedItem();
 			if(syllabifier != null) {
-				syllabifier.syllabify(transcript.toList());
+				transcript = syllabifier.syllabify(transcript);
 			}
 			ipaDisplay.setTranscript(transcript);
 		} catch (ParseException e) {

@@ -49,9 +49,6 @@ import java.util.prefs.PreferenceChangeListener;
  */
 public class SyllabificationAlignmentEditorView extends EditorView {
 
-	public record ScEditData(int transcriptElementIdx, String tier, IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
-	public final static EditorEventType<ScEditData> ScEdit = new EditorEventType<>(EditorEventName.MODIFICATION_EVENT + "_SC_TYPE_", ScEditData.class);
-
 	public final static String VIEW_NAME = "Syllabification & Alignment";
 
 	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":flex_wrap";
@@ -268,7 +265,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		eventManager.registerActionForEvent(ScEdit, this::onScChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+		eventManager.registerActionForEvent(ScTypeEdit.ScEdit, this::onScChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	public void update() {
@@ -436,7 +433,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		}
 	}
 
-	private void onScChange(EditorEvent<ScEditData> ee) {
+	private void onScChange(EditorEvent<ScTypeEdit.ScEditData> ee) {
 		final IPATranscript ipa = ee.data().ipa();
 		final Record r = getEditor().currentRecord();
 		if(r == null) return;
@@ -459,9 +456,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			}
 		}
 
-		if(SystemTierType.IPATarget.getName().equals(ee.data().tier)) {
+		if(SystemTierType.IPATarget.getName().equals(ee.data().tier())) {
 			updateTargetSyllables();
-		} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier)) {
+		} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier())) {
 			updateActualSyllables();
 		}
 	}

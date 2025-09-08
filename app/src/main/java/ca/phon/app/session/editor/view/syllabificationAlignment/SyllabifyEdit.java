@@ -15,33 +15,34 @@
  */
 package ca.phon.app.session.editor.view.syllabificationAlignment;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
+import ca.phon.session.Transcript;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllable.*;
 
-import java.text.ParseException;
-
 /**
- * Modifies the syllabifier used for a specific tier.
+ * Reset syllabification info on an IPA tier using a given {@link Syllabifier}.
  */
 public class SyllabifyEdit extends SessionUndoableEdit {
 
-	private int transcriptElementIndex;
+	private final int transcriptElementIndex;
 
 	private final Tier<IPATranscript> tier;
 	
 	private final Syllabifier syllabifier;
 	
-	private String oldVal = null;
+	private IPATranscript oldVal = null;
 
-	private Transcriber transcriber = Transcriber.VALIDATOR;
+	private final Transcriber transcriber;
+
+    private TierEdit<IPATranscript> innerEdit = null;
 	
 	public SyllabifyEdit(SessionEditor editor, int transcriptElementIndex, Tier<IPATranscript> ipaTier, Syllabifier syllabifier) {
 		this(editor.getSession(), editor.getEventManager(), transcriptElementIndex, ipaTier, syllabifier, Transcriber.VALIDATOR);
@@ -61,27 +62,16 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 
 	@Override
 	public void undo() {
-		if(oldVal == null) return;
-		try {
-			final IPATranscript oldTranscript = IPATranscript.parseIPATranscript(oldVal);
-			final IPATranscript grp = tier.isBlind()
-				? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
-				: tier.getValue();
-			
-			if(oldTranscript.length() != grp.length()) return;
-			for(int j = 0; j < oldTranscript.length(); j++) {
-				final SyllabificationInfo oldInfo = oldTranscript.elementAt(j).getExtension(SyllabificationInfo.class);
-				grp.elementAt(j).putExtension(SyllabificationInfo.class, oldInfo);
-			}
+		if(oldVal == null || innerEdit == null) return;
+        final Transcript.Element transcriptEle = getSession().getTranscript().getElementAt(transcriptElementIndex);
+        if(transcriptEle.isRecord()) {
+            innerEdit.undo();
 
-			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier.getName(),
-									grp, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
-			getEditorEventManager().queueEvent(ee);
-		} catch (ParseException e) {
-			LogUtil.severe( e.getLocalizedMessage(), e);
-		}
+            final EditorEvent<ScTypeEdit.ScEditData> ee =
+                    new EditorEvent<>(ScTypeEdit.ScEdit, getSource(),
+                            new ScTypeEdit.ScEditData(transcriptEle.asRecord(), tier, oldVal, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
+            getEditorEventManager().queueEvent(ee);
+        }
 	}
 
 	@Override
@@ -89,19 +79,21 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 		IPATranscript ipa = tier.isBlind()
 			? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
 			: tier.getValue();
-		oldVal = ipa.toString(true);
-		
-		final StripSyllabifcationVisitor visitor = new StripSyllabifcationVisitor();
-		ipa.accept(visitor);
-        ipa = visitor.getTranscript();
-		
-		syllabifier.syllabify(ipa.toList());
+		oldVal = ipa;
 
-		final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-				new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-						new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier.getName(),
-								ipa, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
-		getEditorEventManager().queueEvent(ee);
+        ipa = ipa.resetSyllabification();
+		ipa = syllabifier.syllabify(ipa);
+
+        final Transcript.Element transcriptEle = getSession().getTranscript().getElementAt(transcriptElementIndex);
+        if(transcriptEle.isRecord()) {
+            this.innerEdit = new TierEdit<>(getSession(), getEditorEventManager(), transcriber, transcriptEle.asRecord(), tier, ipa, false);
+            this.innerEdit.doIt();
+
+            final EditorEvent<ScTypeEdit.ScEditData> ee =
+                    new EditorEvent<>(ScTypeEdit.ScEdit, getSource(),
+                            new ScTypeEdit.ScEditData(transcriptEle.asRecord(), tier, ipa, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
+            getEditorEventManager().queueEvent(ee);
+        }
 	}
 	
 }

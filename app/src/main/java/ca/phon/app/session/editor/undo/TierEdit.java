@@ -316,13 +316,12 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			}
 		}
 		if(tier.getDeclaredType() == IPATranscript.class && !((IPATranscript)newValue).hasSyllableInformation()) {
-			final IPATranscript ipa = (IPATranscript) newValue;
+			IPATranscript ipa = (IPATranscript) newValue;
 			@SuppressWarnings("unchecked")
 			final Syllabifier syllabifier = SyllabifierOptions.findSyllabifier(getSession(), getRecord(), (Tier<IPATranscript>) tier);
 			if (syllabifier != null) {
-				syllabifier.syllabify(ipa.toList());
-				// will apply additional annotations
-				ipa.syllables();
+				ipa = syllabifier.syllabify(ipa);
+                newValue = (T) ipa;
 			}
 		}
 

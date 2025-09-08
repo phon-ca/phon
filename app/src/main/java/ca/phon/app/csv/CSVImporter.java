@@ -18,6 +18,7 @@ package ca.phon.app.csv;
 import ca.phon.csv.CSVReader;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.formatter.PeriodFormatter;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.project.MutableProject;
 import ca.phon.project.Project;
@@ -499,7 +500,9 @@ public class CSVImporter {
             var syllabifier = column.getOption("syllabifierLanguage") != null
                 ? SyllabifierLibrary.getInstance().getSyllabifierForLanguage(column.getOption("syllabifierLanguage"))
                 : SyllabifierLibrary.getInstance().defaultSyllabifier();
-            syllabifier.syllabify(ipaTargetTier.getValue().toList());
+            IPATranscript ipaTarget = ipaTargetTier.getValue();
+            ipaTarget = syllabifier.syllabify(ipaTarget);
+            ipaTargetTier.setValue(ipaTarget);
         }
 
         if (firstIPAImported) {
@@ -546,7 +549,9 @@ public class CSVImporter {
             var syllabifier = column.getOption("syllabifierLanguage") != null
                 ? SyllabifierLibrary.getInstance().getSyllabifierForLanguage(column.getOption("syllabifierLanguage"))
                 : SyllabifierLibrary.getInstance().defaultSyllabifier();
-            syllabifier.syllabify(ipaActualTier.getValue().toList());
+            IPATranscript ipaActual = ipaActualTier.getValue();
+            ipaActual = syllabifier.syllabify(ipaActual);
+            ipaActualTier.setValue(ipaActual);
         }
 
         if (firstIPAImported) {

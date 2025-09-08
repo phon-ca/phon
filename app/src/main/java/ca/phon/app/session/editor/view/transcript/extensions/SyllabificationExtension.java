@@ -4,18 +4,16 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.view.syllabificationAlignment.ScTypeEdit;
 import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabificationAlignmentEditorView;
 import ca.phon.app.session.editor.view.syllabificationAlignment.SyllabifyEdit;
 import ca.phon.app.session.editor.view.transcript.*;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -93,7 +91,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_COMPONENT, this::setSyllabificationIsComponentPropertyChangeHandler);
 
         editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-        editor.getEventManager().registerActionForEvent(SyllabificationAlignmentEditorView.ScEdit, this::onScEdit, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(ScTypeEdit.ScEdit, this::onScEdit, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         editor.getTranscriptEditorCaret().addCaretHook(new TranscriptEditorCaretHookAdapter() {
             @Override
@@ -440,11 +438,11 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         }
     }
 
-    public void onScEdit(EditorEvent<SyllabificationAlignmentEditorView.ScEditData> event) {
+    public void onScEdit(EditorEvent<ScTypeEdit.ScEditData> event) {
         if(event.source() instanceof SyllabificationDisplay) {
             final IPATranscript clonedTranscript = (new IPATranscriptBuilder()).append(event.data().ipa().toString(true)).toIPATranscript();
-            final int recordIndex = editor.getSession().getTranscript().getRecordIndex(event.data().transcriptElementIdx());
-            String syllablesTierName = getSyllabifierTierNameForIPATier(event.data().tier());
+            final int recordIndex = editor.getSession().getTranscript().getRecordIndex(event.data().eleIdx());
+            String syllablesTierName = getSyllabifierTierNameForIPATier(event.data().tier().getName());
             final TranscriptDocument.StartEnd range = doc.getTierContentStartEnd(recordIndex, syllablesTierName);
             if(!range.valid()) return;
             final AttributeSet attrs = doc.getCharacterElement(range.start()).getAttributes();
@@ -561,17 +559,17 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 StyleConstants.setForeground(attrs, UIManager.getColor(TranscriptEditorUIProps.IPA_PAUSE));
             }
             retVal.add(TranscriptBatchBuilder.getBatchString(p.toString(), attrs));
-            final SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
-            if (hiddenConstituent.contains(sInfo.getConstituentType())) continue;
+            final SyllableInfo sInfo = p.syllableInfo();
+            if (hiddenConstituent.contains(sInfo.constituentType())) continue;
             retVal.add(TranscriptBatchBuilder.getBatchString(":", attrs));
             attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION);
             attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE);
-            if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember()) {
+            if(sInfo.constituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthong()) {
                 StyleConstants.setForeground(attrs, Color.RED);
                 retVal.add(TranscriptBatchBuilder.getBatchString("D", attrs));
             }
             else {
-                retVal.add(TranscriptBatchBuilder.getBatchString(String.valueOf(sInfo.getConstituentType().getIdChar()), attrs));
+                retVal.add(TranscriptBatchBuilder.getBatchString(String.valueOf(sInfo.constituentType().getIdChar()), attrs));
             }
         }
         attrs.removeAttribute(StyleConstants.Foreground);
@@ -727,108 +725,109 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
             // Locked tiers
             Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-            if (tier != null) {
-                String tierName = tier.getName();
-                var tierViewItem = doc
-                    .getSession()
-                    .getTierView()
-                    .stream()
-                    .filter(item -> item.getTierName().equals(tierName))
-                    .findFirst();
-                if (tierViewItem.isPresent() && tierViewItem.get().isTierLocked()) {
-                    return;
-                }
-
-                // Syllabification tiers
-                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
-                    if (text == null || text.isEmpty()) return;
-                    final Record record = TranscriptStyleConstants.getRecord(attrs);
-                    final int recordIndex = doc.getSession().getRecordIndex(record);
-                    if(recordIndex < 0) return;
-                    final String textUpper = text.toUpperCase();
-                    char c = textUpper.charAt(0);
-                    if (syllabificationChars.contains(c)) {
-                        SyllableConstituentType type = Arrays
-                                .stream(SyllableConstituentType.values())
-                                .filter(item -> item.getIdChar() == textUpper.charAt(0))
-                                .findFirst()
-                                .orElse(null);
-                        if (type == null) {
-                            List<IPAElement> syllabificationTranscript = ((Tier<IPATranscript>) tier).getValue().toList();
-                            IPAElement phone = (IPAElement) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE);
-
-                            IPAElement otherNucleus = null;
-                            for (int i = 0; i < syllabificationTranscript.size(); i++) {
-                                IPAElement p = syllabificationTranscript.get(i);
-                                if (!p.equals(phone)) continue;
-                                if (!p.constituentType().equals(SyllableConstituentType.NUCLEUS)) return;
-                                if (i < syllabificationTranscript.size() - 1) {
-                                    IPAElement nextP = syllabificationTranscript.get(i + 1);
-                                    if (nextP.constituentType().equals(SyllableConstituentType.NUCLEUS)) {
-                                        otherNucleus = nextP;
-                                        break;
-                                    }
-                                }
-                                if (i > 0) {
-                                    IPAElement prevP = syllabificationTranscript.get(i - 1);
-                                    if (prevP.constituentType().equals(SyllableConstituentType.NUCLEUS)) {
-                                        otherNucleus = prevP;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (otherNucleus == null) return;
-
-                            final SyllabificationInfo sInfo = phone.getExtension(SyllabificationInfo.class);
-                            final SyllabificationInfo otherSInfo = otherNucleus.getExtension(SyllabificationInfo.class);
-
-                            if (c == 'D' && !sInfo.isDiphthongMember()) {
-                                sInfo.setDiphthongMember(true);
-                                otherSInfo.setDiphthongMember(true);
-
-                                final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, tier.getName());
-                                int start = se.start();
-                                int end = se.end();
-
-                                for (int i = start; i < end; i++) {
-                                    var charAttrs = doc.getCharacterElement(i).getAttributes();
-                                    IPAElement charPhone = (IPAElement) charAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE);
-                                    if (!doc.containsNotEditableAttribute(charAttrs) && charPhone != null && (charPhone.equals(phone) || charPhone.equals(otherNucleus))) {
-                                        SimpleAttributeSet newCharAttrs = new SimpleAttributeSet();
-                                        newCharAttrs.addAttributes(charAttrs);
-                                        StyleConstants.setForeground(newCharAttrs, Color.RED);
-                                        super.replace(fb, i, 1, "D", attrs);
-                                    }
-                                }
-                            }
-                            else if (c == 'H' && sInfo.isDiphthongMember()) {
-                                sInfo.setDiphthongMember(false);
-                                otherSInfo.setDiphthongMember(false);
-
-                                final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, tier.getName());
-                                int start = se.start();
-                                int end = se.end();
-
-                                for (int i = start; i < end; i++) {
-                                    var charAttrs = doc.getCharacterElement(i).getAttributes();
-                                    IPAElement charPhone = (IPAElement) charAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE);
-                                    if (!doc.containsNotEditableAttribute(charAttrs) && charPhone != null && (charPhone.equals(phone) || charPhone.equals(otherNucleus))) {
-                                        SimpleAttributeSet newCharAttrs = new SimpleAttributeSet();
-                                        newCharAttrs.addAttributes(charAttrs);
-                                        super.replace(fb, i, 1, "N", attrs);
-                                    }
-                                }
-                            }
-                            return;
-                        }
-                        else {
-                            text = textUpper;
-                        }
-                    }
-                    else return;
-                }
-            }
+            // TODO update for new immutable IPATranscript API
+//            if (tier != null) {
+//                String tierName = tier.getName();
+//                var tierViewItem = doc
+//                    .getSession()
+//                    .getTierView()
+//                    .stream()
+//                    .filter(item -> item.getTierName().equals(tierName))
+//                    .findFirst();
+//                if (tierViewItem.isPresent() && tierViewItem.get().isTierLocked()) {
+//                    return;
+//                }
+//
+//                // Syllabification tiers
+//                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
+//                    if (text == null || text.isEmpty()) return;
+//                    final Record record = TranscriptStyleConstants.getRecord(attrs);
+//                    final int recordIndex = doc.getSession().getRecordIndex(record);
+//                    if(recordIndex < 0) return;
+//                    final String textUpper = text.toUpperCase();
+//                    char c = textUpper.charAt(0);
+//                    if (syllabificationChars.contains(c)) {
+//                        SyllableConstituentType type = Arrays
+//                                .stream(SyllableConstituentType.values())
+//                                .filter(item -> item.getIdChar() == textUpper.charAt(0))
+//                                .findFirst()
+//                                .orElse(null);
+//                        if (type == null) {
+//                            List<IPAElement> syllabificationTranscript = ((Tier<IPATranscript>) tier).getValue().toList();
+//                            IPAElement phone = (IPAElement) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE);
+//
+//                            IPAElement otherNucleus = null;
+//                            for (int i = 0; i < syllabificationTranscript.size(); i++) {
+//                                IPAElement p = syllabificationTranscript.get(i);
+//                                if (!p.equals(phone)) continue;
+//                                if (!p.constituentType().equals(SyllableConstituentType.NUCLEUS)) return;
+//                                if (i < syllabificationTranscript.size() - 1) {
+//                                    IPAElement nextP = syllabificationTranscript.get(i + 1);
+//                                    if (nextP.constituentType().equals(SyllableConstituentType.NUCLEUS)) {
+//                                        otherNucleus = nextP;
+//                                        break;
+//                                    }
+//                                }
+//                                if (i > 0) {
+//                                    IPAElement prevP = syllabificationTranscript.get(i - 1);
+//                                    if (prevP.constituentType().equals(SyllableConstituentType.NUCLEUS)) {
+//                                        otherNucleus = prevP;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//
+//                            if (otherNucleus == null) return;
+//
+//                            final SyllabificationInfo sInfo = phone.getExtension(SyllabificationInfo.class);
+//                            final SyllabificationInfo otherSInfo = otherNucleus.getExtension(SyllabificationInfo.class);
+//
+//                            if (c == 'D' && !sInfo.isDiphthongMember()) {
+//                                sInfo.setDiphthongMember(true);
+//                                otherSInfo.setDiphthongMember(true);
+//
+//                                final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, tier.getName());
+//                                int start = se.start();
+//                                int end = se.end();
+//
+//                                for (int i = start; i < end; i++) {
+//                                    var charAttrs = doc.getCharacterElement(i).getAttributes();
+//                                    IPAElement charPhone = (IPAElement) charAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE);
+//                                    if (!doc.containsNotEditableAttribute(charAttrs) && charPhone != null && (charPhone.equals(phone) || charPhone.equals(otherNucleus))) {
+//                                        SimpleAttributeSet newCharAttrs = new SimpleAttributeSet();
+//                                        newCharAttrs.addAttributes(charAttrs);
+//                                        StyleConstants.setForeground(newCharAttrs, Color.RED);
+//                                        super.replace(fb, i, 1, "D", attrs);
+//                                    }
+//                                }
+//                            }
+//                            else if (c == 'H' && sInfo.isDiphthongMember()) {
+//                                sInfo.setDiphthongMember(false);
+//                                otherSInfo.setDiphthongMember(false);
+//
+//                                final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, tier.getName());
+//                                int start = se.start();
+//                                int end = se.end();
+//
+//                                for (int i = start; i < end; i++) {
+//                                    var charAttrs = doc.getCharacterElement(i).getAttributes();
+//                                    IPAElement charPhone = (IPAElement) charAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE);
+//                                    if (!doc.containsNotEditableAttribute(charAttrs) && charPhone != null && (charPhone.equals(phone) || charPhone.equals(otherNucleus))) {
+//                                        SimpleAttributeSet newCharAttrs = new SimpleAttributeSet();
+//                                        newCharAttrs.addAttributes(charAttrs);
+//                                        super.replace(fb, i, 1, "N", attrs);
+//                                    }
+//                                }
+//                            }
+//                            return;
+//                        }
+//                        else {
+//                            text = textUpper;
+//                        }
+//                    }
+//                    else return;
+//                }
+//            }
             super.replace(fb, offset, length, text, attrs);
         }
 

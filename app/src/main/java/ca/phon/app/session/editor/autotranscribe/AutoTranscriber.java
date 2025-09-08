@@ -218,11 +218,11 @@ public class AutoTranscriber {
 			}
 		}
 		
-		final IPATranscript ipaT = ipaTBuilder.toIPATranscript();
-		final IPATranscript ipaA = ipaABuilder.toIPATranscript();
+		IPATranscript ipaT = ipaTBuilder.toIPATranscript();
+		IPATranscript ipaA = ipaABuilder.toIPATranscript();
 		if(getSyllabifier() != null) {
-			getSyllabifier().syllabify(ipaT.toList());
-			getSyllabifier().syllabify(ipaA.toList());
+			ipaT = getSyllabifier().syllabify(ipaT);
+			ipaA = getSyllabifier().syllabify(ipaA);
 		}
 
 		final Map<Tier<IPATranscript>, IPATranscript> retVal = new LinkedHashMap<>();

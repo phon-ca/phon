@@ -17,31 +17,36 @@ package ca.phon.app.session.editor.view.syllabificationAlignment;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionUndoableEdit;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.*;
 import ca.phon.session.Session;
+import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
+import ca.phon.session.Transcript;
 
 public class ToggleDiphthongEdit extends SessionUndoableEdit {
 
 	private int transcriptElementIndex;
 
-	private String tier;
+	private Tier<IPATranscript> tier;
 
-	private final IPATranscript transcript;
-	
-	private final int index;
+	private final int index1;
 
+    private final int index2;
 
+    private final Transcriber transcriber;
 
-	public ToggleDiphthongEdit(SessionEditor editor, int transcriptElementIndex, String tier, IPATranscript transcript, int index) {
-		this(editor.getSession(), editor.getEventManager(), transcriptElementIndex, tier, transcript, index);
+	public ToggleDiphthongEdit(SessionEditor editor, int transcriptElementIndex, Tier<IPATranscript> tier, int index1, int index2) {
+		this(editor.getSession(), editor.getEventManager(), transcriptElementIndex, tier, index1, index2, Transcriber.VALIDATOR);
 	}
 
-	public ToggleDiphthongEdit(Session session, EditorEventManager editorEventManager, int transcriptElementIndex, String tier, IPATranscript transcript, int index) {
+	public ToggleDiphthongEdit(Session session, EditorEventManager editorEventManager, int transcriptElementIndex, Tier<IPATranscript> tier, int index1, int index2, Transcriber transcriber) {
 		super(session, editorEventManager);
 		this.transcriptElementIndex = transcriptElementIndex;
 		this.tier = tier;
-		this.transcript = transcript;
-		this.index = index;
+        this.index1 = index1;
+        this.index2 = index2;
+        this.transcriber = transcriber;
 	}
 	
 	@Override
@@ -51,17 +56,62 @@ public class ToggleDiphthongEdit extends SessionUndoableEdit {
 
 	@Override
 	public void doIt() {
-		if(index >= 0 && index < transcript.length()) {
-			final IPAElement ele = transcript.elementAt(index);
-			final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
-			info.setDiphthongMember(!info.isDiphthongMember());
+        final IPATranscript transcript = transcriber == Transcriber.VALIDATOR ?
+                tier.getValue() : tier.getBlindTranscription(transcriber.getUsername());
+        final IPAElementFactory factory = new IPAElementFactory();
 
-			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier,
-									transcript, index, info.getConstituentType(), info.getConstituentType()));
-			getEditorEventManager().queueEvent(ee);
-		}
+        final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(transcriptElementIndex);
+        if(transcriptElement.isRecord()) {
+            if(index1 >= 0 && index1 < transcript.length() && index2 >= 0 && index2 < transcript.length()) {
+                boolean setDiphthong = !transcript.elementAt(index1).isDiphthong();
+                final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+                for(int i = 0; i < index1; i++) {
+                    builder.append(transcript.elementAt(i));
+                }
+                final IPAElement firstElem = transcript.elementAt(index1);
+                final SyllableInfo firstInfo = firstElem.syllableInfo();
+                final SyllableInfo firstNewInfo = new SyllableInfo(
+                    firstInfo.constituentType(),
+                    setDiphthong,
+                    firstInfo.stress(),
+                    firstInfo.syllableIndex(),
+                    firstInfo.segregated(),
+                    firstInfo.sonority(),
+                    firstInfo.sonorityDistance(),
+                    firstInfo.tone()
+                );
+                builder.append(factory.cloneElementWithSyllableInfo(firstElem, firstNewInfo));
+                for(int i = index1+1; i < index2; i++) {
+                    builder.append(transcript.elementAt(i));
+                }
+                final IPAElement secondElem = transcript.elementAt(index2);
+                final SyllableInfo secondInfo = secondElem.syllableInfo();
+                final SyllableInfo secondNewInfo = new SyllableInfo(
+                    secondInfo.constituentType(),
+                    setDiphthong,
+                    secondInfo.stress(),
+                    secondInfo.syllableIndex(),
+                    secondInfo.segregated(),
+                    secondInfo.sonority(),
+                    secondInfo.sonorityDistance(),
+                    secondInfo.tone()
+                );
+                builder.append(factory.cloneElementWithSyllableInfo(secondElem, secondNewInfo));
+                for(int i = index2+1; i < transcript.length(); i++) {
+                    builder.append(transcript.elementAt(i));
+                }
+
+                final TierEdit<IPATranscript> innerEdit = new TierEdit<>(getSession(), getEditorEventManager(),
+                    transcriber, transcriptElement.asRecord(), tier, builder.toIPATranscript(), false);
+                innerEdit.doIt();
+
+//                final EditorEvent<ScTypeEdit.ScEditData> ee =
+//                        new EditorEvent<>(ScTypeEdit.ScEdit, getSource(),
+//                                new ScTypeEdit.ScEditData(transcriptElementIndex, tier,
+//                                        transcript, index, info.getConstituentType(), info.getConstituentType()));
+//                getEditorEventManager().queueEvent(ee);
+            }
+        }
 	}
 
 }

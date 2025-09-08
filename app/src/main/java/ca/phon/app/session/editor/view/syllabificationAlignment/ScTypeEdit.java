@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,61 +16,48 @@
 package ca.phon.app.session.editor.view.syllabificationAlignment;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.SessionUndoableEdit;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.session.Session;
-import ca.phon.ipa.SyllableConstituentType;
+import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.ipa.*;
+import ca.phon.session.*;
+import ca.phon.session.Record;
 
-public class ScTypeEdit extends SessionUndoableEdit {
+public class ScTypeEdit extends TierEdit<IPATranscript> {
 
-	private int transcriptElementIndex;
+    public record ScEditData(Record record, Tier<IPATranscript> tier, IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
+    public final static EditorEventType<ScEditData> ScEdit = new EditorEventType<>(EditorEventName.MODIFICATION_EVENT + "_SC_TYPE_", ScEditData.class);
 
-	private final String tier;
+    private final int index;
 
-	private final IPATranscript transcript;
-	
-	private final int index;
-	
 	private final SyllableConstituentType scType;
-	
+
 	private SyllableConstituentType prevScType;
 
-	public ScTypeEdit(SessionEditor editor, int transcriptIndex, String tier, IPATranscript transcript, int index, SyllableConstituentType scType) {
-		this(editor.getSession(), editor.getEventManager(), transcriptIndex, tier, transcript, index, scType);
+	public ScTypeEdit(SessionEditor editor, Transcriber transcriber, Tier<IPATranscript> tier, Record record, IPATranscript transcript, int index, SyllableConstituentType scType) {
+		this(editor.getSession(), editor.getEventManager(), transcriber, record, tier, transcript, index, scType);
 	}
 
-	public ScTypeEdit(Session session, EditorEventManager eventManager, int transcriptIndex, String tier, IPATranscript transcript, int index, SyllableConstituentType scType) {
-		super(session, eventManager);
-		this.transcriptElementIndex = transcriptIndex;
-		this.tier = tier;
-		this.transcript = transcript;
+	public ScTypeEdit(Session session, EditorEventManager eventManager, Transcriber transcriber, Record record, Tier<IPATranscript> tier, IPATranscript transcript, int index, SyllableConstituentType scType) {
+		super(session, eventManager, transcriber, record, tier, transcript, false);
 		this.index = index;
 		this.scType = scType;
 	}
-	
+
 	@Override
 	public void undo() {
-		if(prevScType != null && index >= 0 && index < transcript.length()) {
-			transcript.elementAt(index).setScType(prevScType);
-		
-			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier, transcript, index, scType, prevScType));
-			getEditorEventManager().queueEvent(ee);
-		}
+        super.undo();
+        final EditorEvent<ScEditData> ee =
+                new EditorEvent<>(ScEdit, getSource(),
+                        new ScEditData(getRecord(), getTier(), getTier().getValue(), index, scType, prevScType));
+        getEditorEventManager().queueEvent(ee);
 	}
-	
+
 	@Override
 	public void doIt() {
-		if(index >= 0 && index < transcript.length()) {
-			prevScType = transcript.elementAt(index).constituentType();
-			transcript.elementAt(index).setScType(scType);
-
-			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
-							new SyllabificationAlignmentEditorView.ScEditData(transcriptElementIndex, tier, transcript, index, prevScType, scType));
-			getEditorEventManager().queueEvent(ee);
-		}
+        super.doIt();
+        final EditorEvent<ScEditData> ee =
+                new EditorEvent<>(ScEdit, getSource(),
+                        new ScEditData(getRecord(), getTier(), getTier().getValue(), index, prevScType, scType));
+        getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override

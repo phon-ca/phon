@@ -52,7 +52,7 @@ public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand
 		final Syllabifier syllabifier = SyllabifierOptions.findSyllabifier(getSession(), r, tier);
 
 		final CompoundEdit edit = new CompoundEdit();
-		final SyllabifyEdit ed = new SyllabifyEdit(getEditor(), transcriptElementIndex, tier, syllabifier);
+		final SyllabifyEdit ed = new SyllabifyEdit(getEditor(), transcriptElementIndex, tier, syllabifier, getEditor().getDataModel().getTranscriber());
 		ed.doIt();
 		edit.addEdit(ed);
 		edit.end();

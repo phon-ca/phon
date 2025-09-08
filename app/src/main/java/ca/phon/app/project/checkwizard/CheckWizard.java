@@ -237,9 +237,10 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 		
 		private void resetSyllabification(Tier<IPATranscript> tier) {
 			if(tier.hasValue()) {
-				final IPATranscript ipa = tier.getValue();
-				ipa.resetSyllabification();
-				syllabifier.syllabify(ipa.toList());
+				IPATranscript ipa = tier.getValue();
+				ipa = ipa.resetSyllabification();
+				ipa = syllabifier.syllabify(ipa);
+                tier.setValue(ipa);
 			}
 		}
 		

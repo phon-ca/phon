@@ -140,9 +140,9 @@ public class SyllabificationComponentFactory implements ComponentFactory {
                 display.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, (e) -> {
                     final SyllabificationDisplay.SyllabificationChangeData data = (SyllabificationDisplay.SyllabificationChangeData) e.getNewValue();
                     final IPATranscript transcript = parentTier.getValueForTranscriber(transcriber).orElse(parentTier.getValue());
-                    final ScTypeEdit edit = new ScTypeEdit(this.session, this.eventManager,
-                            transcriptIndex, parentTier.getName(),
-                            transcript, phoneIndex + data.position(), data.scType());
+                    if(transcript == null) return;
+                    final IPATranscript updatedTranscript = transcript.setConstituentType(phoneIndex + data.position(), data.scType());
+                    final ScTypeEdit edit = new ScTypeEdit(this.session, this.eventManager, transcriber, record, parentTier, updatedTranscript, phoneIndex + data.position(), data.scType());
                     edit.setSource(display);
                     this.undoSupport.postEdit(edit);
                 });
@@ -151,15 +151,9 @@ public class SyllabificationComponentFactory implements ComponentFactory {
                     final SyllabificationDisplay.HiatusChangeData data = (SyllabificationDisplay.HiatusChangeData) e.getNewValue();
                     final int pIdx = phoneIndex + data.position1();
                     final int pIdx2 = phoneIndex + data.position2();
-                    final IPATranscript transcript = parentTier.getValueForTranscriber(transcriber).orElse(parentTier.getValue());
-                    final ToggleDiphthongEdit diphthongEdit1 = new ToggleDiphthongEdit(this.session, this.eventManager, transcriptIndex, parentTier.getName(), transcript, pIdx);
+                    final ToggleDiphthongEdit diphthongEdit1 = new ToggleDiphthongEdit(this.session, this.eventManager, transcriptIndex, parentTier, pIdx, pIdx2, transcriber);
                     diphthongEdit1.setSource(display);
-                    final ToggleDiphthongEdit diphthongEdit2 = new ToggleDiphthongEdit(this.session, this.eventManager, transcriptIndex, parentTier.getName(), transcript, pIdx2);
-                    diphthongEdit2.setSource(display);
-                    this.undoSupport.beginUpdate();
                     this.undoSupport.postEdit(diphthongEdit1);
-                    this.undoSupport.postEdit(diphthongEdit2);
-                    this.undoSupport.endUpdate();
                 });
             }
             currentIndex += word.length() + 1;

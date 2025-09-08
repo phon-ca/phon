@@ -648,7 +648,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
      * reset to UNKNOWN.
 	 *
 	 */
-	public void resetSyllabification() {
+	public IPATranscript resetSyllabification() {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 		for(IPAElement ele:this) {
             if(ele instanceof Phone) {
@@ -674,9 +674,60 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
                 builder.append(ele);
             }
         }
+        return builder.toIPATranscript();
 	}
 
-	/**
+    /**
+     * Return a new IPATranscript with syllabification information
+     * set for the given element index.
+     *
+     * @param index
+     * @param syllableInfo
+     * @return IPATranscript with updated syllable info
+     * @throws ArrayIndexOutOfBoundsException if index is out of bounds
+     */
+    public IPATranscript setSyllableInfo(int index, SyllableInfo syllableInfo) {
+        if (index < 0 || index >= length())
+            throw new ArrayIndexOutOfBoundsException(index);
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        for(int i = 0; i < index; i++) {
+            builder.append(elementAt(i));
+        }
+        final IPAElement ele = elementAt(index);
+        final IPAElement clonedEle = (new IPAElementFactory()).cloneElementWithSyllableInfo(ele, syllableInfo);
+        builder.append(clonedEle);
+        for(int i = index+1; i < length(); i++) {
+            builder.append(elementAt(i));
+        }
+        return builder.toIPATranscript();
+    }
+
+    /**
+     * Set constituent type for the given element index.
+     *
+     * @param index
+     * @param constituentType
+     * @return IPATranscript a new IPATranscript with updated syllable info
+     * @throws ArrayIndexOutOfBoundsException if index is out of bounds
+     */
+    public IPATranscript setConstituentType(int index, SyllableConstituentType constituentType) {
+        if (index < 0 || index >= length())
+            throw new ArrayIndexOutOfBoundsException(index);
+        final IPAElement ele = elementAt(index);
+        final SyllableInfo updatedInfo = new SyllableInfo(
+            constituentType,
+            ele.isDiphthong(),
+            ele.stress(),
+            ele.syllableIndex(),
+            ele.segregated(),
+            ele.sonority(),
+            ele.sonorityDistance(),
+            ele.tone()
+        );
+        return setSyllableInfo(index, updatedInfo);
+    }
+
+    /**
 	 * Has this transcription been syllabified?
 	 *
 	 * @return true if any phones have syllabification info set to something other than UNKNOWN
