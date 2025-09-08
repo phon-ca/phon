@@ -1,556 +1,624 @@
 package ca.phon.util;
 
-import org.junit.Test;
-import org.junit.Before;
 import org.junit.After;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static org.junit.Assert.*;
 
 /**
- * Test class for SearchHistory
+ * Unit tests for {@link SearchHistory}.
+ * Tests cover static API, prefix-based organization, thread safety, and
+ * persistence.
  */
 public class SearchHistoryTest {
 
-    private SearchHistory searchHistory;
-    private SearchHistoryEntry testEntry1;
-    private SearchHistoryEntry testEntry2;
-    private SearchHistoryEntry testEntry3;
-    private String testHistoryName;
+    private static final String TEST_PREFIX = "test.prefix";
+    private static final String TEST_PREFIX_2 = "test.prefix2";
+    private static final String TEMP_PREFIX = "temp.test";
 
     @Before
     public void setUp() {
-        testHistoryName = "test-history-" + System.currentTimeMillis();
-        searchHistory = new SearchHistory(testHistoryName);
-
-        testEntry1 = SearchHistoryEntry.builder()
-                .queryText("query1")
-                .queryType("phonex")
-                .caseSensitive(false)
-                .parameter("target", "IPA Target")
-                .build();
-
-        testEntry2 = SearchHistoryEntry.builder()
-                .queryText("query2")
-                .queryType("regex")
-                .caseSensitive(true)
-                .parameter("group", "Word")
-                .build();
-
-        testEntry3 = SearchHistoryEntry.builder()
-                .queryText("query3")
-                .queryType("plain")
-                .build();
+        // Clean up any existing test data
+        SearchHistory.clear(TEST_PREFIX);
+        SearchHistory.clear(TEST_PREFIX_2);
+        SearchHistory.clear(TEMP_PREFIX);
     }
 
     @After
     public void tearDown() {
         // Clean up test data
-        if (searchHistory != null) {
-            searchHistory.clear();
-        }
-        // Clean up any histories created during static method tests
-        SearchHistory.deleteHistoriesWithPrefix("test-");
+        SearchHistory.clear(TEST_PREFIX);
+        SearchHistory.clear(TEST_PREFIX_2);
+        SearchHistory.clear(TEMP_PREFIX);
+        SearchHistory.deleteHistoriesWithPattern("test.");
+        SearchHistory.deleteHistoriesWithPattern("temp.");
     }
 
     @Test
-    public void testConstructorDefault() {
-        SearchHistory history = new SearchHistory("test-default");
-        assertEquals("test-default", history.getHistoryName());
-        assertEquals(SearchHistory.DEFAULT_MAX_ENTRIES, history.getMaxEntries());
-        assertTrue(history.isEmpty());
-        assertEquals(0, history.size());
-    }
+    public void testBasicAddAndRetrieve() {
+        assertTrue("History should be empty initially", SearchHistory.isEmpty(TEST_PREFIX));
+        assertEquals("Size should be 0 initially", 0, SearchHistory.size(TEST_PREFIX));
 
-    @Test
-    public void testConstructorWithMaxEntries() {
-        SearchHistory history = new SearchHistory("test-custom", 10);
-        assertEquals("test-custom", history.getHistoryName());
-        assertEquals(10, history.getMaxEntries());
-        assertTrue(history.isEmpty());
-    }
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test query")
+                .queryType("phonex")
+                .build();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorNullName() {
-        new SearchHistory(null);
-    }
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorEmptyName() {
-        new SearchHistory("   ");
-    }
+        assertFalse("History should not be empty after adding entry", SearchHistory.isEmpty(TEST_PREFIX));
+        assertEquals("Size should be 1 after adding entry", 1, SearchHistory.size(TEST_PREFIX));
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorZeroMaxEntries() {
-        new SearchHistory("test", 0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorNegativeMaxEntries() {
-        new SearchHistory("test", -1);
-    }
-
-    @Test
-    public void testAddSearchEntry() {
-        assertTrue(searchHistory.isEmpty());
-
-        searchHistory.addSearchEntry(testEntry1);
-
-        assertEquals(1, searchHistory.size());
-        assertFalse(searchHistory.isEmpty());
-        assertEquals(testEntry1, searchHistory.getMostRecentEntry());
-        assertTrue(searchHistory.containsEntry(testEntry1));
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have one entry", 1, entries.size());
+        assertEquals("Entry should match", entry, entries.get(0));
     }
 
     @Test
     public void testAddMultipleEntries() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
-        searchHistory.addSearchEntry(testEntry3);
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("query 1")
+                .queryType("phonex")
+                .build();
 
-        assertEquals(3, searchHistory.size());
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("query 2")
+                .queryType("regex")
+                .build();
 
-        List<SearchHistoryEntry> entries = searchHistory.getSearchEntries();
-        assertEquals(testEntry3, entries.get(0)); // Most recent first
-        assertEquals(testEntry2, entries.get(1));
-        assertEquals(testEntry1, entries.get(2));
+        SearchHistoryEntry entry3 = SearchHistoryEntry.builder()
+                .queryText("query 3")
+                .queryType("plain")
+                .build();
+
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry2);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry3);
+
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have 3 entries", 3, entries.size());
+
+        // Entries should be in reverse order (most recent first)
+        assertEquals("First entry should be most recent", entry3, entries.get(0));
+        assertEquals("Second entry should be middle", entry2, entries.get(1));
+        assertEquals("Third entry should be oldest", entry1, entries.get(2));
     }
 
     @Test
-    public void testAddDuplicateEntry() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
-        searchHistory.addSearchEntry(testEntry1); // Add duplicate
+    public void testDuplicateRemoval() {
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("duplicate query")
+                .queryType("phonex")
+                .parameter("target", "IPA")
+                .build();
 
-        assertEquals(2, searchHistory.size()); // Should not increase size
-        assertEquals(testEntry1, searchHistory.getMostRecentEntry()); // Should move to front
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("other query")
+                .queryType("regex")
+                .build();
 
-        List<SearchHistoryEntry> entries = searchHistory.getSearchEntries();
-        assertEquals(testEntry1, entries.get(0));
-        assertEquals(testEntry2, entries.get(1));
-    }
+        // Add different entries
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry2);
+        assertEquals("Should have 2 entries", 2, SearchHistory.size(TEST_PREFIX));
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddNullEntry() {
-        searchHistory.addSearchEntry(null);
+        // Add duplicate of entry1 (same query text and parameters)
+        SearchHistoryEntry duplicateEntry = SearchHistoryEntry.builder()
+                .queryText("duplicate query")
+                .queryType("phonex") // type can be different
+                .parameter("target", "IPA")
+                .build();
+
+        SearchHistory.addSearchEntry(TEST_PREFIX, duplicateEntry);
+
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should still have 2 entries after duplicate", 2, entries.size());
+        assertEquals("Duplicate should be at front", duplicateEntry, entries.get(0));
+        assertEquals("Other entry should remain", entry2, entries.get(1));
     }
 
     @Test
     public void testMaxEntriesLimit() {
-        SearchHistory smallHistory = new SearchHistory("test-small", 2);
+        int maxEntries = 3;
 
-        smallHistory.addSearchEntry(testEntry1);
-        smallHistory.addSearchEntry(testEntry2);
-        smallHistory.addSearchEntry(testEntry3); // Should remove oldest
+        // Add more entries than the limit
+        for (int i = 1; i <= 5; i++) {
+            SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                    .queryText("query " + i)
+                    .queryType("phonex")
+                    .build();
+            SearchHistory.addSearchEntry(TEST_PREFIX, entry, maxEntries);
+        }
 
-        assertEquals(2, smallHistory.size());
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have max entries", maxEntries, entries.size());
 
-        List<SearchHistoryEntry> entries = smallHistory.getSearchEntries();
-        assertEquals(testEntry3, entries.get(0));
-        assertEquals(testEntry2, entries.get(1));
-        assertFalse(smallHistory.containsEntry(testEntry1)); // Should be removed
+        // Should have the most recent entries (3, 4, 5)
+        assertEquals("query 5", entries.get(0).queryText());
+        assertEquals("query 4", entries.get(1).queryText());
+        assertEquals("query 3", entries.get(2).queryText());
     }
 
     @Test
-    public void testUpdateSearchEntry() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
+    public void testGetLimitedEntries() {
+        // Add 5 entries
+        for (int i = 1; i <= 5; i++) {
+            SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                    .queryText("query " + i)
+                    .queryType("phonex")
+                    .build();
+            SearchHistory.addSearchEntry(TEST_PREFIX, entry);
+        }
 
-        SearchHistoryEntry newEntry = SearchHistoryEntry.builder()
-                .queryText("updated query")
+        List<SearchHistoryEntry> limited = SearchHistory.getSearchEntries(TEST_PREFIX, 3);
+        assertEquals("Should return limited number", 3, limited.size());
+        assertEquals("query 5", limited.get(0).queryText());
+        assertEquals("query 4", limited.get(1).queryText());
+        assertEquals("query 3", limited.get(2).queryText());
+
+        // Test limit larger than available
+        List<SearchHistoryEntry> all = SearchHistory.getSearchEntries(TEST_PREFIX, 10);
+        assertEquals("Should return all available entries", 5, all.size());
+    }
+
+    @Test
+    public void testMostRecentEntry() {
+        assertNull("Most recent should be null for empty history",
+                SearchHistory.getMostRecentEntry(TEST_PREFIX));
+
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("first")
                 .queryType("phonex")
                 .build();
 
-        searchHistory.updateSearchEntry(testEntry1, newEntry);
-
-        assertEquals(2, searchHistory.size());
-        assertFalse(searchHistory.containsEntry(testEntry1));
-        assertTrue(searchHistory.containsEntry(newEntry));
-
-        List<SearchHistoryEntry> entries = searchHistory.getSearchEntries();
-        assertEquals(testEntry2, entries.get(0)); // Should maintain order
-        assertEquals(newEntry, entries.get(1));
-    }
-
-    @Test
-    public void testUpdateNonExistentEntry() {
-        searchHistory.addSearchEntry(testEntry1);
-
-        SearchHistoryEntry newEntry = SearchHistoryEntry.builder()
-                .queryText("new query")
-                .queryType("phonex")
-                .build();
-
-        searchHistory.updateSearchEntry(testEntry2, newEntry); // testEntry2 not in history
-
-        assertEquals(2, searchHistory.size());
-        assertEquals(newEntry, searchHistory.getMostRecentEntry()); // Should add to front
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testUpdateWithNullNewEntry() {
-        searchHistory.updateSearchEntry(testEntry1, null);
-    }
-
-    @Test
-    public void testDeleteSearchEntry() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
-
-        boolean removed = searchHistory.deleteSearchEntry(testEntry1);
-
-        assertTrue(removed);
-        assertEquals(1, searchHistory.size());
-        assertFalse(searchHistory.containsEntry(testEntry1));
-        assertTrue(searchHistory.containsEntry(testEntry2));
-    }
-
-    @Test
-    public void testDeleteNonExistentEntry() {
-        searchHistory.addSearchEntry(testEntry1);
-
-        boolean removed = searchHistory.deleteSearchEntry(testEntry2);
-
-        assertFalse(removed);
-        assertEquals(1, searchHistory.size());
-    }
-
-    @Test
-    public void testDeleteSearchEntryByIndex() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
-        searchHistory.addSearchEntry(testEntry3);
-
-        SearchHistoryEntry removed = searchHistory.deleteSearchEntry(1); // Remove middle entry
-
-        assertEquals(testEntry2, removed);
-        assertEquals(2, searchHistory.size());
-
-        List<SearchHistoryEntry> entries = searchHistory.getSearchEntries();
-        assertEquals(testEntry3, entries.get(0));
-        assertEquals(testEntry1, entries.get(1));
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testDeleteByInvalidIndex() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.deleteSearchEntry(5);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testDeleteByNegativeIndex() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.deleteSearchEntry(-1);
-    }
-
-    @Test
-    public void testGetSearchEntriesWithLimit() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
-        searchHistory.addSearchEntry(testEntry3);
-
-        List<SearchHistoryEntry> limited = searchHistory.getSearchEntries(2);
-
-        assertEquals(2, limited.size());
-        assertEquals(testEntry3, limited.get(0));
-        assertEquals(testEntry2, limited.get(1));
-    }
-
-    @Test
-    public void testGetSearchEntriesLimitExceedsSize() {
-        searchHistory.addSearchEntry(testEntry1);
-
-        List<SearchHistoryEntry> entries = searchHistory.getSearchEntries(10);
-
-        assertEquals(1, entries.size());
-        assertEquals(testEntry1, entries.get(0));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetSearchEntriesNegativeLimit() {
-        searchHistory.getSearchEntries(-1);
-    }
-
-    @Test
-    public void testGetMostRecentEntryEmptyHistory() {
-        assertNull(searchHistory.getMostRecentEntry());
-    }
-
-    @Test
-    public void testFindEntriesByQueryText() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
-
-        SearchHistoryEntry duplicate = SearchHistoryEntry.builder()
-                .queryText("query1") // Same as testEntry1
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("second")
                 .queryType("regex")
                 .build();
-        searchHistory.addSearchEntry(duplicate);
 
-        List<SearchHistoryEntry> found = searchHistory.findEntriesByQueryText("query1");
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        assertEquals("Most recent should be first entry", entry1,
+                SearchHistory.getMostRecentEntry(TEST_PREFIX));
 
-        assertEquals(2, found.size());
-        assertTrue(found.contains(testEntry1));
-        assertTrue(found.contains(duplicate));
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry2);
+        assertEquals("Most recent should be second entry", entry2,
+                SearchHistory.getMostRecentEntry(TEST_PREFIX));
     }
 
     @Test
-    public void testFindEntriesByQueryTextNotFound() {
-        searchHistory.addSearchEntry(testEntry1);
-
-        List<SearchHistoryEntry> found = searchHistory.findEntriesByQueryText("nonexistent");
-
-        assertTrue(found.isEmpty());
-    }
-
-    @Test
-    public void testFindEntriesByQueryTextNull() {
-        searchHistory.addSearchEntry(testEntry1);
-
-        List<SearchHistoryEntry> found = searchHistory.findEntriesByQueryText(null);
-
-        assertTrue(found.isEmpty());
-    }
-
-    @Test
-    public void testFindEntriesByQueryType() {
-        searchHistory.addSearchEntry(testEntry1); // phonex
-        searchHistory.addSearchEntry(testEntry2); // regex
-        searchHistory.addSearchEntry(testEntry3); // plain
-
-        SearchHistoryEntry anotherPhonex = SearchHistoryEntry.builder()
-                .queryText("another query")
+    public void testDeleteEntry() {
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("keep this")
                 .queryType("phonex")
                 .build();
-        searchHistory.addSearchEntry(anotherPhonex);
 
-        List<SearchHistoryEntry> found = searchHistory.findEntriesByQueryType("phonex");
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("delete this")
+                .queryType("regex")
+                .build();
 
-        assertEquals(2, found.size());
-        assertTrue(found.contains(testEntry1));
-        assertTrue(found.contains(anotherPhonex));
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry2);
+        assertEquals("Should have 2 entries", 2, SearchHistory.size(TEST_PREFIX));
+
+        // Delete specific entry
+        boolean deleted = SearchHistory.deleteSearchEntry(TEST_PREFIX, entry2);
+        assertTrue("Should return true for successful deletion", deleted);
+        assertEquals("Should have 1 entry after deletion", 1, SearchHistory.size(TEST_PREFIX));
+
+        List<SearchHistoryEntry> remaining = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have only first entry", entry1, remaining.get(0));
+
+        // Try to delete non-existent entry
+        boolean notDeleted = SearchHistory.deleteSearchEntry(TEST_PREFIX, entry2);
+        assertFalse("Should return false for non-existent entry", notDeleted);
     }
 
     @Test
-    public void testFindEntriesByParameter() {
-        searchHistory.addSearchEntry(testEntry1); // has "target" parameter
-        searchHistory.addSearchEntry(testEntry2); // has "group" parameter
-        searchHistory.addSearchEntry(testEntry3); // no parameters
+    public void testDeleteByIndex() {
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("first")
+                .queryType("phonex")
+                .build();
 
-        List<SearchHistoryEntry> found = searchHistory.findEntriesByParameter("target");
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("second")
+                .queryType("regex")
+                .build();
 
-        assertEquals(1, found.size());
-        assertEquals(testEntry1, found.get(0));
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry2);
+
+        // Delete first entry (most recent)
+        SearchHistoryEntry deleted = SearchHistory.deleteSearchEntry(TEST_PREFIX, 0);
+        assertEquals("Should return deleted entry", entry2, deleted);
+        assertEquals("Should have 1 entry remaining", 1, SearchHistory.size(TEST_PREFIX));
+
+        List<SearchHistoryEntry> remaining = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have only first entry", entry1, remaining.get(0));
+
+        // Test invalid index
+        try {
+            SearchHistory.deleteSearchEntry(TEST_PREFIX, 5);
+            fail("Should throw exception for invalid index");
+        } catch (IndexOutOfBoundsException e) {
+            assertTrue(e.getMessage().contains("out of range"));
+        }
     }
 
     @Test
-    public void testFindEntriesByParameterValue() {
-        searchHistory.addSearchEntry(testEntry1); // target="IPA Target"
-        searchHistory.addSearchEntry(testEntry2); // group="Word"
+    public void testUpdateEntry() {
+        SearchHistoryEntry original = SearchHistoryEntry.builder()
+                .queryText("original")
+                .queryType("phonex")
+                .build();
 
-        List<SearchHistoryEntry> found = searchHistory.findEntriesByParameterValue("target", "IPA Target");
+        SearchHistoryEntry updated = SearchHistoryEntry.builder()
+                .queryText("updated")
+                .queryType("regex")
+                .build();
 
-        assertEquals(1, found.size());
-        assertEquals(testEntry1, found.get(0));
+        SearchHistory.addSearchEntry(TEST_PREFIX, original);
+
+        // Update existing entry
+        SearchHistory.updateSearchEntry(TEST_PREFIX, original, updated);
+
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have 1 entry", 1, entries.size());
+        assertEquals("Entry should be updated", updated, entries.get(0));
+
+        // Update non-existent entry (should add to front)
+        SearchHistoryEntry nonExistent = SearchHistoryEntry.builder()
+                .queryText("non-existent")
+                .queryType("plain")
+                .build();
+
+        SearchHistoryEntry newEntry = SearchHistoryEntry.builder()
+                .queryText("new entry")
+                .queryType("phonex")
+                .build();
+
+        SearchHistory.updateSearchEntry(TEST_PREFIX, nonExistent, newEntry);
+
+        entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have 2 entries", 2, entries.size());
+        assertEquals("New entry should be at front", newEntry, entries.get(0));
+        assertEquals("Updated entry should be second", updated, entries.get(1));
     }
 
     @Test
-    public void testAddSimpleSearchEntry() {
-        SearchHistoryEntry entry = searchHistory.addSimpleSearchEntry("simple query", "plain");
+    public void testContainsEntry() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("phonex")
+                .build();
 
-        assertEquals("simple query", entry.queryText());
-        assertEquals("plain", entry.queryType());
-        assertFalse(entry.caseSensitive());
-        assertTrue(entry.parameters().isEmpty());
-        assertTrue(searchHistory.containsEntry(entry));
+        assertFalse("Should not contain entry initially",
+                SearchHistory.containsEntry(TEST_PREFIX, entry));
+
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry);
+
+        assertTrue("Should contain entry after adding",
+                SearchHistory.containsEntry(TEST_PREFIX, entry));
+
+        SearchHistory.deleteSearchEntry(TEST_PREFIX, entry);
+
+        assertFalse("Should not contain entry after deletion",
+                SearchHistory.containsEntry(TEST_PREFIX, entry));
     }
 
     @Test
-    public void testAddSimpleSearchEntryWithCaseSensitive() {
-        SearchHistoryEntry entry = searchHistory.addSimpleSearchEntry("case query", "regex", true);
+    public void testFindMethods() {
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("phoneme pattern")
+                .queryType("phonex")
+                .parameter("target", "IPA Target")
+                .build();
 
-        assertEquals("case query", entry.queryText());
-        assertEquals("regex", entry.queryType());
-        assertTrue(entry.caseSensitive());
-    }
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("regex pattern")
+                .queryType("regex")
+                .parameter("group", "Word")
+                .build();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddSimpleSearchEntryNullQueryText() {
-        searchHistory.addSimpleSearchEntry(null, "plain");
-    }
+        SearchHistoryEntry entry3 = SearchHistoryEntry.builder()
+                .queryText("phoneme pattern")
+                .queryType("plain")
+                .parameter("target", "Orthography")
+                .build();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddSimpleSearchEntryNullQueryType() {
-        searchHistory.addSimpleSearchEntry("query", null);
-    }
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry2);
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry3);
 
-    @Test
-    public void testClear() {
-        searchHistory.addSearchEntry(testEntry1);
-        searchHistory.addSearchEntry(testEntry2);
+        // Test find by query text
+        List<SearchHistoryEntry> byQueryText = SearchHistory.findEntriesByQueryText(
+                TEST_PREFIX, "phoneme pattern");
+        assertEquals("Should find 2 entries with same query text", 2, byQueryText.size());
+        assertTrue(byQueryText.contains(entry1));
+        assertTrue(byQueryText.contains(entry3));
 
-        assertFalse(searchHistory.isEmpty());
+        // Test find by query type
+        List<SearchHistoryEntry> byQueryType = SearchHistory.findEntriesByQueryType(
+                TEST_PREFIX, "phonex");
+        assertEquals("Should find 1 entry with phonex type", 1, byQueryType.size());
+        assertEquals(entry1, byQueryType.get(0));
 
-        searchHistory.clear();
+        // Test find by parameter key
+        List<SearchHistoryEntry> byParameter = SearchHistory.findEntriesByParameter(
+                TEST_PREFIX, "target");
+        assertEquals("Should find 2 entries with target parameter", 2, byParameter.size());
+        assertTrue(byParameter.contains(entry1));
+        assertTrue(byParameter.contains(entry3));
 
-        assertTrue(searchHistory.isEmpty());
-        assertEquals(0, searchHistory.size());
-    }
+        // Test find by parameter value
+        List<SearchHistoryEntry> byParameterValue = SearchHistory.findEntriesByParameterValue(
+                TEST_PREFIX, "target", "IPA Target");
+        assertEquals("Should find 1 entry with specific parameter value", 1, byParameterValue.size());
+        assertEquals(entry1, byParameterValue.get(0));
 
-    @Test
-    public void testGetSearchEntriesImmutable() {
-        searchHistory.addSearchEntry(testEntry1);
-
-        List<SearchHistoryEntry> entries = searchHistory.getSearchEntries();
-        entries.clear(); // Modify returned list
-
-        // Original history should not be affected
-        assertEquals(1, searchHistory.size());
-    }
-
-    @Test
-    public void testGetHistoryNamesWithPrefix() {
-        // Create multiple histories
-        SearchHistory history1 = new SearchHistory("test-prefix-history1");
-        SearchHistory history2 = new SearchHistory("test-prefix-history2");
-        SearchHistory history3 = new SearchHistory("other-history");
-
-        // Add entries to make them persistent
-        history1.addSearchEntry(testEntry1);
-        history2.addSearchEntry(testEntry2);
-        history3.addSearchEntry(testEntry3);
-
-        List<String> names = SearchHistory.getHistoryNamesWithPrefix("test-prefix");
-
-        assertTrue(names.contains("test-prefix-history1"));
-        assertTrue(names.contains("test-prefix-history2"));
-        assertFalse(names.contains("other-history"));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetHistoryNamesWithNullPrefix() {
-        SearchHistory.getHistoryNamesWithPrefix(null);
+        // Test with null values
+        assertTrue("Should return empty list for null query text",
+                SearchHistory.findEntriesByQueryText(TEST_PREFIX, null).isEmpty());
+        assertTrue("Should return empty list for null query type",
+                SearchHistory.findEntriesByQueryType(TEST_PREFIX, null).isEmpty());
+        assertTrue("Should return empty list for null parameter key",
+                SearchHistory.findEntriesByParameter(TEST_PREFIX, null).isEmpty());
+        assertTrue("Should return empty list for null parameter value",
+                SearchHistory.findEntriesByParameterValue(TEST_PREFIX, "key", null).isEmpty());
     }
 
     @Test
-    public void testGetAllHistoryNames() {
-        SearchHistory history1 = new SearchHistory("test-all-1");
-        SearchHistory history2 = new SearchHistory("test-all-2");
+    public void testSimpleSearchEntry() {
+        // Test basic simple entry
+        SearchHistoryEntry entry1 = SearchHistory.addSimpleSearchEntry(
+                TEST_PREFIX, "simple query", "phonex");
 
-        history1.addSearchEntry(testEntry1);
-        history2.addSearchEntry(testEntry2);
+        assertEquals("simple query", entry1.queryText());
+        assertEquals("phonex", entry1.queryType());
+        assertFalse(entry1.caseSensitive());
+        assertTrue(entry1.parameters().isEmpty());
 
-        List<String> allNames = SearchHistory.getAllHistoryNames();
+        // Test with case sensitivity
+        SearchHistoryEntry entry2 = SearchHistory.addSimpleSearchEntry(
+                TEST_PREFIX, "case sensitive", "regex", true);
 
-        assertTrue(allNames.contains("test-all-1"));
-        assertTrue(allNames.contains("test-all-2"));
+        assertEquals("case sensitive", entry2.queryText());
+        assertEquals("regex", entry2.queryType());
+        assertTrue(entry2.caseSensitive());
+
+        // Verify both entries are in history
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Should have 2 entries", 2, entries.size());
+        assertEquals("Most recent should be first", entry2, entries.get(0));
+        assertEquals("Older should be second", entry1, entries.get(1));
     }
 
     @Test
-    public void testGetEntriesFromHistoriesWithPrefix() {
-        SearchHistory history1 = new SearchHistory("test-multi-1");
-        SearchHistory history2 = new SearchHistory("test-multi-2");
+    public void testPrefixSeparation() {
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .queryText("prefix1 query")
+                .queryType("phonex")
+                .build();
 
-        history1.addSearchEntry(testEntry1);
-        history1.addSearchEntry(testEntry2);
-        history2.addSearchEntry(testEntry3);
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .queryText("prefix2 query")
+                .queryType("regex")
+                .build();
 
-        Map<String, List<SearchHistoryEntry>> entries = SearchHistory.getEntriesFromHistoriesWithPrefix("test-multi");
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
+        SearchHistory.addSearchEntry(TEST_PREFIX_2, entry2);
 
-        assertEquals(2, entries.size());
-        assertTrue(entries.containsKey("test-multi-1"));
-        assertTrue(entries.containsKey("test-multi-2"));
-        assertEquals(2, entries.get("test-multi-1").size());
-        assertEquals(1, entries.get("test-multi-2").size());
+        // Each prefix should have its own entry
+        List<SearchHistoryEntry> entries1 = SearchHistory.getSearchEntries(TEST_PREFIX);
+        List<SearchHistoryEntry> entries2 = SearchHistory.getSearchEntries(TEST_PREFIX_2);
+
+        assertEquals("Prefix 1 should have 1 entry", 1, entries1.size());
+        assertEquals("Prefix 2 should have 1 entry", 1, entries2.size());
+        assertEquals("Prefix 1 entry should match", entry1, entries1.get(0));
+        assertEquals("Prefix 2 entry should match", entry2, entries2.get(0));
+
+        // Clear one prefix shouldn't affect the other
+        SearchHistory.clear(TEST_PREFIX);
+
+        assertTrue("Prefix 1 should be empty", SearchHistory.isEmpty(TEST_PREFIX));
+        assertFalse("Prefix 2 should not be empty", SearchHistory.isEmpty(TEST_PREFIX_2));
     }
 
     @Test
-    public void testGetEntriesFromHistoriesWithPrefixAndLimit() {
-        SearchHistory history1 = new SearchHistory("test-limit-1");
+    public void testBulkOperations() {
+        // Add entries to multiple prefixes
+        SearchHistory.addSimpleSearchEntry("test.query.phonex", "phonex1", "phonex");
+        SearchHistory.addSimpleSearchEntry("test.query.regex", "regex1", "regex");
+        SearchHistory.addSimpleSearchEntry("test.analysis.segment", "segment1", "plain");
+        SearchHistory.addSimpleSearchEntry("temp.test.data", "temp1", "phonex");
 
-        history1.addSearchEntry(testEntry1);
-        history1.addSearchEntry(testEntry2);
-        history1.addSearchEntry(testEntry3);
+        // Test pattern matching
+        List<String> testPrefixes = SearchHistory.getHistoryPrefixesWithPattern("test.");
+        assertTrue("Should find test prefixes", testPrefixes.size() >= 3);
+        assertTrue("Should contain phonex prefix", testPrefixes.contains("test.query.phonex"));
+        assertTrue("Should contain regex prefix", testPrefixes.contains("test.query.regex"));
+        assertTrue("Should contain analysis prefix", testPrefixes.contains("test.analysis.segment"));
 
-        Map<String, List<SearchHistoryEntry>> entries = SearchHistory.getEntriesFromHistoriesWithPrefix("test-limit",
-                2);
+        List<String> queryPrefixes = SearchHistory.getHistoryPrefixesWithPattern("test.query.");
+        assertEquals("Should find 2 query prefixes", 2, queryPrefixes.size());
 
-        assertEquals(1, entries.size());
-        assertEquals(2, entries.get("test-limit-1").size());
-    }
+        // Test existence checks
+        assertTrue("Should exist with test pattern",
+                SearchHistory.existsHistoryWithPattern("test."));
+        assertFalse("Should not exist with nonexistent pattern",
+                SearchHistory.existsHistoryWithPattern("nonexistent."));
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetEntriesFromHistoriesNullPrefix() {
-        SearchHistory.getEntriesFromHistoriesWithPrefix(null);
-    }
+        // Test count
+        int testCount = SearchHistory.getHistoryCountWithPattern("test.");
+        assertTrue("Should have test histories", testCount >= 3);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetEntriesFromHistoriesNegativeLimit() {
-        SearchHistory.getEntriesFromHistoriesWithPrefix("test", -1);
-    }
+        // Test bulk delete
+        int deleted = SearchHistory.deleteHistoriesWithPattern("test.query.");
+        assertEquals("Should delete 2 query histories", 2, deleted);
 
-    @Test
-    public void testDeleteHistoriesWithPrefix() {
-        SearchHistory history1 = new SearchHistory("test-delete-1");
-        SearchHistory history2 = new SearchHistory("test-delete-2");
-        SearchHistory history3 = new SearchHistory("keep-this");
-
-        history1.addSearchEntry(testEntry1);
-        history2.addSearchEntry(testEntry2);
-        history3.addSearchEntry(testEntry3);
-
-        int deletedCount = SearchHistory.deleteHistoriesWithPrefix("test-delete");
-
-        assertEquals(2, deletedCount);
-        assertFalse(SearchHistory.existsHistoryWithPrefix("test-delete"));
-        assertTrue(SearchHistory.existsHistoryWithPrefix("keep-this"));
-    }
-
-    @Test
-    public void testExistsHistoryWithPrefix() {
-        assertFalse(SearchHistory.existsHistoryWithPrefix("test-exists"));
-
-        SearchHistory history = new SearchHistory("test-exists-1");
-        history.addSearchEntry(testEntry1);
-
-        assertTrue(SearchHistory.existsHistoryWithPrefix("test-exists"));
+        // Verify deletion
+        assertFalse("Query phonex should be gone",
+                SearchHistory.existsHistoryWithPattern("test.query.phonex"));
+        assertFalse("Query regex should be gone",
+                SearchHistory.existsHistoryWithPattern("test.query.regex"));
+        assertTrue("Analysis should remain",
+                SearchHistory.existsHistoryWithPattern("test.analysis."));
+        assertTrue("Temp should remain",
+                SearchHistory.existsHistoryWithPattern("temp."));
     }
 
     @Test
-    public void testGetHistoryCountWithPrefix() {
-        SearchHistory history1 = new SearchHistory("test-count-1");
-        SearchHistory history2 = new SearchHistory("test-count-2");
+    public void testGetAllHistoryPrefixes() {
+        SearchHistory.addSimpleSearchEntry("test.one", "query1", "phonex");
+        SearchHistory.addSimpleSearchEntry("test.two", "query2", "regex");
+        SearchHistory.addSimpleSearchEntry("other.prefix", "query3", "plain");
 
-        history1.addSearchEntry(testEntry1);
-        history2.addSearchEntry(testEntry2);
-
-        int count = SearchHistory.getHistoryCountWithPrefix("test-count");
-
-        assertEquals(2, count);
+        List<String> allPrefixes = SearchHistory.getAllHistoryPrefixes();
+        assertTrue("Should contain test.one", allPrefixes.contains("test.one"));
+        assertTrue("Should contain test.two", allPrefixes.contains("test.two"));
+        assertTrue("Should contain other.prefix", allPrefixes.contains("other.prefix"));
     }
 
     @Test
-    public void testConstructorTrimsName() {
-        SearchHistory history = new SearchHistory("  test-name  ");
-        assertEquals("test-name", history.getHistoryName());
+    public void testThreadSafety() throws InterruptedException {
+        int numThreads = 10;
+        int entriesPerThread = 20;
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        CountDownLatch latch = new CountDownLatch(numThreads);
+
+        // Submit tasks that add entries concurrently
+        for (int t = 0; t < numThreads; t++) {
+            final int threadId = t;
+            executor.submit(() -> {
+                try {
+                    for (int i = 0; i < entriesPerThread; i++) {
+                        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                                .queryText("thread" + threadId + "_entry" + i)
+                                .queryType("phonex")
+                                .build();
+                        SearchHistory.addSearchEntry(TEST_PREFIX, entry);
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executor.shutdown();
+
+        // Verify all entries were added (subject to max entries limit)
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertTrue("Should have entries from concurrent operations", entries.size() > 0);
+        assertTrue("Should not exceed default max entries",
+                entries.size() <= SearchHistory.DEFAULT_MAX_ENTRIES);
+
+        // Verify no corruption occurred
+        for (SearchHistoryEntry entry : entries) {
+            assertNotNull("Entry should not be null", entry);
+            assertNotNull("Query text should not be null", entry.queryText());
+            assertNotNull("Query type should not be null", entry.queryType());
+        }
     }
 
     @Test
-    public void testPersistenceAcrossInstances() {
-        String historyName = "test-persistence";
+    public void testValidationErrors() {
+        // Test null prefix
+        try {
+            SearchHistory.addSearchEntry(null, SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .build());
+            fail("Should throw exception for null prefix");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("cannot be null or empty"));
+        }
 
-        // Create first instance and add entry
-        SearchHistory history1 = new SearchHistory(historyName);
-        history1.addSearchEntry(testEntry1);
+        // Test empty prefix
+        try {
+            SearchHistory.addSearchEntry("  ", SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .build());
+            fail("Should throw exception for empty prefix");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("cannot be null or empty"));
+        }
 
-        // Create second instance with same name
-        SearchHistory history2 = new SearchHistory(historyName);
+        // Test null entry
+        try {
+            SearchHistory.addSearchEntry(TEST_PREFIX, null);
+            fail("Should throw exception for null entry");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Search entry cannot be null"));
+        }
 
-        // Should load the same data
-        assertEquals(1, history2.size());
-        assertTrue(history2.containsEntry(testEntry1));
+        // Test invalid max entries
+        try {
+            SearchHistory.addSearchEntry(TEST_PREFIX, SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .build(), 0);
+            fail("Should throw exception for zero max entries");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Max entries must be greater than 0"));
+        }
 
-        // Clean up
-        history2.clear();
+        // Test negative limit for getSearchEntries
+        try {
+            SearchHistory.getSearchEntries(TEST_PREFIX, -1);
+            fail("Should throw exception for negative limit");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Limit cannot be negative"));
+        }
+    }
+
+    @Test
+    public void testClearHistory() {
+        // Add some entries
+        SearchHistory.addSimpleSearchEntry(TEST_PREFIX, "query1", "phonex");
+        SearchHistory.addSimpleSearchEntry(TEST_PREFIX, "query2", "regex");
+
+        assertFalse("History should not be empty", SearchHistory.isEmpty(TEST_PREFIX));
+        assertEquals("Should have 2 entries", 2, SearchHistory.size(TEST_PREFIX));
+
+        // Clear history
+        SearchHistory.clear(TEST_PREFIX);
+
+        assertTrue("History should be empty after clear", SearchHistory.isEmpty(TEST_PREFIX));
+        assertEquals("Size should be 0 after clear", 0, SearchHistory.size(TEST_PREFIX));
+        assertNull("Most recent should be null after clear",
+                SearchHistory.getMostRecentEntry(TEST_PREFIX));
+    }
+
+    @Test
+    public void testImmutableReturnValues() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("phonex")
+                .build();
+
+        SearchHistory.addSearchEntry(TEST_PREFIX, entry);
+
+        // Get entries and try to modify the returned list
+        List<SearchHistoryEntry> entries = SearchHistory.getSearchEntries(TEST_PREFIX);
+
+        // The returned list should be modifiable (it's a copy)
+        entries.clear();
+
+        // Original history should be unaffected
+        assertEquals("Original history should be unchanged", 1, SearchHistory.size(TEST_PREFIX));
+
+        // Get fresh copy to verify
+        List<SearchHistoryEntry> freshEntries = SearchHistory.getSearchEntries(TEST_PREFIX);
+        assertEquals("Fresh copy should have original entry", 1, freshEntries.size());
+        assertEquals("Entry should match original", entry, freshEntries.get(0));
     }
 }

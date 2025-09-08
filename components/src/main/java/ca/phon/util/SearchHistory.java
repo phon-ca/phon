@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
+ * Copyright (C) 2005-2025 Gregory Hedlund & Yvan Rose
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ package ca.phon.util;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.prefs.Preferences;
+
+import ca.phon.util.PrefHelper;
+import ca.phon.util.Base64;
 
 /**
  * <p>

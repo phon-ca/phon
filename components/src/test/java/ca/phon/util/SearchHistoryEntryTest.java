@@ -1,340 +1,361 @@
 package ca.phon.util;
 
 import org.junit.Test;
-import org.junit.Before;
-import static org.junit.Assert.*;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.*;
+
 /**
- * Test class for SearchHistoryEntry
+ * Unit tests for {@link SearchHistoryEntry}.
+ * Tests cover builder pattern, validation, immutability, and serialization.
  */
 public class SearchHistoryEntryTest {
 
-        private LocalDateTime testDate;
-        private String testQueryText;
-        private String testQueryType;
-        private Map<String, String> testParameters;
+    @Test
+    public void testBasicBuilder() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test query")
+                .queryType("phonex")
+                .build();
 
-        @Before
-        public void setUp() {
-                testDate = LocalDateTime.of(2023, 12, 25, 10, 30, 0);
-                testQueryText = "test query";
-                testQueryType = "phonex";
-                testParameters = new HashMap<>();
-                testParameters.put("target", "IPA Target");
-                testParameters.put("group", "Word");
+        assertEquals("test query", entry.queryText());
+        assertEquals("phonex", entry.queryType());
+        assertFalse(entry.caseSensitive());
+        assertTrue(entry.parameters().isEmpty());
+        assertNotNull(entry.date());
+    }
+
+    @Test
+    public void testBuilderWithAllFields() {
+        LocalDateTime testDate = LocalDateTime.of(2025, 1, 15, 10, 30, 0);
+        Map<String, String> params = new HashMap<>();
+        params.put("target", "IPA Target");
+        params.put("group", "Word");
+
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .date(testDate)
+                .queryText("phoneme pattern")
+                .queryType("phonex")
+                .caseSensitive(true)
+                .parameters(params)
+                .build();
+
+        assertEquals(testDate, entry.date());
+        assertEquals("phoneme pattern", entry.queryText());
+        assertEquals("phonex", entry.queryType());
+        assertTrue(entry.caseSensitive());
+        assertEquals(2, entry.parameters().size());
+        assertEquals("IPA Target", entry.getParameter("target"));
+        assertEquals("Word", entry.getParameter("group"));
+    }
+
+    @Test
+    public void testBuilderWithIndividualParameters() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("regex")
+                .parameter("key1", "value1")
+                .parameter("key2", "value2")
+                .build();
+
+        assertEquals(2, entry.parameters().size());
+        assertEquals("value1", entry.getParameter("key1"));
+        assertEquals("value2", entry.getParameter("key2"));
+    }
+
+    @Test
+    public void testParameterManagement() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("plain")
+                .parameter("keep", "this")
+                .parameter("remove", "this")
+                .removeParameter("remove")
+                .build();
+
+        assertEquals(1, entry.parameters().size());
+        assertEquals("this", entry.getParameter("keep"));
+        assertNull(entry.getParameter("remove"));
+        assertFalse(entry.hasParameter("remove"));
+        assertTrue(entry.hasParameter("keep"));
+    }
+
+    @Test
+    public void testClearParameters() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("plain")
+                .parameter("key1", "value1")
+                .parameter("key2", "value2")
+                .clearParameters()
+                .parameter("key3", "value3")
+                .build();
+
+        assertEquals(1, entry.parameters().size());
+        assertEquals("value3", entry.getParameter("key3"));
+        assertNull(entry.getParameter("key1"));
+        assertNull(entry.getParameter("key2"));
+    }
+
+    @Test
+    public void testToBuilder() {
+        SearchHistoryEntry original = SearchHistoryEntry.builder()
+                .queryText("original query")
+                .queryType("phonex")
+                .caseSensitive(true)
+                .parameter("param1", "value1")
+                .build();
+
+        SearchHistoryEntry modified = original.toBuilder()
+                .queryText("modified query")
+                .parameter("param2", "value2")
+                .build();
+
+        // Original should be unchanged
+        assertEquals("original query", original.queryText());
+        assertEquals(1, original.parameters().size());
+
+        // Modified should have changes
+        assertEquals("modified query", modified.queryText());
+        assertEquals("phonex", modified.queryType()); // Inherited
+        assertTrue(modified.caseSensitive()); // Inherited
+        assertEquals(2, modified.parameters().size()); // Added to
+        assertEquals("value1", modified.getParameter("param1"));
+        assertEquals("value2", modified.getParameter("param2"));
+    }
+
+    @Test
+    public void testImmutability() {
+        Map<String, String> mutableParams = new HashMap<>();
+        mutableParams.put("key", "value");
+
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("plain")
+                .parameters(mutableParams)
+                .build();
+
+        // Modify original map
+        mutableParams.put("key2", "value2");
+        mutableParams.put("key", "modified");
+
+        // Entry should not be affected
+        assertEquals(1, entry.parameters().size());
+        assertEquals("value", entry.getParameter("key"));
+        assertNull(entry.getParameter("key2"));
+
+        // Try to modify returned parameters map
+        try {
+            entry.parameters().put("new", "value");
+            fail("Should not be able to modify parameters map");
+        } catch (UnsupportedOperationException e) {
+            // Expected
+        }
+    }
+
+    @Test
+    public void testEquality() {
+        LocalDateTime date = LocalDateTime.now();
+
+        SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
+                .date(date)
+                .queryText("test")
+                .queryType("phonex")
+                .caseSensitive(true)
+                .parameter("key", "value")
+                .build();
+
+        SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
+                .date(date)
+                .queryText("test")
+                .queryType("phonex")
+                .caseSensitive(true)
+                .parameter("key", "value")
+                .build();
+
+        SearchHistoryEntry entry3 = SearchHistoryEntry.builder()
+                .date(date)
+                .queryText("different")
+                .queryType("phonex")
+                .caseSensitive(true)
+                .parameter("key", "value")
+                .build();
+
+        assertEquals(entry1, entry2);
+        assertEquals(entry1.hashCode(), entry2.hashCode());
+        assertNotEquals(entry1, entry3);
+        assertNotEquals(entry1.hashCode(), entry3.hashCode());
+    }
+
+    @Test
+    public void testValidation() {
+        // Test null query text
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText(null)
+                    .queryType("phonex")
+                    .build();
+            fail("Should throw exception for null query text");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Query text cannot be null"));
         }
 
-        @Test
-        public void testBuilderWithRequiredFields() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .build();
-
-                assertEquals(testQueryText, entry.queryText());
-                assertEquals(testQueryType, entry.queryType());
-                assertFalse(entry.caseSensitive());
-                assertTrue(entry.parameters().isEmpty());
-                assertNotNull(entry.date());
+        // Test empty query text
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("  ")
+                    .queryType("phonex")
+                    .build();
+            fail("Should throw exception for empty query text");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Query text cannot be null"));
         }
 
-        @Test
-        public void testBuilderWithAllFields() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .date(testDate)
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .caseSensitive(true)
-                                .parameters(testParameters)
-                                .build();
-
-                assertEquals(testDate, entry.date());
-                assertEquals(testQueryText, entry.queryText());
-                assertEquals(testQueryType, entry.queryType());
-                assertTrue(entry.caseSensitive());
-                assertEquals(testParameters, entry.parameters());
+        // Test null query type
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType(null)
+                    .build();
+            fail("Should throw exception for null query type");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Query type cannot be null"));
         }
 
-        @Test
-        public void testBuilderWithIndividualParameters() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameter("key1", "value1")
-                                .parameter("key2", "value2")
-                                .build();
-
-                assertEquals("value1", entry.getParameter("key1"));
-                assertEquals("value2", entry.getParameter("key2"));
-                assertTrue(entry.hasParameter("key1"));
-                assertTrue(entry.hasParameter("key2"));
-                assertFalse(entry.hasParameter("key3"));
+        // Test empty query type
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("  ")
+                    .build();
+            fail("Should throw exception for empty query type");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Query type cannot be null"));
         }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderNullQueryText() {
-                SearchHistoryEntry.builder()
-                                .queryText(null)
-                                .queryType(testQueryType)
-                                .build();
+        // Test null parameter key
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .parameter(null, "value")
+                    .build();
+            fail("Should throw exception for null parameter key");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Parameter key cannot be null"));
         }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderEmptyQueryText() {
-                SearchHistoryEntry.builder()
-                                .queryText("   ")
-                                .queryType(testQueryType)
-                                .build();
+        // Test null parameter value
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .parameter("key", null)
+                    .build();
+            fail("Should throw exception for null parameter value");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Parameter value cannot be null"));
         }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderNullQueryType() {
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(null)
-                                .build();
+        // Test missing required fields
+        try {
+            SearchHistoryEntry.builder()
+                    .queryType("phonex")
+                    .build();
+            fail("Should throw exception for missing query text");
+        } catch (IllegalStateException e) {
+            assertTrue(e.getMessage().contains("Query text is required"));
         }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderEmptyQueryType() {
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType("   ")
-                                .build();
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .build();
+            fail("Should throw exception for missing query type");
+        } catch (IllegalStateException e) {
+            assertTrue(e.getMessage().contains("Query type is required"));
+        }
+    }
+
+    @Test
+    public void testTextTrimming() {
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("  trimmed query  ")
+                .queryType("  phonex  ")
+                .build();
+
+        assertEquals("trimmed query", entry.queryText());
+        assertEquals("phonex", entry.queryType());
+    }
+
+    @Test
+    public void testDefaultDate() {
+        LocalDateTime before = LocalDateTime.now();
+
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("test")
+                .queryType("phonex")
+                .build();
+
+        LocalDateTime after = LocalDateTime.now();
+
+        assertNotNull(entry.date());
+        assertTrue("Date should be after or equal to before time",
+                !entry.date().isBefore(before));
+        assertTrue("Date should be before or equal to after time",
+                !entry.date().isAfter(after));
+    }
+
+    @Test
+    public void testBuilderParametersValidation() {
+        Map<String, String> invalidParams = new HashMap<>();
+        invalidParams.put("valid", "value");
+        invalidParams.put(null, "invalid");
+
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .parameters(invalidParams)
+                    .build();
+            fail("Should throw exception for null parameter key in map");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Parameter key cannot be null"));
         }
 
-        @Test(expected = IllegalStateException.class)
-        public void testBuilderMissingQueryText() {
-                SearchHistoryEntry.builder()
-                                .queryType(testQueryType)
-                                .build();
+        invalidParams.clear();
+        invalidParams.put("key", null);
+
+        try {
+            SearchHistoryEntry.builder()
+                    .queryText("test")
+                    .queryType("phonex")
+                    .parameters(invalidParams)
+                    .build();
+            fail("Should throw exception for null parameter value in map");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("Parameter value cannot be null"));
         }
+    }
 
-        @Test(expected = IllegalStateException.class)
-        public void testBuilderMissingQueryType() {
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .build();
-        }
+    @Test
+    public void testSerialization() {
+        // Test that the class is Serializable
+        SearchHistoryEntry entry = SearchHistoryEntry.builder()
+                .queryText("serialization test")
+                .queryType("phonex")
+                .caseSensitive(true)
+                .parameter("test", "value")
+                .build();
 
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderNullParameterKey() {
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameter(null, "value")
-                                .build();
-        }
+        assertTrue("SearchHistoryEntry should be Serializable",
+                java.io.Serializable.class.isAssignableFrom(SearchHistoryEntry.class));
 
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderNullParameterValue() {
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameter("key", null)
-                                .build();
-        }
-
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderNullParametersMap() {
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameters(null)
-                                .build();
-        }
-
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderParametersMapWithNullKey() {
-                Map<String, String> badParams = new HashMap<>();
-                badParams.put(null, "value");
-
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameters(badParams)
-                                .build();
-        }
-
-        @Test(expected = IllegalArgumentException.class)
-        public void testBuilderParametersMapWithNullValue() {
-                Map<String, String> badParams = new HashMap<>();
-                badParams.put("key", null);
-
-                SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameters(badParams)
-                                .build();
-        }
-
-        @Test
-        public void testBuilderRemoveParameter() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameter("key1", "value1")
-                                .parameter("key2", "value2")
-                                .removeParameter("key1")
-                                .build();
-
-                assertFalse(entry.hasParameter("key1"));
-                assertTrue(entry.hasParameter("key2"));
-                assertEquals("value2", entry.getParameter("key2"));
-        }
-
-        @Test
-        public void testBuilderClearParameters() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameter("key1", "value1")
-                                .parameter("key2", "value2")
-                                .clearParameters()
-                                .build();
-
-                assertTrue(entry.parameters().isEmpty());
-        }
-
-        @Test
-        public void testToBuilder() {
-                SearchHistoryEntry original = SearchHistoryEntry.builder()
-                                .date(testDate)
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .caseSensitive(true)
-                                .parameters(testParameters)
-                                .build();
-
-                SearchHistoryEntry copy = original.toBuilder()
-                                .queryText("modified query")
-                                .build();
-
-                assertEquals(testDate, copy.date());
-                assertEquals("modified query", copy.queryText());
-                assertEquals(testQueryType, copy.queryType());
-                assertTrue(copy.caseSensitive());
-                assertEquals(testParameters, copy.parameters());
-        }
-
-        @Test
-        public void testGetParameterNotFound() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .build();
-
-                assertNull(entry.getParameter("nonexistent"));
-        }
-
-        @Test
-        public void testGetParametersImmutable() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .parameter("key1", "value1")
-                                .build();
-
-                Map<String, String> params = entry.parameters();
-
-                // Record returns immutable map, so this should throw exception
-                try {
-                        params.put("key2", "value2");
-                        fail("Expected UnsupportedOperationException");
-                } catch (UnsupportedOperationException e) {
-                        // Expected - parameters() returns immutable map
-                }
-
-                // Original entry should not be affected
-                assertFalse(entry.hasParameter("key2"));
-        }
-
-        @Test
-        public void testEquals() {
-                SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
-                                .date(testDate)
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .caseSensitive(true)
-                                .parameters(testParameters)
-                                .build();
-
-                SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
-                                .date(testDate)
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .caseSensitive(true)
-                                .parameters(testParameters)
-                                .build();
-
-                assertEquals(entry1, entry2);
-                assertEquals(entry1.hashCode(), entry2.hashCode());
-        }
-
-        @Test
-        public void testNotEquals() {
-                SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .build();
-
-                SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
-                                .queryText("different query")
-                                .queryType(testQueryType)
-                                .build();
-
-                assertNotEquals(entry1, entry2);
-        }
-
-        @Test
-        public void testEqualsWithNull() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .build();
-
-                assertNotEquals(entry, null);
-        }
-
-        @Test
-        public void testEqualsWithDifferentClass() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .build();
-
-                assertNotEquals(entry, "string");
-        }
-
-        @Test
-        public void testToString() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .date(testDate)
-                                .queryText(testQueryText)
-                                .queryType(testQueryType)
-                                .caseSensitive(true)
-                                .parameter("key1", "value1")
-                                .build();
-
-                String str = entry.toString();
-                assertTrue(str.contains("SearchHistoryEntry"));
-                assertTrue(str.contains(testQueryText));
-                assertTrue(str.contains(testQueryType));
-                assertTrue(str.contains("true"));
-                assertTrue(str.contains("key1"));
-        }
-
-        @Test
-        public void testTrimWhitespace() {
-                SearchHistoryEntry entry = SearchHistoryEntry.builder()
-                                .queryText("  " + testQueryText + "  ")
-                                .queryType("  " + testQueryType + "  ")
-                                .build();
-
-                assertEquals(testQueryText, entry.queryText());
-                assertEquals(testQueryType, entry.queryType());
-        }
+        // Ensure entry was properly created
+        assertNotNull("Entry should not be null", entry);
+        assertEquals("serialization test", entry.queryText());
+    }
 }

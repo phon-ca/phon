@@ -300,7 +300,6 @@ public class SearchView extends EditorView {
         searchHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Show search history");
         final JMenuItem searchHistoryItem = new JMenuItem(searchHistoryAct);
         menuBuilder.addItem(".", searchHistoryItem);
-
     }
 
     private void showSearchHistoryPopup() {

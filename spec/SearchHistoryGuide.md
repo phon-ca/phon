@@ -293,10 +293,10 @@ public class QueryAnalyzer {
 
 The system provides thread safety through:
 
-- **Per-prefix locking**: Each prefix gets its own lock object
-- **Synchronized operations**: All storage operations are synchronized
+- **Per-prefix locking**: Each prefix gets its own lock object using `ConcurrentHashMap`
+- **Synchronized operations**: All storage operations are synchronized per prefix
 - **Atomic updates**: Preference writes are atomic
-- **Concurrent access**: Multiple prefixes can be accessed simultaneously
+- **Concurrent access**: Multiple prefixes can be accessed simultaneously without blocking
 
 ```java
 // Safe to call from multiple threads
@@ -322,9 +322,10 @@ ca.phon.util.SearchHistory.editor.search.main
 
 ### Serialization
 
-- **Format**: Base64-encoded serialized ArrayList
-- **Compatibility**: Handles version changes gracefully
-- **Recovery**: Falls back to empty history on corruption
+- **Format**: Uses `PrefHelper.getSerializedObject()` for loading and Base64-encoded serialized ArrayList for saving
+- **Compatibility**: Handles version changes gracefully with validation
+- **Recovery**: Falls back to empty history on corruption or loading errors
+- **Validation**: Loading process validates that all entries are valid `SearchHistoryEntry` instances
 - **Cross-platform**: Works on all Java-supported platforms
 
 ### Cleanup
@@ -357,9 +358,15 @@ SearchHistory.deleteHistoriesWithPattern("");
    - Clean up unused histories
 
 3. **Memory usage**
+
    - Monitor large history accumulation
    - Implement periodic cleanup
    - Use appropriate maxEntries limits
+
+4. **Loading/saving errors**
+   - Non-fatal by design - operations continue with empty history
+   - Check application logs for warning messages
+   - Consider clearing corrupted history with `clear(prefix)`
 
 ### Debugging
 
@@ -373,6 +380,10 @@ int size = SearchHistory.size("your.prefix");
 // List all prefixes for debugging
 List<String> allPrefixes = SearchHistory.getAllHistoryPrefixes();
 System.out.println("Active history prefixes: " + allPrefixes);
+
+// Check specific prefix patterns
+List<String> queryPrefixes = SearchHistory.getHistoryPrefixesWithPattern("query.");
+System.out.println("Query-related prefixes: " + queryPrefixes);
 ```
 
 ## Migration Guide
