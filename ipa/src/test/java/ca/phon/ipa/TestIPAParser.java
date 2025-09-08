@@ -364,20 +364,50 @@ public class TestIPAParser {
 		Assert.assertEquals("h", ipa.elementAt(0).getText());
 	}
 
-//	@Test
-//	public void testToneNumbers() throws Exception {
-//		final String txt = "b:Oa²³⁴:Nd:Oa⁰:N";
-//		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-//
-//		Assert.assertEquals(4, ipa.length());
-//		Assert.assertEquals(2, ipa.syllables().size());
-//		Assert.assertEquals("b", ipa.elementAt(0).toString());
-//		Assert.assertEquals("a²³⁴", ipa.elementAt(1).toString());
-//		final String toneNumberString = Arrays.stream(((Phone)ipa.elementAt(1)).getToneNumberDiacritics()).map(Object::toString).collect(Collectors.joining());
-//		Assert.assertEquals("²³⁴", toneNumberString);
-//		Assert.assertEquals("d", ipa.elementAt(2).toString());
-//		Assert.assertEquals("a⁰", ipa.elementAt(3).toString());
-//	}
+	@Test
+	public void testToneNumbers() throws Exception {
+		final String txt = "b:Oa:N²³⁴d:Oa:N⁰";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(6, ipa.length());
+		Assert.assertEquals(2, ipa.syllables().size());
+		Assert.assertEquals("b", ipa.elementAt(0).toString());
+		Assert.assertEquals("a", ipa.elementAt(1).toString());
+        Assert.assertEquals("²³⁴", ipa.elementAt(2).toString());
+        Assert.assertEquals(ToneNumber.class, ipa.elementAt(2).getClass());
+        final ToneNumber tn = (ToneNumber)ipa.elementAt(2);
+        Assert.assertEquals(234, tn.asInt());
+        Assert.assertEquals(true, tn.isMelody());
+        Assert.assertEquals(false, tn.isError());
+		Assert.assertEquals("d", ipa.elementAt(3).toString());
+		Assert.assertEquals("a", ipa.elementAt(4).toString());
+        Assert.assertEquals("⁰", ipa.elementAt(5).toString());
+        Assert.assertEquals(ToneNumber.class, ipa.elementAt(5).getClass());
+        final ToneNumber tn2 = (ToneNumber)ipa.elementAt(5);
+        Assert.assertEquals(0, tn2.asInt());
+        Assert.assertEquals(false, tn2.isMelody());
+        Assert.assertEquals(false, tn2.isError());
+	}
+
+    @Test
+    public void testToneError() throws Exception {
+        final String txt = "b:Oa:N²³⁴d:Oa:N\u02e3\u02e3";
+        final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+        Assert.assertEquals(6, ipa.length());
+        Assert.assertEquals(2, ipa.syllables().size());
+        Assert.assertEquals("b", ipa.elementAt(0).toString());
+        Assert.assertEquals("a", ipa.elementAt(1).toString());
+        Assert.assertEquals("²³⁴", ipa.elementAt(2).toString());
+        Assert.assertEquals(ToneNumber.class, ipa.elementAt(2).getClass());
+        final ToneNumber tn = (ToneNumber)ipa.elementAt(2);
+        Assert.assertEquals(234, tn.asInt());
+        Assert.assertEquals("d", ipa.elementAt(3).toString());
+        Assert.assertEquals("a", ipa.elementAt(4).toString());
+        Assert.assertEquals("\u02e3\u02e3", ipa.elementAt(5).toString());
+        Assert.assertEquals(ToneNumber.class, ipa.elementAt(5).getClass());
+        Assert.assertEquals(true,  ((ToneNumber)ipa.elementAt(5)).isError());
+    }
 
 	@Test
 	public void testPg() throws Exception {

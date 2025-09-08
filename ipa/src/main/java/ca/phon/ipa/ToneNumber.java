@@ -21,6 +21,9 @@ public class ToneNumber extends IPAElement {
      * @return the corresponding superscript character
      */
     public static char[] fromNumber(int number) {
+        if(number < 0) {
+            return "\u02e3\u02e3".toCharArray(); // error tone number
+        }
         final StringBuffer sb = new StringBuffer();
         while(number > 0) {
             final int firstDigit = number % 10;
@@ -78,11 +81,28 @@ public class ToneNumber extends IPAElement {
         return toneChars.length > 1;
     }
 
+    /**
+     * Check if this tone number represents an error.
+     * An error tone number is represented by two combining
+     * superscript x characters: ˣˣ
+     *
+     * @return true if this is an error tone number, false otherwise
+     */
+    public boolean isError() {
+        return "\u02e3\u02e3".equals(getText());
+    }
+
     @Override
     protected FeatureSet _getFeatureSet() {
         FeatureSet fs = new FeatureSet();
         for(char toneChar: toneChars) {
             fs = FeatureSet.union(fs, FeatureMatrix.getInstance().getFeatureSet(toneChar));
+        }
+        if(isError()) {
+            fs = FeatureSet.union(fs, FeatureSet.fromArray(new String[]{"toneerr"}));
+        }
+        if(isMelody()) {
+            fs = FeatureSet.union(fs, FeatureSet.fromArray(new String[]{"tonemelody"}));
         }
         return fs;
     }
@@ -96,10 +116,14 @@ public class ToneNumber extends IPAElement {
      * Get tone number as integer value.
      * If the tone number is a sequence of digits, the
      * integer value is the concatenation of the digits.
+     * If the tone number is an error, -1 is returned.
      *
      * @return the tone number as an integer
      */
     public int asInt() {
+        if(isError()) {
+            return -1;
+        }
         int retVal = 0;
         for(char toneChar:toneChars) {
             final int digit = switch(toneChar) {

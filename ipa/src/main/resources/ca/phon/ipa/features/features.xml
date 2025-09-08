@@ -435,6 +435,9 @@
     <feature name="toneerr">
         <primary_family>diacritic</primary_family>
     </feature>
+    <feature name="tonemelody">
+        <primary_family>diacritic</primary_family>
+    </feature>
     <feature name="pause">
         <primary_family>diacritic</primary_family>
     </feature>
