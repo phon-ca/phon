@@ -94,7 +94,7 @@ public class BasicSyllabifier implements Syllabifier {
                     final SyllableConstituentType scType = SyllableConstituentType.fromString(name);
                     if(scType != null) {
                         // add all elements before match
-                        for(int j = lastEnd; j < m.start(); j++) {
+                        for(int j = lastEnd; j < m.start(i); j++) {
                             builder.append(transcript.elementAt(j));
                         }
                         final List<IPAElement> group = m.group(i);
@@ -117,7 +117,7 @@ public class BasicSyllabifier implements Syllabifier {
                             }
                         }
                         // update end
-                        lastEnd = m.end();
+                        lastEnd = m.end(i);
                     }
                 }
             }
