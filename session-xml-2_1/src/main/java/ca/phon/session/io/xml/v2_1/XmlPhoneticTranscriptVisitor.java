@@ -174,7 +174,10 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     }
 
     public IPATranscript toIPATranscript() throws ParseException {
-        return builder.toIPATranscript();
+        IPATranscript ipa = builder.toIPATranscript();
+        final SyllableInfoVisitor visitor = new SyllableInfoVisitor();
+        ipa.accept(visitor);
+        return visitor.toIPATranscript();
     }
 
     public String toString() {

@@ -70,6 +70,9 @@ public class SyllableInfoVisitor extends VisitorAdapter<IPAElement> {
     protected void breakSyllable() {
         final IPATranscript currentSyllable = currentSyllableBuilder.toIPATranscript();
         if(currentSyllable.length() > 0) {
+            final ToneNumber tone = currentSyllable.elementAt(currentSyllable.length()-1) instanceof ToneNumber
+                    ? (ToneNumber)currentSyllable.elementAt(currentSyllable.length()-1)
+                    : null;
             for(IPAElement element:currentSyllable) {
                 final SyllableInfo currentInfo = element.syllableInfo();
                 SyllableInfo syllableInfo = new SyllableInfo(
@@ -80,7 +83,7 @@ public class SyllableInfoVisitor extends VisitorAdapter<IPAElement> {
                         segregated,
                         currentInfo.sonority(),
                         currentInfo.sonorityDistance(),
-                        null
+                        tone
                 );
                 final IPAElement newElem = factory.cloneElementWithSyllableInfo(element, syllableInfo);
                 builder.append(newElem);
@@ -160,6 +163,13 @@ public class SyllableInfoVisitor extends VisitorAdapter<IPAElement> {
         currentSyllableBuilder.append(pause);
         breakSyllable();
         lastPhone = null;
+    }
+
+    @Visits
+    public void visitToneNumber(ToneNumber toneNumber) {
+    	currentSyllableBuilder.append(toneNumber);
+        breakSyllable();
+    	lastPhone = toneNumber;
     }
 
     public IPATranscript toIPATranscript() {
