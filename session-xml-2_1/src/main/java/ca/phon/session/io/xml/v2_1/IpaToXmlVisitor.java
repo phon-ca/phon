@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 
+ * Convert IPATranscript to XML phonetic transcription for session XML v2.1.
  */
 public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	
@@ -56,8 +56,6 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 			Arrays.stream(phone.getCombiningDiacritics()).map(Diacritic::getText).forEach(phoneType.getCombining()::add);
 		String phLen = Arrays.stream(phone.getLengthDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
 		if(!phLen.isEmpty()) phoneType.setPhlen(phLen);
-//		String toneNum = Arrays.stream(phone.getToneNumberDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
-//		if(toneNum.length() > 0) phoneType.setToneNumber(toneNum);
 		final List<Diacritic> filteredSuffixDiacritics =
 				Arrays.stream(phone.getSuffixDiacritics()).filter(d -> d.getType() == DiacriticType.SUFFIX).toList();
 		if(!filteredSuffixDiacritics.isEmpty())
@@ -211,6 +209,13 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 			}
 		}
 	}
+
+    @Visits
+    public void visitToneNumber(ToneNumber toneNum) {
+        final XmlToneNumberType xmlToneNum = factory.createXmlToneNumberType();
+        xmlToneNum.setValue(toneNum.toString());
+        this.currentWord.getStressOrPhOrCmph().add(xmlToneNum);
+    }
 
 	@Override
 	public void fallbackVisit(IPAElement obj) {

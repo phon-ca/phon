@@ -69,13 +69,6 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             }
         }
 
-        final List<Character> toneNumberDiacriticChars = new ArrayList<>();
-        if(phoneType.getToneNumber() != null) {
-            for(char ch:phoneType.getToneNumber().toCharArray()) {
-                toneNumberDiacriticChars.add(ch);
-            }
-        }
-
         final List<Object> suffixDiacriticChars = new ArrayList<>();
         if(phoneType.getSuffix() != null) {
             for(String s:phoneType.getSuffix()) {
@@ -83,7 +76,6 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             }
         }
         suffixDiacriticChars.addAll(lengthDiacriticChars);
-        suffixDiacriticChars.addAll(toneNumberDiacriticChars);
         final Diacritic[] suffixDiacritics =
                 suffixDiacriticChars.stream().map(obj -> factory.createDiacritic(obj.toString())).toArray(Diacritic[]::new);
 
@@ -174,6 +166,11 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
         } else {
             builder.appendPause(PauseLength.SIMPLE);
         }
+    }
+
+    @Visits
+    public void visitToneNumer(XmlToneNumberType toneNumer) {
+        builder.append(factory.createToneNumber(toneNumer.getValue().toCharArray()));
     }
 
     public IPATranscript toIPATranscript() throws ParseException {

@@ -214,6 +214,25 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		}
 	}
 
+    @Visits
+    public void visitToneNumber(ToneNumber toneNumber) {
+        // get last element and add tone number diacritics to it
+        if(!this.currentWord.getStressOrPhOrCmph().isEmpty()) {
+            final Object lastElem = this.currentWord.getStressOrPhOrCmph().get(this.currentWord.getStressOrPhOrCmph().size()-1);
+            if(lastElem instanceof XmlPhoneType) {
+                final XmlPhoneType phoneType = (XmlPhoneType)lastElem;
+                phoneType.setToneNumber(toneNumber.getText());
+            } else if(lastElem instanceof XmlCompoundPhoneType) {
+                final XmlCompoundPhoneType cmpType = (XmlCompoundPhoneType)lastElem;
+                final Object lastCmpElem = cmpType.getContent().get(cmpType.getContent().size()-1);
+                if(lastCmpElem instanceof XmlPhoneType) {
+                    final XmlPhoneType phoneType = (XmlPhoneType)lastCmpElem;
+                    phoneType.setToneNumber(toneNumber.getText());
+                }
+            }
+        }
+    }
+
 	@Override
 	public void fallbackVisit(IPAElement obj) {
 	}

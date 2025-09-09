@@ -69,13 +69,6 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             }
         }
 
-        final List<Character> toneNumberDiacriticChars = new ArrayList<>();
-        if(phoneType.getToneNumber() != null) {
-            for(char ch:phoneType.getToneNumber().toCharArray()) {
-                toneNumberDiacriticChars.add(ch);
-            }
-        }
-
         final List<Object> suffixDiacriticChars = new ArrayList<>();
         if(phoneType.getSuffix() != null) {
             for(String s:phoneType.getSuffix()) {
@@ -83,7 +76,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             }
         }
         suffixDiacriticChars.addAll(lengthDiacriticChars);
-        suffixDiacriticChars.addAll(toneNumberDiacriticChars);
+//        suffixDiacriticChars.addAll(toneNumberDiacriticChars);
         final Diacritic[] suffixDiacritics =
                 suffixDiacriticChars.stream().map(obj -> factory.createDiacritic(obj.toString())).toArray(Diacritic[]::new);
 
@@ -102,6 +95,11 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
         final boolean isDiphthong = scType == SyllableConstituentType.NUCLEUS && phoneType.getScType() == XmlSyllableConstituentType.DIPHTHONG;
         final SyllableInfo syllableInfo = SyllableInfo.builder().constituentType(scType).isDiphthong(isDiphthong).build();
         builder.appendPhone(prefixDiacritics, basePhone, combiningDiacritics, suffixDiacritics, null, syllableInfo);
+
+        // make tone numbers to their own element
+        if(phoneType.getToneNumber() != null && !phoneType.getToneNumber().isEmpty()) {
+            builder.append(factory.createToneNumber(phoneType.getToneNumber().toCharArray()));
+        }
     }
 
     @Visits

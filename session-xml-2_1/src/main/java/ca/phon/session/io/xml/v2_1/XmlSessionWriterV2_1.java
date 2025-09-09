@@ -79,9 +79,11 @@ import java.util.logging.Logger;
 @Rank(0)
 public final class XmlSessionWriterV2_1 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
+    public final static String VERSION = "2.1";
+
 	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
-	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v2_0/session.xsd";
+	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v2_1/session.xsd";
 
 	/**
 	 * Create a new jaxb version of the session
@@ -94,7 +96,7 @@ public final class XmlSessionWriterV2_1 implements SessionWriter, IPluginExtensi
 		final XmlSessionType retVal = factory.createXmlSessionType();
 
 		// header data
-		retVal.setVersion("2.1");
+		retVal.setVersion(VERSION);
 		retVal.setName(session.getName());
 		retVal.setCorpus(session.getCorpus());
 
