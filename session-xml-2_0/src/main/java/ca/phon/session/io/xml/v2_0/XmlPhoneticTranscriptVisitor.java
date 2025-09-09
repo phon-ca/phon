@@ -100,7 +100,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             };
         }
         final boolean isDiphthong = scType == SyllableConstituentType.NUCLEUS && phoneType.getScType() == XmlSyllableConstituentType.DIPHTHONG;
-        final SyllableInfo syllableInfo = new SyllableInfo(scType, isDiphthong);
+        final SyllableInfo syllableInfo = SyllableInfo.builder().constituentType(scType).isDiphthong(isDiphthong).build();
         builder.appendPhone(prefixDiacritics, basePhone, combiningDiacritics, suffixDiacritics, null, syllableInfo);
     }
 
@@ -132,7 +132,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             };
         }
         final boolean isDiphthong = scType == SyllableConstituentType.NUCLEUS && xmlCompoundPhoneType.getScType() == XmlSyllableConstituentType.DIPHTHONG;
-        final SyllableInfo syllableInfo = new SyllableInfo(scType, isDiphthong);
+        final SyllableInfo syllableInfo = SyllableInfo.builder().constituentType(scType).isDiphthong(isDiphthong).build();
         builder.makeCompoundPhone(ligCh, null, syllableInfo);
     }
 

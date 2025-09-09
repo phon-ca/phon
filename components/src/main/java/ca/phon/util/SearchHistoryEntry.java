@@ -133,6 +133,56 @@ public record SearchHistoryEntry(
                 .parameters(this.parameters());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        SearchHistoryEntry other = (SearchHistoryEntry) obj;
+        boolean retVal = date.equals(other.date) &&
+               queryText.equals(other.queryText) &&
+               queryType.equals(other.queryType) &&
+               caseSensitive == other.caseSensitive;
+        if (retVal) {
+            retVal = parameters.size() == other.parameters.size();
+            if (retVal) {
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                    String otherValue = other.parameters.get(entry.getKey());
+                    if (!entry.getValue().equals(otherValue)) {
+                        retVal = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return retVal;
+    }
+
+    public boolean equalsExceptDate(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        SearchHistoryEntry other = (SearchHistoryEntry) obj;
+        boolean retVal = queryText.equals(other.queryText) &&
+               queryType.equals(other.queryType) &&
+               caseSensitive == other.caseSensitive;
+        if (retVal) {
+            retVal = parameters.size() == other.parameters.size();
+            if (retVal) {
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                    String otherValue = other.parameters.get(entry.getKey());
+                    if (!entry.getValue().equals(otherValue)) {
+                        retVal = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return retVal;
+    }
+
     /**
      * Builder class for creating {@link SearchHistoryEntry} instances.
      */

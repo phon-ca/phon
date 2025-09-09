@@ -119,20 +119,6 @@ public final class SearchHistory {
     }
 
     /**
-     * Checks if two search history entries have the same query text and parameters.
-     * This is used to determine if entries are duplicates for deduplication
-     * purposes.
-     * 
-     * @param entry1 the first entry to compare
-     * @param entry2 the second entry to compare
-     * @return true if both entries have the same query text and parameters
-     */
-    private static boolean entriesMatch(SearchHistoryEntry entry1, SearchHistoryEntry entry2) {
-        return entry1.queryText().equals(entry2.queryText()) &&
-                entry1.parameters().equals(entry2.parameters());
-    }
-
-    /**
      * Adds a new search entry to the history for the given prefix. If an entry with
      * the same query text and parameters already exists, it is removed before
      * adding
@@ -178,7 +164,7 @@ public final class SearchHistory {
             List<SearchHistoryEntry> entries = loadSearchEntries(prefKey);
 
             // Remove any existing entries with same query text and parameters
-            entries.removeIf(existingEntry -> entriesMatch(existingEntry, entry));
+            entries.removeIf(existingEntry -> existingEntry.equalsExceptDate(entry));
 
             // Add to front
             entries.add(0, entry);
