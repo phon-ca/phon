@@ -69,6 +69,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>${junit.junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

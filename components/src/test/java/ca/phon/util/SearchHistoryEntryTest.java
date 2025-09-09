@@ -1,6 +1,8 @@
 package ca.phon.util;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import static org.junit.Assert.*;
  * Unit tests for {@link SearchHistoryEntry}.
  * Tests cover builder pattern, validation, immutability, and serialization.
  */
+@RunWith(JUnit4.class)
 public class SearchHistoryEntryTest {
 
     @Test

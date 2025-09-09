@@ -135,8 +135,6 @@ public record SearchHistoryEntry(
 
     /**
      * Builder class for creating {@link SearchHistoryEntry} instances.
-     * This builder follows the fluent interface pattern and provides validation
-     * of required fields.
      */
     public static final class Builder {
         private LocalDateTime date;
