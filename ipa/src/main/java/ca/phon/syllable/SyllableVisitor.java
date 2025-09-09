@@ -160,6 +160,14 @@ public class SyllableVisitor extends VisitorAdapter<IPAElement> {
 		lastPhone = null;
 	}
 
+    @Visits
+    public void visitToneNumber(ToneNumber toneNumber) {
+        // tone numbers are syllable boundaries
+        currentSyllableBuilder.append(toneNumber);
+        breakSyllable();
+        lastPhone = null;
+    }
+
 	/**
 	 * Rest syllable list
 	 */

@@ -869,7 +869,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				if(projectPaths == null) {
 					throw new IOException("Unable to save session, no filesystem information found");
 				}
-				final String backupFolderName = "__v" + origFormat.getSessionIO().version().replaceAll("\\.", "_") + "-backups__";
+				final String backupFolderName = "__previous-version-backups__";
 				props.setMessage("A backup file will be created at: " + projectPaths.getLocation() + File.separator + backupFolderName +
 						". After upgrading, the current transcript will not open in previous versions of Phon.");
 				props.setOptions(MessageDialogProperties.okCancelOptions);
