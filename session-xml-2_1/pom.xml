@@ -21,11 +21,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>session-xml-2_0</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>phon-ipa</artifactId>
             <version>${project.version}</version>
         </dependency>

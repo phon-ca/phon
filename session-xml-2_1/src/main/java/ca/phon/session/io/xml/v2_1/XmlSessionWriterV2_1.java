@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v2_0;
+package ca.phon.session.io.xml.v2_1;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
@@ -26,8 +26,8 @@ import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.session.io.xml.SessionXMLStreamWriter;
@@ -41,7 +41,10 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.xml.datatype.*;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -68,13 +71,13 @@ import java.util.logging.Logger;
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="2.0",
+		version="2.1",
 		mimetype="application/xml",
 		extension="xml",
 		name="Phon 4.0+ (.xml)"
 )
-@Rank(10)
-public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+@Rank(0)
+public final class XmlSessionWriterV2_1 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
 	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
@@ -91,7 +94,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		final XmlSessionType retVal = factory.createXmlSessionType();
 
 		// header data
-		retVal.setVersion("2.0");
+		retVal.setVersion("2.1");
 		retVal.setName(session.getName());
 		retVal.setCorpus(session.getCorpus());
 
@@ -914,7 +917,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 	@Override
 	public IPluginExtensionFactory<SessionWriter> getFactory() {
-		return (args) -> { return new XmlSessionWriterV2_0(); };
+		return (args) -> { return new XmlSessionWriterV2_1(); };
 	}
 
 }
