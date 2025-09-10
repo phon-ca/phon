@@ -1,4 +1,4 @@
-package ca.phon.session.io.xml.v2_0;
+package ca.phon.session.io.xml.v2_1;
 
 import ca.phon.session.Record;
 import ca.phon.session.Session;

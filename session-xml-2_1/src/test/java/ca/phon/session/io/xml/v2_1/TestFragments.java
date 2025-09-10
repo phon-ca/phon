@@ -1,4 +1,4 @@
-package ca.phon.session.io.xml.v2_0;
+package ca.phon.session.io.xml.v2_1;
 
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
