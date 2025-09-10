@@ -225,7 +225,6 @@ public class TestPluginMatchers extends PhonexTest {
         IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
         final Syllabifier syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage("cmn");
         transcript = syllabifier.syllabify(transcript);
-        System.out.println(transcript.syllables());
 
         final PhonexMatcher matcher = pattern.matcher(transcript);
         Assert.assertTrue(matcher.find());
@@ -248,7 +247,6 @@ public class TestPluginMatchers extends PhonexTest {
         IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
         final Syllabifier syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage("cmn");
         transcript = syllabifier.syllabify(transcript);
-        System.out.println(transcript.syllables());
 
         final PhonexMatcher matcher = pattern.matcher(transcript);
         Assert.assertTrue(matcher.find());
