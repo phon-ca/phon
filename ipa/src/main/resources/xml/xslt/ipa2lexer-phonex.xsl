@@ -114,7 +114,7 @@ fragment
 </xsl:for-each>
 
 ESCAPED_PHONE_CLASS
-	:	BACKSLASH ('c'|'v'|'g'|'p'|'P'|'w'|'W'|'s')
+	:	BACKSLASH ('c'|'v'|'g'|'p'|'P'|'w'|'W'|'s'|'t')
 	;
 
 ESCAPED_PUNCT

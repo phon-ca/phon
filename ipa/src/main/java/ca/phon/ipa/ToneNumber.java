@@ -41,6 +41,46 @@ public class ToneNumber extends IPAElement {
         return sb.reverse().toString().toCharArray();
     }
 
+    /**
+     * Return a ToneNumber from a string of digits. The string may be composed of superscript
+     * or normal digits.  Anything that is not a digit is ignored. If no digits are found, or '-1',
+     * an error tone number is returned.
+     *
+     * @param toneStr the tone number string
+     * @return the corresponding ToneNumber
+     */
+    public static ToneNumber fromString(String toneStr) {
+        if(toneStr == null || toneStr.isEmpty()) {
+            throw new IllegalArgumentException("Tone number string cannot be null or empty");
+        }
+        if(toneStr.equals("-1")) {
+            return new ToneNumber(-1);
+        }
+        final StringBuilder sb = new StringBuilder();
+        for(char ch:toneStr.toCharArray()) {
+            switch(ch) {
+                case '0', '\u2070' -> sb.append('\u2070');
+                case '1', '\u00B9' -> sb.append('\u00B9');
+                case '2', '\u00B2' -> sb.append('\u00B2');
+                case '3', '\u00B3' -> sb.append('\u00B3');
+                case '4', '\u2074' -> sb.append('\u2074');
+                case '5', '\u2075' -> sb.append('\u2075');
+                case '6', '\u2076' -> sb.append('\u2076');
+                case '7', '\u2077' -> sb.append('\u2077');
+                case '8', '\u2078' -> sb.append('\u2078');
+                case '9', '\u2079' -> sb.append('\u2079');
+                default -> {
+                    // ignore
+                }
+            }
+        }
+        if(sb.length() == 0) {
+            return new ToneNumber(-1);
+        } else {
+            return new ToneNumber(sb.toString().toCharArray());
+        }
+    }
+
     public ToneNumber(int number) {
         this(fromNumber(number));
     }

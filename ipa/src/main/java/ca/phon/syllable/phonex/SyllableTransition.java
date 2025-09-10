@@ -117,6 +117,7 @@ public class SyllableTransition extends PhonexTransition {
 				case NUCLEUS:
 				case CODA:
 				case RIGHTAPPENDIX:
+                case TONENUMBER:
 					afterStart = true;
 					break;
 					
@@ -133,6 +134,7 @@ public class SyllableTransition extends PhonexTransition {
 				case NUCLEUS:
 				case CODA:
 				case RIGHTAPPENDIX:
+                case TONENUMBER:
 					afterStart = true;
 					break;
 					
@@ -148,6 +150,7 @@ public class SyllableTransition extends PhonexTransition {
 				case NUCLEUS:
 				case CODA:
 				case RIGHTAPPENDIX:
+                case TONENUMBER:
 					afterStart = true;
 					break;
 					
@@ -161,6 +164,7 @@ public class SyllableTransition extends PhonexTransition {
 				case NUCLEUS:
 				case CODA:
 				case RIGHTAPPENDIX:
+                case TONENUMBER:
 					afterStart = true;
 					break;
 					
@@ -173,6 +177,7 @@ public class SyllableTransition extends PhonexTransition {
 				switch(sctype) {
 				case CODA:
 				case RIGHTAPPENDIX:
+                case TONENUMBER:
 					afterStart = true;
 					break;
 					
@@ -184,6 +189,7 @@ public class SyllableTransition extends PhonexTransition {
 			case RIGHTAPPENDIX:
 				switch(sctype) {
 				case RIGHTAPPENDIX:
+                case TONENUMBER:
 					afterStart = true;
 					break;
 					
@@ -191,6 +197,17 @@ public class SyllableTransition extends PhonexTransition {
 					break;
 				}
 				break;
+
+            case TONENUMBER:
+                switch(sctype) {
+                case TONENUMBER:
+                    afterStart = true;
+                    break;
+
+                default:
+                    break;
+                }
+                break;
 				
 			default:
 				break;
@@ -201,6 +218,17 @@ public class SyllableTransition extends PhonexTransition {
 			case UNKNOWN:
 				beforeEnd = true;
 				break;
+
+            case TONENUMBER:
+                switch(sctype) {
+                case TONENUMBER:
+                    beforeEnd = true;
+                    break;
+
+                default:
+                    break;
+                }
+                break;
 				
 			case RIGHTAPPENDIX:
 				switch(sctype) {

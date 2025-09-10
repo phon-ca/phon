@@ -16,6 +16,9 @@
 package ca.phon.phonex;
 
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -210,5 +213,58 @@ public class TestPluginMatchers extends PhonexTest {
 		Assert.assertEquals(1, ipa.indexOf(".:suffix(\"{aspirated}\")"));
 		Assert.assertEquals(4, ipa.indexOf(".:suffix(\"{labial}\")"));
 	}
+
+    @Test
+    public void testToneNumberMatcher() throws ParseException {
+        // Any σ²¹⁴ followed by another σ²¹⁴
+        final String phonex = "(σ:tn(\"214\"))(?>σ:tn(\"214\"))";
+        final PhonexPattern pattern = PhonexPattern.compile(phonex);
+
+        final String ipa = "mɔ²¹⁴ɕi²¹⁴ kʰɔ²¹⁴ɕi²¹⁴ mɔ³³ɕi³³";
+
+        IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
+        final Syllabifier syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage("cmn");
+        transcript = syllabifier.syllabify(transcript);
+        System.out.println(transcript.syllables());
+
+        final PhonexMatcher matcher = pattern.matcher(transcript);
+        Assert.assertTrue(matcher.find());
+        final IPATranscript grpIpa = new IPATranscript(matcher.group(1));
+        Assert.assertEquals("mɔ²¹⁴", grpIpa.toString());
+        Assert.assertTrue(matcher.find());
+        final IPATranscript grpIpa2 = new IPATranscript(matcher.group(1));
+        Assert.assertEquals("kʰɔ²¹⁴", grpIpa2.toString());
+        Assert.assertFalse(matcher.find());
+    }
+
+    @Test
+    public void testToneNumberReplace() throws ParseException {
+        // Any σ²¹⁴ followed by another σ²¹⁴
+        final String phonex = "((σ/S..R/:tn(\"214\"))\\t)(?>σ:tn(\"214\"))";
+        final PhonexPattern pattern = PhonexPattern.compile(phonex);
+
+        final String ipa = "mɔ²¹⁴ɕi²¹⁴ kʰɔ²¹⁴ɕi²¹⁴ mɔ³³ɕi³³";
+
+        IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
+        final Syllabifier syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage("cmn");
+        transcript = syllabifier.syllabify(transcript);
+        System.out.println(transcript.syllables());
+
+        final PhonexMatcher matcher = pattern.matcher(transcript);
+        Assert.assertTrue(matcher.find());
+
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        // replace our matched groups tone with tone 51
+        final IPATranscript replacement = IPATranscript.parseIPATranscript("\\2⁵¹");
+        matcher.appendReplacement(builder, replacement);
+        matcher.appendTail(builder);
+        final IPATranscript replaced = builder.toIPATranscript();
+        Assert.assertEquals("mɔ⁵¹ɕi²¹⁴ kʰɔ²¹⁴ɕi²¹⁴ mɔ³³ɕi³³", replaced.toString());
+
+        Assert.assertTrue(matcher.find());
+        final IPATranscript grpIpa2 = new IPATranscript(matcher.group(1));
+        Assert.assertEquals("kʰɔ²¹⁴", grpIpa2.toString());
+        Assert.assertFalse(matcher.find());
+    }
 
 }

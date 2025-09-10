@@ -17,7 +17,13 @@ package ca.phon.phonex;
 
 import ca.phon.ipa.*;
 
+/**
+ * Matcher for intra-word pauses.  Intra-word pauses are represented by a caret (^)
+ * in an IPA string.  The phonex representation is <code>\p</code>.
+ */
 public class IntraWordPauseMatcher implements PhoneMatcher {
+
+    private final static String phonex = "\\p";
 
 	public IntraWordPauseMatcher() {
 	}
@@ -34,6 +40,7 @@ public class IntraWordPauseMatcher implements PhoneMatcher {
 
 	@Override
 	public String toString() {
-		return "\\p";
+		return phonex;
 	}
+
 }

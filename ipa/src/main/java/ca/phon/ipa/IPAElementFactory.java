@@ -550,7 +550,7 @@ public class IPAElementFactory {
         } else if(ele instanceof AlignmentMarker) {
             retVal = createAlignmentMarker();
         } else if(ele instanceof ToneNumber) {
-            retVal = cloneToneNumber((ToneNumber)ele);
+            retVal = cloneToneNumberWithSyllableInfo((ToneNumber)ele, syllableInfo);
         }
 
         return retVal;
@@ -568,6 +568,10 @@ public class IPAElementFactory {
 
     public ToneNumber cloneToneNumber(ToneNumber tn) {
         return new ToneNumber(tn.toneChars());
+    }
+
+    public ToneNumber cloneToneNumberWithSyllableInfo(ToneNumber tn, SyllableInfo syllInfo) {
+        return new ToneNumber(tn.toneChars(), tn.overrideFeatureSet(), syllInfo);
     }
 
 }

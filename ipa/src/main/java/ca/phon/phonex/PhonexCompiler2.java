@@ -910,6 +910,11 @@ public class PhonexCompiler2 implements PhonexListener {
 			matcherStack.push(scm);
 			break;
 
+        case "\\t":
+            ToneNumberMatcher tnm = new ToneNumberMatcher();
+            matcherStack.push(tnm);
+            break;
+
 		default:
 			throw new PhonexPatternException(ctx.start.getLine(),
 					ctx.start.getCharPositionInLine(), "Invalid escape sequence");

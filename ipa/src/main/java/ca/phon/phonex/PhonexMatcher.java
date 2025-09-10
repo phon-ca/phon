@@ -71,7 +71,10 @@ public class PhonexMatcher {
 		reset();
 	}
 
-	/**
+    public PhonexMatcher() {
+    }
+
+    /**
 	 * Return this matcher's pattern.
 	 *
 	 * @return the pattern for this matcher
