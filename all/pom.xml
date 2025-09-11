@@ -50,10 +50,10 @@
 
 		<!-- Dependency versions -->
 		<ca.phon.app.version>${project.version}</ca.phon.app.version>
-		<ca.phon.phon-dict-data.version>55</ca.phon.phon-dict-data.version>
+		<ca.phon.phon-dict-data.version>56</ca.phon.phon-dict-data.version>
 		<ca.phon.phon-shell-plugin.version>29</ca.phon.phon-shell-plugin.version>
 		<ca.phon.phon-groovy-plugin.version>9</ca.phon.phon-groovy-plugin.version>
-		<ca.phon.phon-praat-plugin.version>71-SNAPSHOT</ca.phon.phon-praat-plugin.version>
+		<ca.phon.phon-praat-plugin.version>72</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-version-triggers.version>12</ca.phon.phon-version-triggers.version>
 		<ca.phon.phontalk.version>4.0.0-3.1.0-SNAPSHOT</ca.phon.phontalk.version>
 	</properties>
