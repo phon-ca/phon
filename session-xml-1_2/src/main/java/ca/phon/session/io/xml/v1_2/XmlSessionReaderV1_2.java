@@ -412,18 +412,10 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final Map<SystemTierType, List<IPATranscript>> ipaGroupMap = new LinkedHashMap<>();
 		// ipa target/actual
 		for(IpaTierType ipaTt:rt.getIpaTier()) {
-			if(rt.getId().equals("c85835e4-6a11-4bc1-a72d-d3bb6a90d4e0")) {
-				System.out.println("here");
-			}
 			final SystemTierType tierType =
 					(ipaTt.getForm() == PhoTypeType.MODEL ? SystemTierType.IPATarget : SystemTierType.IPAActual);
 			final List<IPATranscript> ipaGroups = copyTranscript(factory, ipaTt);
 			ipaGroupMap.put(tierType, ipaGroups);
-//			if(ipaTt.getForm() == PhoTypeType.ACTUAL) {
-//				retVal.setIPAActual(ipaTranscript);
-//			} else {
-//				retVal.setIPATarget(ipaTranscript);
-//			}
 		}
 
 		// build orthography and ipa data from groups
@@ -553,8 +545,18 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			finalOrtho.putExtension(UnvalidatedValue.class, orthoBuilder.getExtension(UnvalidatedValue.class));
 		}
 		retVal.setOrthography(finalOrtho);
-		retVal.setIPATarget(ipaTBuilder.toIPATranscript());
-		retVal.setIPAActual(ipaABuilder.toIPATranscript());
+
+        IPATranscript ipaT = ipaTBuilder.toIPATranscript();
+        SyllableInfoVisitor siv = new SyllableInfoVisitor();
+        ipaT.accept(siv);
+        ipaT = siv.toIPATranscript();
+		retVal.setIPATarget(ipaT);
+
+        IPATranscript ipaA = ipaABuilder.toIPATranscript();
+        siv = new SyllableInfoVisitor();
+        ipaA.accept(siv);
+        ipaA = siv.toIPATranscript();
+		retVal.setIPAActual(ipaA);
 
 		// blind transcriptions
 		for(BlindTierType btt:rt.getBlindTranscription()) {
