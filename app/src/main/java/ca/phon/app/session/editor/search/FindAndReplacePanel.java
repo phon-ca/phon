@@ -54,6 +54,10 @@ import java.util.*;
  */
 public class FindAndReplacePanel extends JPanel {
 
+    private final static String SEARCH_HISTORY_PROP_PREFIX = "SessionEditor.searchHistory";
+
+    private final static int MAX_SEARCH_HISTORY = 40;
+
 	// find panel
 	private JPanel searchOptionsPanel;
 
@@ -200,7 +204,7 @@ public class FindAndReplacePanel extends JPanel {
 		filterButton.setIconColor(UIManager.getColor("textInactiveText"));
 		filterButton.setIconSelectedColor(UIManager.getColor("Phon.darkBlue"));
 
-		this.searchField = new SearchField("Search tiers...");
+		this.searchField = new SearchField(SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY, "Search tiers...");
 		final PhonUIAction<Void> searchAct = PhonUIAction.runnable(this::onQuery);
 		this.searchField.setAction(searchAct);
 		this.searchField.addPropertyChangeListener("text_cleared", (e) -> {
