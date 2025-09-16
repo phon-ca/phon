@@ -25,6 +25,7 @@ import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditorTierChangeListener;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.formatter.Formatter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.session.*;
@@ -129,7 +130,7 @@ public class FindAndReplacePanel extends JPanel {
 		super();
 
 		this.editorDataModel = editorDataModel;
-		this.findManager = new FindManager(editorDataModel.getSession());
+		this.findManager = new FindManager(editorDataModel.getSession(), editorDataModel.getTranscriber());
 		this.selectionModel = selectionModel;
 		this.editorEventManager = eventManager;
 		this.editorViewModel = editorViewModel;
@@ -710,7 +711,11 @@ public class FindAndReplacePanel extends JPanel {
 
 			if(ele.isRecord()) {
 				final Tier<?> tier = ele.asRecord().getTier(range.tier());
-				final String currentText = tier.toString();
+                final Object tierValue = editorDataModel.getTranscriber() != null && tier.isBlind()
+                        ? tier.getValueForTranscriber(editorDataModel.getTranscriber()).isPresent() ? tier.getValueForTranscriber(editorDataModel.getTranscriber()).get() : tier.getValue()
+                        : tier.getValue();
+                final Formatter<Object> formatter = (Formatter<Object>) tier.getFormatter();
+				final String currentText = tierValue == null ? "" : (formatter != null ? formatter.format(tierValue) : tierValue.toString());
 
 				final int startChar = range.start().charPosition();
 				final int endChar = range.end().charPosition();
@@ -720,7 +725,7 @@ public class FindAndReplacePanel extends JPanel {
 				final Tier<?> dummyTier = factory.createTier("dummy", tier.getDeclaredType());
 				dummyTier.setText(newText);
 
-				final TierEdit edit = new TierEdit(getSession(), getEditorEventManager(), ele.asRecord(), tier, dummyTier.getValue());
+				final TierEdit edit = new TierEdit(getSession(), getEditorEventManager(), editorDataModel.getTranscriber(), ele.asRecord(), tier, dummyTier.getValue());
 				edit.setValueAdjusting(false);
 				getUndoSupport().postEdit(edit);
 			} else if (ele.isComment()) {

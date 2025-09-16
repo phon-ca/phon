@@ -445,7 +445,7 @@ public class SearchView extends EditorView {
      * @return a new FindManager with the current search settings
      */
     private FindManager createFindManager() {
-        final FindManager findManager = new FindManager(getEditor().getSession());
+        final FindManager findManager = new FindManager(getEditor().getSession(), getEditor().getDataModel().getTranscriber());
         final String query = searchField.getText();
         final SearchType searchType = regexButton.isSelected() ? SearchType.REGEX
                 : phonexButton.isSelected() ? SearchType.PHONEX : SearchType.PLAIN;

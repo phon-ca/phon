@@ -93,13 +93,25 @@ public class FindManager {
 	 * Speakers
 	 */
 	private final List<Participant> speakers = new ArrayList<>();
-	
-	/**
-	 * Constructor
-	 */
-	public FindManager(Session session) {
-		this.session = session;
 
+    /**
+     * Transcriber - allows for searching during blind mode transcription
+     */
+    private final Transcriber transcriber;
+
+    public FindManager(Session session) {
+        this(session, Transcriber.VALIDATOR);
+    }
+
+    /**
+	 * Constructor
+     *
+     * @param session the session to search
+     * @param transcriber the transcriber
+	 */
+	public FindManager(Session session, Transcriber transcriber) {
+		this.session = session;
+        this.transcriber = transcriber;
 		this.searchTiers = new ArrayList<>();
 
 		for(TierViewItem toi:session.getTierView()) {
@@ -339,11 +351,14 @@ public class FindManager {
 					FindExprMatch anyExprRange = null;
 
 					final FindExpr tierExpr = getExprForTier(tier.getName());
+                    final Object tierValue = transcriber != Transcriber.VALIDATOR && tier.isBlind()
+                            ? tier.getValueForTranscriber(transcriber).isPresent() ? tier.getValueForTranscriber(transcriber).get() : tier.getValue()
+                            : tier.getValue();
 					if (tierExpr != null) {
-						tierExprRange = tierExpr.findNext(tier.getValue(), charIdx);
+						tierExprRange = tierExpr.findNext(tierValue, charIdx);
 					}
 					if (anyExpr != null) {
-						anyExprRange = anyExpr.findNext(tier.getValue(), charIdx);
+						anyExprRange = anyExpr.findNext(tierValue, charIdx);
 					}
 
 
@@ -439,11 +454,14 @@ public class FindManager {
 					}
 
 					final FindExpr tierExpr = getExprForTier(tier.getName());
+                    final Object tierValue = transcriber != Transcriber.VALIDATOR && tier.isBlind()
+                            ? tier.getValueForTranscriber(transcriber).isPresent() ? tier.getValueForTranscriber(transcriber).get() : tier.getValue()
+                            : tier.getValue();
 					if (tierExpr != null) {
-						tierExprRange = tierExpr.findPrev(tier.getValue(), charIdx);
+						tierExprRange = tierExpr.findPrev(tierValue, charIdx);
 					}
 					if (anyExpr != null) {
-						anyExprRange = anyExpr.findPrev(tier.getValue(), charIdx);
+						anyExprRange = anyExpr.findPrev(tierValue, charIdx);
 					}
 
 					if (tierExprRange != null && tierExprRange.hasMatch() && anyExprRange != null && anyExprRange.hasMatch()) {

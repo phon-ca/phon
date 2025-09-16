@@ -110,28 +110,12 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		syllabifierSettingsAct.putValue(FlatButton.ICON_NAME_PROP, "settings");
 		syllabifierSettingsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 
-//		final SyllabifierInfo syllabifierInfo = getEditor().getSession().getExtension(SyllabifierInfo.class);
-//		SyllabificationSettingsPanel popupPanel = new SyllabificationSettingsPanel(syllabifierInfo);
-//		popupPanel.addPropertyChangeListener(SyllabificationSettingsPanel.IPA_TARGET_SYLLABIFIER_PROP, (e) -> {
-//			syllabifierInfo.saveInfo(getEditor().getSession());
-//		});
-//		popupPanel.addPropertyChangeListener(SyllabificationSettingsPanel.IPA_ACTUAL_SYLLABIFIER_PROP, (e) -> {
-//			syllabifierInfo.saveInfo(getEditor().getSession());
-//		});
-//		syllabifierSettingsAct.putValue(DropDownButton.BUTTON_POPUP, popupPanel);
-//		syllabifierSettingsAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
-//		syllabifierSettingsAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-
 		FlatButton settingsBtn = new FlatButton(syllabifierSettingsAct);
 
 		toolbar.add(settingsBtn, IconStrip.IconStripPosition.LEFT);
 
 		setLayout(new BorderLayout());
-//		scroller = new JScrollPane(contentPane);
-//		scroller.setBackground(Color.white);
-//		scroller.setOpaque(true);
 		add(toolbar, BorderLayout.NORTH);
-//		add(scroller, BorderLayout.CENTER);
 
 		editor = new TranscriptEditor(getEditor().getDataModel(), getEditor().getSelectionModel(), getEditor().getEventManager(),
 				getEditor().getUndoSupport(), getEditor().getUndoManager());
