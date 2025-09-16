@@ -17,6 +17,8 @@ package ca.phon.ui;
 
 import ca.phon.util.SearchHistory;
 import ca.phon.util.SearchHistoryEntry;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +79,6 @@ public class SearchHistoryListView extends JList<String> {
     private final List<SearchHistoryEntry> historyEntries;
 
     private Consumer<SearchHistoryEntry> selectionCallback;
-    private JPopupMenu currentPopup;
 
     /**
      * Creates a new SearchHistoryListView with the specified history prefix
@@ -132,32 +133,6 @@ public class SearchHistoryListView extends JList<String> {
         JScrollPane scrollPane = new JScrollPane(this);
         scrollPane.setPreferredSize(calculatePreferredSize());
         return scrollPane;
-    }
-
-    /**
-     * Shows this history list in a popup menu positioned relative to the specified
-     * component.
-     * 
-     * @param component the component to position the popup relative to
-     * @param x         the x coordinate relative to the component
-     * @param y         the y coordinate relative to the component
-     * @return the popup menu that was created and shown
-     */
-    public JPopupMenu showAsPopup(Component component, int x, int y) {
-        currentPopup = new JPopupMenu();
-        currentPopup.add(createScrollPane());
-        currentPopup.show(component, x, y);
-        return currentPopup;
-    }
-
-    /**
-     * Shows this history list in a popup positioned below the specified component.
-     * 
-     * @param component the component to position the popup below
-     * @return the popup menu that was created and shown
-     */
-    public JPopupMenu showBelowComponent(Component component) {
-        return showAsPopup(component, 0, component.getHeight());
     }
 
     private void setupUI() {
@@ -263,12 +238,6 @@ public class SearchHistoryListView extends JList<String> {
                 }
 
                 if (matchingEntry != null) {
-                    // Close the popup if it exists
-                    if (currentPopup != null && currentPopup.isVisible()) {
-                        currentPopup.setVisible(false);
-                        currentPopup = null;
-                    }
-
                     // Invoke the selection callback
                     selectionCallback.accept(matchingEntry);
                 }
@@ -314,6 +283,7 @@ public class SearchHistoryListView extends JList<String> {
             if (isHeader) {
                 setFont(getFont().deriveFont(Font.BOLD));
                 setForeground(UIManager.getColor("textInactiveText"));
+                setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "history", IconSize.SMALL, UIManager.getColor("textInactiveText")));
                 if (isSelected) {
                     setBackground(list.getBackground());
                     setOpaque(false);

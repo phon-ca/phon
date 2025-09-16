@@ -51,7 +51,7 @@ public class SearchView extends EditorView {
 
     private final static String SEARCH_HISTORY_PROP_PREFIX = "SessionEditor.searchHistory";
 
-    private final static int MAX_SEARCH_HISTORY = 10;
+    private final static int MAX_SEARCH_HISTORY = 40;
 
     /**
      * Custom text field with search icon
@@ -283,7 +283,6 @@ public class SearchView extends EditorView {
     }
 
     private void setupSearchContextMenu(MenuBuilder menuBuilder) {
-
         final PhonUIAction<Boolean> toggleLiveUpdateAct = PhonUIAction.consumer(this::setLiveUpdate, !liveUpdate);
         toggleLiveUpdateAct.putValue(Action.NAME, "Toggle live update");
         toggleLiveUpdateAct.putValue(Action.SHORT_DESCRIPTION, "Toggle live update of search results");
@@ -294,16 +293,7 @@ public class SearchView extends EditorView {
         // Separator after live update option
         menuBuilder.addSeparator(".", "search_history_separator");
 
-        // Search history button
-        final PhonUIAction<Void> searchHistoryAct = PhonUIAction.runnable(this::showSearchHistoryPopup);
-        searchHistoryAct.putValue(Action.NAME, "Search history");
-        searchHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Show search history");
-        final JMenuItem searchHistoryItem = new JMenuItem(searchHistoryAct);
-        menuBuilder.addItem(".", searchHistoryItem);
-    }
-
-    private void showSearchHistoryPopup() {
-        SearchHistoryListView historyView = new SearchHistoryListView(SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY);
+        final SearchHistoryListView historyView = new SearchHistoryListView(SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY);
         historyView.setSelectionCallback(entry -> {
             // Set search field text
             searchField.setText(entry.queryText());
@@ -318,9 +308,23 @@ public class SearchView extends EditorView {
             // Trigger search
             onQuery();
         });
+        final JScrollPane scrollPane = new JScrollPane(historyView);
+        historyView.setPreferredSize(new Dimension(350, 200));
+        menuBuilder.addComponent(".", scrollPane);
+//
+//        // Search history button
+//        final PhonUIAction<Void> searchHistoryAct = PhonUIAction.runnable(this::showSearchHistoryPopup);
+//        searchHistoryAct.putValue(Action.NAME, "Search history");
+//        searchHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Show search history");
+//        final JMenuItem searchHistoryItem = new JMenuItem(searchHistoryAct);
+//        menuBuilder.addItem(".", searchHistoryItem);
+    }
 
-        // Show the popup below the search field
-        historyView.showBelowComponent(searchField);
+    private void showSearchHistoryPopup() {
+//
+//
+//        // Show the popup below the search field
+//        historyView.showBelowComponent(searchField);
     }
 
     public void setLiveUpdate(Boolean liveUpdate) {

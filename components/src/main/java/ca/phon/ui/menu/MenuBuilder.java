@@ -200,6 +200,29 @@ public final class MenuBuilder {
 		addItem(elem, insertIdx, ele);
 	}
 
+    public void addComponent(String path, Component comp) {
+        final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
+        final MenuElement elem = deepest.getObj2();
+        int insertIdx = getInsertIndex(elem, deepest.getObj1());
+
+        if(elem instanceof JMenu) {
+            if(insertIdx >= 0)
+                ((JMenu)elem).add(comp, insertIdx);
+            else
+                ((JMenu)elem).add(comp);
+        } else if(elem instanceof JPopupMenu) {
+            if(insertIdx >= 0)
+                ((JPopupMenu)elem).add(comp, insertIdx);
+            else
+                ((JPopupMenu)elem).add(comp);
+        } else if(elem instanceof JMenuBar) {
+            if(insertIdx >= 0)
+                ((JMenuBar)elem).add(comp, insertIdx);
+            else
+                ((JMenuBar)elem).add(comp);
+        }
+    }
+
 	public void addItem(MenuElement elem, int insertIdx, MenuElement menuItem) {
 		if(elem instanceof JMenu) {
 			if(insertIdx >= 0)
