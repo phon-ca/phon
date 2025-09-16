@@ -32,6 +32,12 @@ public class RecordIntervalTier implements IntervalTierSPI {
         return tierName;
     }
 
+    /**
+     * Get intervals from the given {@link Record} object.
+     *
+     * @param record the record
+     * @return list of intervals for the record, or empty list if none
+     */
     public List<IntervalTier.Interval> getIntervals(Record record) {
         final Tier<?> tier = record.getTier(this.tierName);
         // process tier data
@@ -47,6 +53,26 @@ public class RecordIntervalTier implements IntervalTierSPI {
             return orthographyIntervals(orthography);
         }
         return List.of();
+    }
+
+    /**
+     * Get record index from given interval index.
+     *
+     * @param intervalIndex
+     * @return record index, or -1 if not found
+     */
+    public int getRecordIndexFromIntervalIndex(int intervalIndex) {
+        int currentIndex = 0;
+        for(int i = 0; i < session.getRecordCount(); i++) {
+            final Record record = session.getRecord(i);
+            final List<IntervalTier.Interval> intervals = getIntervals(record);
+            if(intervalIndex < currentIndex + intervals.size()) {
+                return i;
+            } else {
+                currentIndex += intervals.size();
+            }
+        }
+        return -1;
     }
 
     /**

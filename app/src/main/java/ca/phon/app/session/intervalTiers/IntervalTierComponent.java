@@ -5,6 +5,7 @@ import ca.phon.media.TimeComponentUI;
 import ca.phon.media.TimeUIModel;
 import ca.phon.session.IntervalTier;
 
+import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 
 /**
@@ -19,11 +20,27 @@ public class IntervalTierComponent extends TimeComponent {
      */
     private final IntervalTier intervalTier;
 
+    private final ListSelectionModel selectionModel;
+
     public IntervalTierComponent(TimeUIModel model, IntervalTier intervalTier) {
         super(model);
         this.intervalTier = intervalTier;
+        this.selectionModel = new DefaultListSelectionModel();
 
         setUI(new IntervalTierComponentUI());
+    }
+
+    public ListSelectionModel getSelectionModel() {
+        return this.selectionModel;
+    }
+
+    public int getSelectedIndex() {
+        return this.selectionModel.getMinSelectionIndex();
+    }
+
+    public void setSelectedIndex(int index) {
+        this.selectionModel.setSelectionInterval(index, index);
+        repaint();
     }
 
     public IntervalTier getTimelineTier() {
