@@ -4,7 +4,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.search.FindExpr;
 import ca.phon.app.session.editor.search.FindManager;
 import ca.phon.app.session.editor.search.FindResult;
-import ca.phon.app.session.editor.search.SearchType;
+import ca.phon.util.SearchType;
 import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.session.Participant;
@@ -301,9 +301,8 @@ public class SearchView extends EditorView {
             // Set search parameters based on history entry
             caseSensitiveButton.setSelected(entry.caseSensitive());
 
-            String queryType = entry.queryType();
-            regexButton.setSelected("regex".equals(queryType));
-            phonexButton.setSelected("phonex".equals(queryType));
+            regexButton.setSelected(entry.queryType() == SearchType.REGEX);
+            phonexButton.setSelected(entry.queryType() == SearchType.PHONEX);
 
             // Trigger search
             onQuery();
@@ -474,8 +473,8 @@ public class SearchView extends EditorView {
         }
 
         // Add search entry to history
-        final String queryType = regexButton.isSelected() ? "regex"
-                : phonexButton.isSelected() ? "phonex" : "plain";
+        final SearchType queryType = regexButton.isSelected() ? SearchType.REGEX
+                : phonexButton.isSelected() ? SearchType.PHONEX : SearchType.PLAIN;
         final SearchHistoryEntry historyEntry = SearchHistoryEntry.builder()
                 .queryText(queryText.trim())
                 .queryType(queryType)

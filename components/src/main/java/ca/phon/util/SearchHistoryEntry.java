@@ -15,6 +15,7 @@
  */
 package ca.phon.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -49,10 +50,11 @@ import java.util.Map;
 public record SearchHistoryEntry(
         LocalDateTime date,
         String queryText,
-        String queryType,
+        SearchType queryType,
         boolean caseSensitive,
         Map<String, String> parameters) implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -62,7 +64,7 @@ public record SearchHistoryEntry(
         if (queryText == null || queryText.trim().isEmpty()) {
             throw new IllegalArgumentException("Query text cannot be null or empty");
         }
-        if (queryType == null || queryType.trim().isEmpty()) {
+        if (queryType == null) {
             throw new IllegalArgumentException("Query type cannot be null or empty");
         }
 
@@ -71,7 +73,6 @@ public record SearchHistoryEntry(
 
         // Trim and validate required fields
         queryText = queryText.trim();
-        queryType = queryType.trim();
 
         // Defensive copy of parameters map
         if (parameters == null) {
@@ -189,7 +190,7 @@ public record SearchHistoryEntry(
     public static final class Builder {
         private LocalDateTime date;
         private String queryText;
-        private String queryType;
+        private SearchType queryType;
         private boolean caseSensitive;
         private Map<String, String> parameters = new HashMap<>();
 
@@ -229,11 +230,11 @@ public record SearchHistoryEntry(
          * @return this builder
          * @throws IllegalArgumentException if queryType is null or empty
          */
-        public Builder queryType(String queryType) {
-            if (queryType == null || queryType.trim().isEmpty()) {
-                throw new IllegalArgumentException("Query type cannot be null or empty");
+        public Builder queryType(SearchType queryType) {
+            if (queryType == null) {
+                throw new IllegalArgumentException("Query type cannot be null");
             }
-            this.queryType = queryType.trim();
+            this.queryType = queryType;
             return this;
         }
 

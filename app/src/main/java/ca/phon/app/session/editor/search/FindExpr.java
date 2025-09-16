@@ -15,16 +15,14 @@
  */
 package ca.phon.app.session.editor.search;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.extensions.*;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.*;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.phonex.*;
 import ca.phon.session.MediaSegment;
 import ca.phon.util.Range;
+import ca.phon.util.SearchType;
 
-import java.text.ParseException;
 import java.util.regex.*;
 
 /**

@@ -50,7 +50,7 @@ public class SearchHistoryTest {
 
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test query")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry);
@@ -67,17 +67,17 @@ public class SearchHistoryTest {
     public void testAddMultipleEntries() {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("query 1")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("query 2")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         SearchHistoryEntry entry3 = SearchHistoryEntry.builder()
                 .queryText("query 3")
-                .queryType("plain")
+                .queryType(SearchType.PLAIN)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
@@ -97,13 +97,13 @@ public class SearchHistoryTest {
     public void testDuplicateRemoval() {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("duplicate query")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .parameter("target", "IPA")
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("other query")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         // Add different entries
@@ -114,7 +114,7 @@ public class SearchHistoryTest {
         // Add duplicate of entry1 (same query text and parameters)
         SearchHistoryEntry duplicateEntry = SearchHistoryEntry.builder()
                 .queryText("duplicate query")
-                .queryType("phonex") // type can be different
+                .queryType(SearchType.PHONEX) // type can be different
                 .parameter("target", "IPA")
                 .build();
 
@@ -134,7 +134,7 @@ public class SearchHistoryTest {
         for (int i = 1; i <= 5; i++) {
             SearchHistoryEntry entry = SearchHistoryEntry.builder()
                     .queryText("query " + i)
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build();
             SearchHistory.addSearchEntry(TEST_PREFIX, entry, maxEntries);
         }
@@ -154,7 +154,7 @@ public class SearchHistoryTest {
         for (int i = 1; i <= 5; i++) {
             SearchHistoryEntry entry = SearchHistoryEntry.builder()
                     .queryText("query " + i)
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build();
             SearchHistory.addSearchEntry(TEST_PREFIX, entry);
         }
@@ -177,12 +177,12 @@ public class SearchHistoryTest {
 
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("first")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("second")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
@@ -198,12 +198,12 @@ public class SearchHistoryTest {
     public void testDeleteEntry() {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("keep this")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("delete this")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
@@ -227,12 +227,12 @@ public class SearchHistoryTest {
     public void testDeleteByIndex() {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("first")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("second")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
@@ -259,12 +259,12 @@ public class SearchHistoryTest {
     public void testUpdateEntry() {
         SearchHistoryEntry original = SearchHistoryEntry.builder()
                 .queryText("original")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistoryEntry updated = SearchHistoryEntry.builder()
                 .queryText("updated")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, original);
@@ -279,12 +279,12 @@ public class SearchHistoryTest {
         // Update non-existent entry (should add to front)
         SearchHistoryEntry nonExistent = SearchHistoryEntry.builder()
                 .queryText("non-existent")
-                .queryType("plain")
+                .queryType(SearchType.PLAIN)
                 .build();
 
         SearchHistoryEntry newEntry = SearchHistoryEntry.builder()
                 .queryText("new entry")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistory.updateSearchEntry(TEST_PREFIX, nonExistent, newEntry);
@@ -299,7 +299,7 @@ public class SearchHistoryTest {
     public void testContainsEntry() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         assertFalse("Should not contain entry initially",
@@ -320,19 +320,19 @@ public class SearchHistoryTest {
     public void testFindMethods() {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("phoneme pattern")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .parameter("target", "IPA Target")
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("regex pattern")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .parameter("group", "Word")
                 .build();
 
         SearchHistoryEntry entry3 = SearchHistoryEntry.builder()
                 .queryText("phoneme pattern")
-                .queryType("plain")
+                .queryType(SearchType.PLAIN)
                 .parameter("target", "Orthography")
                 .build();
 
@@ -349,7 +349,7 @@ public class SearchHistoryTest {
 
         // Test find by query type
         List<SearchHistoryEntry> byQueryType = SearchHistory.findEntriesByQueryType(
-                TEST_PREFIX, "phonex");
+                TEST_PREFIX, SearchType.PHONEX);
         assertEquals("Should find 1 entry with phonex type", 1, byQueryType.size());
         assertEquals(entry1, byQueryType.get(0));
 
@@ -381,19 +381,19 @@ public class SearchHistoryTest {
     public void testSimpleSearchEntry() {
         // Test basic simple entry
         SearchHistoryEntry entry1 = SearchHistory.addSimpleSearchEntry(
-                TEST_PREFIX, "simple query", "phonex");
+                TEST_PREFIX, "simple query", SearchType.PHONEX);
 
         assertEquals("simple query", entry1.queryText());
-        assertEquals("phonex", entry1.queryType());
+        assertEquals(SearchType.PHONEX, entry1.queryType());
         assertFalse(entry1.caseSensitive());
         assertTrue(entry1.parameters().isEmpty());
 
         // Test with case sensitivity
         SearchHistoryEntry entry2 = SearchHistory.addSimpleSearchEntry(
-                TEST_PREFIX, "case sensitive", "regex", true);
+                TEST_PREFIX, "case sensitive", SearchType.REGEX, true);
 
         assertEquals("case sensitive", entry2.queryText());
-        assertEquals("regex", entry2.queryType());
+        assertEquals(SearchType.REGEX, entry2.queryType());
         assertTrue(entry2.caseSensitive());
 
         // Verify both entries are in history
@@ -407,12 +407,12 @@ public class SearchHistoryTest {
     public void testPrefixSeparation() {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .queryText("prefix1 query")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .queryText("prefix2 query")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry1);
@@ -437,10 +437,10 @@ public class SearchHistoryTest {
     @Test
     public void testBulkOperations() {
         // Add entries to multiple prefixes
-        SearchHistory.addSimpleSearchEntry("test.query.phonex", "phonex1", "phonex");
-        SearchHistory.addSimpleSearchEntry("test.query.regex", "regex1", "regex");
-        SearchHistory.addSimpleSearchEntry("test.analysis.segment", "segment1", "plain");
-        SearchHistory.addSimpleSearchEntry("temp.test.data", "temp1", "phonex");
+        SearchHistory.addSimpleSearchEntry("test.query.phonex", "phonex1", SearchType.PHONEX);
+        SearchHistory.addSimpleSearchEntry("test.query.regex", "regex1", SearchType.REGEX);
+        SearchHistory.addSimpleSearchEntry("test.analysis.segment", "segment1", SearchType.PLAIN);
+        SearchHistory.addSimpleSearchEntry("temp.test.data", "temp1", SearchType.PHONEX);
 
         // Test pattern matching
         List<String> testPrefixes = SearchHistory.getHistoryPrefixesWithPattern("test.");
@@ -479,9 +479,9 @@ public class SearchHistoryTest {
 
     @Test
     public void testGetAllHistoryPrefixes() {
-        SearchHistory.addSimpleSearchEntry("test.one", "query1", "phonex");
-        SearchHistory.addSimpleSearchEntry("test.two", "query2", "regex");
-        SearchHistory.addSimpleSearchEntry("other.prefix", "query3", "plain");
+        SearchHistory.addSimpleSearchEntry("test.one", "query1", SearchType.PHONEX);
+        SearchHistory.addSimpleSearchEntry("test.two", "query2", SearchType.REGEX);
+        SearchHistory.addSimpleSearchEntry("other.prefix", "query3", SearchType.PLAIN);
 
         List<String> allPrefixes = SearchHistory.getAllHistoryPrefixes();
         assertTrue("Should contain test.one", allPrefixes.contains("test.one"));
@@ -504,7 +504,7 @@ public class SearchHistoryTest {
                     for (int i = 0; i < entriesPerThread; i++) {
                         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                                 .queryText("thread" + threadId + "_entry" + i)
-                                .queryType("phonex")
+                                .queryType(SearchType.PHONEX)
                                 .build();
                         SearchHistory.addSearchEntry(TEST_PREFIX, entry);
                     }
@@ -537,7 +537,7 @@ public class SearchHistoryTest {
         try {
             SearchHistory.addSearchEntry(null, SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build());
             fail("Should throw exception for null prefix");
         } catch (IllegalArgumentException e) {
@@ -548,7 +548,7 @@ public class SearchHistoryTest {
         try {
             SearchHistory.addSearchEntry("  ", SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build());
             fail("Should throw exception for empty prefix");
         } catch (IllegalArgumentException e) {
@@ -567,7 +567,7 @@ public class SearchHistoryTest {
         try {
             SearchHistory.addSearchEntry(TEST_PREFIX, SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build(), 0);
             fail("Should throw exception for zero max entries");
         } catch (IllegalArgumentException e) {
@@ -586,8 +586,8 @@ public class SearchHistoryTest {
     @Test
     public void testClearHistory() {
         // Add some entries
-        SearchHistory.addSimpleSearchEntry(TEST_PREFIX, "query1", "phonex");
-        SearchHistory.addSimpleSearchEntry(TEST_PREFIX, "query2", "regex");
+        SearchHistory.addSimpleSearchEntry(TEST_PREFIX, "query1", SearchType.PHONEX);
+        SearchHistory.addSimpleSearchEntry(TEST_PREFIX, "query2", SearchType.REGEX);
 
         assertFalse("History should not be empty", SearchHistory.isEmpty(TEST_PREFIX));
         assertEquals("Should have 2 entries", 2, SearchHistory.size(TEST_PREFIX));
@@ -605,7 +605,7 @@ public class SearchHistoryTest {
     public void testImmutableReturnValues() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         SearchHistory.addSearchEntry(TEST_PREFIX, entry);

@@ -19,6 +19,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.phonex.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.util.SearchType;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;

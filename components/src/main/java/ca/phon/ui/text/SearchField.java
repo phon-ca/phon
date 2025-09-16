@@ -19,6 +19,8 @@ import ca.phon.ui.SearchHistoryListView;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.SearchHistory;
+import ca.phon.util.SearchHistoryEntry;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.*;
 
@@ -379,6 +381,12 @@ public class SearchField extends JPanel {
 		}
 		
 	}
+
+    public void addToSearchHistory(SearchHistoryEntry entry) {
+        if(this.historyProperty != null && this.maxHistory > 0) {
+            SearchHistory.addSearchEntry(this.historyProperty, entry, this.maxHistory);
+        }
+    }
 
 //	/**
 //	 * Append given text to history

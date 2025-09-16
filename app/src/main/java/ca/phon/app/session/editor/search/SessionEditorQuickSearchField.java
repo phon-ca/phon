@@ -20,6 +20,7 @@ import ca.phon.session.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.text.TableSearchField;
+import ca.phon.util.SearchType;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;

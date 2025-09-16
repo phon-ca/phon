@@ -406,7 +406,7 @@ public final class SearchHistory {
      * @return a list of matching entries (never null)
      * @throws IllegalArgumentException if prefix is null
      */
-    public static List<SearchHistoryEntry> findEntriesByQueryType(String prefix, String queryType) {
+    public static List<SearchHistoryEntry> findEntriesByQueryType(String prefix, SearchType queryType) {
         if (queryType == null) {
             return new ArrayList<>();
         }
@@ -503,7 +503,7 @@ public final class SearchHistory {
      * @throws IllegalArgumentException if prefix, queryText or queryType is null or
      *                                  empty
      */
-    public static SearchHistoryEntry addSimpleSearchEntry(String prefix, String queryText, String queryType) {
+    public static SearchHistoryEntry addSimpleSearchEntry(String prefix, String queryText, SearchType queryType) {
         return addSimpleSearchEntry(prefix, queryText, queryType, false);
     }
 
@@ -520,7 +520,7 @@ public final class SearchHistory {
      * @throws IllegalArgumentException if prefix, queryText or queryType is null or
      *                                  empty
      */
-    public static SearchHistoryEntry addSimpleSearchEntry(String prefix, String queryText, String queryType,
+    public static SearchHistoryEntry addSimpleSearchEntry(String prefix, String queryText, SearchType queryType,
             boolean caseSensitive) {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText(queryText)

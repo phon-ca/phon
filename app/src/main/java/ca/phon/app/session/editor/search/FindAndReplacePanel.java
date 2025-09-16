@@ -35,6 +35,8 @@ import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.SearchField;
+import ca.phon.util.SearchHistoryEntry;
+import ca.phon.util.SearchType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -46,6 +48,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
 
@@ -226,6 +229,13 @@ public class FindAndReplacePanel extends JPanel {
 			}
 		});
 		searchField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        searchField.getTextField().addActionListener((e) -> {
+            final SearchHistoryEntry entry = new SearchHistoryEntry(LocalDateTime.now(), searchField.getText(),
+                    regexButton.isSelected() ? SearchType.REGEX :
+                            phonexButton.isSelected() ? SearchType.PHONEX :
+                                    SearchType.PLAIN,
+                    caseSensitiveButton.isSelected(), new HashMap<>());
+        });
 
 		resultsLabel = new JLabel("0 results");
 		resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
