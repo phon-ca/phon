@@ -23,7 +23,6 @@ import ca.phon.app.session.editor.view.transcript.extensions.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.ipa.SyllableConstituentType;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
@@ -95,8 +94,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private void init() {
 		// toolbar
 		toolbar = new IconStrip(SwingConstants.HORIZONTAL);
-
-		ImageIcon sigmaIcn = IconManager.getInstance().getIcon("misc/small_sigma", IconSize.SMALL);
 
 		final PhonUIAction<Void> syllabifierSettingsAct = PhonUIAction.runnable(() -> {
 			final JPopupMenu settingsMenu = new JPopupMenu();
@@ -395,6 +392,25 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
 		if(ee.data().valueAdjusting()) return;
+
+        final Component source = ee.source();
+        if(source instanceof SyllabificationDisplay syllabificationDisplay) {
+            TranscriptDocument.StartEnd syllableRange = new TranscriptDocument.StartEnd(-1, -1);
+            if(SystemTierType.IPATarget.getName().equals(ee.data().tier().getName())) {
+                syllableRange = editor.getTranscriptDocument().getTierContentStartEnd(getEditor().getSession().getRecordIndex(ee.data().record()), SystemTierType.TargetSyllables.getName());
+            } else if(SystemTierType.IPAActual.getName().equals(ee.data().tier().getName())) {
+                syllableRange = editor.getTranscriptDocument().getTierContentStartEnd(getEditor().getSession().getRecordIndex(ee.data().record()), SystemTierType.ActualSyllables.getName());
+            }
+            if(syllableRange.valid()) {
+                final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(syllableRange.start()).getAttributes();
+                final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+                if(componentFactory instanceof SyllabificationComponentFactory) {
+                    if (componentFactory.getComponent() == source.getParent())
+                        return;
+                }
+            }
+        }
+
 		final String tierName = ee.data().tier().getName();
 		if(SystemTierType.IPATarget.getName().equals(tierName)) {
 			updateTargetSyllables();
@@ -425,9 +441,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final Component source = ee.source();
 		if(source instanceof SyllabificationDisplay syllabificationDisplay) {
 			TranscriptDocument.StartEnd syllableRange = new TranscriptDocument.StartEnd(-1, -1);
-			if(SystemTierType.IPATarget.getName().equals(ee.data().tier())) {
+			if(SystemTierType.IPATarget.getName().equals(ee.data().tier().getName())) {
 				syllableRange = editor.getTranscriptDocument().getTierContentStartEnd(getEditor().getSession().getRecordIndex(r), SystemTierType.TargetSyllables.getName());
-			} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier())) {
+			} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier().getName())) {
 				syllableRange = editor.getTranscriptDocument().getTierContentStartEnd(getEditor().getSession().getRecordIndex(r), SystemTierType.ActualSyllables.getName());
 			}
 			if(syllableRange.valid()) {
@@ -440,9 +456,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			}
 		}
 
-		if(SystemTierType.IPATarget.getName().equals(ee.data().tier())) {
+		if(SystemTierType.IPATarget.getName().equals(ee.data().tier().getName())) {
 			updateTargetSyllables();
-		} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier())) {
+		} else if(SystemTierType.IPAActual.getName().equals(ee.data().tier().getName())) {
 			updateActualSyllables();
 		}
 	}
@@ -491,7 +507,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		if(props.containsKey(SHOW_DIACRITICS)) {
 			showDiacritics = Boolean.parseBoolean(props.getProperty(SHOW_DIACRITICS, String.valueOf(DEFAULT_SHOW_DIACRITICS)));
 		}
-		if(editor.getText().length() > 0) {
+		if(!editor.getText().isEmpty()) {
 			update();
 		}
 	}
