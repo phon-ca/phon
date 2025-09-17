@@ -283,15 +283,15 @@ public class SearchView extends EditorView {
     }
 
     private void setupSearchContextMenu(MenuBuilder menuBuilder) {
-        final PhonUIAction<Boolean> toggleLiveUpdateAct = PhonUIAction.consumer(this::setLiveUpdate, !liveUpdate);
-        toggleLiveUpdateAct.putValue(Action.NAME, "Toggle live update");
-        toggleLiveUpdateAct.putValue(Action.SHORT_DESCRIPTION, "Toggle live update of search results");
-        toggleLiveUpdateAct.putValue(Action.SELECTED_KEY, liveUpdate);
-        final JCheckBoxMenuItem toggleLiveUpdateItem = new JCheckBoxMenuItem(toggleLiveUpdateAct);
-        menuBuilder.addItem(".", toggleLiveUpdateItem);
-
-        // Separator after live update option
-        menuBuilder.addSeparator(".", "search_history_separator");
+//        final PhonUIAction<Boolean> toggleLiveUpdateAct = PhonUIAction.consumer(this::setLiveUpdate, !liveUpdate);
+//        toggleLiveUpdateAct.putValue(Action.NAME, "Toggle live update");
+//        toggleLiveUpdateAct.putValue(Action.SHORT_DESCRIPTION, "Toggle live update of search results");
+//        toggleLiveUpdateAct.putValue(Action.SELECTED_KEY, liveUpdate);
+//        final JCheckBoxMenuItem toggleLiveUpdateItem = new JCheckBoxMenuItem(toggleLiveUpdateAct);
+//        menuBuilder.addItem(".", toggleLiveUpdateItem);
+//
+//        // Separator after live update option
+//        menuBuilder.addSeparator(".", "search_history_separator");
 
         final SearchHistoryListView historyView = new SearchHistoryListView(SEARCH_HISTORY_PROP_PREFIX, MAX_SEARCH_HISTORY);
         historyView.setSelectionCallback(entry -> {
@@ -310,20 +310,6 @@ public class SearchView extends EditorView {
         final JScrollPane scrollPane = new JScrollPane(historyView);
         historyView.setPreferredSize(new Dimension(350, 200));
         menuBuilder.addComponent(".", scrollPane);
-//
-//        // Search history button
-//        final PhonUIAction<Void> searchHistoryAct = PhonUIAction.runnable(this::showSearchHistoryPopup);
-//        searchHistoryAct.putValue(Action.NAME, "Search history");
-//        searchHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Show search history");
-//        final JMenuItem searchHistoryItem = new JMenuItem(searchHistoryAct);
-//        menuBuilder.addItem(".", searchHistoryItem);
-    }
-
-    private void showSearchHistoryPopup() {
-//
-//
-//        // Show the popup below the search field
-//        historyView.showBelowComponent(searchField);
     }
 
     public void setLiveUpdate(Boolean liveUpdate) {

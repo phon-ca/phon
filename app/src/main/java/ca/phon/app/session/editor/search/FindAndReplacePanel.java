@@ -35,6 +35,7 @@ import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.SearchField;
+import ca.phon.util.SearchHistory;
 import ca.phon.util.SearchHistoryEntry;
 import ca.phon.util.SearchType;
 import ca.phon.util.icons.IconManager;
@@ -90,8 +91,6 @@ public class FindAndReplacePanel extends JPanel {
 	private SearchField replaceField;
 
 	private JButton replaceButton;
-
-	private JButton replaceFindButton;
 
 	private JButton replaceAllButton;
 
@@ -229,12 +228,12 @@ public class FindAndReplacePanel extends JPanel {
 			}
 		});
 		searchField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        searchField.getTextField().addActionListener((e) -> {
-            final SearchHistoryEntry entry = new SearchHistoryEntry(LocalDateTime.now(), searchField.getText(),
-                    regexButton.isSelected() ? SearchType.REGEX :
-                            phonexButton.isSelected() ? SearchType.PHONEX :
-                                    SearchType.PLAIN,
-                    caseSensitiveButton.isSelected(), new HashMap<>());
+        searchField.getTextField().addActionListener((e) -> addCurrentSearchToHistory());
+        searchField.setSearchHistorySelectionCallback( (entry) -> {
+            caseSensitiveButton.setSelected(entry.caseSensitive());
+            regexButton.setSelected(entry.queryType() == SearchType.REGEX);
+            phonexButton.setSelected(entry.queryType() == SearchType.PHONEX);
+            onQuery();
         });
 
 		resultsLabel = new JLabel("0 results");
@@ -315,7 +314,17 @@ public class FindAndReplacePanel extends JPanel {
 
 		searchResults.clear();
 		currentResultIdx = -1;
-	}
+    }
+
+    private void addCurrentSearchToHistory() {
+        final SearchHistoryEntry entry = new SearchHistoryEntry(LocalDateTime.now(), searchField.getText(),
+                regexButton.isSelected() ? SearchType.REGEX :
+                        phonexButton.isSelected() ? SearchType.PHONEX :
+                                SearchType.PLAIN,
+                caseSensitiveButton.isSelected(), new HashMap<>());
+        SearchHistory.addSearchEntry(SEARCH_HISTORY_PROP_PREFIX, entry, MAX_SEARCH_HISTORY);
+    }
+
 
 	private void toggleCaseSensitive() {
 		final boolean caseSensitive = caseSensitiveButton.isSelected();

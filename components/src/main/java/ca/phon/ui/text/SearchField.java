@@ -30,6 +30,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.beans.*;
+import java.util.function.Consumer;
 
 /**
  * A search field with optional context button.
@@ -266,6 +267,12 @@ public class SearchField extends JPanel {
             final SearchHistoryListView historyView = new SearchHistoryListView(historyProperty, maxHistory);
             historyView.setPreferredSize(new Dimension(350, 200));
             menuBuilder.addComponent(".", new JScrollPane(historyView));
+            historyView.setSelectionCallback((entry) -> {
+                setText(entry.queryText());
+                if (searchHistorySelectionCallback != null) {
+                    searchHistorySelectionCallback.accept(entry);
+                }
+            });
         }
 
 		PhonUIAction clearFieldAct = PhonUIAction.eventConsumer(this::onClearText);
@@ -382,42 +389,24 @@ public class SearchField extends JPanel {
 		
 	}
 
+
+    /**
+     * Add given entry to search history, requires that a history property
+     * was specified at construction time.
+     *
+     * @param entry the entry to add
+     */
     public void addToSearchHistory(SearchHistoryEntry entry) {
         if(this.historyProperty != null && this.maxHistory > 0) {
             SearchHistory.addSearchEntry(this.historyProperty, entry, this.maxHistory);
         }
     }
 
-//	/**
-//	 * Append given text to history
-//	 *
-//	 * @param text
-//	 * @return <code>true</code> if text was added to history, <code>false</code> otherwise
-//	 */
-//	public boolean appendToHistory(String text) {
-//		if (text == null || text.isEmpty()) {
-//			return false;
-//		}
-//		if (history.contains(text)) {
-//			return false;
-//		}
-//		history.add(text);
-//		return true;
-//	}
+    private Consumer<SearchHistoryEntry> searchHistorySelectionCallback = null;
 
-//	/**
-//	 * Save history to preferences
-//	 *
-//	 * @return <code>true</code> if history was saved, <code>false</code> otherwise
-//	 */
-//	public boolean saveHistory() {
-//		final StringBuilder historyStr = new StringBuilder();
-//		for (String h : history) {
-//			historyStr.append(h).append(HISTORY_SEPARATOR);
-//		}
-//		PrefHelper.getUserPreferences().put(historyProperty, historyStr.toString());
-//		return true;
-//	}
+    public void setSearchHistorySelectionCallback(Consumer<SearchHistoryEntry> callback) {
+        this.searchHistorySelectionCallback = callback;
+    }
 
 	public static interface SearchFieldMenuHandler {
 		/**
