@@ -190,8 +190,8 @@ public record SearchHistoryEntry(
     public static final class Builder {
         private LocalDateTime date;
         private String queryText;
-        private SearchType queryType;
-        private boolean caseSensitive;
+        private SearchType queryType = SearchType.PLAIN;
+        private boolean caseSensitive = false;
         private Map<String, String> parameters = new HashMap<>();
 
         private Builder() {

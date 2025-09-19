@@ -21,11 +21,11 @@ public class SearchHistoryEntryTest {
     public void testBasicBuilder() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test query")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         assertEquals("test query", entry.queryText());
-        assertEquals("phonex", entry.queryType());
+        assertEquals(SearchType.PHONEX, entry.queryType());
         assertFalse(entry.caseSensitive());
         assertTrue(entry.parameters().isEmpty());
         assertNotNull(entry.date());
@@ -41,14 +41,14 @@ public class SearchHistoryEntryTest {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .date(testDate)
                 .queryText("phoneme pattern")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .caseSensitive(true)
                 .parameters(params)
                 .build();
 
         assertEquals(testDate, entry.date());
         assertEquals("phoneme pattern", entry.queryText());
-        assertEquals("phonex", entry.queryType());
+        assertEquals(SearchType.PHONEX, entry.queryType());
         assertTrue(entry.caseSensitive());
         assertEquals(2, entry.parameters().size());
         assertEquals("IPA Target", entry.getParameter("target"));
@@ -59,7 +59,7 @@ public class SearchHistoryEntryTest {
     public void testBuilderWithIndividualParameters() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("regex")
+                .queryType(SearchType.REGEX)
                 .parameter("key1", "value1")
                 .parameter("key2", "value2")
                 .build();
@@ -73,7 +73,7 @@ public class SearchHistoryEntryTest {
     public void testParameterManagement() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("plain")
+                .queryType(SearchType.PLAIN)
                 .parameter("keep", "this")
                 .parameter("remove", "this")
                 .removeParameter("remove")
@@ -90,7 +90,7 @@ public class SearchHistoryEntryTest {
     public void testClearParameters() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("plain")
+                .queryType(SearchType.PLAIN)
                 .parameter("key1", "value1")
                 .parameter("key2", "value2")
                 .clearParameters()
@@ -107,7 +107,7 @@ public class SearchHistoryEntryTest {
     public void testToBuilder() {
         SearchHistoryEntry original = SearchHistoryEntry.builder()
                 .queryText("original query")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .caseSensitive(true)
                 .parameter("param1", "value1")
                 .build();
@@ -123,7 +123,7 @@ public class SearchHistoryEntryTest {
 
         // Modified should have changes
         assertEquals("modified query", modified.queryText());
-        assertEquals("phonex", modified.queryType()); // Inherited
+        assertEquals(SearchType.PHONEX, modified.queryType()); // Inherited
         assertTrue(modified.caseSensitive()); // Inherited
         assertEquals(2, modified.parameters().size()); // Added to
         assertEquals("value1", modified.getParameter("param1"));
@@ -137,7 +137,7 @@ public class SearchHistoryEntryTest {
 
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("plain")
+                .queryType(SearchType.PLAIN)
                 .parameters(mutableParams)
                 .build();
 
@@ -166,7 +166,7 @@ public class SearchHistoryEntryTest {
         SearchHistoryEntry entry1 = SearchHistoryEntry.builder()
                 .date(date)
                 .queryText("test")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .caseSensitive(true)
                 .parameter("key", "value")
                 .build();
@@ -174,7 +174,7 @@ public class SearchHistoryEntryTest {
         SearchHistoryEntry entry2 = SearchHistoryEntry.builder()
                 .date(date)
                 .queryText("test")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .caseSensitive(true)
                 .parameter("key", "value")
                 .build();
@@ -182,7 +182,7 @@ public class SearchHistoryEntryTest {
         SearchHistoryEntry entry3 = SearchHistoryEntry.builder()
                 .date(date)
                 .queryText("different")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .caseSensitive(true)
                 .parameter("key", "value")
                 .build();
@@ -199,7 +199,7 @@ public class SearchHistoryEntryTest {
         try {
             SearchHistoryEntry.builder()
                     .queryText(null)
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build();
             fail("Should throw exception for null query text");
         } catch (IllegalArgumentException e) {
@@ -210,7 +210,7 @@ public class SearchHistoryEntryTest {
         try {
             SearchHistoryEntry.builder()
                     .queryText("  ")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build();
             fail("Should throw exception for empty query text");
         } catch (IllegalArgumentException e) {
@@ -228,22 +228,11 @@ public class SearchHistoryEntryTest {
             assertTrue(e.getMessage().contains("Query type cannot be null"));
         }
 
-        // Test empty query type
-        try {
-            SearchHistoryEntry.builder()
-                    .queryText("test")
-                    .queryType("  ")
-                    .build();
-            fail("Should throw exception for empty query type");
-        } catch (IllegalArgumentException e) {
-            assertTrue(e.getMessage().contains("Query type cannot be null"));
-        }
-
         // Test null parameter key
         try {
             SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .parameter(null, "value")
                     .build();
             fail("Should throw exception for null parameter key");
@@ -255,7 +244,7 @@ public class SearchHistoryEntryTest {
         try {
             SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .parameter("key", null)
                     .build();
             fail("Should throw exception for null parameter value");
@@ -266,20 +255,11 @@ public class SearchHistoryEntryTest {
         // Test missing required fields
         try {
             SearchHistoryEntry.builder()
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .build();
             fail("Should throw exception for missing query text");
         } catch (IllegalStateException e) {
             assertTrue(e.getMessage().contains("Query text is required"));
-        }
-
-        try {
-            SearchHistoryEntry.builder()
-                    .queryText("test")
-                    .build();
-            fail("Should throw exception for missing query type");
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().contains("Query type is required"));
         }
     }
 
@@ -287,11 +267,11 @@ public class SearchHistoryEntryTest {
     public void testTextTrimming() {
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("  trimmed query  ")
-                .queryType("  phonex  ")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         assertEquals("trimmed query", entry.queryText());
-        assertEquals("phonex", entry.queryType());
+        assertEquals(SearchType.PHONEX, entry.queryType());
     }
 
     @Test
@@ -300,7 +280,7 @@ public class SearchHistoryEntryTest {
 
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("test")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .build();
 
         LocalDateTime after = LocalDateTime.now();
@@ -321,7 +301,7 @@ public class SearchHistoryEntryTest {
         try {
             SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .parameters(invalidParams)
                     .build();
             fail("Should throw exception for null parameter key in map");
@@ -335,7 +315,7 @@ public class SearchHistoryEntryTest {
         try {
             SearchHistoryEntry.builder()
                     .queryText("test")
-                    .queryType("phonex")
+                    .queryType(SearchType.PHONEX)
                     .parameters(invalidParams)
                     .build();
             fail("Should throw exception for null parameter value in map");
@@ -349,7 +329,7 @@ public class SearchHistoryEntryTest {
         // Test that the class is Serializable
         SearchHistoryEntry entry = SearchHistoryEntry.builder()
                 .queryText("serialization test")
-                .queryType("phonex")
+                .queryType(SearchType.PHONEX)
                 .caseSensitive(true)
                 .parameter("test", "value")
                 .build();
