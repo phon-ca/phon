@@ -225,8 +225,7 @@ public final class XmlSessionWriterV2_1 implements SessionWriter, IPluginExtensi
 
 		// timeline
 		if(session.getTimeline() != null) {
-			if(session.getTimeline().getLength() > 0 &&
-					(session.getTimeline().getTiers().size() > 0 || session.getTimeline().getRecordIntervalTiers().size() > 0)) {
+			if(!session.getTimeline().getTiers().isEmpty() || !session.getTimeline().getRecordIntervalTiers().isEmpty()) {
 				final XmlIntervalTiersType timeline = writeTimeline(factory, session.getTimeline());
 				retVal.setIntervalTiers(timeline);
 			}
