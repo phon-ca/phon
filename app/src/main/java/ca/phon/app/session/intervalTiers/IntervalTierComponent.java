@@ -7,6 +7,8 @@ import ca.phon.session.IntervalTier;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Time component for session {@link IntervalTier}s
@@ -22,12 +24,27 @@ public class IntervalTierComponent extends TimeComponent {
 
     private final ListSelectionModel selectionModel;
 
+    /**
+     * User specified callback for interval clicks, unlike in selection model
+     * this callback will only be called when an interval is clicked, not when
+     * the selection is changed programmatically
+     */
+    private BiConsumer<Integer, IntervalTier.Interval> intervalClickedCallback = null;
+
     public IntervalTierComponent(TimeUIModel model, IntervalTier intervalTier) {
         super(model);
         this.intervalTier = intervalTier;
         this.selectionModel = new DefaultListSelectionModel();
 
         setUI(new IntervalTierComponentUI());
+    }
+
+    public void setIntervalClickedCallback(BiConsumer<Integer, IntervalTier.Interval> callback) {
+        this.intervalClickedCallback = callback;
+    }
+
+    public BiConsumer<Integer, IntervalTier.Interval> getIntervalClickedCallback() {
+        return this.intervalClickedCallback;
     }
 
     public ListSelectionModel getSelectionModel() {

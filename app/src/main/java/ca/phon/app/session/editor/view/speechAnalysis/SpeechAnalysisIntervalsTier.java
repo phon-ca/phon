@@ -96,6 +96,9 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
             final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
             intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
+            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                    setupSelectionInterval(intervalTierComponent, index, interval)
+            );
             add(intervalTierComponent);
             intervalTiersMap.put(worTierDesc.getName(), intervalTierComponent);
         }
@@ -110,6 +113,9 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
             final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(this.intervalTierTimeModel, intervalTier);
             intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
+            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                    setupSelectionInterval(intervalTierComponent, index, interval)
+            );
             add(intervalTierComponent);
             intervalTiersMap.put(phoTierDesc.getName(), intervalTierComponent);
         }
@@ -118,15 +124,50 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, timelineTierName);
             final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
             final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(this.intervalTierTimeModel, intervalTier);
+            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                    setupSelectionInterval(intervalTierComponent, index, interval)
+            );
             add(intervalTierComponent);
             intervalTiersMap.put(timelineTierName, intervalTierComponent);
         }
 
         for(var timelineTier : intervalTiers.getTiers()) {
             final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(this.intervalTierTimeModel, timelineTier);
+            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                    setupSelectionInterval(intervalTierComponent, index, interval)
+            );
             add(intervalTierComponent);
             intervalTiersMap.put(timelineTier.getName(), intervalTierComponent);
         }
+
+    }
+
+    private TimeUIModel.Marker currentIntervalStartMarker = null;
+    private TimeUIModel.Marker currentIntervalEndMarker = null;
+
+    /**
+     * Setup selection for given interval tier name and index
+     * @param tierComponent the interval tier component
+     * @param intervalIndex the interval index
+     * @param interval the interval
+     */
+    private void setupSelectionInterval(IntervalTierComponent tierComponent, int intervalIndex, IntervalTier.Interval interval) {
+        getParentView().setSelection(interval.getStart(), interval.getEnd());
+
+        // remove old markers
+        if(currentIntervalStartMarker != null) {
+            intervalTierTimeModel.removeMarker(currentIntervalStartMarker);
+            currentIntervalStartMarker = null;
+        }
+        if(currentIntervalEndMarker != null) {
+            intervalTierTimeModel.removeMarker(currentIntervalEndMarker);
+            currentIntervalEndMarker = null;
+        }
+        // add start/end markers for the interval
+        currentIntervalStartMarker = new TimeUIModel.Marker(interval.getStart(), UIManager.getColor("textText"));
+        currentIntervalEndMarker = new TimeUIModel.Marker(interval.getEnd(), UIManager.getColor("textText"));
+        intervalTierTimeModel.addMarker(currentIntervalStartMarker);
+        intervalTierTimeModel.addMarker(currentIntervalEndMarker);
     }
 
     @Override
@@ -170,7 +211,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 final IntervalTier.Interval wordInterval = wordIntervalTier.getTimelineTier().getIntervals().get(selectedWord);
                 final var phoneIndiciesForWord =
                     ((IntervalTierComponentUI)phoneIntervalTier.getUI()).getIntervalIndicesForTimeRange(wordInterval.getStart(), wordInterval.getEnd());
-                if(phoneIndiciesForWord.size() == 0) {
+                if(phoneIndiciesForWord.isEmpty()) {
                     phoneIntervalTier.getSelectionModel().clearSelection();
                     phoneIntervalTier.repaint();
                 } else {

@@ -1,6 +1,7 @@
 package ca.phon.app.session.intervalTiers;
 
 import ca.phon.media.TimeComponentUI;
+import ca.phon.media.TimeUIModel;
 import ca.phon.session.IntervalTier;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -230,6 +231,21 @@ public class IntervalTierComponentUI extends TimeComponentUI {
 
             ++intervalIdx;
         }
+
+        int markerIdx = 0;
+        for(TimeUIModel.Marker marker:timeComponent.getTimeModel().getMarkers()) {
+            final double markerX = timeComponent.xForTime(marker.getTime());
+            final Rectangle markerRect = new Rectangle((int)markerX - 1, tierContentY, 2, tierRect.height);
+
+            paintMarker(g2, marker);
+
+            // add to marker tree for hit testing
+            markerTree = markerTree.add(markerIdx, Geometries.rectangle(
+                    markerRect.x,
+                    markerRect.y,
+                    markerRect.getMaxX(),
+                    markerRect.getMaxY()));
+        }
     }
 
     /**
@@ -281,6 +297,10 @@ public class IntervalTierComponentUI extends TimeComponentUI {
                         // already selected, do nothing
                     } else {
                         tc.setSelectedIndex(selectedIdx);
+                    }
+                    if(tc.getIntervalClickedCallback() != null) {
+                        final var interval = tc.getTimelineTier().getIntervals().get(selectedIdx);
+                        tc.getIntervalClickedCallback().accept(selectedIdx, interval);
                     }
                 }
             }
