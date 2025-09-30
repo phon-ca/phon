@@ -17,6 +17,7 @@ package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
@@ -34,6 +35,8 @@ import ca.phon.session.io.xml.v12.CommentType;
 import ca.phon.session.io.xml.v12.UserTierType;
 import ca.phon.session.io.xml.v12.WordType;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Language;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
@@ -563,24 +566,29 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			// get the correct ipa object from our new record
 			final Tier<IPATranscript> ipaTier =
 					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATargetTier() : retVal.getIPAActualTier());
+            final StringBuffer buffer = new StringBuffer();
 			for(BgType bgt:btt.getBg()) {
-				final StringBuffer buffer = new StringBuffer();
 				for(WordType wt:bgt.getW()) {
 					if(buffer.length() > 0)
 						buffer.append(" ");
 					buffer.append(wt.getContent());
 				}
-
-				try {
-					final IPATranscript blindTranscript =
-							IPATranscript.parseIPATranscript(buffer.toString());
-					final TranscriberType tt = (TranscriberType)btt.getUser();
-					final String name = tt.getId();
-					ipaTier.setBlindTranscription(name, blindTranscript);
-				} catch (ParseException e) {
-					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-				}
 			}
+            try {
+                IPATranscript blindTranscript =
+                        IPATranscript.parseIPATranscript(buffer.toString());
+                final Syllabifier syllabifier = SyllabifierOptions.findSyllabifier(session, retVal, ipaTier);
+                blindTranscript = syllabifier.syllabify(blindTranscript);
+                final TranscriberType tt = (TranscriberType)btt.getUser();
+                final String name = tt.getId();
+                ipaTier.setBlindTranscription(name, blindTranscript);
+
+                // update alignment
+                final PhoneAlignment alignment = PhoneAlignment.fromTiers(retVal.getIPATargetTier(), retVal.getIPAActualTier());
+                retVal.getPhoneAlignmentTier().setBlindTranscription(name, alignment);
+            } catch (ParseException e) {
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+            }
 		}
 
 		// notes

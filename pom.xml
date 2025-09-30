@@ -46,24 +46,9 @@
 
 	<repositories>
 		<repository>
-			<id>phon</id>
+			<id>github-phon</id>
 			<name>GitHub phon-ca Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/phon-ca/phon</url>
-		</repository>
-		<repository>
-			<id>ghedlund-tst</id>
-			<name>tst</name>
-			<url>https://maven.pkg.github.com/ghedlund/tst</url>
-		</repository>
-		<repository>
-			<id>ghedlund-desktopicons</id>
-			<name>tst</name>
-			<url>https://maven.pkg.github.com/ghedlund/desktopicons</url>
-		</repository>
-		<repository>
-			<id>ghedlund-nativedialogs</id>
-			<name>tst</name>
-			<url>https://maven.pkg.github.com/ghedlund/nativedialogs</url>
 		</repository>
 	</repositories>
 

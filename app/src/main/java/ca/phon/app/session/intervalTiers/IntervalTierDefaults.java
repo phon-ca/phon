@@ -28,6 +28,9 @@ public class IntervalTierDefaults implements UIDefaultsHandler, IPluginExtension
     public final static String TIMELINE_TIER_SELECTED_INTERVAL_BORDER = "IntervalTier.selectedIntervalBorder";
     public final static Color DEFAULT_TIMELINE_TIER_SELECTED_INTERVAL_BORDER = Color.gray;
 
+    public final static String INTERVAL_HIGHLIGHTER_COLOR = "Interval.highlighterColor";
+    public final static Color DEFAULT_INTERVAL_HIGHLIGHTER_COLOR = new Color(0, 187, 255, 128);
+
     @Override
     public void setupDefaults(UIDefaults defaults) {
         defaults.put(TIMELINE_TIER_BACKGROUND, DEFAULT_TIMELINE_TIER_BACKGROUND);
@@ -36,6 +39,7 @@ public class IntervalTierDefaults implements UIDefaultsHandler, IPluginExtension
         defaults.put(TIMELINE_TIER_TITLE_FOREGROUND, DEFAULT_TIMELINE_TIER_TITLE_FOREGROUND);
         defaults.put(TIMELINE_TIER_INTERVAL_BORDER, DEFAULT_TIMELINE_TIER_INTERVAL_BORDER);
         defaults.put(TIMELINE_TIER_SELECTED_INTERVAL_BORDER, DEFAULT_TIMELINE_TIER_SELECTED_INTERVAL_BORDER);
+        defaults.put(INTERVAL_HIGHLIGHTER_COLOR, DEFAULT_INTERVAL_HIGHLIGHTER_COLOR);
     }
 
     @Override
