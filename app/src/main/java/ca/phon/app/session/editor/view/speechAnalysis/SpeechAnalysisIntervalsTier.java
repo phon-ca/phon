@@ -290,7 +290,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             }
         }
         if(tierName == null) return;
-        if("startMarker.time".equals(e.getPropertyName())) {
+        if("startMarker.time".equals(e.getPropertyName()) || "endMarker.time".equals(e.getPropertyName())) {
             if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
                 final WorTierUpdater updater = new WorTierUpdater(currentIntervalIndex, currentInterval);
                 final Record currentRecord = getParentView().getEditor().currentRecord();
@@ -308,8 +308,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             } else {
 
             }
-        } else if("endMarker.time".equals(e.getPropertyName())) {
-
         } else if("valueAdjusting".equals(e.getPropertyName())) {
             if((boolean)e.getNewValue()) {
                 getParentView().getEditor().getUndoSupport().beginUpdate("Adjust interval");

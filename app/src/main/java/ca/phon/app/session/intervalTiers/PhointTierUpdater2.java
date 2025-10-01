@@ -8,11 +8,9 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyElement;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
-import ca.phon.session.TierDescription;
-import ca.phon.session.UserTierType;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.tierdata.TierData;
@@ -30,9 +28,30 @@ import java.util.List;
 @Extension(Tier.class)
 public class PhointTierUpdater2 implements TierEdit.DependentTierChanges<Orthography>, ExtensionProvider {
 
+    private InternalMedia getFirstInternalMedia(Orthography ortho) {
+        if(ortho == null) return null;
+        for(int i = 0; i < ortho.length(); i++) {
+            final OrthographyElement ele = ortho.elementAt(i);
+            if(ele instanceof InternalMedia) {
+                return (InternalMedia)ele;
+            }
+        }
+        return null;
+    }
+
+    private InternalMedia getLastInternalMedia(Orthography ortho) {
+        if(ortho == null) return null;
+        for(int i = ortho.length() - 1; i >= 0; i--) {
+            final OrthographyElement ele = ortho.elementAt(i);
+            if(ele instanceof InternalMedia) {
+                return (InternalMedia)ele;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void performDependentTierChanges(TierEdit<Orthography> tierEdit) {
-//        if(tierEdit.isValueAdjusting()) return;
         final Session session = tierEdit.getSession();
         // check for the phone intervals tier
         final TierDescription phoTierDesc = session.getUserTiers()
@@ -80,6 +99,47 @@ public class PhointTierUpdater2 implements TierEdit.DependentTierChanges<Orthogr
         phoneIntervalsTier.setValue(newPhoneIntervalsTierData);
         tierEdit.putAdditionalTierChange(phoneIntervalsTier.getName(), newPhoneIntervalsTierData);
         tierEdit.fireTierChange(phoneIntervalsTier, oldPhoneIntervals, newPhoneIntervalsTierData);
+
+        // check to see if we should adjust media segment for the record
+        final Object getPreviousChange = tierEdit.getAdditionalTierChange(SystemTierType.Segment.getName());
+        final boolean isUndo = (getPreviousChange != null);
+        final Orthography oldVal = isUndo ? tierEdit.getNewValue() : tierEdit.getOldValue();
+        final Orthography newVal = isUndo ? tierEdit.getOldValue() : tierEdit.getNewValue();
+        final InternalMedia oldStart = getFirstInternalMedia(oldVal);
+        final InternalMedia oldEnd = getLastInternalMedia(oldVal);
+        final InternalMedia newStart = getFirstInternalMedia(newVal);
+        final InternalMedia newEnd = getLastInternalMedia(newVal);
+        final MediaSegment recordSegment = record.getMediaSegment();
+        // if anything is null or the record segment is null, we can't do anything
+        if (oldStart == null || oldEnd == null || newStart == null || newEnd == null || recordSegment == null)
+            return;
+
+        // if old start time matches record start time and new start time is different, update record start time
+        float recStart = recordSegment.getStartTime();
+        final float currentRecStart = recStart;
+        float recEnd = recordSegment.getEndTime();
+        final float currentRecEnd = recEnd;
+        if (oldStart.getStartTime() == recStart && newStart.getStartTime() != recStart) {
+            recStart = newStart.getStartTime();
+            // if old end time matches record end time and new end time is different, update record end time
+        } else if (oldEnd.getEndTime() == recEnd && newEnd.getEndTime() != recEnd) {
+            recEnd = newEnd.getEndTime();
+        }
+
+        // if start or end time changed, make a new media segment
+        if (tierEdit.isValueAdjusting() && (recStart == currentRecStart && recEnd == currentRecEnd)) return;
+
+        final MediaSegment newRecordSegment = (SessionFactory.newFactory()).createMediaSegment();
+        newRecordSegment.setUnitType(recordSegment.getUnitType());
+        newRecordSegment.setStartTime(recStart);
+        newRecordSegment.setEndTime(recEnd);
+        record.setMediaSegment(newRecordSegment);
+        if(isUndo) {
+            tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), null);
+        } else {
+            tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), newRecordSegment);
+        }
+        tierEdit.fireTierChange(record.getSegmentTier(), recordSegment, newRecordSegment);
     }
 
     @Override
