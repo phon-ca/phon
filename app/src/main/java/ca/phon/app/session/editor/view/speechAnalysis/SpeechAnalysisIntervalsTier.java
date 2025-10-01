@@ -2,19 +2,24 @@ package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.intervalTiers.IntervalTierComponent;
 import ca.phon.app.session.intervalTiers.IntervalTierComponentUI;
 import ca.phon.app.session.intervalTiers.RecordIntervalTier;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModelAdapter;
+import ca.phon.orthography.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +29,17 @@ import java.util.Map;
 public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
     private TimeUIModel intervalTierTimeModel;
+
+    /**
+     * Currently focused selected interval, changes to this interval will update the selected interval
+     * as well as any intervals which share a relationship with this interval (e.g. phones within a word).
+     * Intervals across other tiers will also be affected if they share an start/end time with this interval.
+     */
+    private TimeUIModel.Interval currentInterval;
+
+    private IntervalTierComponent currentIntervalTierComponent;
+
+    private int currentIntervalIndex = -1;
 
     /**
      * Map of tier name to interval tier component
@@ -142,9 +158,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
     }
 
-    private TimeUIModel.Marker currentIntervalStartMarker = null;
-    private TimeUIModel.Marker currentIntervalEndMarker = null;
-
     /**
      * Setup selection for given interval tier name and index
      * @param tierComponent the interval tier component
@@ -155,19 +168,25 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         getParentView().setSelection(interval.getStart(), interval.getEnd());
 
         // remove old markers
-        if(currentIntervalStartMarker != null) {
-            intervalTierTimeModel.removeMarker(currentIntervalStartMarker);
-            currentIntervalStartMarker = null;
+        if(currentInterval != null) {
+            intervalTierTimeModel.removeInterval(currentInterval);
         }
-        if(currentIntervalEndMarker != null) {
-            intervalTierTimeModel.removeMarker(currentIntervalEndMarker);
-            currentIntervalEndMarker = null;
+
+        currentIntervalTierComponent = tierComponent;
+        currentIntervalIndex = intervalIndex;
+        currentInterval = new TimeUIModel.Interval(interval.getStart(), interval.getEnd());
+        currentInterval.addPropertyChangeListener(currentIntervalListener);
+        intervalTierTimeModel.addInterval(currentInterval);
+    }
+
+    public void clearSelectionInterval() {
+        if(currentInterval != null) {
+            intervalTierTimeModel.removeInterval(currentInterval);
+            currentInterval.removePropertyChangeListener(currentIntervalListener);
+            currentInterval = null;
+            currentIntervalIndex = -1;
+            currentIntervalTierComponent = null;
         }
-        // add start/end markers for the interval
-        currentIntervalStartMarker = new TimeUIModel.Marker(interval.getStart(), UIManager.getColor("textText"));
-        currentIntervalEndMarker = new TimeUIModel.Marker(interval.getEnd(), UIManager.getColor("textText"));
-        intervalTierTimeModel.addMarker(currentIntervalStartMarker);
-        intervalTierTimeModel.addMarker(currentIntervalEndMarker);
     }
 
     @Override
@@ -260,5 +279,95 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
 
     };
+
+    private final PropertyChangeListener currentIntervalListener = (e) -> {
+        if(currentIntervalTierComponent == null || currentIntervalIndex == -1) return;
+        String tierName = null;
+        for(var entry: intervalTiersMap.entrySet()) {
+            if(entry.getValue() == currentIntervalTierComponent) {
+                tierName = entry.getKey();
+                break;
+            }
+        }
+        if(tierName == null) return;
+        if("startMarker.time".equals(e.getPropertyName())) {
+            if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
+                final WorTierUpdater updater = new WorTierUpdater(currentIntervalIndex, currentInterval);
+                final Record currentRecord = getParentView().getEditor().currentRecord();
+                final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
+                final Orthography wor = worTier.getValue();
+                wor.accept(updater);
+                final Orthography updatedWor = updater.getUpdatedOrthography();
+                final TierEdit<Orthography> worEdit =
+                        new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
+                                getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
+                                (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
+                getParentView().getEditor().getUndoSupport().postEdit(worEdit);
+            } else if(UserTierType.PhoneIntervals.getPhonTierName().equals(tierName)) {
+                // update phone intervals
+            } else {
+
+            }
+        } else if("endMarker.time".equals(e.getPropertyName())) {
+
+        } else if("valueAdjusting".equals(e.getPropertyName())) {
+            if((boolean)e.getNewValue()) {
+                getParentView().getEditor().getUndoSupport().beginUpdate("Adjust interval");
+            } else {
+                if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
+                    final WorTierUpdater updater = new WorTierUpdater(currentIntervalIndex, currentInterval);
+                    final Record currentRecord = getParentView().getEditor().currentRecord();
+                    final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
+                    final Orthography wor = worTier.getValue();
+                    wor.accept(updater);
+                    final Orthography updatedWor = updater.getUpdatedOrthography();
+                    final TierEdit<Orthography> worEdit =
+                            new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
+                                    getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
+                                    (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
+                    getParentView().getEditor().getUndoSupport().postEdit(worEdit);
+                }
+                getParentView().getEditor().getUndoSupport().endUpdate();
+            }
+        }
+    };
+
+    public static class WorTierUpdater extends VisitorAdapter<OrthographyElement> {
+
+        private final int intervalIndex;
+
+        private TimeUIModel.Interval newInterval;
+
+        private OrthographyBuilder builder = new OrthographyBuilder();
+
+        private int currentIndex = 0;
+
+        public WorTierUpdater(int intervalIndex, TimeUIModel.Interval newInterval) {
+            super();
+            this.intervalIndex = intervalIndex;
+            this.newInterval = newInterval;
+        }
+
+        @Visits
+        public void visitInternalMedia(InternalMedia internalMedia) {
+            if(currentIndex == intervalIndex) {
+                final InternalMedia newInternalMedia =
+                        new InternalMedia(newInterval.getStartMarker().getTime(), newInterval.getEndMarker().getTime());
+                builder.append(newInternalMedia);
+            } else {
+                builder.append(internalMedia);
+            }
+            currentIndex++;
+        }
+
+        @Override
+        public void fallbackVisit(OrthographyElement element) {
+            builder.append(element);
+        }
+
+        public Orthography getUpdatedOrthography() {
+            return builder.toOrthography();
+        }
+    }
 
 }

@@ -4,4 +4,5 @@ ca.phon.app.session.editor.view.transcript.extensions.DefaultEditorExtensionProv
 ca.phon.app.session.intervalTiers.IntervalTierDependentTierChanges
 ca.phon.app.session.intervalTiers.WordIntervalsTextUpdater
 ca.phon.app.session.intervalTiers.PhointTierUpdater
+ca.phon.app.session.intervalTiers.PhointTierUpdater2
 

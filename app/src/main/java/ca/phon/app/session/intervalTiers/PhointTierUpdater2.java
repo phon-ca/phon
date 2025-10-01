@@ -8,9 +8,11 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.alignment.PhoneIntervalsElementFilter;
+import ca.phon.session.Session;
+import ca.phon.session.Tier;
+import ca.phon.session.TierDescription;
+import ca.phon.session.UserTierType;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.tierdata.TierData;
@@ -22,15 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Update text and intervals of the "IPA Actual" (%pho) tier when text of Orthography
- * changes.
+ * Update text and intervals of the pho interval tier (%xphoint) when text of the word intervals
+ * tier (%wor) changes.
  */
 @Extension(Tier.class)
-public class PhointTierUpdater implements TierEdit.DependentTierChanges<IPATranscript>, ExtensionProvider {
+public class PhointTierUpdater2 implements TierEdit.DependentTierChanges<Orthography>, ExtensionProvider {
 
     @Override
-    public void performDependentTierChanges(TierEdit<IPATranscript> tierEdit) {
-        if(tierEdit.isValueAdjusting()) return;
+    public void performDependentTierChanges(TierEdit<Orthography> tierEdit) {
+//        if(tierEdit.isValueAdjusting()) return;
         final Session session = tierEdit.getSession();
         // check for the phone intervals tier
         final TierDescription phoTierDesc = session.getUserTiers()
@@ -38,17 +40,12 @@ public class PhointTierUpdater implements TierEdit.DependentTierChanges<IPATrans
                 .filter(td -> UserTierType.PhoneIntervals.getPhonTierName().equals(td.getName()))
                 .findAny().orElse(null);
         if(phoTierDesc == null) return;
-        // check for word intervals tier
-        final TierDescription worTierDesc = session.getUserTiers()
-                .stream()
-                .filter(td -> UserTierType.Wor.getPhonTierName().equals(td.getName()))
-                .findAny().orElse(null);
-        if(worTierDesc == null) return;
 
         final Record record = tierEdit.getRecord();
-        final Tier<IPATranscript> ipaTier = tierEdit.getTier();
-        final Tier<Orthography> wordIntervalsTier = record.getTier(worTierDesc.getName(), Orthography.class);
+        final Tier<Orthography> wordIntervalsTier = tierEdit.getTier();
+        final Tier<IPATranscript> ipaTier = record.getIPAActualTier();
         final Tier<TierData> phoneIntervalsTier = record.getTier(phoTierDesc.getName(), TierData.class);
+        if(phoneIntervalsTier == null) return;
 
         final TierData oldPhoneIntervals = phoneIntervalsTier.hasValue() ? phoneIntervalsTier.getValue() : new TierData();
         final List<TierElement> newPhoneIntervals = new ArrayList<>();
@@ -88,8 +85,8 @@ public class PhointTierUpdater implements TierEdit.DependentTierChanges<IPATrans
     @Override
     public void installExtension(IExtendable obj) {
         if (obj instanceof Tier<?> tier) {
-            if (SystemTierType.IPAActual.getName().equals(tier.getName()) && tier.getDeclaredType() == IPATranscript.class) {
-                final PhointTierUpdater extension = new PhointTierUpdater();
+            if (UserTierType.Wor.getPhonTierName().equals(tier.getName()) && tier.getDeclaredType() == Orthography.class) {
+                final PhointTierUpdater2 extension = new PhointTierUpdater2();
                 final TierEdit.DependentTierChanges existingExtension =  obj.getExtension(TierEdit.DependentTierChanges.class);
                 if(existingExtension == null) {
                     obj.putExtension(TierEdit.DependentTierChanges.class, extension);

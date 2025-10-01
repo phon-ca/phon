@@ -246,6 +246,10 @@ public class IntervalTierComponentUI extends TimeComponentUI {
                     markerRect.getMaxX(),
                     markerRect.getMaxY()));
         }
+
+        for(TimeUIModel.Interval interval:timeComponent.getTimeModel().getIntervals()) {
+            paintInterval(g2, interval, false);
+        }
     }
 
     /**
