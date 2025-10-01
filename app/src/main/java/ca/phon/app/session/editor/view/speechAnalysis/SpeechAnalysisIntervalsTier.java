@@ -42,9 +42,14 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     private int currentIntervalIndex = -1;
 
     /**
-     * Map of tier name to interval tier component
+     * Map of tier name to interval tier components for record data tiers
      */
-    private final Map<String, IntervalTierComponent> intervalTiersMap = new HashMap<>();
+    private final Map<String, IntervalTierComponent> recordDataIntervalTiers = new HashMap<>();
+
+    /**
+     * Map of tier name to interval tier components for session intervalTiers tiers
+     */
+    private final Map<String, IntervalTierComponent> sessionLevelIntervalTiers = new HashMap<>();
 
     public SpeechAnalysisIntervalsTier(SpeechAnalysisEditorView parentView) {
         super(parentView);
@@ -65,8 +70,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final EditorEventType.TierChangeData data = ee.data();
         final Tier<?> tier = data.tier();
 
-        if(intervalTiersMap.containsKey(tier.getName())) {
-            final IntervalTierComponent intervalTierComponent = intervalTiersMap.get(tier.getName());
+        if(recordDataIntervalTiers.containsKey(tier.getName())) {
+            final IntervalTierComponent intervalTierComponent = recordDataIntervalTiers.get(tier.getName());
             intervalTierComponent.repaint();
         }
     }
@@ -116,7 +121,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     setupSelectionInterval(intervalTierComponent, index, interval)
             );
             add(intervalTierComponent);
-            intervalTiersMap.put(worTierDesc.getName(), intervalTierComponent);
+            recordDataIntervalTiers.put(worTierDesc.getName(), intervalTierComponent);
         }
 
         // check for phone intervals tier
@@ -133,7 +138,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     setupSelectionInterval(intervalTierComponent, index, interval)
             );
             add(intervalTierComponent);
-            intervalTiersMap.put(phoTierDesc.getName(), intervalTierComponent);
+            recordDataIntervalTiers.put(phoTierDesc.getName(), intervalTierComponent);
         }
 
         for(String timelineTierName: intervalTiers.getRecordIntervalTiers()) {
@@ -144,7 +149,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     setupSelectionInterval(intervalTierComponent, index, interval)
             );
             add(intervalTierComponent);
-            intervalTiersMap.put(timelineTierName, intervalTierComponent);
+            recordDataIntervalTiers.put(timelineTierName, intervalTierComponent);
         }
 
         for(var timelineTier : intervalTiers.getTiers()) {
@@ -153,7 +158,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     setupSelectionInterval(intervalTierComponent, index, interval)
             );
             add(intervalTierComponent);
-            intervalTiersMap.put(timelineTier.getName(), intervalTierComponent);
+            sessionLevelIntervalTiers.put(timelineTier.getName(), intervalTierComponent);
         }
 
     }
@@ -209,11 +214,11 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     private class WordAndPhoneSelectionListener implements ListSelectionListener {
 
         private IntervalTierComponent wordIntervalTierComponent() {
-            return intervalTiersMap.get(UserTierType.Wor.getPhonTierName());
+            return recordDataIntervalTiers.get(UserTierType.Wor.getPhonTierName());
         }
 
         private IntervalTierComponent phoneIntervalTierComponent() {
-            return intervalTiersMap.get(UserTierType.PhoneIntervals.getPhonTierName());
+            return recordDataIntervalTiers.get(UserTierType.PhoneIntervals.getPhonTierName());
         }
 
         @Override
@@ -283,7 +288,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     private final PropertyChangeListener currentIntervalListener = (e) -> {
         if(currentIntervalTierComponent == null || currentIntervalIndex == -1) return;
         String tierName = null;
-        for(var entry: intervalTiersMap.entrySet()) {
+        for(var entry: recordDataIntervalTiers.entrySet()) {
             if(entry.getValue() == currentIntervalTierComponent) {
                 tierName = entry.getKey();
                 break;
@@ -304,7 +309,23 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                                 (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
                 getParentView().getEditor().getUndoSupport().postEdit(worEdit);
             } else if(UserTierType.PhoneIntervals.getPhonTierName().equals(tierName)) {
-                // update phone intervals
+                // first get the word interval that contains this phone interval,
+                // then all of the other phone intervals within that word interval
+                final IntervalTierComponent wordIntervalTier = recordDataIntervalTiers.get(UserTierType.Wor.getPhonTierName());
+                if(wordIntervalTier == null) return;
+                final IntervalTier.Interval phoneInterval = currentIntervalTierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex);
+                final IntervalTierComponentUI wordTierUI = (IntervalTierComponentUI)wordIntervalTier.getUI();
+                final var wordIndiciesForPhone =
+                        wordTierUI.getIntervalIndicesForTimeRange(phoneInterval.getStart(), phoneInterval.getEnd());
+                if(wordIndiciesForPhone.size() == 0) return;
+                final int wordIndex = wordIndiciesForPhone.get(0);
+                if(wordIndex == -1) return;
+                final IntervalTier.Interval wordInterval = wordIntervalTier.getTimelineTier().getIntervals().get(wordIndex);
+                // get all phone intervals within the word interval
+                final IntervalTierComponentUI phoneTierUI = (IntervalTierComponentUI)currentIntervalTierComponent.getUI();
+                final var phoneIndiciesForWord =
+                        phoneTierUI.getIntervalIndicesForTimeRange(wordInterval.getStart(), wordInterval.getEnd());
+                if(phoneIndiciesForWord.size() == 0) return;
             } else {
 
             }
