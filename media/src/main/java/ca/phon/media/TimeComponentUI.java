@@ -259,7 +259,8 @@ public class TimeComponentUI extends ComponentUI {
 		synchronized(interval) {
 			if(e.getPropertyName().endsWith(".time")) {
 				boolean movingStartMarker = e.getPropertyName().startsWith("startMarker");
-				
+
+                final Marker marker = movingStartMarker ? interval.getStartMarker() : interval.getEndMarker();
 				float oldTime = (float)e.getOldValue();
 				float newTime = (float)e.getNewValue();
 				
@@ -374,12 +375,17 @@ public class TimeComponentUI extends ComponentUI {
 				float newTime = timeComp.timeAtX(e.getX());
 				float oldTime = currentlyDraggedMarker.getTime();
 				int oldX = (int)Math.round(timeComp.xForTime(oldTime));
+
+                if(currentlyDraggedMarker.getMinTime() >= 0)
+                    newTime = Math.max(newTime, currentlyDraggedMarker.getMinTime());
+                if(currentlyDraggedMarker.getMaxTime() >= 0)
+                    newTime = Math.min(newTime, currentlyDraggedMarker.getMaxTime());
 				
-				if(currentlyDraggedInterval != null) {
+				if(currentlyDraggedInterval != null && currentlyDraggedInterval.isAutoSwapMarkers()) {
 					// ensure time values are within interval range
 					if(currentlyDraggedInterval.getStartMarker() == currentlyDraggedMarker) {
 						newTime = Math.min(newTime, currentlyDraggedInterval.getEndMarker().getTime());
-						
+
 						if(newTime >= currentlyDraggedInterval.getEndMarker().getTime()
 								&& (newTime - oldTime >= 0)) {
 							beginDragOtherIntervalMarker();

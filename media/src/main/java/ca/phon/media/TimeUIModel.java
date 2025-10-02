@@ -314,6 +314,11 @@ public class TimeUIModel {
 		private boolean repaintOnTimeChange = true;
 		
 		private TimeComponent owner = null;
+
+        /* Optional min/max time for marker */
+        private float minTime = -1;
+
+        private float maxTime = -1;
 		
 		public Marker(float startTime) {
 			super();
@@ -343,6 +348,26 @@ public class TimeUIModel {
 			this.time = time;
 			propSupport.firePropertyChange("time", oldVal, time);
 		}
+
+        public float getMinTime() {
+            return this.minTime;
+        }
+
+        public void setMinTime(float minTime) {
+            var oldVal = this.minTime;
+            this.minTime = minTime;
+            propSupport.firePropertyChange("minTime", oldVal, minTime);
+        }
+
+        public float getMaxTime() {
+            return this.maxTime;
+        }
+
+        public void setMaxTime(float maxTime) {
+            var oldVal = this.maxTime;
+            this.maxTime = maxTime;
+            propSupport.firePropertyChange("maxTime", oldVal, maxTime);
+        }
 
 		public boolean isValueAdjusting() {
 			return this.valueAdjusting;
@@ -433,6 +458,9 @@ public class TimeUIModel {
 		
 		/* Owner, if not null interval will only be painted on owner component */
 		private TimeComponent owner = null;
+
+        /** Automatically swap start and end markers if start > end */
+        private boolean autoSwapMarkers = true;
 		
 		public Interval() {
 			this(0.0f, 0.0f);
@@ -450,6 +478,16 @@ public class TimeUIModel {
 			this.endMarker = endMarker;
 			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener(this, "endMarker.", propSupport));
 		}
+
+        public boolean isAutoSwapMarkers() {
+            return this.autoSwapMarkers;
+        }
+
+        public void setAutoSwapMarkers(boolean autoSwapMarkers) {
+            var oldVal = this.autoSwapMarkers;
+            this.autoSwapMarkers = autoSwapMarkers;
+            propSupport.firePropertyChange("autoSwapMarkers", oldVal, autoSwapMarkers);
+        }
 		
 		public boolean isRepaintOnTimeChange() {
 			return this.repaintOnTimeChange;

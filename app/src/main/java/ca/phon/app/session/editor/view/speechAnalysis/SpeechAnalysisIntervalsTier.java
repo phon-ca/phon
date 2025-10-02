@@ -180,6 +180,9 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         currentIntervalTierComponent = tierComponent;
         currentIntervalIndex = intervalIndex;
         currentInterval = new TimeUIModel.Interval(interval.getStart(), interval.getEnd());
+        currentInterval.getStartMarker().setMaxTime(interval.getEnd());
+        currentInterval.getEndMarker().setMinTime(interval.getStart());
+        currentInterval.setAutoSwapMarkers(false);
         currentInterval.addPropertyChangeListener(currentIntervalListener);
         intervalTierTimeModel.addInterval(currentInterval);
     }
@@ -296,13 +299,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
         if(tierName == null) return;
         if("startMarker.time".equals(e.getPropertyName()) || "endMarker.time".equals(e.getPropertyName())) {
+            final Record currentRecord = getParentView().getEditor().currentRecord();
+            final MediaSegment seg = currentRecord.getMediaSegment();
+            if(seg.isPoint()) return;
+            final int[] recordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(seg.getStartTime(), seg.getEndTime());
+            final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
+            final int idx = Math.max(0, currentIntervalIndex - offset);
             if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
-                final Record currentRecord = getParentView().getEditor().currentRecord();
-                final MediaSegment seg = currentRecord.getMediaSegment();
-                if(seg.isPoint()) return;
-                final int[] recordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(seg.getStartTime(), seg.getEndTime());
-                final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
-                final int idx = Math.max(0, currentIntervalIndex - offset);
                 final WorTierUpdater updater = new WorTierUpdater(idx, currentInterval);
                 final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
                 final Orthography wor = worTier.getValue();
@@ -319,18 +322,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 final IntervalTierComponent wordIntervalTier = recordDataIntervalTiers.get(UserTierType.Wor.getPhonTierName());
                 if(wordIntervalTier == null) return;
                 final IntervalTier.Interval phoneInterval = currentIntervalTierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex);
-                final IntervalTierComponentUI wordTierUI = (IntervalTierComponentUI)wordIntervalTier.getUI();
-                final var wordIndiciesForPhone =
-                        wordTierUI.getIntervalIndicesForTimeRange(phoneInterval.getStart(), phoneInterval.getEnd());
-                if(wordIndiciesForPhone.size() == 0) return;
-                final int wordIndex = wordIndiciesForPhone.get(0);
-                if(wordIndex == -1) return;
-                final IntervalTier.Interval wordInterval = wordIntervalTier.getTimelineTier().getIntervals().get(wordIndex);
-                // get all phone intervals within the word interval
-                final IntervalTierComponentUI phoneTierUI = (IntervalTierComponentUI)currentIntervalTierComponent.getUI();
-                final var phoneIndiciesForWord =
-                        phoneTierUI.getIntervalIndicesForTimeRange(wordInterval.getStart(), wordInterval.getEnd());
-                if(phoneIndiciesForWord.size() == 0) return;
+
             } else {
 
             }
