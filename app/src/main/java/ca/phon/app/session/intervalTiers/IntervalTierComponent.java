@@ -8,6 +8,7 @@ import ca.phon.ui.text.FileSelectionField;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -122,8 +123,26 @@ public class IntervalTierComponent extends TimeComponent {
         repaint();
     }
 
+    /**
+     * Return the interval tier this component is associated with
+     *
+     * @return the interval tier
+     */
     public IntervalTier getTimelineTier() {
         return intervalTier;
+    }
+
+    /**
+     * Intervals which intersect the given time values
+     *
+     * @param startTime the start time
+     * @param endTime the end time
+     * @return array of interval indices which intersect the given time values
+     */
+    public int[] getIntersectingIntervals(float startTime, float endTime) {
+        final IntervalTierComponentUI ui = (IntervalTierComponentUI) getUI();
+        final List<Integer> intersectingIntervals = ui.getIntervalIndicesForTimeRange(startTime, endTime);
+        return intersectingIntervals.stream().mapToInt(i -> i).toArray();
     }
 
     @Override

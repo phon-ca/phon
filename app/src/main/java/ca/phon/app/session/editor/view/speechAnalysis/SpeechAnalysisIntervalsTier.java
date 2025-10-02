@@ -297,8 +297,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         if(tierName == null) return;
         if("startMarker.time".equals(e.getPropertyName()) || "endMarker.time".equals(e.getPropertyName())) {
             if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
-                final WorTierUpdater updater = new WorTierUpdater(currentIntervalIndex, currentInterval);
                 final Record currentRecord = getParentView().getEditor().currentRecord();
+                final MediaSegment seg = currentRecord.getMediaSegment();
+                if(seg.isPoint()) return;
+                final int[] recordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(seg.getStartTime(), seg.getEndTime());
+                final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
+                final int idx = Math.max(0, currentIntervalIndex - offset);
+                final WorTierUpdater updater = new WorTierUpdater(idx, currentInterval);
                 final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
                 final Orthography wor = worTier.getValue();
                 wor.accept(updater);
@@ -334,8 +339,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 getParentView().getEditor().getUndoSupport().beginUpdate("Adjust interval");
             } else {
                 if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
-                    final WorTierUpdater updater = new WorTierUpdater(currentIntervalIndex, currentInterval);
                     final Record currentRecord = getParentView().getEditor().currentRecord();
+                    final MediaSegment seg = currentRecord.getMediaSegment();
+                    if(seg.isPoint()) return;
+                    final int[] recordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(seg.getStartTime(), seg.getEndTime());
+                    final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
+                    final int idx = Math.max(0, currentIntervalIndex - offset);
+                    final WorTierUpdater updater = new WorTierUpdater(idx, currentInterval);
                     final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
                     final Orthography wor = worTier.getValue();
                     wor.accept(updater);
