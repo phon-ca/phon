@@ -479,10 +479,10 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
             final Tier<IPATranscript> tempTier = SessionFactory.newFactory().createTier(tier.getName(), IPATranscript.class);
             tempTier.setValue((IPATranscript) evt.getData().get().oldValue());
-            final TierAlignment oldAlignment = TierAligner.alignTiers(record.getOrthographyTier(), tempTier);
+            final TierAlignment oldAlignment = TierAligner.alignTiers(record.getOrthographyTier(), tempTier, editor.getDataModel().getTranscriber());
             removeOldAlignmentValues(oldAlignment);
 
-            final TierAlignment alignment = TierAligner.alignTiers(record.getOrthographyTier(), tier);
+            final TierAlignment alignment = TierAligner.alignTiers(record.getOrthographyTier(), tier, editor.getDataModel().getTranscriber());
             scanTierAlignment(alignment);
         } else if(tier.getDeclaredType().equals(Orthography.class)) {
             // XXX removed because the SwingUtilities.invokeLater for tier changes has been removed, no longer necessary
@@ -525,7 +525,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private void scanSession() {
         final var session = editor.getSession();
         for(Record r:session.getRecords()) {
-            CrossTierAlignment alignment = TierAligner.calculateCrossTierAlignment(r, r.getOrthographyTier());
+            CrossTierAlignment alignment = TierAligner.calculateCrossTierAlignment(r, r.getOrthographyTier(), editor.getDataModel().getTranscriber());
             for(Tier<IPATranscript> iapTier:r.getTiersOfType(IPATranscript.class)) {
                 final TierAlignment tierAlignment = alignment.getTierAlignment(iapTier.getName());
                 if(tierAlignment != null) {

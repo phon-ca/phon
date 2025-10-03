@@ -179,9 +179,18 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
         currentIntervalTierComponent = tierComponent;
         currentIntervalIndex = intervalIndex;
+        final IntervalTier.Interval previousInterval = currentIntervalIndex > 0 ? tierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex-1) : null;
+        final IntervalTier.Interval nextInterval = (currentIntervalIndex < tierComponent.getTimelineTier().getIntervals().size() - 1) ?
+                tierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex+1) : null;
         currentInterval = new TimeUIModel.Interval(interval.getStart(), interval.getEnd());
         currentInterval.getStartMarker().setMaxTime(interval.getEnd());
+        if(previousInterval != null) {
+            currentInterval.getStartMarker().setMinTime(previousInterval.getStart());
+        }
         currentInterval.getEndMarker().setMinTime(interval.getStart());
+        if(nextInterval != null) {
+            currentInterval.getEndMarker().setMaxTime(nextInterval.getEnd());
+        }
         currentInterval.setAutoSwapMarkers(false);
         currentInterval.addPropertyChangeListener(currentIntervalListener);
         intervalTierTimeModel.addInterval(currentInterval);
@@ -306,11 +315,44 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
             final int idx = Math.max(0, currentIntervalIndex - offset);
             if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
-                final WorTierUpdater updater = new WorTierUpdater(idx, currentInterval);
+                final InternalMedia newInterval = new InternalMedia(currentInterval.getStartMarker().getTime(), currentInterval.getEndMarker().getTime());
+                final WorTierUpdater updater = new WorTierUpdater(idx, newInterval);
                 final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
                 final Orthography wor = worTier.getValue();
                 wor.accept(updater);
                 final Orthography updatedWor = updater.getUpdatedOrthography();
+
+                // if modifying the first or last interval, and the start/end time overlaps the previous/next
+                // record segment, update the %wor tier for the previous/next record as well  Do this first to avoid
+                // issues with overlapping record intervals
+                if(idx == 0) {
+                    final int prevRecordIdx = getParentView().getEditor().getCurrentRecordIndex() - 1;
+                    if(prevRecordIdx >= 0) {
+                        final Record prevRecord = getParentView().getEditor().getSession().getRecord(prevRecordIdx);
+                        final MediaSegment prevSeg = prevRecord.getMediaSegment();
+                        final int[] prevRecordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(prevSeg.getStartTime(), prevSeg.getEndTime());
+                        if(prevRecordIntervalIndices.length == 0) return;
+
+                        // modify the previous segment end time if it overlaps
+                        if(prevSeg.getEndTime() > currentInterval.getStartMarker().getTime()) {
+                            final Tier<Orthography> prevWorTier = (Tier<Orthography>)prevRecord.getTier(tierName);
+                            final Orthography prevWor = prevWorTier.getValue();
+                            final var lastRecordInterval = prevRecordIntervalIndices[prevRecordIntervalIndices.length - 1];
+                            final int prevIdx = Math.max(0, lastRecordInterval - prevRecordIntervalIndices[0]);
+                            final InternalMedia prevNewInterval = new InternalMedia(prevSeg.getStartTime(), currentInterval.getStartMarker().getTime());
+                            final WorTierUpdater prevUpdater = new WorTierUpdater(prevIdx, prevNewInterval);
+                            prevWor.accept(prevUpdater);
+                            final Orthography updatedPrevWor = prevUpdater.getUpdatedOrthography();
+                            System.out.println(updatedPrevWor);
+                            final TierEdit<Orthography> prevWorEdit =
+                                    new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
+                                            getParentView().getEditor().getDataModel().getTranscriber(), prevRecord,
+                                            (Tier<Orthography>)prevRecord.getTier(UserTierType.Wor.getPhonTierName()), updatedPrevWor, currentInterval.isValueAdjusting());
+                            getParentView().getEditor().getUndoSupport().postEdit(prevWorEdit);
+                        }
+                    }
+                }
+
                 final TierEdit<Orthography> worEdit =
                         new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
                                 getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
@@ -337,7 +379,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     final int[] recordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(seg.getStartTime(), seg.getEndTime());
                     final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
                     final int idx = Math.max(0, currentIntervalIndex - offset);
-                    final WorTierUpdater updater = new WorTierUpdater(idx, currentInterval);
+                    final InternalMedia newInterval = new InternalMedia(this.currentInterval.getStartMarker().getTime(), this.currentInterval.getEndMarker().getTime());
+                    final WorTierUpdater updater = new WorTierUpdater(idx, newInterval);
                     final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
                     final Orthography wor = worTier.getValue();
                     wor.accept(updater);
@@ -357,13 +400,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
         private final int intervalIndex;
 
-        private TimeUIModel.Interval newInterval;
+        private InternalMedia newInterval;
 
         private OrthographyBuilder builder = new OrthographyBuilder();
 
         private int currentIndex = 0;
 
-        public WorTierUpdater(int intervalIndex, TimeUIModel.Interval newInterval) {
+        public WorTierUpdater(int intervalIndex, InternalMedia newInterval) {
             super();
             this.intervalIndex = intervalIndex;
             this.newInterval = newInterval;
@@ -372,9 +415,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         @Visits
         public void visitInternalMedia(InternalMedia internalMedia) {
             if(currentIndex == intervalIndex) {
-                final InternalMedia newInternalMedia =
-                        new InternalMedia(newInterval.getStartMarker().getTime(), newInterval.getEndMarker().getTime());
-                builder.append(newInternalMedia);
+                builder.append(newInterval);
             } else {
                 builder.append(internalMedia);
             }

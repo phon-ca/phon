@@ -4,6 +4,7 @@ import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.Word;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.ArrayList;
@@ -87,10 +88,13 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
     }
 
     @Override
-    public List<?> filterTier(Tier<?> tier) {
+    public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
         if(tier.getDeclaredType() != Orthography.class)
             return new ArrayList<>();
-        return filterOrthography((Orthography) tier.getValue());
+        final Orthography value = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                (Orthography) tier.getBlindTranscription(transcriber.getUsername()) :
+                (Orthography) tier.getValue();
+        return filterOrthography(value);
     }
 
     public final class OrthographyFilter extends AbstractOrthographyVisitor {

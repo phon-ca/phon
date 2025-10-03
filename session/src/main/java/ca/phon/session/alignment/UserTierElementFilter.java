@@ -1,6 +1,7 @@
 package ca.phon.session.alignment;
 
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.session.tierdata.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -37,11 +38,13 @@ public class UserTierElementFilter implements TierElementFilter {
     }
 
     @Override
-    public List<?> filterTier(Tier<?> tier) {
+    public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
         if(tier.getDeclaredType() != TierData.class)
             throw new IllegalArgumentException();
         final UserTierAlignmentFilter alignmentFilter = new UserTierAlignmentFilter();
-        TierData tierData = (TierData) tier.getValue();
+        TierData tierData = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                (TierData) tier.getBlindTranscription(transcriber.getUsername()) :
+                (TierData) tier.getValue();
         tierData.accept(alignmentFilter);
         return alignmentFilter.getElements();
     }

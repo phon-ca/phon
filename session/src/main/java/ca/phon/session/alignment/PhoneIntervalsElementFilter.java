@@ -1,6 +1,7 @@
 package ca.phon.session.alignment;
 
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
@@ -50,10 +51,12 @@ public class PhoneIntervalsElementFilter extends VisitorAdapter<TierElement> imp
     }
 
     @Override
-    public List<?> filterTier(Tier<?> tier) {
+    public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
         reset();
         if(tier.getDeclaredType() != TierData.class) return List.of();
-        final TierData tierData = (TierData) tier.getValue();
+        final TierData tierData = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                (TierData) tier.getBlindTranscription(transcriber.getUsername()) :
+                (TierData) tier.getValue();
         if(tierData == null) return List.of();
         tierData.accept(this);
         final List<TierData> result = new ArrayList<>(this.tierDataList);

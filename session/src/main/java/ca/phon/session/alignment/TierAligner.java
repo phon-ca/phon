@@ -2,14 +2,19 @@ package ca.phon.session.alignment;
 
 import ca.phon.orthography.OrthographyElement;
 import ca.phon.orthography.mor.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
-import ca.phon.session.UserTierType;
 import ca.phon.util.Tuple;
 
 import java.util.*;
 
+/**
+ * Helper class for aligning two tiers of a record. Tier values are first filtered using tier alignment rules
+ * and then left-aligned. The result is a list of tuples where each tuple contains an element from the top tier
+ * and an element from the bottom tier. If one tier has more elements than the other, nulls are used to fill in the gaps
+ * (i.e., 'indels.')
+ *
+ */
 public final class TierAligner {
 
     /**
@@ -31,17 +36,26 @@ public final class TierAligner {
         return retVal;
     }
 
-    public static TierAlignment alignTiers(Tier<?> topTier, Tier<?> bottomTier, TierAlignmentRules tierAlignmentRules) {
+    /**
+     * Align two tiers using the given tier alignment rules
+     *
+     * @param topTier top tier
+     * @param bottomTier bottom tier
+     * @param tierAlignmentRules tier alignment rules
+     * @param transcriber transcriber the blind transcriber used to transcribe the record
+     * @return tier alignment
+     */
+    public static TierAlignment alignTiers(Tier<?> topTier, Tier<?> bottomTier, TierAlignmentRules tierAlignmentRules, Transcriber transcriber) {
         final TierElementFilter tier1Filter = tierAlignmentRules.getFilterForTier(topTier.getName());
-        final List<?> topElements = tier1Filter.filterTier(topTier);
+        final List<?> topElements = tier1Filter.filterTier(topTier, transcriber);
         final TierElementFilter tier2Filter = tierAlignmentRules.getFilterForTier(bottomTier.getName());
-        final List<?> bottomElements = tier2Filter.filterTier(bottomTier);
+        final List<?> bottomElements = tier2Filter.filterTier(bottomTier, transcriber);
         return new TierAlignment(topTier, bottomTier, mapAlignedElements(topElements, bottomElements));
     }
 
     @SuppressWarnings("unchecked")
-    public static TierAlignment alignTiers(Tier<?> topTier, Tier<?> bottomTier) {
-        return alignTiers(topTier, bottomTier, TierAlignmentRules.defaultTierAlignmentRules(topTier, bottomTier));
+    public static TierAlignment alignTiers(Tier<?> topTier, Tier<?> bottomTier, Transcriber transcriber) {
+        return alignTiers(topTier, bottomTier, TierAlignmentRules.defaultTierAlignmentRules(topTier, bottomTier), transcriber);
     }
 
     /**
@@ -50,8 +64,8 @@ public final class TierAligner {
      * @param record
      * @return cross tier alignment for record against Orthography
      */
-    public static CrossTierAlignment calculateCrossTierAlignment(Record record) {
-        return calculateCrossTierAlignment(record, record.getOrthographyTier());
+    public static CrossTierAlignment calculateCrossTierAlignment(Record record, Transcriber transcriber) {
+        return calculateCrossTierAlignment(record, record.getOrthographyTier(), transcriber);
     }
 
     /**
@@ -62,22 +76,22 @@ public final class TierAligner {
      *
      * @return cross tier alignment for record
      */
-    public static CrossTierAlignment calculateCrossTierAlignment(Record record, Tier<?> topTier) {
+    public static CrossTierAlignment calculateCrossTierAlignment(Record record, Tier<?> topTier, Transcriber transcriber) {
         Map<String, TierAlignment> alignmentMap = new LinkedHashMap<>();
         if(!topTier.isExcludeFromAlignment()) {
             if(topTier != record.getOrthographyTier())
                 alignmentMap.put(SystemTierType.Orthography.getName(),
-                        TierAligner.alignTiers(topTier, record.getOrthographyTier()));
+                        TierAligner.alignTiers(topTier, record.getOrthographyTier(), transcriber));
             if(topTier != record.getIPATargetTier())
                 alignmentMap.put(SystemTierType.IPATarget.getName(),
-                        TierAligner.alignTiers(topTier, record.getIPATargetTier()));
+                        TierAligner.alignTiers(topTier, record.getIPATargetTier(), transcriber));
             if(topTier != record.getIPAActualTier())
                 alignmentMap.put(SystemTierType.IPAActual.getName(),
-                        TierAligner.alignTiers(topTier, record.getIPAActualTier()));
+                        TierAligner.alignTiers(topTier, record.getIPAActualTier(), transcriber));
             if(record.getPhoneAlignmentTier() != null) {
                 if(topTier != record.getPhoneAlignmentTier())
                     alignmentMap.put(SystemTierType.PhoneAlignment.getName(),
-                            TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier()));
+                            TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier(), transcriber));
             }
             for(String tierName:record.getUserDefinedTierNames()) {
                 final Tier<?> bottomTier = record.getTier(tierName);
@@ -86,7 +100,7 @@ public final class TierAligner {
                     final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
                     if(userTierType == UserTierType.Mor || userTierType == UserTierType.Trn) {
                         // align with orthography only
-                        alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+                        alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier, transcriber));
                     }
                 }
                 if(topTier == record.getOrthographyTier() && bottomTier.getDeclaredType() == GraspTierData.class) {
@@ -99,8 +113,8 @@ public final class TierAligner {
                         morTier = record.getTier(UserTierType.Trn.getPhonTierName(), MorTierData.class);
                     }
                     if(morTier != null && morTier.hasValue()) {
-                        final TierAlignment orthoMorAlignment = TierAligner.alignTiers(topTier, morTier);
-                        final TierAlignment morGraAlignment = TierAligner.alignTiers(morTier, bottomTier);
+                        final TierAlignment orthoMorAlignment = TierAligner.alignTiers(topTier, morTier, transcriber);
+                        final TierAlignment morGraAlignment = TierAligner.alignTiers(morTier, bottomTier, transcriber);
                         final List<Tuple<?, ?>> orthoGraMap = new ArrayList<>();
                         for(Tuple alignedElements:orthoMorAlignment.getAlignedElements()) {
                             final OrthographyElement orthoEle = (OrthographyElement) alignedElements.getObj1();
@@ -133,15 +147,15 @@ public final class TierAligner {
                     final UserTierType graType = UserTierType.fromPhonTierName(bottomTier.getName());
                     if((morType == UserTierType.Mor && graType == UserTierType.Gra)
                         || (morType == UserTierType.Trn && graType == UserTierType.Grt)) {
-                        alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+                        alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier, transcriber));
                     }
                 }
                 if(topTier != bottomTier && bottomTier != null && bottomTier.hasValue() && !bottomTier.isExcludeFromAlignment()) {
-                    alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+                    alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier, transcriber));
                 }
             }
         }
-        return new CrossTierAlignment(topTier, alignmentMap);
+        return new CrossTierAlignment(topTier, alignmentMap, transcriber);
     }
 
 }

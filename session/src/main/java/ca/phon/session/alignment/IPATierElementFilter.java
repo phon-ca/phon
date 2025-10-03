@@ -4,6 +4,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,13 +31,17 @@ public class IPATierElementFilter implements TierElementFilter {
     }
 
     @Override
-    public List<?> filterTier(Tier<?> tier) {
+    public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
         final Class<?> declaredType = tier.getDeclaredType();
         if(declaredType == IPATranscript.class) {
-            final IPATranscript transcript = (IPATranscript) tier.getValue();
+            final IPATranscript transcript = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                    (IPATranscript) tier.getBlindTranscription(transcriber.getUsername()) :
+                    (IPATranscript) tier.getValue();
             return transcript.words().stream().filter(this::test).toList();
         } else if(declaredType == PhoneAlignment.class) {
-            final PhoneAlignment phoneAlignment = (PhoneAlignment) tier.getValue();
+            final PhoneAlignment phoneAlignment = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                    (PhoneAlignment) tier.getBlindTranscription(transcriber.getUsername()) :
+                    (PhoneAlignment) tier.getValue();
             return phoneAlignment.getAlignments().stream().filter(this::test).toList();
         } else {
             throw new IllegalArgumentException();

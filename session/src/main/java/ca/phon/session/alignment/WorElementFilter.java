@@ -2,6 +2,7 @@ package ca.phon.session.alignment;
 
 import ca.phon.orthography.*;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -53,10 +54,12 @@ public class WorElementFilter extends VisitorAdapter<OrthographyElement> impleme
     }
 
     @Override
-    public List<?> filterTier(Tier<?> tier) {
+    public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
         this.wordIntervalPairs.clear();
         if(tier.getDeclaredType() != Orthography.class) return List.of();
-        final Orthography value = (Orthography)tier.getValue();
+        final Orthography value = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                (Orthography) tier.getBlindTranscription(transcriber.getUsername()) :
+                (Orthography) tier.getValue();
         value.accept(this);
         return wordIntervalPairs;
     }

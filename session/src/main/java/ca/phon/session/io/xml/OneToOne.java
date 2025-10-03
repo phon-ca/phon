@@ -6,6 +6,7 @@ import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.Transcriber;
 import ca.phon.session.UserTierType;
 import ca.phon.session.alignment.CrossTierAlignment;
 import ca.phon.session.alignment.TierAligner;
@@ -51,11 +52,22 @@ public class OneToOne {
     /**
      * Apply OneToOne annotation to relevant objects before xml output.
      *
-     * @param record
+     * @param record the record to annotate
      *
      */
     public static void annotateRecord(Record record) {
-        final CrossTierAlignment xTierAlignment = TierAligner.calculateCrossTierAlignment(record);
+        annotateRecord(record, Transcriber.VALIDATOR);
+    }
+
+    /**
+     * Apply OneToOne annotation to relevant objects before xml output.
+     *
+     * @param record the record to annotate
+     * @param transcriber the transcriber to use for blind tiers
+     *
+     */
+    public static void annotateRecord(Record record, Transcriber transcriber) {
+        final CrossTierAlignment xTierAlignment = TierAligner.calculateCrossTierAlignment(record, transcriber);
         final OrthographyAnnotator annotator = new OrthographyAnnotator(xTierAlignment);
         record.getOrthographyTier().getValue().accept(annotator);
     }

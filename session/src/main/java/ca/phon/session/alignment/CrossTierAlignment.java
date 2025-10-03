@@ -3,10 +3,8 @@ package ca.phon.session.alignment;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
-import ca.phon.session.UserTierType;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Tuple;
 
@@ -22,10 +20,13 @@ public class CrossTierAlignment {
 
     private final Map<String, TierAlignment> tierAlignments;
 
-    public CrossTierAlignment(Tier<?> topTier, Map<String, TierAlignment> alignmentMap) {
+    private final Transcriber transcriber;
+
+    public CrossTierAlignment(Tier<?> topTier, Map<String, TierAlignment> alignmentMap, Transcriber transcriber) {
         super();
         this.topTier = topTier;
         this.tierAlignments = alignmentMap;
+        this.transcriber = transcriber;
     }
 
     public Tier<?> getTopTier() {
@@ -127,7 +128,7 @@ public class CrossTierAlignment {
                     // TODO handle grasp tier alignment with mor
                     continue;
                 }
-                List<?> filteredElements = filter.filterTier(tierAlignment.getTopTier());
+                List<?> filteredElements = filter.filterTier(tierAlignment.getTopTier(), transcriber);
                 if(!filteredElements.contains(obj)) {
                     continue;
                 }

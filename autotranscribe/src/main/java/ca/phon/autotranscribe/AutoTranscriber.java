@@ -7,6 +7,7 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.orthography.*;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.session.alignment.TierElementFilter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -27,8 +28,20 @@ public class AutoTranscriber {
      */
     private Comparator<IPATranscript> ipaComparator = null;
 
+    /**
+     * Blind transcriber for orthography values
+     */
+    private final Transcriber transcriber;
+
+    /**
+     * Create a new auto transcriber with no sources and default transcriber
+     */
     public AutoTranscriber() {
         this(new ArrayList<>());
+    }
+
+    public AutoTranscriber(Transcriber transcriber) {
+        this(new ArrayList<>(), transcriber);
     }
 
     /**
@@ -36,7 +49,12 @@ public class AutoTranscriber {
      * @param sources
      */
     public AutoTranscriber(List<AutoTranscribeSource> sources) {
+        this(sources, Transcriber.VALIDATOR);
+    }
+
+    public AutoTranscriber(List<AutoTranscribeSource> sources, Transcriber transcriber) {
         this.sources = sources;
+        this.transcriber = transcriber;
     }
 
     public List<AutoTranscribeSource> getSources() {
@@ -135,7 +153,7 @@ public class AutoTranscriber {
         final Tier<Orthography> orthoTier = SessionFactory.newFactory().createTier("orthotemp", Orthography.class, new HashMap<>(), false, false);
         orthoTier.setValue(orthography);
 
-        List<OrthographyElement> orthographyElements = (List<OrthographyElement>) orthoFilter.filterTier(orthoTier);
+        List<OrthographyElement> orthographyElements = (List<OrthographyElement>) orthoFilter.filterTier(orthoTier, transcriber);
         int wordCount = 0;
         for(int i = fromWord; i < orthographyElements.size() && (toWord >= 0 ? i < toWord : true); i++) {
             final OrthographyElement element = orthographyElements.get(i);

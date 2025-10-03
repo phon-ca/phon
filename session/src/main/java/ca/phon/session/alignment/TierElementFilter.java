@@ -9,6 +9,7 @@ import ca.phon.orthography.mor.MorTierData;
 import ca.phon.orthography.mor.MorphemicBaseType;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.session.UserTierType;
 import ca.phon.session.tierdata.TierData;
 
@@ -191,8 +192,11 @@ public interface TierElementFilter {
     public static TierElementFilter defaultMorTierElementFilter() {
         return new TierElementFilter() {
             @Override
-            public List<?> filterTier(Tier<?> tier) {
-                return ((Tier<MorTierData>)tier).getValue().getMors();
+            public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
+                final MorTierData morTierData = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                        (MorTierData) tier.getBlindTranscription(transcriber.getUsername()) :
+                        (MorTierData) tier.getValue();
+                return morTierData.getMors();
             }
         };
     }
@@ -205,9 +209,11 @@ public interface TierElementFilter {
     public static TierElementFilter morFilterForGraspTierAlignment() {
         return new TierElementFilter() {
             @Override
-            public List<?> filterTier(Tier<?> tier) {
+            public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
                 List<MorphemicBaseType> retVal = new ArrayList<>();
-                final MorTierData morTierData = (MorTierData) tier.getValue();
+                final MorTierData morTierData = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                        (MorTierData) tier.getBlindTranscription(transcriber.getUsername()) :
+                        (MorTierData) tier.getValue();
                 for(Mor mor:morTierData) {
                     mor.getMorPres().forEach(retVal::add);
                     retVal.add(mor);
@@ -225,8 +231,11 @@ public interface TierElementFilter {
     public static TierElementFilter defaultGraTierElementFilter() {
         return new TierElementFilter() {
             @Override
-            public List<?> filterTier(Tier<?> tier) {
-                return ((Tier<GraspTierData>)tier).getValue().getGrasps();
+            public List<?> filterTier(Tier<?> tier, Transcriber transcriber) {
+                final GraspTierData graTierData = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
+                        (GraspTierData) tier.getBlindTranscription(transcriber.getUsername()) :
+                        (GraspTierData) tier.getValue();
+                return graTierData.getGrasps();
             }
         };
     }
@@ -261,6 +270,6 @@ public interface TierElementFilter {
      * @param tier
      * @return list of alignable elements in tier
      */
-    public List<?> filterTier(Tier<?> tier);
+    public List<?> filterTier(Tier<?> tier, Transcriber transcriber);
 
 }
