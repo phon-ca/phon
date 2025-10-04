@@ -84,7 +84,7 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 
 			if( (diffMs < 0) && (Math.abs(diffMs) > getOverlapTolerance()) ) {
 				// issue warning
-				final ValidationEvent evt = new ValidationEvent(session, rIdx, "Segment overlaps with previous record for " + r.getSpeaker() + " (#" + (lastRecords.get(r.getSpeaker())+1) + ")");
+				final ValidationEvent evt = new ValidationEvent(session, rIdx, Transcriber.VALIDATOR, "Segment overlaps with previous record for " + r.getSpeaker() + " (#" + (lastRecords.get(r.getSpeaker())+1) + ")");
 				validator.fireValidationEvent(evt);
 			}
 			lastEndTime = segment.getEndValue();

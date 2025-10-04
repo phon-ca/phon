@@ -66,7 +66,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
             final PhoneAlignment alignmentTier = r.getPhoneAlignmentTier().getValueForTranscriber(transcriber).orElse(r.getPhoneAlignment());
             if (alignmentTier.getAlignments().size() != maxWords) {
                 // alignment tier does not match number of words
-                ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(),
+                ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(), transcriber,
                         "Alignments in tier do not match number of words", new ResetAlignmentQuickFix());
                 validator.fireValidationEvent(evt);
             }
@@ -74,13 +74,13 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
             int audiblePhonesA = ipaA.audiblePhones().length();
             if (audiblePhonesT != alignmentTier.getFullAlignment().getTopElements().length) {
                 // alignment tier does not match number of audible phones in target
-                ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(),
+                ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(), transcriber,
                         "Target alignment does not match number of audible phones", new ResetAlignmentQuickFix());
                 validator.fireValidationEvent(evt);
             }
             if (audiblePhonesA != alignmentTier.getFullAlignment().getBottomElements().length) {
                 // alignment tier does not match number of audible phones in actual
-                ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(),
+                ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(), transcriber,
                         "Actual alignment does not match number of audible phones", new ResetAlignmentQuickFix());
                 validator.fireValidationEvent(evt);
             }
@@ -89,7 +89,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
                 PhoneAlignment newAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
                 r.getPhoneAlignmentTier().setValueForTranscriber(transcriber, newAlignment);
                 modified = true;
-                ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(),
+                ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(), transcriber,
                         "Alignment was reset for record #" + (rIdx + 1));
                 validator.fireValidationEvent(evt);
             }

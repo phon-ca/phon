@@ -17,6 +17,7 @@ package ca.phon.session.check;
 
 import ca.phon.extensions.*;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 import java.util.*;
 
@@ -30,70 +31,77 @@ public class ValidationEvent implements IExtendable {
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(ValidationEvent.class, this);
 
-	private Severity severity = Severity.WARNING;
+	private final Severity severity;
 
-	private Session session;
+	private final Session session;
 	
-	private int elementIndex;
+	private final int elementIndex;
 	
-	private String tierName;
+	private final String tierName;
 	
-	private String message;
-	
-	private List<SessionQuickFix> quickFixes;
+	private final String message;
 
-	public ValidationEvent(Severity severity, Session session, String message) {
-		this(severity, session, message, new SessionQuickFix[0]);
+    private final Transcriber transcriber;
+	
+	private final List<SessionQuickFix> quickFixes;
+
+	public ValidationEvent(Severity severity, Session session, Transcriber transcriber, String message) {
+		this(severity, session, transcriber, message, new SessionQuickFix[0]);
 	}
 
-	public ValidationEvent(Session session, String message) {
-		this(Severity.WARNING, session, message);
+	public ValidationEvent(Session session, Transcriber transcriber, String message) {
+		this(Severity.WARNING, session, transcriber, message);
 	}
 
-	public ValidationEvent(Severity severity, Session session, String message, SessionQuickFix ... quickFixes) {
+	public ValidationEvent(Severity severity, Session session, Transcriber transcriber, String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.severity = severity;
 		this.session = session;
 		this.message = message;
+        this.transcriber = transcriber;
+        this.elementIndex = -1;
+        this.tierName = null;
 		this.quickFixes = List.of(quickFixes);
 
 	}
 
-	public ValidationEvent(Session session, String message, SessionQuickFix ... quickFixes) {
-		this(Severity.WARNING, session, message, quickFixes);
+	public ValidationEvent(Session session, Transcriber transcriber, String message, SessionQuickFix ... quickFixes) {
+		this(Severity.WARNING, session, transcriber, message, quickFixes);
 	}
 
-	public ValidationEvent(Severity severity, Session session, int elementIndex, String message) {
-		this(severity, session, elementIndex, message, new SessionQuickFix[0]);
+	public ValidationEvent(Severity severity, Session session, int elementIndex, Transcriber transcriber, String message) {
+		this(severity, session, elementIndex, transcriber, message, new SessionQuickFix[0]);
 	}
 
-	public ValidationEvent(Session session, int elementIndex, String message) {
-		this(Severity.WARNING, session, elementIndex, message);
+	public ValidationEvent(Session session, int elementIndex, Transcriber transcriber, String message) {
+		this(Severity.WARNING, session, elementIndex, transcriber, message);
 	}
 
-	public ValidationEvent(Severity severity, Session session, int elementIndex, String message, SessionQuickFix ... quickFixes) {
+	public ValidationEvent(Severity severity, Session session, int elementIndex, Transcriber transcriber, String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.severity = severity;
 		this.session = session;
 		this.elementIndex = elementIndex;
 		this.message = message;
+        this.transcriber = transcriber;
+        this.tierName = null;
 		this.quickFixes = List.of(quickFixes);
 	}
 
-	public ValidationEvent(Session session, int elementIndex, String message, SessionQuickFix ... quickFixes) {
-		this(Severity.WARNING, session, elementIndex, message, quickFixes);
+	public ValidationEvent(Session session, int elementIndex, Transcriber transcriber, String message, SessionQuickFix ... quickFixes) {
+		this(Severity.WARNING, session, elementIndex, transcriber, message, quickFixes);
 	}
 
-	public ValidationEvent(Session session, int elementIndex, String tierName, String message) {
-		this(session, elementIndex, tierName, message, new SessionQuickFix[0]);
+	public ValidationEvent(Session session, int elementIndex, String tierName, Transcriber transcriber, String message) {
+		this(session, elementIndex, tierName, transcriber, message, new SessionQuickFix[0]);
 	}
 
-	public ValidationEvent(Session session, int elementIndex, String tierName,
+	public ValidationEvent(Session session, int elementIndex, String tierName, Transcriber transcriber,
 						   String message, SessionQuickFix ... quickFixes) {
-		this(Severity.WARNING, session, elementIndex, tierName, message, quickFixes);
+		this(Severity.WARNING, session, elementIndex, tierName, transcriber, message, quickFixes);
 	}
 
-	public ValidationEvent(Severity severity, Session session, int elementIndex, String tierName,
+	public ValidationEvent(Severity severity, Session session, int elementIndex, String tierName, Transcriber transcriber,
 						   String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.severity = severity;
@@ -101,49 +109,34 @@ public class ValidationEvent implements IExtendable {
 		this.elementIndex = elementIndex;
 		this.tierName = tierName;
 		this.message = message;
+        this.transcriber = transcriber;
 		this.quickFixes = List.of(quickFixes);
 	}
 
+    public Transcriber getTranscriber() {
+        return this.transcriber;
+    }
+
 	public Severity getSeverity() {
 		return this.severity;
-	}
-
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
 	}
 
 	public Session getSession() {
 		return session;
 	}
 
-	public void setSession(Session session) {
-		this.session = session;
-	}
-
 	public int getElementIndex() {
 		return elementIndex;
-	}
-
-	public void setElementIndex(int elementIndex) {
-		this.elementIndex = elementIndex;
 	}
 
 	public String getTierName() {
 		return tierName;
 	}
 
-	public void setTierName(String tierName) {
-		this.tierName = tierName;
-	}
-
 	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
 	/**
 	 * Can this event be automatically fixed?  Sub-classes
 	 * should override this method.

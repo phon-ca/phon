@@ -52,28 +52,28 @@ public class SessionValidator implements IExtendable {
 		this.sessionChecks.addAll(sessionChecks);
 	}
 
-	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, String message) {
-		fireValidationEvent(new ValidationEvent(severity, session, message));
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, Transcriber transcriber, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, transcriber, message));
 	}
 
-	public void fireValidationEvent(Session session, String message) {
-		fireValidationEvent(new ValidationEvent(session, message));
+	public void fireValidationEvent(Session session, Transcriber transcriber, String message) {
+		fireValidationEvent(new ValidationEvent(session, transcriber, message));
 	}
 
-	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String message) {
-		fireValidationEvent(new ValidationEvent(severity, session, record, message));
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, Transcriber transcriber, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, record, transcriber, message));
 	}
 
-	public void fireValidationEvent(Session session, int record, String message) {
-		fireValidationEvent(new ValidationEvent(session, record, message));
+	public void fireValidationEvent(Session session, int record, Transcriber transcriber, String message) {
+		fireValidationEvent(new ValidationEvent(session, record, transcriber, message));
 	}
 
-	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String tierName, String message) {
-		fireValidationEvent(new ValidationEvent(severity, session, record, tierName, message));
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String tierName, Transcriber transcriber, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, record, tierName, transcriber, message));
 	}
 
-	public void fireValidationEvent(Session session, int record, String tierName, String message) {
-		fireValidationEvent(new ValidationEvent(session, record, tierName, message));
+	public void fireValidationEvent(Session session, int record, String tierName, Transcriber transcriber, String message) {
+		fireValidationEvent(new ValidationEvent(session, record, tierName, transcriber, message));
 	}
 
 	public void fireValidationEvent(final ValidationEvent evt) {

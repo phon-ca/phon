@@ -97,7 +97,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
                         ipaT = ipaTSyllabifier.syllabify(ipaT);
                         r.getIPATargetTier().setValueForTranscriber(transcriber, ipaT);
                         final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
-                                SystemTierType.IPATarget.getName(), "IPA target syllabification reset for record #" + rIdx);
+                                SystemTierType.IPATarget.getName(), transcriber, "IPA target syllabification reset for record #" + rIdx);
                         validator.fireValidationEvent(evt);
                     }
                 }
@@ -108,7 +108,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
                         ipaA = ipaASyllabifier.syllabify(ipaA);
                         r.getIPAActualTier().setValueForTranscriber(transcriber, ipaA);
                         final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
-                                SystemTierType.IPAActual.getName(), "IPA actual syllabification reset for record #" + rIdx);
+                                SystemTierType.IPAActual.getName(), transcriber, "IPA actual syllabification reset for record #" + rIdx);
                         validator.fireValidationEvent(evt);
                     }
                 }
@@ -117,7 +117,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				final PhoneAlignment alignment = PhoneAlignment.fromTiers(transcriptElement.asRecord().getIPATargetTier(), transcriptElement.asRecord().getIPAActualTier(), transcriber);
 				r.getPhoneAlignmentTier().setValueForTranscriber(transcriber, alignment);
 				final ValidationEvent alignEvt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
-						SystemTierType.PhoneAlignment.getName(), "Phone alignment reset for record #" + rIdx);
+						SystemTierType.PhoneAlignment.getName(), transcriber, "Phone alignment reset for record #" + rIdx);
 				validator.fireValidationEvent(alignEvt);
 
 				for(Tier<IPATranscript> ipaUserTier: transcriptElement.asRecord().getTiersOfType(IPATranscript.class)) {
@@ -128,7 +128,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 					ipa = syllabifier.syllabify(ipa);
                     ipaUserTier.setValueForTranscriber(transcriber, ipa);
 					final ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, eleIdx,
-							ipaUserTier.getName(), ipaUserTier.getName() + " syllabification reset for record #" + rIdx);
+							ipaUserTier.getName(), transcriber, ipaUserTier.getName() + " syllabification reset for record #" + rIdx);
 					validator.fireValidationEvent(evt);
 				}
 				modified = true;
@@ -157,20 +157,20 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 	private boolean checkRecord(SessionValidator validator, Session session, int eleIdx, Record record, Transcriber transcriber) {
 		if(record.getSpeaker() == Participant.UNKNOWN) {
-			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Record", "Speaker is unidentified"));
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Record", transcriber, "Speaker is unidentified"));
 		}
 
         boolean isOrthoValid = true;
         if(transcriber == Transcriber.VALIDATOR || !record.getOrthographyTier().isBlind()) {
             if(record.getOrthographyTier().isUnvalidated()) {
                 isOrthoValid = false;
-                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(),
+                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(), transcriber,
                         record.getOrthographyTier().getUnvalidatedValue().getParseError().getMessage()));
             }
         } else {
             if(record.getOrthographyTier().isBlindTranscriptionUnvalidated(transcriber.getUsername())) {
                 isOrthoValid = false;
-                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(),
+                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(), transcriber,
                         record.getOrthographyTier().getBlindUnvalidatedValue(transcriber.getUsername()).getParseError().getMessage()));
             }
         }
@@ -193,7 +193,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 						return true;
 					}
 				};
-				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(),
+				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(), transcriber,
 					"Orthography is blank", quickFix));
 			} else {
 				// check for terminator
@@ -214,7 +214,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 							return true;
 						}
 					};
-					validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.Orthography.getName(),
+					validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.Orthography.getName(), transcriber,
 						"Orthography does not end with a terminator", quickFix));
 				}
 			}
@@ -223,24 +223,24 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		// check default ipa tiers
         if(transcriber == Transcriber.VALIDATOR || !record.getIPATargetTier().isBlind()) {
             if (record.getIPATargetTier().isUnvalidated()) {
-                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPATarget.getName(),
+                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPATarget.getName(), transcriber,
                         record.getIPATargetTier().getUnvalidatedValue().getParseError().getMessage()));
             }
         } else {
             if(record.getIPATargetTier().isBlindTranscriptionUnvalidated(transcriber.getUsername())) {
-                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPATarget.getName(),
+                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPATarget.getName(), transcriber,
                         record.getIPATargetTier().getBlindUnvalidatedValue(transcriber.getUsername()).getParseError().getMessage()));
             }
         }
 
         if(transcriber == Transcriber.VALIDATOR || !record.getIPAActualTier().isUnvalidated()) {
             if (record.getIPAActualTier().isUnvalidated()) {
-                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPAActual.getName(),
+                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPAActual.getName(), transcriber,
                         record.getIPAActualTier().getUnvalidatedValue().getParseError().getMessage()));
             }
         } else {
             if(record.getIPAActualTier().isBlindTranscriptionUnvalidated(transcriber.getUsername())) {
-                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPAActual.getName(),
+                validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPAActual.getName(), transcriber,
                         record.getIPAActualTier().getBlindUnvalidatedValue(transcriber.getUsername()).getParseError().getMessage()));
             }
         }
@@ -250,12 +250,12 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 			final Tier<?> tier = record.getTier(tierName);
             if(transcriber == Transcriber.VALIDATOR || !tier.isBlind()) {
                 if (tier.isUnvalidated()) {
-                    validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, tier.getName(),
+                    validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, tier.getName(), transcriber,
                             tier.getUnvalidatedValue().getParseError().getMessage()));
                 }
             } else {
                 if(tier.isBlindTranscriptionUnvalidated(transcriber.getUsername())) {
-                    validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, tier.getName(),
+                    validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, tier.getName(), transcriber,
                             tier.getBlindUnvalidatedValue(transcriber.getUsername()).getParseError().getMessage()));
                 }
             }
@@ -300,12 +300,12 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				Optional<? extends Tuple<?, ?>> alignedEle = tierAlignment.getAlignedElements().stream()
 						.filter(ae -> ae.getObj1() == obj).findAny();
 				if(alignedEle.isEmpty()) {
-					validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName,
+					validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName, transcriber,
 						"Incorrect x-tier alignment"));
 					break;
 				} else {
 					if(alignedEle.get().getObj2() == null) {
-						validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName,
+						validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName, transcriber,
 								"Missing aligned value for " + obj));
 						break;
 					}
@@ -318,7 +318,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 	private boolean checkGem(SessionValidator validator, Session session, int eleIdx, Gem gem) {
 		if(gem.getLabel() == null || gem.getLabel().isBlank()) {
-			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Gem", "Gem label is blank"));
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Gem", Transcriber.VALIDATOR, "Gem label is blank"));
 		}
 		return false;
 	}
@@ -326,10 +326,10 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 	private boolean checkComment(SessionValidator validator, Session session, int eleIdx, Comment comment) {
 		if(comment.getExtension(UnvalidatedValue.class) != null) {
 			var uv = comment.getExtension(UnvalidatedValue.class);
-			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, "Comment", uv.getParseError().getMessage()));
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, "Comment", Transcriber.VALIDATOR, uv.getParseError().getMessage()));
 		} else {
 			if(comment.getValue().toString().isBlank()) {
-				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Comment", "Comment is blank"));
+				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Comment", Transcriber.VALIDATOR, "Comment is blank"));
 			}
 		}
 		return false;
