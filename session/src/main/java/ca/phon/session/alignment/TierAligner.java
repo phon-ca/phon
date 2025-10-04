@@ -53,6 +53,10 @@ public final class TierAligner {
         return new TierAlignment(topTier, bottomTier, mapAlignedElements(topElements, bottomElements));
     }
 
+    public static TierAlignment alignTiers(Tier<?> topTier, Tier<?> bottomTier) {
+        return alignTiers(topTier, bottomTier, Transcriber.VALIDATOR);
+    }
+
     @SuppressWarnings("unchecked")
     public static TierAlignment alignTiers(Tier<?> topTier, Tier<?> bottomTier, Transcriber transcriber) {
         return alignTiers(topTier, bottomTier, TierAlignmentRules.defaultTierAlignmentRules(topTier, bottomTier), transcriber);
@@ -69,10 +73,23 @@ public final class TierAligner {
     }
 
     /**
+     * Calculates cross tier alignment for all tiers against the Orthography tier
+     *
+     * @param record the record
+     * @param topTier the top tier to align against (usually orthography or morphology
+     *
+     * @return cross tier alignment for record
+     */
+    public static CrossTierAlignment calculateCrossTierAlignment(Record record, Tier<?> topTier) {
+        return calculateCrossTierAlignment(record, topTier, Transcriber.VALIDATOR);
+    }
+
+    /**
      * Calculate cross tier alignment for all tiers which align by type
      *
-     * @param record
-     * @param topTier
+     * @param record the record
+     * @param topTier the top tier to align against (usually orthography or morphology
+     * @param transcriber the transcriber to use for blind tiers
      *
      * @return cross tier alignment for record
      */

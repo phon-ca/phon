@@ -342,9 +342,9 @@ public class SessionCheckView extends EditorView {
 			});
 
 			if(elementIndex >= 0) {
-				validator.validate(getEditor().getSession(), elementIndex);
+				validator.validate(getEditor().getSession(), elementIndex, getEditor().getDataModel().getTranscriber());
 			} else {
-				validator.validate(getEditor().getSession());
+				validator.validate(getEditor().getSession(), getEditor().getDataModel().getTranscriber());
 			}
 			
 			return events;

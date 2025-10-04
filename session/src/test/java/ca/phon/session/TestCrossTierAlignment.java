@@ -24,7 +24,7 @@ public class TestCrossTierAlignment {
     @Test
     public void testRepeatedIPAAlignment() {
         final Record record = createTestRecord();
-        final CrossTierAlignment crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, record.getIPATargetTier());
+        final CrossTierAlignment crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, record.getIPATargetTier(), Transcriber.VALIDATOR);
 
         Assert.assertEquals(4, crossTierAlignment.getTopAlignmentElements().size());
     }

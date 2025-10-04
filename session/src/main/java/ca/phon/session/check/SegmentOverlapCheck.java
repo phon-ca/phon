@@ -57,7 +57,7 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 	}
 
 	@Override
-	public boolean checkSession(SessionValidator validator, Session session) {
+	public boolean checkSession(SessionValidator validator, Session session, Transcriber transcriber) {
 		boolean modified = false;
 		final Map<Participant, Float> endTimes = new HashMap<>();
 		final Map<Participant, Integer> lastRecords = new HashMap<>();
@@ -95,7 +95,7 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 	}
 
 	@Override
-	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex) {
+	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex, Transcriber transcriber) {
 		return false;
 	}
 

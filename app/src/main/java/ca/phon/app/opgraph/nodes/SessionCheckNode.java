@@ -160,7 +160,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings {
 			row[c++] = ve.toString();
 			warningsTable.addRow(row);
 		});
-		boolean modified = validator.validate(session);
+		boolean modified = validator.validate(session, Transcriber.VALIDATOR);
 		
 		if(modified) {
 			if(spRef.get().getExtension(SessionEditor.class) != null) {

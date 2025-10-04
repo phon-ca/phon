@@ -17,6 +17,7 @@ package ca.phon.session.check;
 
 import ca.phon.plugin.*;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 import java.util.*;
 
@@ -53,22 +54,25 @@ public interface SessionCheck {
 	/**
 	 * Check session and report any issues using the given validator.
 	 * 
-	 * @param validator
-	 * @param session
+	 * @param validator the session validator
+	 * @param session the session to check
+     * @param transcriber check transcripts for given transcriber, or validated transcripts if validator
 	 * 
 	 * @return true if session was modified, false otherwise
 	 */
-	public boolean checkSession(SessionValidator validator, Session session);
+	public boolean checkSession(SessionValidator validator, Session session, Transcriber transcriber);
 
 	/**
 	 * Check specified transcript element index for issues.
 	 *
-	 * @param validator
-	 * @param session
+	 * @param validator the session validator
+	 * @param session the session to check
+     * @param elementIndex the transcript element index to check
+     * @param transcriber check transcripts for given transcriber, or validated transcripts if validator
 	 *
 	 * @return true if issues were found, false otherwise
 	 */
-	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex);
+	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex, Transcriber transcriber);
 	
 	public Properties getProperties();
 	

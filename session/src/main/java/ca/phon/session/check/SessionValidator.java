@@ -17,6 +17,7 @@ package ca.phon.session.check;
 
 import ca.phon.extensions.*;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 import java.util.*;
 
@@ -24,8 +25,8 @@ import java.util.*;
  * Session validator with plug-in support.  This class maintains the
  * list of available validator plug-ins as well as a set of
  * validation listeners.
- * 
- * @author Greg
+ *
+ *
  */
 public class SessionValidator implements IExtendable {
 	
@@ -79,19 +80,34 @@ public class SessionValidator implements IExtendable {
 		events.add(evt);
 		listeners.forEach( (l) -> { l.validationInfo(evt); } );
 	}
-	
-	public boolean validate(Session session) {
+
+    /**
+     * Validate the given session using all available session checks.
+     *
+     * @param session the session to validate
+     * @param transcriber check transcripts for given transcriber, or validated transcripts if validator
+     * @return true if session was modified, false otherwise
+     */
+	public boolean validate(Session session, Transcriber transcriber) {
 		boolean modified = false;
 		for(SessionCheck check:sessionChecks) {
-			modified |= check.checkSession(this, session);
+			modified |= check.checkSession(this, session, transcriber);
 		}
 		return modified;
 	}
 
-	public boolean validate(Session session, int elementIndex) {
+    /**
+     * Validate the given transcript element index using all available session checks.
+     *
+     * @param session the session to validate
+     * @param elementIndex the transcript element index to validate
+     * @param transcriber check transcripts for given transcriber, or validated transcripts if validator
+     * @return true if session was modified, false otherwise
+     */
+	public boolean validate(Session session, int elementIndex, Transcriber transcriber) {
 		boolean modified = false;
 		for(SessionCheck check:sessionChecks) {
-			modified |= check.checkTranscriptElement(this, session, elementIndex);
+			modified |= check.checkTranscriptElement(this, session, elementIndex, transcriber);
 		}
 		return modified;
 	}

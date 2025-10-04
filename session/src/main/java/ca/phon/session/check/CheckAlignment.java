@@ -54,16 +54,16 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
     }
 
     @Override
-    public boolean checkSession(SessionValidator validator, Session session) {
+    public boolean checkSession(SessionValidator validator, Session session, Transcriber transcriber) {
         boolean modified = false;
 
         for (int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
             final Record r = session.getRecord(rIdx);
 
-            final IPATranscript ipaT = r.getIPATarget();
-            final IPATranscript ipaA = r.getIPAActual();
+            final IPATranscript ipaT = r.getIPATargetTier().getValueForTranscriber(transcriber).orElse(r.getIPATarget());
+            final IPATranscript ipaA = r.getIPAActualTier().getValueForTranscriber(transcriber).orElse(r.getIPAActual());
             int maxWords = Math.max(ipaT.words().size(), ipaA.words().size());
-            final PhoneAlignment alignmentTier = r.getPhoneAlignment();
+            final PhoneAlignment alignmentTier = r.getPhoneAlignmentTier().getValueForTranscriber(transcriber).orElse(r.getPhoneAlignment());
             if (alignmentTier.getAlignments().size() != maxWords) {
                 // alignment tier does not match number of words
                 ValidationEvent evt = new ValidationEvent(session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(),
@@ -87,7 +87,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 
             if (isResetAlignment()) {
                 PhoneAlignment newAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
-                r.setPhoneAlignment(newAlignment);
+                r.getPhoneAlignmentTier().setValueForTranscriber(transcriber, newAlignment);
                 modified = true;
                 ValidationEvent evt = new ValidationEvent(ValidationEvent.Severity.INFO, session, session.getRecordElementIndex(rIdx), SystemTierType.PhoneAlignment.getName(),
                         "Alignment was reset for record #" + (rIdx + 1));
@@ -107,7 +107,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
     }
 
     @Override
-    public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex) {
+    public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex, Transcriber transcriber) {
         return false;
     }
 
