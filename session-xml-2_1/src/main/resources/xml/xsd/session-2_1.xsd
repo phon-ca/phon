@@ -1198,23 +1198,23 @@
     <xs:element name="tn" type="toneNumberType"/>
     <xs:complexType name="toneNumberType">
         <xs:annotation>
-            <xs:documentation>Superscript tone number in a transcription</xs:documentation>
-            <xs:documentation>Ambiguous tone production errors is represented by 'ˣˣ'</xs:documentation>
+            <xs:documentation>Superscript tone number/melody in a transcription e.g., '²¹⁴' </xs:documentation>
+            <xs:documentation>Ambiguous tone production errors are represented by 'ˣˣ', if ambiguous the
+                tone number content should be empty and will be ignored.</xs:documentation>
             <xs:documentation>
                 <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone__tone_number">Phon manual section on this topic...</a>
             </xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
-            </xs:documentation>
         </xs:annotation>
         <xs:simpleContent>
-            <xs:extension base="superscriptToneNumberType"/>
+            <xs:extension base="superscriptToneNumberType">
+                <xs:attribute name="ambiguous" type="xs:boolean" default="false"/>
+            </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
 
     <xs:simpleType name="superscriptToneNumberType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[⁰¹²³⁴⁵⁶⁷⁸⁹]+|ˣˣ"/>
+            <xs:pattern value="[⁰¹²³⁴⁵⁶⁷⁸⁹]*"/>
         </xs:restriction>
     </xs:simpleType>
 

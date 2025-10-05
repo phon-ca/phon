@@ -22,7 +22,6 @@ import org.junit.runners.JUnit4;
 
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Test methods for the ipa parser.
@@ -378,7 +377,7 @@ public class TestIPAParser {
         final ToneNumber tn = (ToneNumber)ipa.elementAt(2);
         Assert.assertEquals(234, tn.asInt());
         Assert.assertEquals(true, tn.isMelody());
-        Assert.assertEquals(false, tn.isError());
+        Assert.assertEquals(false, tn.isAmbiguous());
 		Assert.assertEquals("d", ipa.elementAt(3).toString());
 		Assert.assertEquals("a", ipa.elementAt(4).toString());
         Assert.assertEquals("⁰", ipa.elementAt(5).toString());
@@ -386,7 +385,7 @@ public class TestIPAParser {
         final ToneNumber tn2 = (ToneNumber)ipa.elementAt(5);
         Assert.assertEquals(0, tn2.asInt());
         Assert.assertEquals(false, tn2.isMelody());
-        Assert.assertEquals(false, tn2.isError());
+        Assert.assertEquals(false, tn2.isAmbiguous());
 	}
 
     @Test
@@ -406,7 +405,7 @@ public class TestIPAParser {
         Assert.assertEquals("a", ipa.elementAt(4).toString());
         Assert.assertEquals("\u02e3\u02e3", ipa.elementAt(5).toString());
         Assert.assertEquals(ToneNumber.class, ipa.elementAt(5).getClass());
-        Assert.assertEquals(true,  ((ToneNumber)ipa.elementAt(5)).isError());
+        Assert.assertEquals(true,  ((ToneNumber)ipa.elementAt(5)).isAmbiguous());
     }
 
 	@Test

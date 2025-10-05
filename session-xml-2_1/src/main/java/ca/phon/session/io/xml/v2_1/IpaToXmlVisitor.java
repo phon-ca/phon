@@ -16,7 +16,6 @@
 package ca.phon.session.io.xml.v2_1;
 
 import ca.phon.ipa.*;
-import ca.phon.session.io.xml.v2_1.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -213,7 +212,10 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
     @Visits
     public void visitToneNumber(ToneNumber toneNum) {
         final XmlToneNumberType xmlToneNum = factory.createXmlToneNumberType();
-        xmlToneNum.setValue(toneNum.toString());
+        if(toneNum.isAmbiguous())
+            xmlToneNum.setAmbiguous(true);
+        else
+            xmlToneNum.setValue(toneNum.toString());
         this.currentWord.getStressOrPhOrCmph().add(xmlToneNum);
     }
 

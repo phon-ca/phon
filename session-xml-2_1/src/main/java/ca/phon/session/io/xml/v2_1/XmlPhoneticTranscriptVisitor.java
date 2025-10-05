@@ -169,8 +169,12 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitToneNumer(XmlToneNumberType toneNumer) {
-        builder.append(factory.createToneNumber(toneNumer.getValue().toCharArray()));
+    public void visitToneNumber(XmlToneNumberType toneNumber) {
+        if(toneNumber.isAmbiguous()) {
+            builder.append(factory.createToneNumber(ToneNumber.TONE_NUMBER_AMBIGUOUS.toCharArray()));
+        } else {
+            builder.append(factory.createToneNumber(toneNumber.getValue().toCharArray()));
+        }
     }
 
     public IPATranscript toIPATranscript() throws ParseException {

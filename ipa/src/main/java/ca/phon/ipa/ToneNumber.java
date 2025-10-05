@@ -11,6 +11,8 @@ import ca.phon.ipa.features.FeatureSet;
  */
 public class ToneNumber extends IPAElement {
 
+    public static final String TONE_NUMBER_AMBIGUOUS = "\u02e3\u02e3"; // ˣˣ
+
     private final char[] toneChars;
 
     /**
@@ -22,7 +24,7 @@ public class ToneNumber extends IPAElement {
      */
     public static char[] fromNumber(int number) {
         if(number < 0) {
-            return "\u02e3\u02e3".toCharArray(); // error tone number
+            return TONE_NUMBER_AMBIGUOUS.toCharArray(); // error tone number
         }
         final StringBuffer sb = new StringBuffer();
         while(number > 0) {
@@ -55,6 +57,9 @@ public class ToneNumber extends IPAElement {
         }
         if(toneStr.equals("-1")) {
             return new ToneNumber(-1);
+        }
+        if(TONE_NUMBER_AMBIGUOUS.equals(toneStr)) {
+            return new ToneNumber(TONE_NUMBER_AMBIGUOUS.toCharArray());
         }
         final StringBuilder sb = new StringBuilder();
         for(char ch:toneStr.toCharArray()) {
@@ -122,14 +127,14 @@ public class ToneNumber extends IPAElement {
     }
 
     /**
-     * Check if this tone number represents an error.
+     * Check if this tone number represents an ambiguous tone error.
      * An error tone number is represented by two combining
      * superscript x characters: ˣˣ
      *
-     * @return true if this is an error tone number, false otherwise
+     * @return true if this is an ambiguous tone number, false otherwise
      */
-    public boolean isError() {
-        return "\u02e3\u02e3".equals(getText());
+    public boolean isAmbiguous() {
+        return TONE_NUMBER_AMBIGUOUS.equals(getText());
     }
 
     @Override
@@ -138,7 +143,7 @@ public class ToneNumber extends IPAElement {
         for(char toneChar: toneChars) {
             fs = FeatureSet.union(fs, FeatureMatrix.getInstance().getFeatureSet(toneChar));
         }
-        if(isError()) {
+        if(isAmbiguous()) {
             fs = FeatureSet.union(fs, FeatureSet.fromArray(new String[]{"toneerr"}));
         }
         if(isMelody()) {
@@ -161,7 +166,7 @@ public class ToneNumber extends IPAElement {
      * @return the tone number as an integer
      */
     public int asInt() {
-        if(isError()) {
+        if(isAmbiguous()) {
             return -1;
         }
         int retVal = 0;
