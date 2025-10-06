@@ -96,7 +96,6 @@ public class CSVExporter {
                     String field = "";
 
                     switch (column.getColumnType()) {
-                        case NOTES -> field = getNotesTierValue(record);
                         case ORTHOGRAPHY -> field = getOrthographyTierValue(record, column);
                         case IPA_TARGET -> field = getIPATargetTierValue(record, column);
                         case IPA_ACTUAL -> field = getIPAActualTierValue(record, column);

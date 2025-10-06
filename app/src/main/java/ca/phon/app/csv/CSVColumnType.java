@@ -46,7 +46,6 @@ public enum CSVColumnType {
     SEGMENT_START("Segment Start"),
     SEGMENT_END("Segment End"),
     SEGMENT_DURATION("Segment Duration"),
-    NOTES("Notes"),
     USER_TIER("User Tier");
 
     private final String readableName;

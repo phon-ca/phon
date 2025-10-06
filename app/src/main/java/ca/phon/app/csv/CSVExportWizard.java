@@ -488,7 +488,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
         addMenuOption(tiersSubmenu, CSVColumnType.IPA_TARGET);
         addMenuOption(tiersSubmenu, CSVColumnType.IPA_ACTUAL);
         addMenuOption(tiersSubmenu, CSVColumnType.PHONE_ALIGNMENT);
-        addMenuOption(tiersSubmenu, CSVColumnType.NOTES);
 
         JMenu userTiersSubmenu = new JMenu("User tiers");
         menu.add(userTiersSubmenu);
@@ -687,7 +686,6 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                 addExportColumn(CSVColumnType.IPA_ACTUAL, false);
                 addExportColumn(CSVColumnType.SEGMENT_START, false);
                 addExportColumn(CSVColumnType.SEGMENT_END, false);
-                addExportColumn(CSVColumnType.NOTES, false);
                 selectedColumnTable.getSelectionModel().setSelectionInterval(0, 0);
             }
         }

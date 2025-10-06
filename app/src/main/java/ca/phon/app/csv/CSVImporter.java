@@ -360,15 +360,6 @@ public class CSVImporter {
                                 csvRowIndex,
                                 currentSession.get().getRecordCount());
                     }
-                    case NOTES -> {
-                        importNotesTier(
-                                record,
-                                field,
-                                importColumn,
-                                currentSession.get(),
-                                csvRowIndex,
-                                currentSession.get().getRecordCount());
-                    }
                     default -> {
                     }
                 }
@@ -562,29 +553,6 @@ public class CSVImporter {
         }
 
         return true;
-    }
-
-    private void importNotesTier(
-            Record record,
-            String field,
-            CSVColumn column,
-            Session session,
-            int csvRecordIndex,
-            int sessionRecordIndex) {
-        var notesTier = record.getNotesTier();
-        notesTier.setText(field);
-        if (notesTier.isUnvalidated()) {
-            var e = notesTier.getUnvalidatedValue().getParseError();
-            fireParsingError(
-                    fileName,
-                    csvRecordIndex,
-                    column.getCsvColumnIndex(),
-                    e.getErrorOffset(),
-                    column.getColumnType(),
-                    session,
-                    sessionRecordIndex,
-                    e);
-        }
     }
 
     private boolean isImported(Optional<CSVColumn> column) {
