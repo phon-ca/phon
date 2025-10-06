@@ -314,7 +314,7 @@ public class CSVExporter {
             MediaTimeFormatter mediaTimeFormatter = new MediaTimeFormatter(
                     formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
-            return mediaTimeFormatter.format(segmentTier.getValue().getStartValue());
+            return mediaTimeFormatter.format(segmentTier.getValue().getStartTime());
         }
         return "";
     }
@@ -333,7 +333,7 @@ public class CSVExporter {
             MediaTimeFormatter mediaTimeFormatter = new MediaTimeFormatter(
                     formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
-            return mediaTimeFormatter.format(segmentTier.getValue().getEndValue());
+            return mediaTimeFormatter.format(segmentTier.getValue().getEndTime());
         }
         return "";
     }
@@ -352,7 +352,7 @@ public class CSVExporter {
             MediaTimeFormatter mediaTimeFormatter = new MediaTimeFormatter(
                     formatStyle.orElse(MediaTimeFormatStyle.MINUTES_AND_SECONDS));
 
-            float duration = segmentTier.getValue().getEndValue() - segmentTier.getValue().getStartValue();
+            float duration = segmentTier.getValue().getEndTime() - segmentTier.getValue().getStartTime();
             return mediaTimeFormatter.format(duration);
         }
         return "";
