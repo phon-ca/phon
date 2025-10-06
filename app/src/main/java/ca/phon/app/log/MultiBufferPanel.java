@@ -143,7 +143,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			viewAsHtmlAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingHtml());
 			builder.addItem(".", new JCheckBoxMenuItem(viewAsHtmlAct));
 			
-			if(getCurrentBuffer().isShowingHtml() && PrefHelper.getBoolean("phon.debug", false)) {
+			if(getCurrentBuffer().isShowingHtml() && PrefHelper.isDebugMode()) {
 				final PhonUIAction<Void> toggleDebugAct = PhonUIAction.runnable(
 						(getCurrentBuffer().isShowingHtmlDebug() ? getCurrentBuffer()::hideHtmlDebug : getCurrentBuffer()::showHtmlDebug));
 				toggleDebugAct.putValue(PhonUIAction.NAME, "Debug");

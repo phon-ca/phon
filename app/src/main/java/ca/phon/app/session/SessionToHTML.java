@@ -28,6 +28,7 @@ import ca.phon.session.filter.RecordFilter;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.*;
 
@@ -398,15 +399,11 @@ public class SessionToHTML extends SessionExporter {
 			
 			buffer.append("<meta charset='UTF-8'/>").append(nl);
 			
-			try {
-				buffer.append("<style>").append(nl);
-				IOUtils.readLines(ClassLoader.getSystemResourceAsStream(HTMLConstants.CSS_COMMON))
-					.forEach( (l) -> buffer.append(l).append(nl) );
-				buffer.append("</style>").append(nl);
-			} catch (IOException e) {
-				LogUtil.warning(e);
-			}
-			
+            buffer.append("<style>").append(nl);
+            IOUtils.readLines(ClassLoader.getSystemResourceAsStream(HTMLConstants.CSS_COMMON), StandardCharsets.UTF_8)
+                .forEach( (l) -> buffer.append(l).append(nl) );
+            buffer.append("</style>").append(nl);
+
 			buffer.append("<style>").append(CSS).append("</style>").append(nl);
 			// buffer.append("<script>").append(JS).append("</script>").append(nl);
 			

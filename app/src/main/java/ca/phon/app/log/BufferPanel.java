@@ -105,8 +105,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	private CefBrowser browser;
 
-	private CefBrowser debugBrowser;
-
 	private List<CefLoadHandler> cefLoadHandlers = Collections.synchronizedList(new ArrayList<>());
 
 	private Component htmlView;
@@ -374,18 +372,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public void showHtmlDebug() {
 		if(browser != null) {
-			debugBrowser = browser.getDevTools();
-
-			htmlSplitPane = new JSplitPane();
-			htmlSplitPane.setLeftComponent(getWebView());
-			htmlSplitPane.setRightComponent(debugBrowser.getUIComponent());
-			htmlSplitPane.setResizeWeight(1.0);
-
-			htmlPanel.removeAll();
-			htmlPanel.add(htmlSplitPane, BorderLayout.CENTER);
-			htmlPanel.revalidate();
-
-			SwingUtilities.invokeLater( () -> htmlSplitPane.setDividerLocation(0.6) );
+			browser.openDevTools();
 		}
 	}
 
@@ -440,8 +427,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 						LogUtil.info("Disposing browser");
 						if(browser != null) {
 							browser.getClient().removeLoadHandler();
-							if(debugBrowser != null)
-								debugBrowser.close(true);
 							browser.close(true);
 							cefClient.dispose();
 						}

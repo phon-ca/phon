@@ -260,7 +260,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 		});
 		
-		if(PrefHelper.getBoolean("phon.debug", false)) {
+		if(PrefHelper.isDebugMode()) {
 			final JMenu bufferMenu = builder.addMenu(".@Report", "Buffer");
 			bufferMenu.addMenuListener(new MenuListener() {
 				
@@ -286,22 +286,16 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		final boolean hasHTMLReport = htmlReportAvailable();
 
 		if(hasHTMLReport) {
-			/* Disabled until we have a method of showing debug split pane in wizard */
-//			if(PrefHelper.getBoolean("phon.debug", false)) {
-//				final PhonUIAction<Void> debugAct = PhonUIAction.runnable(
-//					(reportBuffer.isShowingHtmlDebug() ? reportBuffer::hideHtmlDebug : reportBuffer::showHtmlDebug)
-//				);
-//				debugAct.putValue(PhonUIAction.NAME, "Debug");
-//				debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
-//				debugAct.putValue(PhonUIAction.SELECTED_KEY, reportBuffer.isShowingHtmlDebug());
-//				builder.addItem(".", new JCheckBoxMenuItem(debugAct));
-//
-//				final PhonUIAction<Void> reloadAct = PhonUIAction.runnable(reportBuffer.getBrowser()::reload);
-//				reloadAct.putValue(PhonUIAction.NAME, "Reload");
-//				reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reload report");
-//				builder.addItem(".", reloadAct);
-//				builder.addSeparator(".", "debug_sep");
-//			}
+            if(PrefHelper.isDebugMode()) {
+                final PhonUIAction<Void> debugAct = PhonUIAction.runnable(
+                        (htmlReportUI.cefBrowser.getDevToolsClient().isClosed() ? htmlReportUI.cefBrowser::openDevTools : htmlReportUI.cefBrowser::closeDevTools)
+                );
+                debugAct.putValue(PhonUIAction.NAME, "Debug");
+                debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
+                debugAct.putValue(PhonUIAction.SELECTED_KEY, htmlReportUI.cefBrowser.getDevToolsClient().isClosed());
+                builder.addItem(".", new JCheckBoxMenuItem(debugAct));
+                builder.addSeparator(".", "debug_sep");
+            }
 
 			if(includeZoomActions) {
 				final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
