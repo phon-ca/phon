@@ -287,9 +287,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		if(hasHTMLReport) {
             if(PrefHelper.isDebugMode()) {
-                final PhonUIAction<Void> debugAct = PhonUIAction.runnable(
-                        (htmlReportUI.cefBrowser.getDevToolsClient().isClosed() ? htmlReportUI.cefBrowser::openDevTools : htmlReportUI.cefBrowser::closeDevTools)
-                );
+                final PhonUIAction<Void> debugAct = PhonUIAction.runnable(htmlReportUI.cefBrowser::openDevTools);
                 debugAct.putValue(PhonUIAction.NAME, "Debug");
                 debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
                 debugAct.putValue(PhonUIAction.SELECTED_KEY, htmlReportUI.cefBrowser.getDevToolsClient().isClosed());
