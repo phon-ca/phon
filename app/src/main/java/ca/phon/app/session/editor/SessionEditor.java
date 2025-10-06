@@ -877,6 +877,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 					if(e.getDialogResult() == 0) {;
 						try {
 							createUpgradeBackup(project, session, backupFolderName);
+                            session.putExtension(OriginalFormat.class, new OriginalFormat(currentFormat));
 							doSave(project, session, finalWriter);
 						} catch (IOException e1) {
 							Toolkit.getDefaultToolkit().beep();

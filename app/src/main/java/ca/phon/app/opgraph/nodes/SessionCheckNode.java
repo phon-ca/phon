@@ -142,6 +142,8 @@ public class SessionCheckNode extends OpNode implements NodeSettings {
 					.filter( this::isIncludeCheck )
 					.collect( Collectors.toList() ));
 		validator.addValidationListener( (ve) -> {
+            if(ve.getTierName() == null)
+                return;
 			Object row[] = new Object[warningsTable.getColumnCount()];
 			int c = 0;
 			row[c++] = StringUtils.capitalize(ve.getSeverity().toString().toLowerCase());
@@ -150,7 +152,8 @@ public class SessionCheckNode extends OpNode implements NodeSettings {
 			row[c++] = ve.getTierName();
 
 			final int recordIndex = ve.getSession().getTranscript().getRecordIndex(ve.getElementIndex());
-			var groupVal = ve.getSession().getRecord(recordIndex).getTier(ve.getTierName()).getValue();
+            final Tier<?> tier = ve.getSession().getRecord(recordIndex).getTier(ve.getTierName());
+			var groupVal = tier != null ? tier.getValue() : null;
 			if(groupVal instanceof IExtendable) {
 				if(((IExtendable)groupVal).getExtension(UnvalidatedValue.class) != null) {
 					groupVal = ((IExtendable)groupVal).getExtension(UnvalidatedValue.class).getValue();

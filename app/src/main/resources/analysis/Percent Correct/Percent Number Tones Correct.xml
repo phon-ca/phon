@@ -184,10 +184,11 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="1f2a5721" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-04-16T08:51:16.729-02:30" name="Aligned IPA Domains" uuid="24205704-1137-4df7-899b-2a86849be572">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-10-06T07:19:49.629-02:30" name="Aligned IPA Domains" uuid="23a8ef88-c815-4f05-ba76-124068736eae">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
+                    <param id="filters.alignedTierFilter.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                     <param id="filters.searchBy.searchBy">Word</param>
                     <param id="filters.speaker.age1Comparator">equal to</param>
@@ -197,8 +198,8 @@ function setup_params(params) {
                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                     <param id="filters.syllable.syllableType">Any syllable</param>
                     <param id="filters.targetResultFilter.filterType">Phonex</param>
+                    <param id="filters.tierFilter.filterType">Plain text</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
-                    <param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
                     <param id="searchTier">IPA Target</param>
                 </script>
             </qry:query>
@@ -208,7 +209,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5117d827">
+            <graph id="2cac2340">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -248,7 +249,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="73d5137add6043a6" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="17205909">
+            <graph id="13cbe965">
                 <node id="b08db04d89424752" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -320,6 +321,8 @@ function setup_params(params) {
             <output name="title" type="java.lang.String"/>
             <extensions>
                 <oga:settings>
+                    <oga:property key="filters.syllable.otherSyllTypePattern.filterType"><![CDATA[Plain text]]></oga:property>
+                    <oga:property key="filters.syllable.syllableType"><![CDATA[Any syllable]]></oga:property>
                     <oga:property key="__script"><![CDATA[var WordFilter = require("lib/WordFilter").WordFilter;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 
@@ -510,11 +513,11 @@ function run(context) {
 			expRow[expCol++] = table.getValueAt(row, "Group #");
 			expRow[expCol++] = expResult.target;
 			expRow[expCol++] = (expResult.target != null && expResult.target.length() > 0 
-				? expResult.target.elementAt(0).getExtension(SyllabificationInfo).toneNumber
+				? expResult.target.elementAt(0).syllableInfo().tone() != null ? expResult.target.elementAt(0).syllableInfo().tone().asInt().toString() : ""
 				: "");
 			expRow[expCol++] = expResult.actual;
 			expRow[expCol++] = (expResult.actual != null && expResult.actual.length() > 0 
-				? expResult.actual.elementAt(0).getExtension(SyllabificationInfo).toneNumber
+				? expResult.actual.elementAt(0).syllableInfo().tone() != null ? expResult.actual.elementAt(0).syllableInfo().tone().asInt().toString() : ""
 				: "");
 			expRow[expCol++] = expResult.syllDeleted;
 			expRow[expCol++] = expResult.epen;
@@ -541,7 +544,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="424c6a59" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="12110236">
+            <graph id="6fbc8fb4">
                 <node id="3759a36a" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -577,7 +580,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="945e057185e74864" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="232a6e6">
+                    <graph id="248c31e6">
                         <node id="65b6213415b545ba" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>

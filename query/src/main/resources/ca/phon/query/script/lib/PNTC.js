@@ -55,7 +55,7 @@ exports.PNTC = {
         for (var i = 0; i < targetGroup.syllables().size(); i++) {
             var targetSyll = targetGroup.syllables().get(i);
             var targetScInfo = targetSyll.elementAt(0).syllableInfo();
-            var targetToneNumber = targetScInfo.tone() != null ? targetScInfo.tone().toString() : "";
+            var targetToneNumber = targetScInfo.tone() != null ? targetScInfo.tone().asInt() : "";
             targetTone += (i > 0 ? "," : "") + targetToneNumber;
         }
 
@@ -63,7 +63,7 @@ exports.PNTC = {
         for (var i = 0; i < actualGroup.syllables().size(); i++) {
             var actualSyll = actualGroup.syllables().get(i);
             var actualScInfo = actualSyll.elementAt(0).syllableInfo();
-            var actualToneNumber = actualScInfo.tone() != null ? actualScInfo.tone().toString() : "";
+            var actualToneNumber = actualScInfo.tone() != null ? actualScInfo.tone().asInt() : "";
             actualTone += (actualTone.length > 0 ? "," : "") + actualToneNumber;
         }
 
@@ -82,9 +82,9 @@ exports.PNTC = {
             var wasEpen = false;
             var wasSyllDeleted = false;
 
-            if (targetSyll == null) {
+            if (alignedTargetSyll === null) {
                 wasEpen = true;
-            } else if (actualSyll == null) {
+            } else if (alignedActualSyll === null) {
                 wasDeleted = true;
                 wasSyllDeleted = true;
             } else {
@@ -101,7 +101,7 @@ exports.PNTC = {
                 } else if (alignedTargetToneNumber !== null && alignedActualToneNumber === null) {
                     wasDeleted = true;
                 } else if (alignedTargetToneNumber !== null && alignedActualToneNumber !== null) {
-                    if(alignedTargetToneNumber.toString() === alignedActualToneNumber.toString()) {
+                    if(alignedTargetToneNumber.toString() == alignedActualToneNumber.toString()) {
                         wasCorrect = true;
                     } else {
                         wasSub = true;
