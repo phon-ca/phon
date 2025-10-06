@@ -3,10 +3,8 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.view.transcript.extensions.BlindTranscriptionExtension;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcriber;
-import ca.phon.session.Transcript;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -32,7 +30,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
     private enum IconType {
         ERROR,
-        BLIND
+        BLIND,
+        LOCKED
     }
 
     private final TranscriptEditor editor;
@@ -252,6 +251,15 @@ public class TranscriptScrollPaneGutter extends JComponent {
         return blindIcon;
     }
 
+    private ImageIcon lockIcon;
+    private ImageIcon getLockIcon() {
+        if(lockIcon == null) {
+            lockIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+                    "lock", IconSize.SMALL, Color.DARK_GRAY);
+        }
+        return lockIcon;
+    }
+
     // endregion
 
     @Override
@@ -422,6 +430,29 @@ public class TranscriptScrollPaneGutter extends JComponent {
                         }
                     } else {
                         hasError = tier.isUnvalidated();
+                    }
+
+                    // is the tier locked?
+                    boolean isLocked = false;
+                    if(isBlindMode && !tier.isBlind()) {
+                        isLocked = true;
+                    }
+                    final TierViewItem tvi = editor.getSession().getTierView()
+                            .stream()
+                            .filter( (item) -> item.getTierName().equals(tier.getName()))
+                            .findFirst().orElse(null);
+                    if(tvi != null) {
+                        isLocked |= tvi.isTierLocked();
+                    }
+
+                    if(isLocked) {
+                        // draw lock icon
+                        final ImageIcon icon = getLockIcon();
+                        final int iconWidth = icon.getIconWidth();
+                        final int iconHeight = icon.getIconHeight();
+                        final int x = getWidth() - (iconWidth * 2) - PADDING;
+                        final int y = (int) elemRect.getCenterY() - iconHeight / 2;
+                        icon.paintIcon(this, g, x, y);
                     }
 
                     if (hasError) {
