@@ -59,6 +59,7 @@ ca.phon.app.project.checkwizard
 ca.phon.app.project.git
 ca.phon.app.project.git.actions
 ca.phon.app.project.mergewizard
+ca.phon.app.project.tree
 ca.phon.app.query
 ca.phon.app.query.actions
 ca.phon.app.query.report
@@ -80,6 +81,7 @@ ca.phon.app.session.editor.view.ipaDictionary
 ca.phon.app.session.editor.view.ipaDictionary.actions
 ca.phon.app.session.editor.view.mediaPlayer
 ca.phon.app.session.editor.view.mediaPlayer.actions
+ca.phon.app.session.editor.view.mediaPlayer.undo
 ca.phon.app.session.editor.view.participants
 ca.phon.app.session.editor.view.participants.actions
 ca.phon.app.session.editor.view.search
@@ -101,8 +103,6 @@ ca.phon.app.workspace
 ca.phon.audio
 ca.phon.autotranscribe
 ca.phon.csv
-ca.phon.cvseq
-ca.phon.cvseq.fsa
 ca.phon.dict.cmn
 ca.phon.extensions
 ca.phon.formatter
@@ -177,11 +177,10 @@ ca.phon.session.io.xml
 ca.phon.session.io.xml.v1_2
 ca.phon.session.io.xml.v12
 ca.phon.session.io.xml.v2_0
+ca.phon.session.io.xml.v2_1
 ca.phon.session.position
 ca.phon.session.spi
 ca.phon.session.tierdata
-ca.phon.stresspattern
-ca.phon.stresspattern.fsa
 ca.phon.syllabifier
 ca.phon.syllabifier.opgraph
 ca.phon.syllabifier.opgraph.extensions
