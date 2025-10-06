@@ -207,8 +207,8 @@ public class CSVImporter {
                     }
                 } else if (sessionPathTier.isEmpty()) {
                     // If no session path and no corpus name column, use "." as corpus name
-                    if (!currentCorpus.equals(".")) {
-                        currentCorpus = ".";
+                    if (!currentCorpus.equals(selectedCorpus)) {
+                        currentCorpus = selectedCorpus;
                         corpusChanged = true;
                         if (!project.hasCorpus(currentCorpus)) {
                             mutableProject.addCorpus(currentCorpus);
