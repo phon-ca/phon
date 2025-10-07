@@ -67,7 +67,7 @@ public class CSVMenuHandler
 		if (project == null)
 			return;
 
-		final CSVImportWizard wizard = new CSVImportWizard(project, pw.getSelectedCorpus());
+		final CSVImportWizard wizard = new CSVImportWizard(project, pw.getSelectedCorpus() != null ? pw.getSelectedCorpus() : ".");
 		wizard.pack();
 		wizard.setSize(new Dimension(640, wizard.getPreferredSize().height));
 		wizard.centerWindow();
