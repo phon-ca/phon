@@ -164,12 +164,25 @@ public class IntervalTierComponentUI extends TimeComponentUI {
         final int tierContentMaxY = tierContentY + (2 * c.getFont().getSize());
         final Rectangle tierRect = new Rectangle(0, tierContentY, c.getWidth(), tierContentMaxY - tierContentY);
 
+        final Rectangle clipBounds = g2.getClipBounds();
+        final float clipStartTime = ((IntervalTierComponent)c).timeAtX(clipBounds.x);
+        final float clipEndTime = ((IntervalTierComponent)c).timeAtX(clipBounds.x + clipBounds.width);
+
         // draw tier intervals
         int intervalIdx = 0;
         intervalTree = RTree.create();
         for(var interval:tier.getIntervals()) {
             final float startTime = interval.getStart();
             final float endTime = interval.getEnd();
+
+            if(endTime < clipStartTime) {
+                // interval ends before clip start time
+                ++intervalIdx;
+                continue;
+            } else if(startTime > clipEndTime) {
+                // interval starts after clip end time
+                break;
+            }
 
             final IntervalTierComponent tc = (IntervalTierComponent)c;
             final var intervalX = tc.xForTime(startTime);

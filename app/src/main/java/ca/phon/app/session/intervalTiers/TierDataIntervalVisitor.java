@@ -4,6 +4,7 @@ import ca.phon.session.IntervalTier;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
 import ca.phon.session.tierdata.TierString;
+import ca.phon.util.Range;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -21,6 +22,11 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
     private final StringBuilder buffer = new StringBuilder();
 
     private final List<IntervalTier.Interval> intervals = new ArrayList<>();
+
+    /**
+     * Word interval ranges (start,end)
+     */
+    private final List<Range> ranges = new ArrayList<>();
 
     private final List<String> ignoreWords = new ArrayList<>();
 
@@ -57,10 +63,15 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
         if(buffer.length() > 0) {
             final String lbl = buffer.toString();
 
+            final int startIdx = intervals.size();
+
             // create IntervalTier.Interval
             final IntervalTier.Interval interval =
                     new IntervalTier.Interval(tierInternalMedia.getStartTime(), tierInternalMedia.getEndTime(), lbl);
             intervals.add(interval);
+
+            final int endIdx = intervals.size() - 1;
+            ranges.add(new Range(startIdx, endIdx));
 
             // reset interval string
             buffer.setLength(0);
