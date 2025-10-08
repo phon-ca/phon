@@ -11,6 +11,7 @@ import ca.phon.media.TimeUIModelAdapter;
 import ca.phon.orthography.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Range;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -19,6 +20,7 @@ import org.jdesktop.swingx.VerticalLayout;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.undo.AbstractUndoableEdit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
@@ -216,12 +218,127 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
     @Override
     public void addMenuItems(JMenu menuEle, boolean includeAccelerators) {
+        final MenuBuilder mb = new MenuBuilder(menuEle);
 
+        // add show/hide menu items for each tier
+        if(!recordDataIntervalTiers.isEmpty()) {
+            final MenuBuilder recordTierMenuBuilder = new MenuBuilder(mb.addMenu(".", "Record Interval Tiers"));
+            for(var entry: recordDataIntervalTiers.entrySet()) {
+                final String tierName = entry.getKey();
+                final IntervalTierComponent tierComp = entry.getValue();
+                final JCheckBoxMenuItem showTierItem = new JCheckBoxMenuItem(tierName, tierComp.isVisible());
+                showTierItem.addActionListener( (e) -> {
+                    final boolean newVisibility = showTierItem.isSelected();
+                    setTierVisible(tierName, newVisibility);
+                    final TierVisibilityEdit edit = new TierVisibilityEdit(this, tierName, newVisibility);
+                    getParentView().getEditor().getUndoSupport().postEdit(edit);
+                });
+                recordTierMenuBuilder.addItem(".", showTierItem);
+            }
+
+            // add show all/hide all
+            recordTierMenuBuilder.addSeparator(".", "showhide");
+            final JMenuItem showAllItem = new JMenuItem("Show All");
+            showAllItem.addActionListener( (e) -> {
+                getParentView().getEditor().getUndoSupport().beginUpdate("Show all record interval tiers");
+                for(var entry: recordDataIntervalTiers.entrySet()) {
+                    final String tierName = entry.getKey();
+                    final IntervalTierComponent tierComp = entry.getValue();
+                    if(!tierComp.isVisible()) {
+                        tierComp.setVisible(true);
+                        final TierVisibilityEdit visibilityEdit = new TierVisibilityEdit(this, tierName, true);
+                        getParentView().getEditor().getUndoSupport().postEdit(visibilityEdit);
+                    }
+                }
+                getParentView().getEditor().getUndoSupport().endUpdate();
+            });
+            recordTierMenuBuilder.addItem(".", showAllItem);
+
+            final JMenuItem hideAllItem = new JMenuItem("Hide All");
+            hideAllItem.addActionListener( (e) -> {
+                getParentView().getEditor().getUndoSupport().beginUpdate("Hide all record interval tiers");
+                for(var entry: recordDataIntervalTiers.entrySet()) {
+                    final String tierName = entry.getKey();
+                    final IntervalTierComponent tierComp = entry.getValue();
+                    if(tierComp.isVisible()) {
+                        tierComp.setVisible(false);
+                        final TierVisibilityEdit visibilityEdit = new TierVisibilityEdit(this, tierName, false);
+                        getParentView().getEditor().getUndoSupport().postEdit(visibilityEdit);
+                    }
+                }
+                getParentView().getEditor().getUndoSupport().endUpdate();
+            });
+            recordTierMenuBuilder.addItem(".", hideAllItem);
+        }
+
+        // add show/hide menu items for each tier
+        if(!sessionLevelIntervalTiers.isEmpty()) {
+            final MenuBuilder sessionTierMenuBuilder = new MenuBuilder(mb.addMenu(".", "Session Interval Tiers"));
+            for(var entry: sessionLevelIntervalTiers.entrySet()) {
+                final String tierName = entry.getKey();
+                final IntervalTierComponent tierComp = entry.getValue();
+                final JCheckBoxMenuItem showTierItem = new JCheckBoxMenuItem(tierName, tierComp.isVisible());
+                showTierItem.addActionListener( (e) -> {
+                    final boolean newVisibility = showTierItem.isSelected();
+                    setTierVisible(tierName, newVisibility);
+                    final TierVisibilityEdit edit = new TierVisibilityEdit(this, tierName, newVisibility);
+                    getParentView().getEditor().getUndoSupport().postEdit(edit);
+                });
+                sessionTierMenuBuilder.addItem(".", showTierItem);
+            }
+
+            // add show all/hide all
+            sessionTierMenuBuilder.addSeparator(".", "showhide");
+            final JMenuItem showAllItem = new JMenuItem("Show All");
+            showAllItem.addActionListener( (e) -> {
+                getParentView().getEditor().getUndoSupport().beginUpdate("Show all session interval tiers");
+                for(var entry: sessionLevelIntervalTiers.entrySet()) {
+                    final String tierName = entry.getKey();
+                    final IntervalTierComponent tierComp = entry.getValue();
+                    if(!tierComp.isVisible()) {
+                        tierComp.setVisible(true);
+                        final TierVisibilityEdit visibilityEdit = new TierVisibilityEdit(this, tierName, true);
+                        getParentView().getEditor().getUndoSupport().postEdit(visibilityEdit);
+                    }
+                }
+                getParentView().getEditor().getUndoSupport().endUpdate();
+            });
+            sessionTierMenuBuilder.addItem(".", showAllItem);
+
+            final JMenuItem hideAllItem = new JMenuItem("Hide All");
+            hideAllItem.addActionListener( (e) -> {
+                getParentView().getEditor().getUndoSupport().beginUpdate("Hide all session interval tiers");
+                for(var entry: sessionLevelIntervalTiers.entrySet()) {
+                    final String tierName = entry.getKey();
+                    final IntervalTierComponent tierComp = entry.getValue();
+                    if(tierComp.isVisible()) {
+                        tierComp.setVisible(false);
+                        final TierVisibilityEdit visibilityEdit = new TierVisibilityEdit(this, tierName, false);
+                        getParentView().getEditor().getUndoSupport().postEdit(visibilityEdit);
+                    }
+                }
+                getParentView().getEditor().getUndoSupport().endUpdate();
+            });
+            sessionTierMenuBuilder.addItem(".", hideAllItem);
+        }
     }
 
     @Override
     public void onRefresh() {
 
+    }
+
+    public boolean isTierVisible(String tierName) {
+        return (recordDataIntervalTiers.containsKey(tierName) && recordDataIntervalTiers.get(tierName).isVisible())
+                || (sessionLevelIntervalTiers.containsKey(tierName) && sessionLevelIntervalTiers.get(tierName).isVisible());
+    }
+
+    public void setTierVisible(String tierName, boolean visible) {
+        if(recordDataIntervalTiers.containsKey(tierName)) {
+            recordDataIntervalTiers.get(tierName).setVisible(visible);
+        } else if(sessionLevelIntervalTiers.containsKey(tierName)) {
+            sessionLevelIntervalTiers.get(tierName).setVisible(visible);
+        }
     }
 
     /**
@@ -460,6 +577,46 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         public Orthography getUpdatedOrthography() {
             return builder.toOrthography();
         }
+    }
+
+    /**
+     * Undoable edit for changing tier visibility
+     */
+    public static class TierVisibilityEdit extends AbstractUndoableEdit {
+
+        private final SpeechAnalysisIntervalsTier intervalsTier;
+
+        private final String tierName;
+
+        private final boolean newVisibility;
+
+        private final boolean oldVisibility;
+
+        public TierVisibilityEdit(SpeechAnalysisIntervalsTier intervalsTier, String tierName, boolean newVisibility) {
+            super();
+            this.intervalsTier = intervalsTier;
+            this.tierName = tierName;
+            this.newVisibility = newVisibility;
+            this.oldVisibility = intervalsTier.isTierVisible(tierName);
+        }
+
+        @Override
+        public String getPresentationName() {
+            return "Change tier visibility";
+        }
+
+        @Override
+        public void redo() {
+            super.redo();
+            intervalsTier.setTierVisible(tierName, newVisibility);
+        }
+
+        @Override
+        public void undo() {
+            super.undo();
+            intervalsTier.setTierVisible(tierName, oldVisibility);
+        }
+
     }
 
 }
