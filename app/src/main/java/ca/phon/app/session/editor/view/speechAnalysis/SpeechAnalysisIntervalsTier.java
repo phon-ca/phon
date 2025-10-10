@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.speechAnalysis;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.undo.TierEdit;
@@ -9,8 +10,11 @@ import ca.phon.app.session.intervalTiers.RecordIntervalTier;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModelAdapter;
 import ca.phon.orthography.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Range;
 import ca.phon.visitor.VisitorAdapter;
@@ -20,10 +24,13 @@ import org.jdesktop.swingx.VerticalLayout;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.undo.AbstractUndoableEdit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -171,6 +178,34 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             sessionLevelIntervalTiers.put(timelineTier.getName(), intervalTierComponent);
         }
 
+        // add button in toolbar to display interval tier menu
+        final JPopupMenu intervalTierMenu = new JPopupMenu();
+        intervalTierMenu.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                intervalTierMenu.removeAll();
+                final MenuBuilder menuBuilder = new MenuBuilder(intervalTierMenu);
+                setupIntervalMenu(menuBuilder);
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+
+            }
+        });
+        final PhonUIAction<Void> phonUIAction = PhonUIAction.eventConsumer((phonActionEvent) -> {
+            final JButton source = (JButton) phonActionEvent.getActionEvent().getSource();
+            intervalTierMenu.show(source, 0, source.getHeight());
+        });
+        phonUIAction.putValue(PhonUIAction.NAME, "Interval Tiers");
+        phonUIAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show interval tiers menu");
+        final JButton intervalTierMenuButton = new JButton(phonUIAction);
+        getParentView().getToolbar().add(intervalTierMenuButton, getParentView().getToolbar().getComponentCount()-1);
     }
 
     /**
@@ -216,10 +251,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
     }
 
-    @Override
-    public void addMenuItems(JMenu menuEle, boolean includeAccelerators) {
-        final MenuBuilder mb = new MenuBuilder(menuEle);
-
+    private void setupIntervalMenu(MenuBuilder mb) {
         // add show/hide menu items for each tier
         if(!recordDataIntervalTiers.isEmpty()) {
             final MenuBuilder recordTierMenuBuilder = new MenuBuilder(mb.addMenu(".", "Record Interval Tiers"));
@@ -321,6 +353,24 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             });
             sessionTierMenuBuilder.addItem(".", hideAllItem);
         }
+
+        // plugin point for adding menu items
+        final List<IPluginExtensionPoint<IntervalTierMenuHandler>> extPts =
+                PluginManager.getInstance().getExtensionPoints(IntervalTierMenuHandler.class);
+        for(IPluginExtensionPoint<IntervalTierMenuHandler> extPt:extPts) {
+            try {
+                final IntervalTierMenuHandler handler = extPt.getFactory().createObject();
+                handler.setupMenu(mb);
+            } catch (Exception ex) {
+                LogUtil.severe(ex);
+            }
+        }
+    }
+
+    @Override
+    public void addMenuItems(JMenu menuEle, boolean includeAccelerators) {
+        final MenuBuilder mb = new MenuBuilder(menuEle);
+        setupIntervalMenu(mb);
     }
 
     @Override
