@@ -360,7 +360,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         for(IPluginExtensionPoint<IntervalTierMenuHandler> extPt:extPts) {
             try {
                 final IntervalTierMenuHandler handler = extPt.getFactory().createObject();
-                handler.setupMenu(mb);
+                handler.setupMenu(this, mb);
             } catch (Exception ex) {
                 LogUtil.severe(ex);
             }

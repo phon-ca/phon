@@ -156,7 +156,12 @@ public final class IntervalTiers extends ExtendableObject {
      * @return new IntervalTierImpl if the given name does not exist, existing IntervalTierImpl if it does
      */
     public IntervalTier addTier(String tierName) {
-        return null;
+        final SessionFactory factory = SessionFactory.newFactory();
+        final IntervalTier tier = factory.createTimelineTier(tierName);
+        if(addTier(tier))
+            return tier;
+        else
+            return getTier(tierName);
     }
 
     /**

@@ -7,6 +7,6 @@ import ca.phon.ui.menu.MenuBuilder;
  */
 public interface IntervalTierMenuHandler {
 
-    void setupMenu(MenuBuilder menuBuilder);
+    void setupMenu(SpeechAnalysisIntervalsTier speechAnalysisIntervalsTier, MenuBuilder menuBuilder);
 
 }

@@ -335,6 +335,32 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 			new EditorEventType<>(EditorEventName.TIMELINE_TIER_REMOVE_INTERVAL.getEventName(), TimelineIntervalRemoveData.class);
 
 	/**
+	 * Record for timeline intervals addition (batch operation)
+	 * @param tierName
+	 * @param intervals
+	 */
+	public record TimelineIntervalsAddData(String tierName, List<IntervalTier.Interval> intervals) {}
+
+	/**
+	 * Add multiple timeline tier intervals event (batch operation)
+	 */
+	public final static EditorEventType<TimelineIntervalsAddData> TimelineIntervalsAdd =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_ADD_INTERVALS.getEventName(), TimelineIntervalsAddData.class);
+
+	/**
+	 * Record for timeline intervals removal (batch operation)
+	 * @param tierName
+	 * @param intervals
+	 */
+	public record TimelineIntervalsRemoveData(String tierName, List<IntervalTier.Interval> intervals) {}
+
+	/**
+	 * Remove multiple timeline tier intervals event (batch operation)
+	 */
+	public final static EditorEventType<TimelineIntervalsRemoveData> TimelineIntervalsRemove =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_REMOVE_INTERVALS.getEventName(), TimelineIntervalsRemoveData.class);
+
+	/**
 	 * Record for timeline interval move
 	 * @param tierName
 	 * @param interval
