@@ -12,34 +12,34 @@ import ca.phon.session.Session;
  */
 public class RemoveIntervalTierEdit extends SessionUndoableEdit {
 
-    private IntervalTier tier;
+    private final String tierName;
 
-    public RemoveIntervalTierEdit(Session session, EditorEventManager editorEventManager, IntervalTier tier) {
+    public RemoveIntervalTierEdit(Session session, EditorEventManager editorEventManager, String tierName) {
         super(session, editorEventManager);
-        this.tier = tier;
+        this.tierName = tierName;
     }
 
     @Override
     public void doIt() {
-        getSession().getTimeline().removeTier(tier);
+        getSession().getTimeline().removeTier(tierName);
 
         final EditorEvent<EditorEventType.TimelineTierRemoveData> ee =
-                new EditorEvent<>(EditorEventType.TimelineTierRemove, getSource(), new EditorEventType.TimelineTierRemoveData(tier.getName()));
+                new EditorEvent<>(EditorEventType.TimelineTierRemove, getSource(), new EditorEventType.TimelineTierRemoveData(tierName));
         getEditorEventManager().queueEvent(ee);
     }
 
     @Override
     public void undo() {
-        getSession().getTimeline().addTier(tier);
+        getSession().getTimeline().addTier(tierName);
 
         final EditorEvent<EditorEventType.TimelineTierAddData> ee =
-                new EditorEvent<>(EditorEventType.TimelineTierAdd, getSource(), new EditorEventType.TimelineTierAddData(tier.getName()));
+                new EditorEvent<>(EditorEventType.TimelineTierAdd, getSource(), new EditorEventType.TimelineTierAddData(tierName));
         getEditorEventManager().queueEvent(ee);
     }
 
     @Override
     public String getPresentationName() {
-        return "Remove interval tier: " + tier.getName();
+        return "Remove interval tier: " + tierName;
     }
 
 }

@@ -70,10 +70,14 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
     private void setupEditorEventHandlers() {
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange);
+        getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TimelineTierAdd, this::onIntervalTierAdd);
+        getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TimelineTierRemove, this::onIntervalTierRemove);
     }
 
     private void unregisterEditorEventHandlers() {
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChange, this::onTierChange);
+        getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TimelineTierAdd, this::onIntervalTierAdd);
+        getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TimelineTierRemove, this::onIntervalTierRemove);
     }
 
     public void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {
@@ -87,6 +91,32 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 recordIntervalTier.updateCachedIntervals(ee.data().record());
             }
             intervalTierComponent.repaint();
+        }
+    }
+
+    public void onIntervalTierAdd(EditorEvent<EditorEventType.TimelineTierAddData> ee) {
+        // create and add tier to view
+        final IntervalTier newTier = getParentView().getEditor().getSession().getTimeline().getTier(ee.data().tierName());
+        if(newTier != null) {
+            final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(this.intervalTierTimeModel, newTier);
+            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                    setupSelectionInterval(intervalTierComponent, index, interval)
+            );
+            add(intervalTierComponent);
+            revalidate();
+            repaint();
+            sessionLevelIntervalTiers.put(newTier.getName(), intervalTierComponent);
+        }
+    }
+
+    public void onIntervalTierRemove(EditorEvent<EditorEventType.TimelineTierRemoveData> ee) {
+        final String tierName = ee.data().tierName();
+        if(sessionLevelIntervalTiers.containsKey(tierName)) {
+            final IntervalTierComponent intervalTierComponent = sessionLevelIntervalTiers.get(tierName);
+            remove(intervalTierComponent);
+            revalidate();
+            repaint();
+            sessionLevelIntervalTiers.remove(tierName);
         }
     }
 

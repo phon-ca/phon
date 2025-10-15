@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.speechAnalysis.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 import ca.phon.media.TimeUIModel;
+import ca.phon.session.Record;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 
@@ -80,7 +81,10 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 			Toolkit.getDefaultToolkit().beep();
 		
 		timeModel.setPixelsPerSecond(pxPerS);
-		getView().scrollToRecord(getEditor().currentRecord());
+        final Record currentRecord = getEditor().currentRecord();
+        if(currentRecord != null) {
+            getView().scrollToRecord(getEditor().currentRecord());
+        }
 	}
 
 }

@@ -682,6 +682,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 
 	public void scrollToRecord(Record r) {
+        if(r == null) return;
 		MediaSegment seg = r.getMediaSegment();
 		float time = seg.getStartTime();
 		float endTime = seg.getEndTime();
