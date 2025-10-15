@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.44/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_44.dmg" newVersion="4.0.0-alpha.44" newMediaFileId="macos" fileSize="393559038" md5Sum="6ffd19d9ac4a7d480e2dca223f3b4cca" sha256Sum="663c5dcabad47c7b4358ef75a90df18e38672233309e975fb4cff69b9fbe7dcc" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.45/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_45.dmg" newVersion="4.0.0-alpha.45" newMediaFileId="macos" fileSize="479836971" md5Sum="6ef4f97d70713cf5fc31f669596fe167" sha256Sum="fa4d4824e0f69306843929a9d5d14df8afef22670ad6a063cb9e56729bffe791" bundledJre="macos-universal-25.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -57,10 +57,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.44
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_44.dmg" newVersion="4.0.0-alpha.44" newMediaFileId="macos" fileSize="393559038" md5Sum="6ffd19d9ac4a7d480e2dca223f3b4cca" sha256Sum="663c5dcabad47c7b4358ef75a90df18e38672233309e975fb4cff69b9fbe7dcc" bundledJre="macos-universal-21.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_45.dmg" newVersion="4.0.0-alpha.45" newMediaFileId="macos" fileSize="479836971" md5Sum="6ef4f97d70713cf5fc31f669596fe167" sha256Sum="fa4d4824e0f69306843929a9d5d14df8afef22670ad6a063cb9e56729bffe791" bundledJre="macos-universal-25.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -117,10 +117,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.44
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_44.exe" newVersion="4.0.0-alpha.44" newMediaFileId="win64" fileSize="375455744" md5Sum="99332b5f81d8793ea45d68783dc145d2" sha256Sum="e1401800abb2edb20aa490e8669975c182a150bda0a141febf093f16c32eddc3" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_45.exe" newVersion="4.0.0-alpha.45" newMediaFileId="win64" fileSize="461687296" md5Sum="0d3357db50e25ee98c174361d49f6403" sha256Sum="9fb9b8f901528352f22df098c8b391b88072981015f0915b5b57257747f83a51" bundledJre="windows-amd64-25.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -177,10 +177,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.44
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_44.exe" newVersion="4.0.0-alpha.44" newMediaFileId="win64" fileSize="375455744" md5Sum="99332b5f81d8793ea45d68783dc145d2" sha256Sum="e1401800abb2edb20aa490e8669975c182a150bda0a141febf093f16c32eddc3" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_45.exe" newVersion="4.0.0-alpha.45" newMediaFileId="win64" fileSize="461687296" md5Sum="0d3357db50e25ee98c174361d49f6403" sha256Sum="9fb9b8f901528352f22df098c8b391b88072981015f0915b5b57257747f83a51" bundledJre="windows-amd64-25.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -237,10 +237,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.44
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_44.exe" newVersion="4.0.0-alpha.44" newMediaFileId="win64" fileSize="375455744" md5Sum="99332b5f81d8793ea45d68783dc145d2" sha256Sum="e1401800abb2edb20aa490e8669975c182a150bda0a141febf093f16c32eddc3" bundledJre="windows-amd64-21.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_45.exe" newVersion="4.0.0-alpha.45" newMediaFileId="win64" fileSize="461687296" md5Sum="0d3357db50e25ee98c174361d49f6403" sha256Sum="9fb9b8f901528352f22df098c8b391b88072981015f0915b5b57257747f83a51" bundledJre="windows-amd64-25.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -297,10 +297,10 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.44
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_44.zip" newVersion="4.0.0-alpha.44" newMediaFileId="win64zip" fileSize="374257377" md5Sum="8488a76e6e59a6d9da96f7f9b13b1adf" sha256Sum="ce555897cb4531ab542f899e2f50ffcc02bf060d96f1b121d680fd34846cf2d0" bundledJre="windows-amd64-21.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_45.zip" newVersion="4.0.0-alpha.45" newMediaFileId="win64zip" fileSize="460616216" md5Sum="47d1dd2868f6c52c597c3f67c8506419" sha256Sum="e83be34aa0f39bd499ab884a542c63fa6d80f980969bf44883ba4cb79053a5d6" bundledJre="windows-amd64-25.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -357,7 +357,7 @@
 - Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
 - Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.41
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.44
 </comment>
   </entry>
 </updateDescriptor>
