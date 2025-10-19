@@ -1342,7 +1342,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         TranscriptDocument doc = this;
         Transcript transcript = getSession().getTranscript();
 
-        if (transcriptLocation.transcriptElementIndex() > -1) {
+        if (transcriptLocation.transcriptElementIndex() > -1 && transcriptLocation.transcriptElementIndex() < transcript.getNumberOfElements()) {
             Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.transcriptElementIndex());
 
             if (transcriptElement.isRecord()) {

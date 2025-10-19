@@ -3,6 +3,7 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.IntervalTierSPI;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -125,6 +126,40 @@ public final class IntervalTier extends ExtendableObject {
     }
 
     /**
+     * Get intervals which overlap the provided interval with the given overlap types
+     * accepted.
+     *
+     * @param interval the interval to check against
+     * @param overlapTypes the overlap types to accept
+     *
+     * @return list of overlapping interval indices (or non-overlapping if NO_OVERLAP is provided as the only overlap type)
+     */
+    public int[] overlappingIntervals(Interval interval, OverlapType... overlapTypes) {
+        List<Integer> overlappingIndices = new ArrayList<>();
+        for(int i = 0; i < getIntervals().size(); i++) {
+            final Interval currentInterval = getIntervals().get(i);
+            final OverlapType overlapType = interval.overlapType(currentInterval);
+            for(OverlapType ot:overlapTypes) {
+                if(ot == overlapType) {
+                    overlappingIndices.add(i);
+                }
+            }
+        }
+        return overlappingIndices.stream().mapToInt(i->i).toArray();
+    }
+
+    /**
+     * Interval overlap type
+     */
+    public enum OverlapType {
+        NO_OVERLAP,
+        PARTIAL_OVERLAP_START,
+        PARTIAL_OVERLAP_END,
+        FULLY_CONTAINS,
+        IS_FULLY_CONTAINED
+    };
+
+    /**
      * Interval entity for timeline tier
      */
     public static class Interval {
@@ -168,6 +203,22 @@ public final class IntervalTier extends ExtendableObject {
 
         public boolean isPoint() {
             return this.start == this.end;
+        }
+
+        public OverlapType overlapType(Interval other) {
+            if( (this.end <= other.start) || (this.start >= other.end) ) {
+                return OverlapType.NO_OVERLAP;
+            } else if( (this.start < other.start) && (this.end < other.end) ) {
+                return OverlapType.PARTIAL_OVERLAP_START;
+            } else if( (this.start > other.start) && (this.end > other.end) ) {
+                return OverlapType.PARTIAL_OVERLAP_END;
+            } else if( (this.start <= other.start) && (this.end >= other.end) ) {
+                return OverlapType.FULLY_CONTAINS;
+            } else if( (this.start >= other.start) && (this.end <= other.end) ) {
+                return OverlapType.IS_FULLY_CONTAINED;
+            } else {
+                return OverlapType.NO_OVERLAP;
+            }
         }
 
     }

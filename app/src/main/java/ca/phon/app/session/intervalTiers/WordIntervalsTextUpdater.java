@@ -24,6 +24,42 @@ import java.util.List;
 @Extension(Tier.class)
 public class WordIntervalsTextUpdater implements TierEdit.DependentTierChanges<Orthography>, ExtensionProvider {
 
+    /**
+     * Generate a new word intervals tier from an orthography tier using the provided
+     * segment.
+     *
+     * @param orthography the orthography tier
+     * @param segment the media segment for the record
+     * @return the new word intervals tier
+     */
+    public static Orthography worFromOrthography(Orthography orthography, MediaSegment segment) {
+        // extract words from wordIntervalsTier
+        final OrthoWordExtractor orthoWordExtractor = new OrthoWordExtractor();
+        orthography.accept(orthoWordExtractor);
+        final List<Word> orthoWords = orthoWordExtractor.getWordList();
+
+        final List<InternalMedia> internalMediaList = new ArrayList<>();
+        if(segment.isPoint()) {
+            for(int i = 0; i < orthoWords.size(); i++) {
+                final InternalMedia internalMedia = new InternalMedia(segment.getStartTime(), segment.getEndTime());
+                internalMediaList.add(internalMedia);
+            }
+        } else {
+            final float segmentDuration = segment.getEndTime() - segment.getStartTime();
+            final float wordDuration = segmentDuration / (float)orthoWords.size();
+            for(int i = 0; i < orthoWords.size(); i++) {
+                final float startTime = segment.getStartTime() + (i * wordDuration);
+                final float endTime = startTime + wordDuration;
+                final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
+                internalMediaList.add(internalMedia);
+            }
+        }
+        final WorTierUpdateVisitor updateVisitor = new WorTierUpdateVisitor(internalMediaList);
+        orthography.accept(updateVisitor);
+        final Orthography wordIntervals = updateVisitor.getOrthography();
+        return wordIntervals;
+    }
+
     @Override
     public void performDependentTierChanges(TierEdit<Orthography> tierEdit) {
         // only update word intervals if the text is being committed

@@ -3,10 +3,12 @@ package ca.phon.app.session.editor.view.speechAnalysis;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.intervalTiers.IntervalTierComponent;
 import ca.phon.app.session.intervalTiers.IntervalTierComponentUI;
 import ca.phon.app.session.intervalTiers.RecordIntervalTier;
+import ca.phon.app.session.intervalTiers.WordIntervalsTextUpdater;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModelAdapter;
 import ca.phon.orthography.*;
@@ -29,6 +31,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.undo.AbstractUndoableEdit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -282,9 +285,30 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     }
 
     private void setupIntervalMenu(MenuBuilder mb) {
+        final boolean hasWorTier = recordDataIntervalTiers.containsKey(UserTierType.Wor.getPhonTierName());
+        final boolean hasPhoTier = recordDataIntervalTiers.containsKey(UserTierType.PhoneIntervals.getPhonTierName());
+        final MenuBuilder recordTierMenuBuilder = new MenuBuilder(mb.addMenu(".", "Record Interval Tiers"));
+
+        if(!hasWorTier) {
+            final PhonUIAction<Void> addWorTierAct = PhonUIAction.runnable(this::addWorTier);
+            addWorTierAct.putValue(PhonUIAction.NAME, "Add Word Intervals Tier");
+            addWorTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add word intervals tier to records");
+            recordTierMenuBuilder.addItem(".", addWorTierAct);
+        }
+
+        if(!hasPhoTier) {
+            final PhonUIAction<Void> addPhoTierAct = PhonUIAction.runnable(this::addPhoTier);
+            addPhoTierAct.putValue(PhonUIAction.NAME, "Add Phone Intervals Tier");
+            addPhoTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add phone intervals tier to records");
+            recordTierMenuBuilder.addItem(".", addPhoTierAct);
+        }
+
+        if(!hasWorTier || !hasPhoTier && !recordDataIntervalTiers.isEmpty()) {
+            recordTierMenuBuilder.addSeparator(".", "addtiers");
+        }
+
         // add show/hide menu items for each tier
         if(!recordDataIntervalTiers.isEmpty()) {
-            final MenuBuilder recordTierMenuBuilder = new MenuBuilder(mb.addMenu(".", "Record Interval Tiers"));
             for(var entry: recordDataIntervalTiers.entrySet()) {
                 final String tierName = entry.getKey();
                 final IntervalTierComponent tierComp = entry.getValue();
@@ -395,6 +419,52 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 LogUtil.severe(ex);
             }
         }
+    }
+
+    private void addWorTier() {
+        final Session session = getParentView().getEditor().getSession();
+        final TierDescription existingTierDesc = session.getTier(UserTierType.Wor.getPhonTierName());
+        if(existingTierDesc != null) return;
+        final SessionFactory factory = SessionFactory.newFactory();
+        final TierDescription worTierDesc = factory.createTierDescription(UserTierType.Wor);
+        final TierViewItem tvi = factory.createTierViewItem(UserTierType.Wor.getPhonTierName(), false, true);
+
+        getParentView().getEditor().getUndoSupport().beginUpdate("Add word intervals tier");
+        final AddTierEdit addTierEdit = new AddTierEdit(getParentView().getEditor(), worTierDesc, tvi, -1);
+        getParentView().getEditor().getUndoSupport().postEdit(addTierEdit);
+
+        for(int i = 0; i < session.getRecordCount(); i++) {
+            final Record r = session.getRecord(i);
+            final Orthography orthography = r.getOrthography();
+            final Orthography wor = WordIntervalsTextUpdater.worFromOrthography(orthography, r.getMediaSegment());
+
+            final Tier<Orthography> worTier = r.getTier(UserTierType.Wor.getPhonTierName(), Orthography.class);
+            final TierEdit<Orthography> worTierEdit = new TierEdit<>(getParentView().getEditor().getSession(),
+                    getParentView().getEditor().getEventManager(), getParentView().getEditor().getDataModel().getTranscriber(),
+                    r, worTier, wor, false);
+            getParentView().getEditor().getUndoSupport().postEdit(worTierEdit);
+        }
+        getParentView().getEditor().getUndoSupport().endUpdate();
+    }
+
+    private void addPhoTier() {
+        final Session session = getParentView().getEditor().getSession();
+        final TierDescription existingTierDesc = session.getTier(UserTierType.PhoneIntervals.getPhonTierName());
+        if(existingTierDesc != null) return;
+        final SessionFactory factory = SessionFactory.newFactory();
+        final TierDescription phointTierDesc = factory.createTierDescription(UserTierType.PhoneIntervals);
+        final TierViewItem tvi = factory.createTierViewItem(UserTierType.PhoneIntervals.getPhonTierName(), false, true);
+
+        getParentView().getEditor().getUndoSupport().beginUpdate("Add phone intervals tier");
+        final AddTierEdit addTierEdit = new AddTierEdit(getParentView().getEditor(), phointTierDesc, tvi, -1);
+        getParentView().getEditor().getUndoSupport().postEdit(addTierEdit);
+
+        for(int i = 0; i < session.getRecordCount(); i++) {
+            final Record r = session.getRecord(i);
+
+            // if we have a word intervals tier, use it to generate phone intervals
+        }
+        getParentView().getEditor().getUndoSupport().endUpdate();
     }
 
     @Override
