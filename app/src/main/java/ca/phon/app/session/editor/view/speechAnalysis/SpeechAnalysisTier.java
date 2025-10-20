@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.speechAnalysis;
 import ca.phon.media.TimeComponent;
 
 import javax.swing.*;
+import java.util.Properties;
 
 /**
  * Extension point for waveform view tiers.
@@ -58,5 +59,12 @@ public abstract class SpeechAnalysisTier extends TimeComponent {
 	public boolean shouldShow() {
 		return true;
 	}
+
+    public Properties getStateProperties() {
+        return new Properties();
+    }
+
+    public void loadStateProperties(Properties props) {
+    }
 	
 }

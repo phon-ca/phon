@@ -876,9 +876,29 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public JPanel getErrorPane() {
 		return this.errorPanel;
 	}
-	
 
-	private JMenu createContextMenu() {
+    @Override
+    public Properties getStateProperties() {
+        final Properties retVal = new Properties();
+
+        for(SpeechAnalysisTier tier:pluginTiers) {
+            final Properties tierProps = tier.getStateProperties();
+            for(String key:tierProps.stringPropertyNames()) {
+                retVal.put(key, tierProps.getProperty(key));
+            }
+        }
+
+        return retVal;
+    }
+
+    @Override
+    public void loadStateProperties(Properties props) {
+        for(SpeechAnalysisTier tier:pluginTiers) {
+            tier.loadStateProperties(props);
+        }
+    }
+
+    private JMenu createContextMenu() {
 		final JMenu menu = new JMenu();
 		MenuBuilder builder = new MenuBuilder(menu);
 		
