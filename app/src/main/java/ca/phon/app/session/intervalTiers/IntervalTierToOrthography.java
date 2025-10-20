@@ -7,7 +7,15 @@ import ca.phon.orthography.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 
-public class IntervalTierToOrthography {
+/**
+ * Import intervals from an interval tier into an orthography tier. The intervals
+ * that fully contain each record's media segment will be concatenated
+ * and added to the orthography tier for that record. Optionally, a word
+ * tier can also be populated with the same content but with InternalMedia
+ * objects between words. A terminator can also be added to the end of the
+ * orthography and word interval tiers.
+ */
+public final class IntervalTierToOrthography extends IntervalTierImporter {
 
     private final IntervalTierToOrthographySettings settings;
 
@@ -51,11 +59,8 @@ public class IntervalTierToOrthography {
                 terminatorType));
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
-        importTier(session, eventManager, Transcriber.VALIDATOR, undoSupport);
-    }
-
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport) {
+    @Override
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -74,7 +79,8 @@ public class IntervalTierToOrthography {
             }
         }
 
-        for(Record record:session.getRecords()) {
+        for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
+            final Record record = session.getRecord(recordIndex);
             final OrthographyBuilder builder = new OrthographyBuilder();
             final OrthographyBuilder worBuilder = new OrthographyBuilder();
             final MediaSegment segment = record.getMediaSegment();

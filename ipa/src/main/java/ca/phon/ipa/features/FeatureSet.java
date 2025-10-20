@@ -58,7 +58,6 @@ public class FeatureSet implements Iterable<Feature> {
 		
 		for(String f:features) {
 			if(f.indexOf(',') >= 0) {
-				//seperate and add features
 				String[] tokens = f.split(",");
 				for(int i = 0; i < tokens.length; i++) {
 					String feature = StringUtils.strip(tokens[i]).toLowerCase();
@@ -71,7 +70,7 @@ public class FeatureSet implements Iterable<Feature> {
 				}
 				
 			} else {
-				if(FeatureMatrix.getInstance().getFeature(f.toLowerCase()) != null) {
+				if(FeatureMatrix.getInstance().getFeature(f.toLowerCase().trim()) != null) {
 					fs.add(f);
 				} else {
 					Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + f);

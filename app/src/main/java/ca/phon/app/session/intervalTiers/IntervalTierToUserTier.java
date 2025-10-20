@@ -14,7 +14,13 @@ import ca.phon.session.tierdata.TierString;
 
 import java.util.List;
 
-public class IntervalTierToUserTier {
+/**
+ * Import intervals from an interval tier into a user-defined tier. The intervals
+ * that fully contain each record's media segment will be added
+ * to the user tier for that record. Optionally, InternalMedia objects
+ * can be added between the tier strings.
+ */
+public final class IntervalTierToUserTier extends IntervalTierImporter {
 
     private final IntervalTierToUserTierSettings settings;
 
@@ -22,11 +28,7 @@ public class IntervalTierToUserTier {
         this.settings = settings;
     }
 
-    public void importToUserTier(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
-        importToUserTier(session, eventManager, Transcriber.VALIDATOR, undoSupport);
-    }
-
-    public void importToUserTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport) {
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -42,7 +44,8 @@ public class IntervalTierToUserTier {
             undoSupport.postEdit(addTierEdit);
         }
 
-        for(Record record:session.getRecords()) {
+        for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
+            final Record record = session.getRecord(recordIndex);
             final MediaSegment segment = record.getMediaSegment();
             if(segment.isPoint()) continue;
 

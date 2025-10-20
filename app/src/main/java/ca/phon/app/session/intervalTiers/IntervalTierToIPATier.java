@@ -5,13 +5,21 @@ import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipadictionary.impl.TransliterationDictionary;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 
-public class IntervalTierToIPATier {
+/**
+ * Import intervals from an interval tier into an IPA tier. The intervals
+ * that fully contain each record's media segment will be concatenated
+ * and added to the specified IPA tier for that record. Optionally, the
+ * resulting text can be syllabified using a specified syllabifier.
+ *
+ * If the interval tier labels are in a different script, a transliteration scheme
+ * can be specified to convert the text to Unicode IPA.
+ */
+public final class IntervalTierToIPATier extends IntervalTierImporter {
 
     private final IntervalTierToIPATierSettings settings;
 
@@ -19,18 +27,19 @@ public class IntervalTierToIPATier {
         this.settings = settings;
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
-        importTier(session, eventManager, Transcriber.VALIDATOR, undoSupport);
+    public void importTier(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, int recordStartIndex) {
+        importTier(session, eventManager, Transcriber.VALIDATOR, undoSupport, recordStartIndex);
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport) {
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
         }
         undoSupport.beginUpdate("Import intervals from tier '" + settings.intervalTierName() + "' to IPA tier '" + settings.recordTierName() + "'");
 
-        for(Record record:session.getRecords()) {
+        for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
+            final Record record = session.getRecord(recordIndex);
             final MediaSegment segment = record.getMediaSegment();
             if(segment.isPoint()) continue;
 

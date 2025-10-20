@@ -3,26 +3,27 @@ package ca.phon.app.session.intervalTiers;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordsFromIntervalTier {
+public final class IntervalTierToRecordSegments extends IntervalTierImporter {
 
-    private final RecordsFromIntervalTierSettings settings;
+    private final IntervalTierToRecordSegmentsSettings settings;
 
-    public RecordsFromIntervalTier(String intervalTierName, Participant speaker) {
-        this(new RecordsFromIntervalTierSettings(intervalTierName, false, 0.0f, 0.0f, speaker));
+    public IntervalTierToRecordSegments(String intervalTierName, Participant speaker) {
+        this(new IntervalTierToRecordSegmentsSettings(intervalTierName, false, 0.0f, 0.0f, speaker, false));
     }
 
-    public RecordsFromIntervalTier(String intervalTierName, boolean groupContiguousIntervals,
-                                   float maxGapLength, float padding, Participant speaker) {
-        this(new RecordsFromIntervalTierSettings(intervalTierName, groupContiguousIntervals, maxGapLength, padding, speaker));
+    public IntervalTierToRecordSegments(String intervalTierName, boolean groupContiguousIntervals,
+                                        float maxGapLength, float padding, Participant speaker, boolean overwriteExistingRecords) {
+        this(new IntervalTierToRecordSegmentsSettings(intervalTierName, groupContiguousIntervals, maxGapLength, padding, speaker, overwriteExistingRecords));
     }
 
-    public RecordsFromIntervalTier(RecordsFromIntervalTierSettings settings) {
+    public IntervalTierToRecordSegments(IntervalTierToRecordSegmentsSettings settings) {
         this.settings = settings;
     }
 
@@ -81,19 +82,29 @@ public class RecordsFromIntervalTier {
      *
      * @param session the session
      * @param eventManager event manager for session change events
+     * @param transcriber the transcriber
      * @param undoSupport undo support
-     * @param speaker optional participant to set as speaker for new records
      */
-    public void createRecordsFromSessionIntervals(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
+    @Override
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
         final List<MediaSegment> segments = segmentsFromSessionIntervals(session);
         final SessionFactory factory = SessionFactory.newFactory();
         undoSupport.beginUpdate("Create records from intervals");
+        int recordIndex = recordStartIndex;
         for(MediaSegment segment: segments) {
-            final Record newRecord = factory.createRecord();
-            newRecord.setMediaSegment(segment);
-            newRecord.setSpeaker(settings.speaker());
-            final AddRecordEdit addRecordEdit = new AddRecordEdit(session, eventManager, newRecord);
-            undoSupport.postEdit(addRecordEdit);
+            boolean recordExists = recordIndex < session.getRecordCount();
+            final Record record = (recordExists && settings.overwriteExistingRecords()) ? session.getRecord(recordIndex) : factory.createRecord();
+            if(recordExists && settings.groupContiguousIntervals()) {
+                final TierEdit<MediaSegment> tierEdit =
+                        new TierEdit<>(session, eventManager, transcriber, record, record.getSegmentTier(), segment);
+                undoSupport.postEdit(tierEdit);
+            } else {
+                record.setMediaSegment(segment);
+                record.setSpeaker(settings.speaker());
+                final AddRecordEdit addRecordEdit = new AddRecordEdit(session, eventManager, record, recordIndex);
+                undoSupport.postEdit(addRecordEdit);
+            }
+            recordIndex++;
         }
         undoSupport.endUpdate();
     }
