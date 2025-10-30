@@ -1,7 +1,7 @@
 package ca.phon.app.session.intervalTiers;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.RemoveTierEdit;
+import ca.phon.app.session.editor.undo.RemoveTimelineTierEdit;
 import ca.phon.session.IntervalTier;
 import ca.phon.session.Session;
 import ca.phon.ui.decorations.DialogHeader;
@@ -139,7 +139,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         Session session = editor.getSession();
         IntervalTier tier = session.getTimeline().getTier(intervalTierName);
         if (tier != null) {
-            RemoveTierEdit edit = new RemoveTierEdit(session, editor.getEventManager(), tier);
+            RemoveTimelineTierEdit edit = new RemoveTimelineTierEdit(session, editor.getEventManager(), tier);
             editor.getUndoSupport().postEdit(edit);
         }
     }
