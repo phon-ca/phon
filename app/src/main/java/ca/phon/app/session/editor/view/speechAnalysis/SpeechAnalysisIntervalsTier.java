@@ -94,7 +94,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             } else if(ee.data().tierNames().contains(UserTierType.PhoneIntervals.getPhonTierName())) {
                 addPhoneIntervalsTierToView();
             }
-        } else if(ee.data().changeType() == EditorEventType.TierViewChangeType.REMOVE_TIER) {
+        } else if(ee.data().changeType() == EditorEventType.TierViewChangeType.DELETE_TIER) {
             if(ee.data().tierNames().contains(UserTierType.Wor.getPhonTierName())) {
                 removeWorTierFromView();
             } else if(ee.data().tierNames().contains(UserTierType.PhoneIntervals.getPhonTierName())) {
