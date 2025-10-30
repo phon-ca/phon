@@ -64,6 +64,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
      */
     private final Map<String, IntervalTierComponent> sessionLevelIntervalTiers = new HashMap<>();
 
+    final WordAndPhoneSelectionListener wordAndPhoneSelectionListener = new WordAndPhoneSelectionListener();
+
     public SpeechAnalysisIntervalsTier(SpeechAnalysisEditorView parentView) {
         super(parentView);
 
@@ -75,12 +77,30 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange);
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TimelineTierAdd, this::onIntervalTierAdd);
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TimelineTierRemove, this::onIntervalTierRemove);
+        getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
     }
 
     private void unregisterEditorEventHandlers() {
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChange, this::onTierChange);
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TimelineTierAdd, this::onIntervalTierAdd);
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TimelineTierRemove, this::onIntervalTierRemove);
+        getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+    }
+
+    public void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> ee) {
+        if(ee.data().changeType() == EditorEventType.TierViewChangeType.ADD_TIER) {
+            if(ee.data().tierNames().contains(UserTierType.Wor.getPhonTierName())) {
+                addWorTierToView();
+            } else if(ee.data().tierNames().contains(UserTierType.PhoneIntervals.getPhonTierName())) {
+                addPhoneIntervalsTierToView();
+            }
+        } else if(ee.data().changeType() == EditorEventType.TierViewChangeType.REMOVE_TIER) {
+            if(ee.data().tierNames().contains(UserTierType.Wor.getPhonTierName())) {
+                removeWorTierFromView();
+            } else if(ee.data().tierNames().contains(UserTierType.PhoneIntervals.getPhonTierName())) {
+                removePhoneIntervalsTierFromView();
+            }
+        }
     }
 
     public void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {
@@ -123,6 +143,64 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
     }
 
+    public void addWorTierToView() {
+        final Session session = getParentView().getEditor().getSession();
+        final TierDescription worTierDesc = session.getTier(UserTierType.Wor.getPhonTierName());
+        if (worTierDesc == null) return;
+        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, worTierDesc.getName());
+        final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
+        intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
+        final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
+        intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
+        intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                setupSelectionInterval(intervalTierComponent, index, interval)
+        );
+        add(intervalTierComponent, 0);
+        recordDataIntervalTiers.put(worTierDesc.getName(), intervalTierComponent);
+    }
+
+    public void removeWorTierFromView() {
+        final String tierName = UserTierType.Wor.getPhonTierName();
+        if(recordDataIntervalTiers.containsKey(tierName)) {
+            final IntervalTierComponent intervalTierComponent = recordDataIntervalTiers.get(tierName);
+            remove(intervalTierComponent);
+            revalidate();
+            repaint();
+            recordDataIntervalTiers.remove(tierName);
+        }
+    }
+
+    public void addPhoneIntervalsTierToView() {
+        final Session session = getParentView().getEditor().getSession();
+        final TierDescription phoTierDesc = session.getTier(UserTierType.PhoneIntervals.getPhonTierName());
+        if (phoTierDesc == null) return;
+        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, phoTierDesc.getName());
+        final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
+        intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
+        final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
+        intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
+        intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                setupSelectionInterval(intervalTierComponent, index, interval)
+        );
+        if(recordDataIntervalTiers.containsKey(UserTierType.Wor.getPhonTierName())) {
+            add(intervalTierComponent, 1);
+        } else {
+            add(intervalTierComponent, 0);
+        }
+        recordDataIntervalTiers.put(phoTierDesc.getName(), intervalTierComponent);
+    }
+
+    public void removePhoneIntervalsTierFromView() {
+        final String tierName = UserTierType.PhoneIntervals.getPhonTierName();
+        if(recordDataIntervalTiers.containsKey(tierName)) {
+            final IntervalTierComponent intervalTierComponent = recordDataIntervalTiers.get(tierName);
+            remove(intervalTierComponent);
+            revalidate();
+            repaint();
+            recordDataIntervalTiers.remove(tierName);
+        }
+    }
+
     private void init() {
         setLayout(new VerticalLayout());
 
@@ -152,7 +230,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final Session session = getParentView().getEditor().getSession();
         final IntervalTiers intervalTiers = session.getTimeline();
 
-        final WordAndPhoneSelectionListener wordAndPhoneSelectionListener = new WordAndPhoneSelectionListener();
+
 
         // check for word intervals tier
         final TierDescription worTierDesc = session.getUserTiers()
@@ -160,16 +238,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 .filter(td -> UserTierType.Wor.getPhonTierName().equals(td.getName()))
                 .findAny().orElse(null);
         if(worTierDesc != null) {
-            final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, worTierDesc.getName());
-            final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
-            intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
-            final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
-            intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
-            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
-                    setupSelectionInterval(intervalTierComponent, index, interval)
-            );
-            add(intervalTierComponent);
-            recordDataIntervalTiers.put(worTierDesc.getName(), intervalTierComponent);
+            addWorTierToView();
         }
 
         // check for phone intervals tier
@@ -178,16 +247,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 .filter(td -> UserTierType.PhoneIntervals.getPhonTierName().equals(td.getName()))
                 .findAny().orElse(null);
         if(phoTierDesc != null) {
-            final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, phoTierDesc.getName());
-            final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
-            intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
-            final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(this.intervalTierTimeModel, intervalTier);
-            intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
-            intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
-                    setupSelectionInterval(intervalTierComponent, index, interval)
-            );
-            add(intervalTierComponent);
-            recordDataIntervalTiers.put(phoTierDesc.getName(), intervalTierComponent);
+            addPhoneIntervalsTierToView();
         }
 
         for(String timelineTierName: intervalTiers.getRecordIntervalTiers()) {
