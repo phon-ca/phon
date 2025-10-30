@@ -40,7 +40,7 @@ public abstract class SpeechAnalysisTier extends TimeComponent {
 	/**
 	 * Add custom commands to the editor view menu.
 	 * 
-	 * @param menu
+	 * @param menuEle
 	 * @param includeAccelerators
 	 */
 	public abstract void addMenuItems(JMenu menuEle, boolean includeAccelerators);
