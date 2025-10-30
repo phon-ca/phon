@@ -423,14 +423,57 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             for(var entry: sessionLevelIntervalTiers.entrySet()) {
                 final String tierName = entry.getKey();
                 final IntervalTierComponent tierComp = entry.getValue();
-                final JCheckBoxMenuItem showTierItem = new JCheckBoxMenuItem(tierName, tierComp.isVisible());
+                
+                // Create submenu for each tier
+                final MenuBuilder tierMenuBuilder = new MenuBuilder(sessionTierMenuBuilder.addMenu(".", tierName));
+                
+                // Show/hide checkbox
+                final JCheckBoxMenuItem showTierItem = new JCheckBoxMenuItem("Show/Hide", tierComp.isVisible());
                 showTierItem.addActionListener( (e) -> {
                     final boolean newVisibility = showTierItem.isSelected();
                     setTierVisible(tierName, newVisibility);
                     final TierVisibilityEdit edit = new TierVisibilityEdit(this, tierName, newVisibility);
                     getParentView().getEditor().getUndoSupport().postEdit(edit);
                 });
-                sessionTierMenuBuilder.addItem(".", showTierItem);
+                tierMenuBuilder.addItem(".", showTierItem);
+                
+                // Add separator before import options
+                tierMenuBuilder.addSeparator(".", "import");
+                
+                // Import to IPA tier
+                final JMenuItem importToIPATierItem = new JMenuItem("Import to IPA Tier...");
+                importToIPATierItem.addActionListener( (e) -> {
+                    showImportToIPATierDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToIPATierItem);
+                
+                // Import to Orthography
+                final JMenuItem importToOrthographyItem = new JMenuItem("Import to Orthography...");
+                importToOrthographyItem.addActionListener( (e) -> {
+                    showImportToOrthographyDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToOrthographyItem);
+                
+                // Import to Phone Intervals
+                final JMenuItem importToPhoneIntervalsItem = new JMenuItem("Import to Phone Intervals...");
+                importToPhoneIntervalsItem.addActionListener( (e) -> {
+                    showImportToPhoneIntervalsDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToPhoneIntervalsItem);
+                
+                // Import to Record Segments
+                final JMenuItem importToRecordSegmentsItem = new JMenuItem("Import to Record Segments...");
+                importToRecordSegmentsItem.addActionListener( (e) -> {
+                    showImportToRecordSegmentsDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToRecordSegmentsItem);
+                
+                // Import to User Tier
+                final JMenuItem importToUserTierItem = new JMenuItem("Import to User Tier...");
+                importToUserTierItem.addActionListener( (e) -> {
+                    showImportToUserTierDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToUserTierItem);
             }
 
             // add show all/hide all
@@ -827,6 +870,51 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             intervalsTier.setTierVisible(tierName, oldVisibility);
         }
 
+    }
+    
+    private void showImportToIPATierDialog(String tierName) {
+        var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createIPATierImportDialog(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+            getParentView().getEditor(),
+            tierName
+        );
+        dialog.setVisible(true);
+    }
+    
+    private void showImportToOrthographyDialog(String tierName) {
+        var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createOrthographyImportDialog(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+            getParentView().getEditor(),
+            tierName
+        );
+        dialog.setVisible(true);
+    }
+    
+    private void showImportToPhoneIntervalsDialog(String tierName) {
+        var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createPhoneIntervalsImportDialog(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+            getParentView().getEditor(),
+            tierName
+        );
+        dialog.setVisible(true);
+    }
+    
+    private void showImportToRecordSegmentsDialog(String tierName) {
+        var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createRecordSegmentsImportDialog(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+            getParentView().getEditor(),
+            tierName
+        );
+        dialog.setVisible(true);
+    }
+    
+    private void showImportToUserTierDialog(String tierName) {
+        var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createUserTierImportDialog(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+            getParentView().getEditor(),
+            tierName
+        );
+        dialog.setVisible(true);
     }
 
 }
