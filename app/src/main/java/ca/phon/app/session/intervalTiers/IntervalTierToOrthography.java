@@ -65,7 +65,6 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
         }
-        undoSupport.beginUpdate("Import intervals from tier '" + settings.intervalTierName() + "' to orthography tier");
 
         if(settings.importWorTier()) {
             TierDescription worTierDesc = session.getTier(UserTierType.Wor.getPhonTierName());
@@ -112,7 +111,7 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
                 builder.append(new Terminator(settings.terminatorType()));
             }
             final Orthography orthography = builder.toOrthography();
-            final TierEdit<Orthography> orthoTierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getOrthographyTier(), orthography);
+            final TierEdit<Orthography> orthoTierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getOrthographyTier(), orthography, false);
             undoSupport.postEdit(orthoTierEdit);
 
             if(settings.importWorTier()) {
@@ -120,12 +119,10 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
                     worBuilder.append(new Terminator(settings.terminatorType()));
                 }
                 final Orthography worOrthography = worBuilder.toOrthography();
-                final TierEdit<Orthography> worTierEdit = new TierEdit<>(session, eventManager, transcriber, record, (Tier<Orthography>)record.getTier(UserTierType.Wor.getPhonTierName()), worOrthography);
+                final TierEdit<Orthography> worTierEdit = new TierEdit<>(session, eventManager, transcriber, record, (Tier<Orthography>)record.getTier(UserTierType.Wor.getPhonTierName()), worOrthography, false);
                 undoSupport.postEdit(worTierEdit);
             }
         }
-
-        undoSupport.endUpdate();
     }
 
 }

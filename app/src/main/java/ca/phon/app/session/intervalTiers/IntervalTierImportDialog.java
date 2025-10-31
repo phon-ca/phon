@@ -70,7 +70,9 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
     
     private void init(String title, String description) {
         setLayout(new BorderLayout());
-        
+
+        setModal(false);
+
         // Header
         DialogHeader header = new DialogHeader(title, description);
         add(header, BorderLayout.NORTH);
@@ -116,15 +118,16 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         R importer = importerFactory.apply(settings);
         
         // Import tier
+        editor.getUndoSupport().beginUpdate("Import Interval Tier: " + intervalTierName);
         try {
             Session session = editor.getSession();
             importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), 0);
-            
+
             // Delete interval tier if requested
             if (shouldDeleteTierSupplier.get()) {
                 deleteIntervalTier();
             }
-            
+
             wasCancelled = false;
             setVisible(false);
         } catch (Exception ex) {
@@ -132,6 +135,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
                 "Error importing tier: " + ex.getMessage(),
                 "Import Error",
                 JOptionPane.ERROR_MESSAGE);
+        } finally {
+            editor.getUndoSupport().endUpdate();
         }
     }
     

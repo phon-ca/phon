@@ -89,7 +89,6 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
     public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
         final List<MediaSegment> segments = segmentsFromSessionIntervals(session);
         final SessionFactory factory = SessionFactory.newFactory();
-        undoSupport.beginUpdate("Create records from intervals");
         int recordIndex = recordStartIndex;
         for(MediaSegment segment: segments) {
             boolean recordExists = recordIndex < session.getRecordCount();
@@ -106,7 +105,6 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
             }
             recordIndex++;
         }
-        undoSupport.endUpdate();
     }
 
 }

@@ -33,7 +33,6 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
         }
-        undoSupport.beginUpdate("Import intervals from tier '" + settings.intervalTierName() + "' to user tier '" + settings.recordTierName() + "'");
         TierDescription tierDesc = session.getTier(settings.recordTierName());
         if(tierDesc == null) {
             final SessionFactory factory = SessionFactory.newFactory();
@@ -54,10 +53,9 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
             if(containedIntervals.length == 0) continue;
 
             final TierData tierData = getTierElements(containedIntervals, importTier);
-            final TierEdit<TierData> tierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getTier(settings.recordTierName(), TierData.class), tierData);
+            final TierEdit<TierData> tierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getTier(settings.recordTierName(), TierData.class), tierData, false);
             undoSupport.postEdit(tierEdit);
         }
-        undoSupport.endUpdate();
     }
 
     private TierData getTierElements(int[] containedIntervals, IntervalTier importTier) {

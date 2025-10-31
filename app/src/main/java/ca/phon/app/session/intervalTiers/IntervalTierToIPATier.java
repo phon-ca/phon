@@ -36,7 +36,6 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
         }
-        undoSupport.beginUpdate("Import intervals from tier '" + settings.intervalTierName() + "' to IPA tier '" + settings.recordTierName() + "'");
 
         for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
             final Record record = session.getRecord(recordIndex);
@@ -76,12 +75,10 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
 
             final Tier<IPATranscript> ipaTier = record.getTier(settings.recordTierName(), IPATranscript.class);
             if(ipaTier != null) {
-                final TierEdit<IPATranscript> tierEdit = new TierEdit<>(session, eventManager, transcriber, record, ipaTier, ipa);
+                final TierEdit<IPATranscript> tierEdit = new TierEdit<>(session, eventManager, transcriber, record, ipaTier, ipa, false);
                 undoSupport.postEdit(tierEdit);
             }
         }
-
-        undoSupport.endUpdate();
     }
 
 }

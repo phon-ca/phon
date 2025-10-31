@@ -2,6 +2,11 @@ package ca.phon.app.session.intervalTiers;
 
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.participant.ParticipantEditor;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,7 +61,10 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
+
+        JPanel speakerPanel = new JPanel(new BorderLayout(5, 0));
         speakerCombo = new JComboBox<>();
+        speakerCombo.addItem(Participant.UNKNOWN);
         for (Participant participant : session.getParticipants()) {
             speakerCombo.addItem(participant);
         }
@@ -65,7 +73,7 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof Participant) {
-                    setText(((Participant) value).getName());
+                    setText(((Participant) value).toString());
                 }
                 return this;
             }
@@ -73,8 +81,15 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         if (settings.speaker() != null) {
             speakerCombo.setSelectedItem(settings.speaker());
         }
-        add(speakerCombo, gbc);
-        
+        speakerPanel.add(speakerCombo, BorderLayout.CENTER);
+
+        JButton addParticipantButton = new JButton(IconManager.getInstance().getFontIcon("person_add", IconSize.SMALL, UIManager.getColor("Button.foreground")));
+        addParticipantButton.setToolTipText("Add participant...");
+        addParticipantButton.addActionListener(e -> addNewParticipant());
+        speakerPanel.add(addParticipantButton, BorderLayout.EAST);
+
+        add(speakerPanel, gbc);
+
         // Group contiguous intervals
         gbc.gridx = 0;
         gbc.gridy++;
@@ -136,6 +151,24 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         add(deleteIntervalTierCheckbox, gbc);
     }
     
+    private void addNewParticipant() {
+        final SessionFactory factory = SessionFactory.newFactory();
+        final Participant newParticipant = factory.createParticipant();
+        ParticipantEditor.editNewParticipant(
+            CommonModuleFrame.getCurrentFrame(),
+            newParticipant,
+            session.getDate(),
+            session.getParticipants().otherParticipants(null),
+            (wasCanceled) -> {
+                if (!wasCanceled) {
+                    session.addParticipant(newParticipant);
+                    speakerCombo.addItem(newParticipant);
+                    speakerCombo.setSelectedItem(newParticipant);
+                }
+            }
+        );
+    }
+
     public IntervalTierToRecordSegmentsSettings getSettings() {
         float maxGapLength = 0.0f;
         if (maxGapLengthField.getValue() instanceof Number) {

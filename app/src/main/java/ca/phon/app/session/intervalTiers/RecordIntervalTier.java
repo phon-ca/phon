@@ -148,6 +148,13 @@ public class RecordIntervalTier implements IntervalTierSPI {
         final var recIntervals = getIntervals(record);
         final var range = recordRanges.get(record);
         if(range != null) {
+            // check ranges
+            if(range.getStart() < 0 || range.getStart() >= intervals.size()
+                    || range.getEnd() < 0 || range.getEnd() >= intervals.size()
+                    || range.getStart() > range.getEnd()) {
+                return;
+            }
+
             // replace existing intervals
             intervals.subList(range.getStart(), range.getEnd() + 1).clear();
             intervals.addAll(range.getStart(), recIntervals);

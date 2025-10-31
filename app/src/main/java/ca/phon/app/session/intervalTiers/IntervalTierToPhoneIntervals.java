@@ -35,7 +35,6 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
         }
-        undoSupport.beginUpdate("Import phone intervals from interval tier");
 
         TierDescription worTierDesc = session.getTier(UserTierType.Wor.getPhonTierName());
         if(worTierDesc == null) {
@@ -84,12 +83,10 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
                 final TierData phoTierData = new TierData(phoTierElements);
                 final TierEdit<TierData> tierEdit =
                         new TierEdit<>(session, eventManager, transcriber, record,
-                                record.getTier(UserTierType.PhoneIntervals.getPhonTierName(), TierData.class), phoTierData);
+                                record.getTier(UserTierType.PhoneIntervals.getPhonTierName(), TierData.class), phoTierData, false);
                 undoSupport.postEdit(tierEdit);
             }
         }
-
-        undoSupport.endUpdate();
     }
 
 }
