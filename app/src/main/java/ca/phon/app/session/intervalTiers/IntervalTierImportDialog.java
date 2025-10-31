@@ -188,7 +188,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             String intervalTierName) {
         Session session = editor.getSession();
         IntervalTierToOrthographySettings defaultSettings = new IntervalTierToOrthographySettings(
-            intervalTierName, false, false, null);
+            intervalTierName, false, false, intervalTierName);
         IntervalTierToOrthographySettingsPanel panel = new IntervalTierToOrthographySettingsPanel(session, defaultSettings);
         
         return new IntervalTierImportDialog<>(
@@ -242,7 +242,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         // Default to first participant or null
         IntervalTierToRecordSegmentsSettings defaultSettings = new IntervalTierToRecordSegmentsSettings(
             intervalTierName, false, 0.0f, 0.0f, 
-            session.getParticipants().size() > 0 ? session.getParticipants().get(0) : null, 
+            session.getParticipantCount() > 0 ? session.getParticipant(0) : null,
             false);
         IntervalTierToRecordSegmentsSettingsPanel panel = new IntervalTierToRecordSegmentsSettingsPanel(session, defaultSettings);
         
