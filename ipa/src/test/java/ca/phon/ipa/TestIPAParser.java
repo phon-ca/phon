@@ -267,7 +267,7 @@ public class TestIPAParser {
 	
 	@Test
 	public void testEmbeddedSyllabification() throws Exception {
-		final String testString = "s:Eh:Le:Ol:Nl:Co:R";
+		final String testString = "l:Es:Lt:Oe:Nk:Cd:R";
 		final IPATranscript transcript = IPATranscript.parseIPATranscript(testString);
 		
 		Assert.assertEquals(6, transcript.length());

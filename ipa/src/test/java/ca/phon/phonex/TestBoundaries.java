@@ -32,7 +32,7 @@ public class TestBoundaries {
 	public void testBeginningOfInput() throws ParseException {
 		final String text = "assassin";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
-		final String phonex = "^ass";
+		final String phonex = "^a{geminate}";
 		
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(ipa);
@@ -66,7 +66,7 @@ public class TestBoundaries {
 		final PhonexMatcher matcher = pattern.matcher(ipa);
 		
 		Assert.assertEquals(true, matcher.find());
-		Assert.assertEquals(ipa.subsection(0, 6).toString(), new IPATranscript(matcher.group()).toString());
+		Assert.assertEquals(ipa.subsection(0, 5).toString(), new IPATranscript(matcher.group()).toString());
 	}
 	
 	

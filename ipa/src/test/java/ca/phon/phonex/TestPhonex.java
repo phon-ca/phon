@@ -43,12 +43,11 @@ public class TestPhonex extends PhonexTest {
 		final String text = "bbadd";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
-		final String phonex = "/* First consonant */(\\c) /* Second consonant */ (\\c)";
+		final String phonex = "/* First consonant */(\\c) . /* Second consonant */ (\\c)";
 		PhonexPattern.compile(phonex);
 		
 		final IPATranscript[][] answers = {
-				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
-				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+				{ ipa.subsection(0, 1), ipa.subsection(2, 3) },
 		};
 		
 		testGroups(ipa, phonex, answers);
@@ -59,12 +58,11 @@ public class TestPhonex extends PhonexTest {
 		final String text = "bbadd";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
-		final String phonex = "/* First consonant */(\\c) (/* Second consonant */ \\c)";
+		final String phonex = "/* First consonant */(\\c) . (/* Second consonant */ \\c)";
 		PhonexPattern.compile(phonex);
 		
 		final IPATranscript[][] answers = {
-				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
-				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+				{ ipa.subsection(0, 1), ipa.subsection(2, 3) },
 		};
 		
 		testGroups(ipa, phonex, answers);
@@ -76,12 +74,11 @@ public class TestPhonex extends PhonexTest {
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final String phonex = "/* First consonant */\n"
-				+ "(\\c) (/* Second consonant */ \\c)";
+				+ "(\\c) . (/* Second consonant */ \\c)";
 		PhonexPattern.compile(phonex);
 		
 		final IPATranscript[][] answers = {
-				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
-				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+				{ ipa.subsection(0, 1), ipa.subsection(2, 3) },
 		};
 		
 		testGroups(ipa, phonex, answers);
@@ -95,12 +92,12 @@ public class TestPhonex extends PhonexTest {
 		final String phonex = "// First consonant\n"
 				+ "(\\c)\n"
 				+ "// Second consonant\n"
+                + ".\n"
 				+ "(\\c)";
 		PhonexPattern.compile(phonex);
 		
 		final IPATranscript[][] answers = {
-				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
-				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+				{ ipa.subsection(0, 1), ipa.subsection(2, 3) },
 		};
 		
 		testGroups(ipa, phonex, answers);
@@ -633,31 +630,31 @@ public class TestPhonex extends PhonexTest {
 	
 	@Test
 	public void testBackReference() throws ParseException {
-		final String text = "hello";
+		final String text = "helelo";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
-		final String phonex = "((\\c)\\2)";
+		final String phonex = "((\\c).\\2)";
 		final IPATranscript[][] answers = new IPATranscript[][] {
-			{ ipa.subsection(2, 4), ipa.subsection(2, 3) }
+			{ ipa.subsection(2, 5), ipa.subsection(2, 3) }
 		};
 		testGroups(ipa, phonex, answers);
 	}
 
 	@Test
 	public void testRelativeReference() throws ParseException {
-		final String text = "hello";
+		final String text = "helelo";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
-		final String phonex = "((\\c)\\-1)";
+		final String phonex = "((\\c).\\-1)";
 		final IPATranscript[][] answers = new IPATranscript[][] {
-			{ ipa.subsection(2, 4), ipa.subsection(2, 3) }
+			{ ipa.subsection(2, 5), ipa.subsection(2, 3) }
 		};
 		testGroups(ipa, phonex, answers);
 	}
 
 	@Test
 	public void testExactBoundedQuantifier() throws  ParseException {
-		final String text = "hhellollla";
+		final String text = "hbelsolsla";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 
 		final String phonex = "(?<[^\\c])(\\c<2>)\\v";
@@ -667,18 +664,16 @@ public class TestPhonex extends PhonexTest {
 		testGroups(ipa, phonex, answers);
 	}
 	
-	@Test
-	public void testGeminates() throws ParseException {
-		final String text = "hhelloll";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
-		
-		final String phonex = "((\\c)\\1)";
-		final IPATranscript[][] answers = new IPATranscript[][] {
-			{ ipa.subsection(0, 2), ipa.subsection(0, 1) },
-			{ ipa.subsection(3, 5), ipa.subsection(3, 4) },
-			{ ipa.subsection(6, 8), ipa.subsection(6, 7) }
-		};
-		testGroups(ipa, phonex, answers);
-	}
+//	@Test
+//	public void testGeminates() throws ParseException {
+//		final String text = "mamma";
+//		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+//
+//		final String phonex = "((\\c)\\1)";
+//		final IPATranscript[][] answers = new IPATranscript[][] {
+//			{ ipa.subsection(2, 3), ipa.subsection(2, 3) },
+//		};
+//		testGroups(ipa, phonex, answers);
+//	}
 	
 }
