@@ -231,6 +231,10 @@
         <primary_family>manner</primary_family>
         <secondary_family>continuancy</secondary_family>
     </feature>
+    <feature name="geminate">
+        <primary_family>manner</primary_family>
+        <secondary_family>continuancy</secondary_family>
+    </feature>
     <feature name="click">
         <primary_family>manner</primary_family>
         <secondary_family>continuancy</secondary_family>

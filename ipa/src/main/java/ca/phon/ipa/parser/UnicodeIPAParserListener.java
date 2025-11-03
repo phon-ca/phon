@@ -111,6 +111,17 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
         }
 
         Phone p = factory.createPhone(prefixCache.toArray(Diacritic[]::new), basePhone, combining, suffixCache.toArray(Diacritic[]::new));
+
+        final Phone lastPhone = builder.size() > 0 ? builder.lastPhone() : null;
+        if (lastPhone != null && lastPhone.featureSet().hasFeature("consonant") && !lastPhone.featureSet().hasFeature("geminate")
+                && p.featureSet().hasFeature("consonant") && !p.featureSet().hasFeature("geminate")
+                && lastPhone.getBasePhone() != null && lastPhone.getBasePhone().equals(p.getBasePhone())) {
+            // make geminate
+            builder.removeLast();
+            Geminate gem = factory.makeGeminate(lastPhone, p);
+            builder.append(gem);
+        }
+
         builder.append(p);
 
         prefixCache.clear();

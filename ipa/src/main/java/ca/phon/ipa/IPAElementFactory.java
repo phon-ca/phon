@@ -108,10 +108,23 @@ public class IPAElementFactory {
     public Phone createPhone(Diacritic[] prefix, Character basePhone, Diacritic[] combining, Diacritic[] suffix, FeatureSet overrides, SyllableInfo syllInfo) {
         return new Phone(prefix, basePhone, combining, suffix, overrides, syllInfo);
     }
+
+    /**
+     * Create a geminate from two identical consonants
+     *
+     * @param firstPhone the first phone
+     * @param secondPhone the second phone
+     * @return the created geminate
+     */
+    public Geminate createGeminate(Phone firstPhone, Phone secondPhone) {
+    	return new Geminate(firstPhone, secondPhone, null, null);
+    }
 		
 	public Phone clonePhone(Phone p) {
 		if(p instanceof CompoundPhone)
 			return cloneCompoundPhone((CompoundPhone)p);
+        else if(p instanceof Geminate)
+            return cloneGeminate((Geminate)p);
 		else
 			return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(), p.syllableInfo());
 	}
@@ -131,6 +144,12 @@ public class IPAElementFactory {
         if(p instanceof CompoundPhone cp) {
             return new CompoundPhone(cp.getFirstPhone(), cp.getSecondPhone(), cp.getLigature(), cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(), cp.overrideFeatureSet(),
                     new SyllableInfo(scType, cp.syllableInfo().isDiphthong(), cp.syllableInfo().stress(), cp.syllableInfo().syllableIndex(), cp.syllableInfo().segregated(), cp.syllableInfo().sonority(), cp.syllableInfo().sonorityDistance(), cp.syllableInfo().tone()));
+        } else if(p instanceof Geminate) {
+            Geminate g = (Geminate)p;
+            return new Geminate(g.getFirstPhone(), g.getSecondPhone(),
+                    g.getPrefixDiacritics(), g.getCombiningDiacritics(), g.getSuffixDiacritics(),
+                    g.overrideFeatureSet(),
+                    new SyllableInfo(scType, g.syllableInfo().isDiphthong(), g.syllableInfo().stress(), g.syllableInfo().syllableIndex(), g.syllableInfo().segregated(), g.syllableInfo().sonority(), g.syllableInfo().sonorityDistance(), g.syllableInfo().tone()));
         } else {
             final SyllableInfo syllInfo = p.syllableInfo();
             return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(),
@@ -141,6 +160,10 @@ public class IPAElementFactory {
     public Phone clonePhoneWithSyllableInfo(Phone p, SyllableInfo syllInfo) {
         if(p instanceof CompoundPhone cp) {
             return new CompoundPhone(cp.getFirstPhone(), cp.getSecondPhone(), cp.getLigature(), cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(), cp.overrideFeatureSet(), syllInfo);
+        } else if(p instanceof Geminate g) {
+            return new Geminate(g.getFirstPhone(), g.getSecondPhone(),
+                    g.getPrefixDiacritics(), g.getCombiningDiacritics(), g.getSuffixDiacritics(),
+                    g.overrideFeatureSet(), syllInfo);
         } else {
             return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics(), p.overrideFeatureSet(), syllInfo);
         }
@@ -254,6 +277,12 @@ public class IPAElementFactory {
                 cp.getPrefixDiacritics(), cp.getCombiningDiacritics(), cp.getSuffixDiacritics(),
                 cp.overrideFeatureSet(), cp.syllableInfo());
 	}
+
+    public Geminate cloneGeminate(Geminate g) {
+    	return new Geminate(clonePhone(g.getFirstPhone()), clonePhone(g.getSecondPhone()),
+                g.getPrefixDiacritics(), g.getCombiningDiacritics(), g.getSuffixDiacritics(),
+                g.overrideFeatureSet(), g.syllableInfo());
+    }
 	
 	/**
 	 * Create a 'hard' syllable boundary. I.e., a '.'
