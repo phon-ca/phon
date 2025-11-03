@@ -5,10 +5,16 @@ import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.TransliterationDictionaryProvider;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
+
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Import intervals from an interval tier into an IPA tier. The intervals
@@ -20,6 +26,8 @@ import ca.phon.syllabifier.SyllabifierLibrary;
  * can be specified to convert the text to Unicode IPA.
  */
 public final class IntervalTierToIPATier extends IntervalTierImporter {
+
+    private static final Logger LOGGER = Logger.getLogger(IntervalTierToIPATier.class.getName());
 
     private final IntervalTierToIPATierSettings settings;
 
@@ -35,6 +43,20 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
+        }
+
+        IPADictionary transliterationDict = null;
+        if(settings.transliterationScheme() != null) {
+            TransliterationDictionaryProvider provider = new TransliterationDictionaryProvider();
+            for(IPADictionary dict : provider) {
+                if(dict.getName().equals(settings.transliterationScheme())) {
+                    transliterationDict = dict;
+                    break;
+                }
+            }
+            if(transliterationDict == null) {
+                LOGGER.log(Level.WARNING, "Transliteration dictionary not found: " + settings.transliterationScheme());
+            }
         }
 
         for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
@@ -56,11 +78,28 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
             }
             String ipaString = sb.toString().trim();
 
-            if(settings.transliterationScheme() != null) {
-                // TODO use transliteration dictionary to convert to IPA
+            if(transliterationDict != null) {
+                try {
+                    String[] lookupResults = transliterationDict.lookup(ipaString);
+                    if(lookupResults != null && lookupResults.length > 0) {
+                        // Transliteration dictionaries always return one transcription
+                        ipaString = lookupResults[0];
+                    } else {
+                        LOGGER.log(Level.WARNING, "No transliteration found for: " + ipaString);
+                    }
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Error during transliteration lookup for: " + ipaString, e);
+                }
             }
 
-            IPATranscript ipa = new IPATranscriptBuilder().append(ipaString).toIPATranscript();
+            IPATranscript ipa = null;
+            try {
+                ipa = IPATranscript.parseIPATranscript(ipaString);
+            } catch (ParseException e) {
+                LOGGER.log(Level.WARNING, "Error parsing IPA transcript: " + ipaString, e);
+                // Fallback to builder which is more lenient
+                ipa = new IPATranscriptBuilder().append(ipaString).toIPATranscript();
+            }
 
             Syllabifier syllabifier = SyllabifierOptions.findSyllabifier(session, record, settings.recordTierName());
             if(settings.language() != null) {

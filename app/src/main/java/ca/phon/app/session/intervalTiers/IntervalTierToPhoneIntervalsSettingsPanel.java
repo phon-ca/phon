@@ -1,20 +1,25 @@
 package ca.phon.app.session.intervalTiers;
 
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.TransliterationDictionaryProvider;
 import ca.phon.session.Session;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 /**
  * Settings panel for importing an interval tier to phone intervals.
  */
 public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
     
+    private static final Logger LOGGER = Logger.getLogger(IntervalTierToPhoneIntervalsSettingsPanel.class.getName());
+
     private final Session session;
     private final IntervalTierToPhoneIntervalsSettings settings;
     
     private JTextField intervalTierNameField;
-    private JTextField transliterationSchemeField;
+    private JComboBox<String> transliterationSchemeComboBox;
     private JCheckBox deleteIntervalTierCheckbox;
     
     public IntervalTierToPhoneIntervalsSettingsPanel(Session session, IntervalTierToPhoneIntervalsSettings settings) {
@@ -50,9 +55,21 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        transliterationSchemeField = new JTextField(settings.transliterationScheme() != null ? settings.transliterationScheme() : "", 20);
-        add(transliterationSchemeField, gbc);
-        
+
+        transliterationSchemeComboBox = new JComboBox<>();
+        transliterationSchemeComboBox.addItem(""); // Empty option for no transliteration
+
+        TransliterationDictionaryProvider provider = new TransliterationDictionaryProvider();
+        for(IPADictionary dict : provider) {
+            transliterationSchemeComboBox.addItem(dict.getName());
+        }
+
+        if(settings.transliterationScheme() != null && !settings.transliterationScheme().isEmpty()) {
+            transliterationSchemeComboBox.setSelectedItem(settings.transliterationScheme());
+        }
+
+        add(transliterationSchemeComboBox, gbc);
+
         // Info label
         gbc.gridx = 0;
         gbc.gridy++;
@@ -69,9 +86,14 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
     }
     
     public IntervalTierToPhoneIntervalsSettings getSettings() {
+        String transliterationScheme = (String) transliterationSchemeComboBox.getSelectedItem();
+        if(transliterationScheme != null && transliterationScheme.trim().isEmpty()) {
+            transliterationScheme = null;
+        }
+
         return new IntervalTierToPhoneIntervalsSettings(
             intervalTierNameField.getText().trim(),
-            transliterationSchemeField.getText().trim().isEmpty() ? null : transliterationSchemeField.getText().trim()
+            transliterationScheme
         );
     }
     

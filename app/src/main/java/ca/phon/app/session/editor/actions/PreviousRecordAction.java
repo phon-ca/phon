@@ -51,6 +51,10 @@ public class PreviousRecordAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final int newIndex = 
 				(getEditor().getCurrentRecordIndex() == 0 ? 0 : getEditor().getCurrentRecordIndex()-1);
+        if(newIndex < 0 || newIndex >= getEditor().getSession().getRecordCount()) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
+        }
 		getEditor().setCurrentRecordIndex(newIndex);
 	}
 	

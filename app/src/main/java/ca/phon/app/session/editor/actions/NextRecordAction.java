@@ -52,6 +52,10 @@ public class NextRecordAction extends SessionEditorAction {
 		final int newIndex = 
 				(getEditor().getCurrentRecordIndex() == getEditor().getDataModel().getRecordCount()-1 ? 
 						getEditor().getCurrentRecordIndex() : getEditor().getCurrentRecordIndex()+1);
+        if(newIndex < 0 || newIndex >= getEditor().getSession().getRecordCount()) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
+        }
 		getEditor().setCurrentRecordIndex(newIndex);
 	}
 	

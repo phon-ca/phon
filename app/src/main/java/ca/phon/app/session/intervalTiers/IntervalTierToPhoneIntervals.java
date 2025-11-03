@@ -4,6 +4,8 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.TransliterationDictionaryProvider;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
@@ -15,6 +17,8 @@ import ca.phon.session.tierdata.TierString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Import intervals from an interval tier into a phone intervals tier. The intervals
@@ -23,6 +27,8 @@ import java.util.List;
  * must exist in the session and be populated for the record.
  */
 public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
+
+    private static final Logger LOGGER = Logger.getLogger(IntervalTierToPhoneIntervals.class.getName());
 
     private final IntervalTierToPhoneIntervalsSettings settings;
 
@@ -34,6 +40,20 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
+        }
+
+        IPADictionary transliterationDict = null;
+        if(settings.transliterationScheme() != null) {
+            TransliterationDictionaryProvider provider = new TransliterationDictionaryProvider();
+            for(IPADictionary dict : provider) {
+                if(dict.getName().equals(settings.transliterationScheme())) {
+                    transliterationDict = dict;
+                    break;
+                }
+            }
+            if(transliterationDict == null) {
+                LOGGER.log(Level.WARNING, "Transliteration dictionary not found: " + settings.transliterationScheme());
+            }
         }
 
         TierDescription worTierDesc = session.getTier(UserTierType.Wor.getPhonTierName());
@@ -72,7 +92,23 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
                         }
                         for(int i = 0; i < containedIntervals.length; i++) {
                             final IntervalTier.Interval phoneInterval = importTier.getIntervals().get(containedIntervals[i]);
-                            final TierString tierPhoneInterval = new TierString(phoneInterval.getLabel());
+                            String phoneLabel = phoneInterval.getLabel();
+
+                            if(transliterationDict != null && phoneLabel != null && !phoneLabel.isBlank()) {
+                                try {
+                                    String[] lookupResults = transliterationDict.lookup(phoneLabel);
+                                    if(lookupResults != null && lookupResults.length > 0) {
+                                        // Transliteration dictionaries always return one transcription
+                                        phoneLabel = lookupResults[0];
+                                    } else {
+                                        LOGGER.log(Level.WARNING, "No transliteration found for: " + phoneLabel);
+                                    }
+                                } catch (Exception e) {
+                                    LOGGER.log(Level.WARNING, "Error during transliteration lookup for: " + phoneLabel, e);
+                                }
+                            }
+
+                            final TierString tierPhoneInterval = new TierString(phoneLabel);
                             phoTierElements.add(tierPhoneInterval);
                             final InternalMedia internalMedia = new InternalMedia(phoneInterval.getStart(), phoneInterval.getEnd());
                             final TierInternalMedia tierInternalMedia = new TierInternalMedia(internalMedia);
