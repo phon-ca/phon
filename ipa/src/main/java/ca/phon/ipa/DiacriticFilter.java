@@ -109,5 +109,31 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
         builder.removeLast();
         builder.append(withDiacritics);
 	}
+
+    @Visits
+    public void visitGeminate(Geminate geminate) {
+        visitPhone(geminate.getFirstPhone());
+        visitPhone(geminate.getSecondPhone());
+
+        Diacritic[] prefix = Arrays.stream(geminate.getPrefixDiacritics())
+                .filter( this::keepDiacritic )
+                .collect(Collectors.toList())
+                .toArray(new Diacritic[0]);
+        Diacritic[] combining = Arrays.stream(geminate.getCombiningDiacritics())
+                .filter( this::keepDiacritic )
+                .collect(Collectors.toList())
+                .toArray(new Diacritic[0]);
+        Diacritic[] suffix = Arrays.stream(geminate.getSuffixDiacritics())
+                .filter(this::keepDiacritic)
+                .collect(Collectors.toList())
+                .toArray(new Diacritic[0]);
+
+        builder.makeGeminate();
+        Geminate g = (Geminate)builder.last();
+        Geminate withDiacritics =
+                factory.createGeminate(g.getFirstPhone(), g.getSecondPhone(), prefix, suffix, combining, geminate.overrideFeatureSet(), geminate.syllableInfo());
+        builder.removeLast();
+        builder.append(withDiacritics);
+    }
 	
 }

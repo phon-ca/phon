@@ -51,6 +51,10 @@
     {
       "name": "MarkLA #1",
       "pattern": "(LA={strident}:U).:O"
+    },
+    {
+      "name": "Mark geminates",
+      "pattern": ".(A={c, geminate}:O:C)."
     }
   ]
 }

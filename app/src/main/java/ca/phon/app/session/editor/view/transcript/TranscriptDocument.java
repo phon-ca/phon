@@ -1339,6 +1339,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the converted character position
      */
     public int sessionLocationToCharPos(TranscriptElementLocation transcriptLocation) {
+        if(transcriptLocation == null) return -1;
         TranscriptDocument doc = this;
         Transcript transcript = getSession().getTranscript();
 

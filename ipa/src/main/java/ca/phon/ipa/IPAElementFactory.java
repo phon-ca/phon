@@ -119,6 +119,12 @@ public class IPAElementFactory {
     public Geminate createGeminate(Phone firstPhone, Phone secondPhone) {
     	return new Geminate(firstPhone, secondPhone, null, null);
     }
+
+    public Geminate createGeminate(Phone firstPhone, Phone secondPhone,
+                                   Diacritic[] prefix, Diacritic[] combining, Diacritic[] suffix,
+                                   FeatureSet overrideFeatureSet, SyllableInfo syllableInfo) {
+    	return new Geminate(firstPhone, secondPhone, prefix, combining, suffix, overrideFeatureSet, syllableInfo);
+    }
 		
 	public Phone clonePhone(Phone p) {
 		if(p instanceof CompoundPhone)
