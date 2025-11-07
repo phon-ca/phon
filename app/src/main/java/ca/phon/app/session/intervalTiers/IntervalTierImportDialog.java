@@ -167,7 +167,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             String intervalTierName) {
         Session session = editor.getSession();
         IntervalTierToIPATierSettings defaultSettings = new IntervalTierToIPATierSettings(
-            intervalTierName, "IPA Target", null, null);
+            intervalTierName, "IPA Target", null, null, null);
         IntervalTierToIPATierSettingsPanel panel = new IntervalTierToIPATierSettingsPanel(session, defaultSettings);
         
         return new IntervalTierImportDialog<>(
@@ -219,7 +219,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             String intervalTierName) {
         Session session = editor.getSession();
         IntervalTierToPhoneIntervalsSettings defaultSettings = new IntervalTierToPhoneIntervalsSettings(
-            intervalTierName, null);
+            intervalTierName, null, null);
         IntervalTierToPhoneIntervalsSettingsPanel panel = new IntervalTierToPhoneIntervalsSettingsPanel(session, defaultSettings);
         
         return new IntervalTierImportDialog<>(
