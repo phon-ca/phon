@@ -3,6 +3,7 @@ package ca.phon.app.session.intervalTiers;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.fontconv.TranscriptConverter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipadictionary.IPADictionary;
@@ -45,6 +46,14 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
         }
 
+        TranscriptConverter fontConverter = null;
+        if(settings.fontConversionScheme() != null) {
+            fontConverter = TranscriptConverter.getInstanceOf(settings.fontConversionScheme());
+            if(fontConverter == null) {
+                LOGGER.log(Level.WARNING, "Font converter not found: " + settings.fontConversionScheme());
+            }
+        }
+
         IPADictionary transliterationDict = null;
         if(settings.transliterationScheme() != null) {
             TransliterationDictionaryProvider provider = new TransliterationDictionaryProvider();
@@ -77,6 +86,15 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
                 }
             }
             String ipaString = sb.toString().trim();
+
+            // Apply font conversion first (if specified)
+            if(fontConverter != null && !ipaString.isEmpty()) {
+                try {
+                    ipaString = fontConverter.convert(ipaString);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Error during font conversion for: " + ipaString, e);
+                }
+            }
 
             if(transliterationDict != null) {
                 try {
