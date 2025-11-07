@@ -20,23 +20,23 @@
 //
 
 
-package ca.phon.fontconverter.io;
+package ca.phon.fontconv.io;
 
 import jakarta.xml.bind.annotation.*;
 
 
 /**
- * <p>Java class for MappingType complex type.
+ * <p>Java class for TokenType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="MappingType">
+ * &lt;complexType name="TokenType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="from" type="{}TokenType"/>
- *         &lt;element name="to" type="{}TokenType"/>
+ *         &lt;element name="image" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="value" type="{}UnicodeSequenceType"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,63 +46,63 @@ import jakarta.xml.bind.annotation.*;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "MappingType", propOrder = {
-    "from",
-    "to"
+@XmlType(name = "TokenType", propOrder = {
+    "image",
+    "value"
 })
-public class MappingType {
+public class TokenType {
 
     @XmlElement(required = true)
-    protected TokenType from;
+    protected String image;
     @XmlElement(required = true)
-    protected TokenType to;
+    protected UnicodeSequenceType value;
 
     /**
-     * Gets the value of the from property.
+     * Gets the value of the image property.
      * 
      * @return
      *     possible object is
-     *     {@link TokenType }
+     *     {@link String }
      *     
      */
-    public TokenType getFrom() {
-        return from;
+    public String getImage() {
+        return image;
     }
 
     /**
-     * Sets the value of the from property.
+     * Sets the value of the image property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TokenType }
+     *     {@link String }
      *     
      */
-    public void setFrom(TokenType value) {
-        this.from = value;
+    public void setImage(String value) {
+        this.image = value;
     }
 
     /**
-     * Gets the value of the to property.
+     * Gets the value of the value property.
      * 
      * @return
      *     possible object is
-     *     {@link TokenType }
+     *     {@link UnicodeSequenceType }
      *     
      */
-    public TokenType getTo() {
-        return to;
+    public UnicodeSequenceType getValue() {
+        return value;
     }
 
     /**
-     * Sets the value of the to property.
+     * Sets the value of the value property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TokenType }
+     *     {@link UnicodeSequenceType }
      *     
      */
-    public void setTo(TokenType value) {
-        this.to = value;
+    public void setValue(UnicodeSequenceType value) {
+        this.value = value;
     }
 
 }

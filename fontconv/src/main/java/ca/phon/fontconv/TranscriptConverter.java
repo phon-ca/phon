@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.fontconverter;
+package ca.phon.fontconv;
 
-import ca.phon.fontconverter.io.*;
+import ca.phon.fontconv.io.*;
 import ca.phon.util.resources.*;
 import de.susebox.jtopas.*;
 import jakarta.xml.bind.*;
@@ -23,6 +23,7 @@ import jakarta.xml.bind.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Handles conversion of one transcription method to UTF-8 IPA
@@ -90,7 +91,7 @@ public class TranscriptConverter {
 			final StandardTokenizer tokenizer = new StandardTokenizer(props);
 			return new TranscriptConverter(convTbl.getFontName(), tokenizer);
 		} catch (JAXBException jaxbEx) {
-			org.apache.logging.log4j.LogManager.getLogger(TranscriptConverter.class.getName()).warn(jaxbEx.getMessage());
+			Logger.getLogger(TranscriptConverter.class.getName()).warning(jaxbEx.getMessage());
 			throw new IOException(jaxbEx);
 		}
 	}
@@ -139,7 +140,7 @@ public class TranscriptConverter {
 					retVal += token.getImage();
 			}
 		} catch (TokenizerException e) {
-			org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).warn(e.getMessage());
+            Logger.getLogger(getClass().getName()).warning(e.getMessage());
 		}
 		
 		return retVal;

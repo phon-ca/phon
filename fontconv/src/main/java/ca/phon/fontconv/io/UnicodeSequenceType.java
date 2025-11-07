@@ -20,7 +20,7 @@
 //
 
 
-package ca.phon.fontconverter.io;
+package ca.phon.fontconv.io;
 
 import jakarta.xml.bind.annotation.*;
 
@@ -28,18 +28,17 @@ import java.util.*;
 
 
 /**
- * <p>Java class for anonymous complex type.
+ * <p>Java class for UnicodeSequenceType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="UnicodeSequenceType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence maxOccurs="unbounded" minOccurs="0">
- *         &lt;element name="mapping" type="{}MappingType"/>
+ *         &lt;element name="codepoint" type="{}UnicodeCharacterType"/>
  *       &lt;/sequence>
- *       &lt;attribute name="FontName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -48,67 +47,40 @@ import java.util.*;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "mapping"
+@XmlType(name = "UnicodeSequenceType", propOrder = {
+    "codepoint"
 })
-@XmlRootElement(name = "ConversionTable")
-public class ConversionTable {
+public class UnicodeSequenceType {
 
-    protected List<MappingType> mapping;
-    @XmlAttribute(name = "FontName")
-    protected String fontName;
+    protected List<String> codepoint;
 
     /**
-     * Gets the value of the mapping property.
+     * Gets the value of the codepoint property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the mapping property.
+     * This is why there is not a <CODE>set</CODE> method for the codepoint property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getMapping().add(newItem);
+     *    getCodepoint().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MappingType }
+     * {@link String }
      * 
      * 
      */
-    public List<MappingType> getMapping() {
-        if (mapping == null) {
-            mapping = new ArrayList<MappingType>();
+    public List<String> getCodepoint() {
+        if (codepoint == null) {
+            codepoint = new ArrayList<String>();
         }
-        return this.mapping;
-    }
-
-    /**
-     * Gets the value of the fontName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFontName() {
-        return fontName;
-    }
-
-    /**
-     * Sets the value of the fontName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFontName(String value) {
-        this.fontName = value;
+        return this.codepoint;
     }
 
 }

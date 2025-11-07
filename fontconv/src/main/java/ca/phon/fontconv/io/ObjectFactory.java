@@ -20,7 +20,7 @@
 //
 
 
-package ca.phon.fontconverter.io;
+package ca.phon.fontconv.io;
 
 import jakarta.xml.bind.annotation.XmlRegistry;
 

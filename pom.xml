@@ -140,6 +140,7 @@
 		<module>query</module>
 		<module>app</module>
 		<module>all</module>
+		<module>fontconv</module>
 	</modules>
 
 	<dependencyManagement>

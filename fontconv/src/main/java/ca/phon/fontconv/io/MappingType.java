@@ -20,24 +20,23 @@
 //
 
 
-package ca.phon.fontconverter.io;
+package ca.phon.fontconv.io;
 
 import jakarta.xml.bind.annotation.*;
 
-import java.util.*;
-
 
 /**
- * <p>Java class for UnicodeSequenceType complex type.
+ * <p>Java class for MappingType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="UnicodeSequenceType">
+ * &lt;complexType name="MappingType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence maxOccurs="unbounded" minOccurs="0">
- *         &lt;element name="codepoint" type="{}UnicodeCharacterType"/>
+ *       &lt;sequence>
+ *         &lt;element name="from" type="{}TokenType"/>
+ *         &lt;element name="to" type="{}TokenType"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -47,40 +46,63 @@ import java.util.*;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "UnicodeSequenceType", propOrder = {
-    "codepoint"
+@XmlType(name = "MappingType", propOrder = {
+    "from",
+    "to"
 })
-public class UnicodeSequenceType {
+public class MappingType {
 
-    protected List<String> codepoint;
+    @XmlElement(required = true)
+    protected TokenType from;
+    @XmlElement(required = true)
+    protected TokenType to;
 
     /**
-     * Gets the value of the codepoint property.
+     * Gets the value of the from property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the codepoint property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCodepoint().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link TokenType }
+     *     
      */
-    public List<String> getCodepoint() {
-        if (codepoint == null) {
-            codepoint = new ArrayList<String>();
-        }
-        return this.codepoint;
+    public TokenType getFrom() {
+        return from;
+    }
+
+    /**
+     * Sets the value of the from property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TokenType }
+     *     
+     */
+    public void setFrom(TokenType value) {
+        this.from = value;
+    }
+
+    /**
+     * Gets the value of the to property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TokenType }
+     *     
+     */
+    public TokenType getTo() {
+        return to;
+    }
+
+    /**
+     * Sets the value of the to property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TokenType }
+     *     
+     */
+    public void setTo(TokenType value) {
+        this.to = value;
     }
 
 }
