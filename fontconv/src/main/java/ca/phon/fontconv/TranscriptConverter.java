@@ -75,7 +75,7 @@ public class TranscriptConverter {
 		
 		try(InputStream is = url.openStream()) {
 			// create the unmarshaller
-			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.fontconverter.io");
+			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.fontconv.io");
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			ConversionTable convTbl = (ConversionTable)unmarshaller.unmarshal(is);
 			
