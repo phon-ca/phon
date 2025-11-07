@@ -4,6 +4,7 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.fontconv.TranscriptConverter;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.TransliterationDictionaryProvider;
 import ca.phon.orthography.InternalMedia;
@@ -40,6 +41,14 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
+        }
+
+        TranscriptConverter fontConverter = null;
+        if(settings.fontConversionScheme() != null) {
+            fontConverter = TranscriptConverter.getInstanceOf(settings.fontConversionScheme());
+            if(fontConverter == null) {
+                LOGGER.log(Level.WARNING, "Font converter not found: " + settings.fontConversionScheme());
+            }
         }
 
         IPADictionary transliterationDict = null;
@@ -93,6 +102,15 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
                         for(int i = 0; i < containedIntervals.length; i++) {
                             final IntervalTier.Interval phoneInterval = importTier.getIntervals().get(containedIntervals[i]);
                             String phoneLabel = phoneInterval.getLabel();
+
+                            // Apply font conversion first (if specified)
+                            if(fontConverter != null && phoneLabel != null && !phoneLabel.isBlank()) {
+                                try {
+                                    phoneLabel = fontConverter.convert(phoneLabel);
+                                } catch (Exception e) {
+                                    LOGGER.log(Level.WARNING, "Error during font conversion for: " + phoneLabel, e);
+                                }
+                            }
 
                             if(transliterationDict != null && phoneLabel != null && !phoneLabel.isBlank()) {
                                 try {

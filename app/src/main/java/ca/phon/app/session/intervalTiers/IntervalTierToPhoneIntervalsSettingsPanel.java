@@ -1,5 +1,6 @@
 package ca.phon.app.session.intervalTiers;
 
+import ca.phon.fontconv.TranscriptConverter;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.TransliterationDictionaryProvider;
 import ca.phon.session.Session;
@@ -20,6 +21,7 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
     
     private JTextField intervalTierNameField;
     private JComboBox<String> transliterationSchemeComboBox;
+    private JComboBox<String> fontConversionSchemeComboBox;
     private JCheckBox deleteIntervalTierCheckbox;
     
     public IntervalTierToPhoneIntervalsSettingsPanel(Session session, IntervalTierToPhoneIntervalsSettings settings) {
@@ -70,6 +72,30 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
 
         add(transliterationSchemeComboBox, gbc);
 
+        // Font conversion scheme
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
+        add(new JLabel("Font Conversion Scheme:"), gbc);
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
+        fontConversionSchemeComboBox = new JComboBox<>();
+        fontConversionSchemeComboBox.addItem(""); // Empty option for no font conversion
+
+        for(String converterName : TranscriptConverter.getAvailableConverterNames()) {
+            fontConversionSchemeComboBox.addItem(converterName);
+        }
+
+        if(settings.fontConversionScheme() != null && !settings.fontConversionScheme().isEmpty()) {
+            fontConversionSchemeComboBox.setSelectedItem(settings.fontConversionScheme());
+        }
+
+        add(fontConversionSchemeComboBox, gbc);
+
         // Info label
         gbc.gridx = 0;
         gbc.gridy++;
@@ -91,9 +117,15 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
             transliterationScheme = null;
         }
 
+        String fontConversionScheme = (String) fontConversionSchemeComboBox.getSelectedItem();
+        if(fontConversionScheme != null && fontConversionScheme.trim().isEmpty()) {
+            fontConversionScheme = null;
+        }
+
         return new IntervalTierToPhoneIntervalsSettings(
             intervalTierNameField.getText().trim(),
-            transliterationScheme
+            transliterationScheme,
+            fontConversionScheme
         );
     }
     
