@@ -59,7 +59,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("IPA Tier Name:"), gbc);
+        add(new JLabel("IPA tier:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -73,10 +73,24 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = 1.0;
         syllabifierSelector = new SyllabifierSelector();
+        final JScrollPane syllabifierScroller = new JScrollPane(syllabifierSelector);
         if (settings.language() != null && !settings.language().isEmpty()) {
             syllabifierSelector.setSelectedLanguage(Language.parseLanguage(settings.language()));
+        } else {
+            Syllabifier syllabifier = SyllabifierOptions.findSyllabifier(session, null, settings.recordTierName());
+            if (syllabifier != null) {
+                syllabifierSelector.setSelectedLanguage(syllabifier.getLanguage());
+            } else {
+                syllabifierSelector.setSelectedLanguage(SyllabifierLibrary.getInstance().defaultSyllabifierLanguage());
+            }
+            SwingUtilities.invokeLater(() -> {
+                Language lang = syllabifierSelector.getSelectedSyllabifier().getLanguage();
+                if(syllabifierSelector.getSelectedIndex() >= 0) {
+                    var p = syllabifierSelector.indexToLocation(syllabifierSelector.getSelectedIndex());
+                    syllabifierScroller.getViewport().setViewPosition(new Point(0, p.y - 10));
+                }
+            });
         }
-        JScrollPane syllabifierScroller = new JScrollPane(syllabifierSelector);
         syllabifierScroller.setBorder(BorderFactory.createTitledBorder("Syllabifier Language"));
         syllabifierScroller.setPreferredSize(new Dimension(400, 150));
         add(syllabifierScroller, gbc);
@@ -86,7 +100,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weighty = 0.0;
-        add(new JLabel("Transliteration Scheme:"), gbc);
+        add(new JLabel("Transliteration scheme:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -111,7 +125,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("Font Conversion Scheme:"), gbc);
+        add(new JLabel("Font conversion Scheme:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
