@@ -25,7 +25,7 @@ public interface ProjectDeprecated {
      * Get the media folders for the project, if any are set.  If multiple media folders
      * are set, the first one is returned.
      *
-     * @deprecated Since Phon 4.0 use {@link Project#getProjectMediaFolders()} instead
+     * @deprecated Since Phon 4.0 use {@link ProjectMediaFolders#getProjectMediaFolders()} instead
      */
     @Deprecated
     public String getProjectMediaFolder();
@@ -37,7 +37,7 @@ public interface ProjectDeprecated {
      * @param mediaFolder If <code>null</code> sets the media folder
      * back to default.
      *
-     * @deprecated Since Phon 4.0 use {@link Project#addProjectMediaFolder(String)} instead
+     * @deprecated Since Phon 4.0 use {@link ProjectMediaFolders#addProjectMediaFolder(String)} instead
      */
     @Deprecated
     public void setProjectMediaFolder(String mediaFolder);

@@ -30,13 +30,12 @@ import java.util.*;
  *
  * <p>Example paths:<br/>
  * <ul>
- * <li><code>File</code></br>
+ * <li><code>File</code><br/>
  * The file menu.
  * </li>
  * <li><code>View/Record Data/My Item</code><br/>
  * The item with name 'My Item' in the View/Record Data' menu.</li>
- * </ul>
- * </p>
+ * </ul></p>
  *
  * <p>When adding a {@link MenuElement}, location of the element may be specified in the path
  * by adding the '@' token followed by
@@ -44,9 +43,9 @@ import java.util.*;
  * <li><code>^</code> - place new element at beginning of this menu</li>
  * <li><code>$</code> - place new element at end of the menu (default behaviour)</li>
  * <li><i>item name</i> - place after given item name (or end if not found)</li>
- * </ul>
+ * </ul></p>
  *
- * E.g., To add a new item to the beginning of the File menu, use the path
+ * <p>E.g., To add a new item to the beginning of the File menu, use the path
  * <code>File@^</code> in the path given to the {@link #addMenu(String, String)} and
  * {@link #addItem(String, Action)} methods.</p>
  *

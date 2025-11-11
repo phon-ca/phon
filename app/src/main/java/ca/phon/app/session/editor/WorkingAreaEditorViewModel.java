@@ -48,7 +48,6 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.Base64;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.*;
@@ -1055,7 +1054,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 						}
 						// set the last used perspective for the session
 						final SessionPath sessionPath = getEditor().getSession().getSessionPath();
-						final String xmlBase64 = Base64.encodeBytes(sb.toString().getBytes(StandardCharsets.UTF_8));
+						final String xmlBase64 = Base64.getEncoder().encodeToString(sb.toString().getBytes(StandardCharsets.UTF_8));
 						perspectivesJson.put(sessionPath.toString(), xmlBase64);
 						return retVal;
 					});

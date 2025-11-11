@@ -96,7 +96,7 @@ public final class XMLFragments {
      * Generate xml fragment for given mor
      *
      * @param mor
-     * @oaram includeNamespace
+     * @param includeNamespace
      * @param formatted
      * @return xml fragment for given Mor
      * @throws IOException
@@ -116,7 +116,7 @@ public final class XMLFragments {
      * Generate xml fragment for given grasp
      *
      * @param gra
-     * @oaram includeNamespace
+     * @param includeNamespace
      * @param formatted
      * @return xml fragment for given Grasp
      * @throws IOException

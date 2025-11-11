@@ -90,7 +90,7 @@ public interface MutableProject {
      *
      * @param session the session to lock
      *
-     * @return the session write lock or < 0 if a write lock
+     * @return the session write lock or &lt; 0 if a write lock
      *  was not obtained
      * @throws IOException
      */
@@ -239,7 +239,7 @@ public interface MutableProject {
      * See {@link #removeSession(Session, SessionWriteLock)} for more
      * information on how to use the write lock.
      *
-     * @parma corpus
+     * @param corpus
      * @param session the session to remove
      * @param writeLock the write lock for the session
      *

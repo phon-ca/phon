@@ -27,10 +27,6 @@ import java.text.Format;
  * sliding knobs withing a bounded interval.  Like the regular swing JSlider,
  * the component can show both major ticks marks and minor tick marks between
  * them.
- * 
- * @beaninfo
- * 		attribute: isContainer false
- *		description: A component that supports selecting a range of values from within a range.
  *
  * @version 1.0 2007-04-22
  *

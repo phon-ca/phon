@@ -15,12 +15,11 @@
  */
 package ca.phon.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.prefs.Preferences;
-
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Base64;
 
 /**
  * <p>
@@ -723,9 +722,15 @@ public final class SearchHistory {
 
             // Create a serializable ArrayList
             ArrayList<SearchHistoryEntry> serializableList = new ArrayList<>(entries);
+            // create byte array
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(serializableList);
+            oos.flush();
+            byte[] serializedBytes = baos.toByteArray();
 
             // Serialize and encode to Base64
-            String encoded = Base64.encodeObject(serializableList);
+            String encoded = Base64.getEncoder().encodeToString(serializedBytes);
             if (encoded != null) {
                 // Store as byte array (PrefHelper.getSerializedObject expects this format)
                 prefs.putByteArray(prefKey, encoded.getBytes());

@@ -19,6 +19,7 @@ import java.awt.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
+import java.util.Base64;
 import java.util.logging.Logger;
 import java.util.prefs.*;
 
@@ -358,7 +359,7 @@ public class PrefHelper {
 			if(fontData.length > 0) {
 				try {
 					String base64 = new String(fontData);
-					ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(base64));
+					ByteArrayInputStream in = new ByteArrayInputStream(Base64.getDecoder().decode(base64));
 					retVal = Font.createFont(Font.TRUETYPE_FONT, in);
 				} catch (FontFormatException | IOException e) {
 					Logger.getLogger(PrefHelper.class.getName()).warning(e.getLocalizedMessage());
@@ -381,7 +382,7 @@ public class PrefHelper {
 		if(data.length > 0) {
 			try {
 				String base64 = new String(data);
-				byte[] objData = Base64.decode(base64);
+				byte[] objData = Base64.getDecoder().decode(base64);
 				ObjectInputStream ois = 
 						new ObjectInputStream(new ByteArrayInputStream(objData));
 				retVal =  type.cast(ois.readObject());

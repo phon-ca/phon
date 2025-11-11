@@ -20,7 +20,7 @@ import ca.phon.session.Session;
 import java.io.File;
 
 /**
- * Path used for project drag & drop support.  The path may 
+ * Path used for project drag &amp; drop support.  The path may
  * point to either a corpus folder or session file.
  */
 public class ProjectPath {

@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -277,7 +278,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 					final String perspectiveBase64 = perspectivesJson.getString(sp.toString());
 					if (perspectiveBase64 != null) {
 						projectPerspective = new RecordEditorPerspective("Previous",
-								new String(Base64.decode(perspectiveBase64), StandardCharsets.UTF_8));
+								new String(Base64.getDecoder().decode(perspectiveBase64), StandardCharsets.UTF_8));
 					}
 				}
 			}

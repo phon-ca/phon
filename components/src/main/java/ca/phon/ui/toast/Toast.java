@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * can be displayed for a certain amount of time
  * and/or hidden when clicked.</p>
  * 
- * <p>To create a new toast, use {@link ToastFactory}.<br/>
+ * To create a new toast, use {@link ToastFactory}.<br/>
  * E.g.,
  * <pre>
  * final Toast toast = ToastFactory.makeToast("Hello world!");
@@ -41,7 +41,6 @@ import java.util.logging.Logger;
  * toast.setDisplayTime(2000);
  * toast.start(comp);
  * </pre>
- * </p>
  */
 public final class Toast {
 	
