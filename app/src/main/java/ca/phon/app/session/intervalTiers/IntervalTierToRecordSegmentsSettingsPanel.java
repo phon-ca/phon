@@ -20,7 +20,7 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
     private final Session session;
     private final IntervalTierToRecordSegmentsSettings settings;
     
-    private JTextField intervalTierNameField;
+    private JComboBox<String> intervalTierNameComboBox;
     private JCheckBox groupContiguousIntervalsCheckbox;
     private JFormattedTextField maxGapLengthField;
     private JFormattedTextField paddingField;
@@ -49,9 +49,16 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        intervalTierNameField = new JTextField(settings.intervalTierName() != null ? settings.intervalTierName() : "", 20);
-        add(intervalTierNameField, gbc);
-        
+        intervalTierNameComboBox = new JComboBox<>();
+        intervalTierNameComboBox.setEditable(false);
+        for (String tierName : session.getTimeline().getTierNames()) {
+            intervalTierNameComboBox.addItem(tierName);
+        }
+        if (settings.intervalTierName() != null && !settings.intervalTierName().isEmpty()) {
+            intervalTierNameComboBox.setSelectedItem(settings.intervalTierName());
+        }
+        add(intervalTierNameComboBox, gbc);
+
         // Speaker
         gbc.gridx = 0;
         gbc.gridy++;
@@ -180,8 +187,13 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
             padding = ((Number) paddingField.getValue()).floatValue();
         }
         
+        String intervalTierName = (String) intervalTierNameComboBox.getSelectedItem();
+        if (intervalTierName != null) {
+            intervalTierName = intervalTierName.trim();
+        }
+
         return new IntervalTierToRecordSegmentsSettings(
-            intervalTierNameField.getText().trim(),
+            intervalTierName,
             groupContiguousIntervalsCheckbox.isSelected(),
             maxGapLength,
             padding,
@@ -195,7 +207,8 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
     }
     
     public String validateSettings() {
-        if (intervalTierNameField.getText().trim().isEmpty()) {
+        String intervalTierName = (String) intervalTierNameComboBox.getSelectedItem();
+        if (intervalTierName == null || intervalTierName.trim().isEmpty()) {
             return "Interval tier name cannot be empty";
         }
         if (speakerCombo.getSelectedItem() == null) {
