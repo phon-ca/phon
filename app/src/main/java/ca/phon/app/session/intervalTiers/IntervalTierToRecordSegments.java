@@ -93,7 +93,7 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
         for(MediaSegment segment: segments) {
             boolean recordExists = recordIndex < session.getRecordCount();
             final Record record = (recordExists && settings.overwriteExistingRecords()) ? session.getRecord(recordIndex) : factory.createRecord();
-            if(recordExists && settings.groupContiguousIntervals()) {
+            if(recordExists && settings.overwriteExistingRecords()) {
                 final TierEdit<MediaSegment> tierEdit =
                         new TierEdit<>(session, eventManager, transcriber, record, record.getSegmentTier(), segment);
                 undoSupport.postEdit(tierEdit);
