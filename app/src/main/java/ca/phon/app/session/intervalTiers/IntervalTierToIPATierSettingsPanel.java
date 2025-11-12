@@ -1,6 +1,7 @@
 package ca.phon.app.session.intervalTiers;
 
 import ca.phon.fontconv.TranscriptConverter;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.TransliterationDictionaryProvider;
 import ca.phon.session.*;
@@ -10,6 +11,8 @@ import ca.phon.util.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,12 +27,13 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
     private final IntervalTierToIPATierSettings settings;
     
     private JComboBox<String> intervalTierNameComboBox;
-    private JTextField recordTierNameField;
+    private JComboBox<String> recordTierNameComboBox;
     private SyllabifierSelector syllabifierSelector;
     private JComboBox<String> transliterationSchemeComboBox;
     private JComboBox<String> fontConversionSchemeComboBox;
     private JCheckBox deleteIntervalTierCheckbox;
-    
+    private JCheckBox importPhoneIntervalsCheckbox;
+
     public IntervalTierToIPATierSettingsPanel(Session session, IntervalTierToIPATierSettings settings) {
         super();
         this.session = session;
@@ -70,9 +74,33 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        recordTierNameField = new JTextField(settings.recordTierName() != null ? settings.recordTierName() : "", 20);
-        add(recordTierNameField, gbc);
-        
+
+        final List<String> recordTierNames = new ArrayList<>();
+        recordTierNames.add(SystemTierType.IPATarget.getName());
+        recordTierNames.add(SystemTierType.IPAActual.getName());
+        for(TierDescription td:session.getUserTiers()) {
+            if(td.getDeclaredType() == IPATranscript.class) {
+                recordTierNames.add(td.getName());
+            }
+        }
+        recordTierNameComboBox = new JComboBox<>(recordTierNames.toArray(new String[recordTierNames.size()]));
+        recordTierNameComboBox.setEditable(false);
+        if (settings.recordTierName() != null && !settings.recordTierName().isEmpty()) {
+            recordTierNameComboBox.setSelectedItem(settings.recordTierName());
+        }
+        recordTierNameComboBox.addActionListener(e -> updatePhoneIntervalsCheckboxVisibility());
+        add(recordTierNameComboBox, gbc);
+
+        // Phone Intervals import option (only for IPA Actual)
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        importPhoneIntervalsCheckbox = new JCheckBox("Also import Phone Intervals tier");
+        importPhoneIntervalsCheckbox.setSelected(false);
+        add(importPhoneIntervalsCheckbox, gbc);
+        updatePhoneIntervalsCheckboxVisibility();
+
         // Syllabifier language
         gbc.gridx = 0;
         gbc.gridy++;
@@ -160,6 +188,12 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         add(deleteIntervalTierCheckbox, gbc);
     }
     
+    private void updatePhoneIntervalsCheckboxVisibility() {
+        String selectedTier = (String) recordTierNameComboBox.getSelectedItem();
+        boolean isIPAActual = SystemTierType.IPAActual.getName().equals(selectedTier);
+        importPhoneIntervalsCheckbox.setVisible(isIPAActual);
+    }
+
     public IntervalTierToIPATierSettings getSettings() {
         String language = null;
         if (syllabifierSelector.getSelectedSyllabifier() != null) {
@@ -183,13 +217,17 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
 
         return new IntervalTierToIPATierSettings(
             intervalTierName,
-            recordTierNameField.getText().trim(),
+            (String) recordTierNameComboBox.getSelectedItem(),
             language,
             transliterationScheme,
             fontConversionScheme
         );
     }
     
+    public boolean shouldImportPhoneIntervals() {
+        return importPhoneIntervalsCheckbox.isVisible() && importPhoneIntervalsCheckbox.isSelected();
+    }
+
     public boolean shouldDeleteIntervalTier() {
         return deleteIntervalTierCheckbox.isSelected();
     }
@@ -199,7 +237,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         if (intervalTierName == null || intervalTierName.trim().isEmpty()) {
             return "Interval tier name cannot be empty";
         }
-        if (recordTierNameField.getText().trim().isEmpty()) {
+        if (recordTierNameComboBox.getSelectedItem() == null) {
             return "IPA tier name cannot be empty";
         }
         return null;

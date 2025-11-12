@@ -275,10 +275,15 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			if(projectJson.has("perspectives")) {
 				final JSONObject perspectivesJson = projectJson.getJSONObject("perspectives");
 				if (perspectivesJson.has(sp.toString())) {
-					final String perspectiveBase64 = perspectivesJson.getString(sp.toString());
+					String perspectiveBase64 = perspectivesJson.getString(sp.toString());
 					if (perspectiveBase64 != null) {
-						projectPerspective = new RecordEditorPerspective("Previous",
-								new String(Base64.getDecoder().decode(perspectiveBase64), StandardCharsets.UTF_8));
+                        perspectiveBase64 = perspectiveBase64.replaceAll("\\p{Space}", "");
+                        try {
+                            projectPerspective = new RecordEditorPerspective("Previous",
+                                    new String(Base64.getDecoder().decode(perspectiveBase64), StandardCharsets.UTF_8));
+                        } catch (IllegalArgumentException e) {
+                            LogUtil.warning("Could not decode perspective for session " + sp.toString(), e);
+                        }
 					}
 				}
 			}
