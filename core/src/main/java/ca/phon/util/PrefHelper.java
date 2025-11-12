@@ -359,6 +359,7 @@ public class PrefHelper {
 			if(fontData.length > 0) {
 				try {
 					String base64 = new String(fontData);
+                    base64 = base64.replaceAll("\\p{Space}", "");
 					ByteArrayInputStream in = new ByteArrayInputStream(Base64.getDecoder().decode(base64));
 					retVal = Font.createFont(Font.TRUETYPE_FONT, in);
 				} catch (FontFormatException | IOException e) {
@@ -382,6 +383,7 @@ public class PrefHelper {
 		if(data.length > 0) {
 			try {
 				String base64 = new String(data);
+                base64 = base64.replaceAll("\\p{Space}", "");
 				byte[] objData = Base64.getDecoder().decode(base64);
 				ObjectInputStream ois = 
 						new ObjectInputStream(new ByteArrayInputStream(objData));
