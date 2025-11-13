@@ -351,15 +351,15 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
         if(!hasWorTier) {
             final PhonUIAction<Void> addWorTierAct = PhonUIAction.runnable(this::addWorTier);
-            addWorTierAct.putValue(PhonUIAction.NAME, "Add Word Intervals Tier");
-            addWorTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add word intervals tier to records");
+            addWorTierAct.putValue(PhonUIAction.NAME, "Add " + UserTierType.Wor.getPhonTierName() + " (" + UserTierType.Wor.getChatTierName() + ")" + " tier");
+            addWorTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add " + UserTierType.Wor.getPhonTierName() + " (" + UserTierType.Wor.getChatTierName() + ")" + " tier to records");
             recordTierMenuBuilder.addItem(".", addWorTierAct);
         }
 
         if(!hasPhoTier) {
             final PhonUIAction<Void> addPhoTierAct = PhonUIAction.runnable(this::addPhoTier);
-            addPhoTierAct.putValue(PhonUIAction.NAME, "Add Phone Intervals Tier");
-            addPhoTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add phone intervals tier to records");
+            addPhoTierAct.putValue(PhonUIAction.NAME, "Add " + UserTierType.PhoneIntervals.getPhonTierName() + " (" + UserTierType.PhoneIntervals.getChatTierName() + ")" + " tier");
+            addPhoTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add " + UserTierType.PhoneIntervals.getPhonTierName() + " (" + UserTierType.PhoneIntervals.getChatTierName() + ")" + " tier to records");
             recordTierMenuBuilder.addItem(".", addPhoTierAct);
         }
 
@@ -439,37 +439,37 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 
                 // Add separator before import options
                 tierMenuBuilder.addSeparator(".", "import");
-                
-                // Import to IPA tier
-                final JMenuItem importToIPATierItem = new JMenuItem("Import to IPA Tier...");
-                importToIPATierItem.addActionListener( (e) -> {
-                    showImportToIPATierDialog(tierName);
-                });
-                tierMenuBuilder.addItem(".", importToIPATierItem);
-                
-                // Import to Orthography
-                final JMenuItem importToOrthographyItem = new JMenuItem("Import to Orthography...");
-                importToOrthographyItem.addActionListener( (e) -> {
-                    showImportToOrthographyDialog(tierName);
-                });
-                tierMenuBuilder.addItem(".", importToOrthographyItem);
-                
-                // Import to Phone Intervals
-                final JMenuItem importToPhoneIntervalsItem = new JMenuItem("Import to Phone Intervals...");
-                importToPhoneIntervalsItem.addActionListener( (e) -> {
-                    showImportToPhoneIntervalsDialog(tierName);
-                });
-                tierMenuBuilder.addItem(".", importToPhoneIntervalsItem);
-                
+
                 // Import to Record Segments
-                final JMenuItem importToRecordSegmentsItem = new JMenuItem("Import to Record Segments...");
+                final JMenuItem importToRecordSegmentsItem = new JMenuItem("Import as records...");
                 importToRecordSegmentsItem.addActionListener( (e) -> {
                     showImportToRecordSegmentsDialog(tierName);
                 });
                 tierMenuBuilder.addItem(".", importToRecordSegmentsItem);
                 
+                // Import to Orthography
+                final JMenuItem importToOrthographyItem = new JMenuItem("Import into Orthography...");
+                importToOrthographyItem.addActionListener( (e) -> {
+                    showImportToOrthographyDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToOrthographyItem);
+
+                // Import to IPA tier
+                final JMenuItem importToIPATierItem = new JMenuItem("Import into IPA tier...");
+                importToIPATierItem.addActionListener( (e) -> {
+                    showImportToIPATierDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToIPATierItem);
+
+                // Import to Phone Intervals
+                final JMenuItem importToPhoneIntervalsItem = new JMenuItem("Import into Phone Intervals...");
+                importToPhoneIntervalsItem.addActionListener( (e) -> {
+                    showImportToPhoneIntervalsDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToPhoneIntervalsItem);
+                
                 // Import to User Tier
-                final JMenuItem importToUserTierItem = new JMenuItem("Import to User Tier...");
+                final JMenuItem importToUserTierItem = new JMenuItem("Import into User tier...");
                 importToUserTierItem.addActionListener( (e) -> {
                     showImportToUserTierDialog(tierName);
                 });

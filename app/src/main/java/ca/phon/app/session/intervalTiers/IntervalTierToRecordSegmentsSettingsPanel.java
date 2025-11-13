@@ -45,7 +45,7 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         
         // Interval tier name
-        add(new JLabel("Interval Tier Name:"), gbc);
+        add(new JLabel("Interval tier:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -147,7 +147,7 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        overwriteExistingRecordsCheckbox = new JCheckBox("Overwrite existing records");
+        overwriteExistingRecordsCheckbox = new JCheckBox("Overwrite existing record segments");
         overwriteExistingRecordsCheckbox.setSelected(settings.overwriteExistingRecords());
         add(overwriteExistingRecordsCheckbox, gbc);
         

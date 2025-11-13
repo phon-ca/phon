@@ -2,6 +2,7 @@ package ca.phon.app.session.intervalTiers;
 
 import ca.phon.orthography.TerminatorType;
 import ca.phon.session.Session;
+import ca.phon.session.UserTierType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,7 @@ public class IntervalTierToOrthographySettingsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         
         // Interval tier name
-        add(new JLabel("Interval Tier Name:"), gbc);
+        add(new JLabel("Interval tier Name:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -56,15 +57,20 @@ public class IntervalTierToOrthographySettingsPanel extends JPanel {
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        importWorTierCheckbox = new JCheckBox("Import to word tier (WOR) as well");
+        importWorTierCheckbox = new JCheckBox("Populate " + UserTierType.Wor.getPhonTierName() + " (" + UserTierType.Wor.getChatTierName() + ")" + " tier as well");
         importWorTierCheckbox.setSelected(settings.importWorTier());
         add(importWorTierCheckbox, gbc);
         
         // Add terminator checkbox
         gbc.gridy++;
-        addTerminatorCheckbox = new JCheckBox("Add terminator");
+        addTerminatorCheckbox = new JCheckBox("Add terminator if missing");
         addTerminatorCheckbox.setSelected(settings.addTerminator());
-        addTerminatorCheckbox.addActionListener(e -> terminatorTypeCombo.setEnabled(addTerminatorCheckbox.isSelected()));
+        addTerminatorCheckbox.addActionListener(e ->  {
+            terminatorTypeCombo.setEnabled(addTerminatorCheckbox.isSelected());
+            if(terminatorTypeCombo.getSelectedIndex() == -1) {
+                terminatorTypeCombo.setSelectedItem(TerminatorType.PERIOD);
+            }
+        });
         add(addTerminatorCheckbox, gbc);
         
         // Terminator type
@@ -72,7 +78,7 @@ public class IntervalTierToOrthographySettingsPanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("Terminator Type:"), gbc);
+        add(new JLabel("Terminator type:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -84,7 +90,9 @@ public class IntervalTierToOrthographySettingsPanel extends JPanel {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof TerminatorType) {
-                    setText(((TerminatorType) value).getDisplayName());
+                    final TerminatorType tt = (TerminatorType) value;
+                    final String text = tt.getText() + " (" + tt.getDisplayName() + ")";
+                    setText(text);
                 }
                 return this;
             }

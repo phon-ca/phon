@@ -108,7 +108,9 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
             }
 
             if(settings.addTerminator()) {
-                builder.append(new Terminator(settings.terminatorType()));
+                if(!builder.toOrthography().hasTerminator()) {
+                    builder.append(new Terminator(settings.terminatorType()));
+                }
             }
             final Orthography orthography = builder.toOrthography();
             final TierEdit<Orthography> orthoTierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getOrthographyTier(), orthography, false);

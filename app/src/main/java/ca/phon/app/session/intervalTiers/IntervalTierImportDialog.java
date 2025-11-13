@@ -84,7 +84,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         add(centerPanel, BorderLayout.CENTER);
         
         // Button bar
-        JButton okButton = new JButton("OK");
+        JButton okButton = new JButton("Ok");
         okButton.addActionListener(e -> onOk());
         
         JButton cancelButton = new JButton("Cancel");
@@ -118,7 +118,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         R importer = importerFactory.apply(settings);
         
         // Import tier
-        editor.getUndoSupport().beginUpdate("Import Interval Tier: " + intervalTierName);
+        editor.getUndoSupport().beginUpdate("Import interval tier: " + intervalTierName);
         try {
             Session session = editor.getSession();
             importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), 0);
@@ -199,7 +199,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         return new IntervalTierImportDialog<>(
             owner,
             editor,
-            "Import to Orthography Tier",
+            "Import into Orthography tier",
             "Import interval tier data to orthography tier",
             intervalTierName,
             panel,
@@ -225,7 +225,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         return new IntervalTierImportDialog<>(
             owner,
             editor,
-            "Import to Phone Intervals",
+            "Import to Phone intervals",
             "Import interval tier data to phone intervals",
             intervalTierName,
             panel,
@@ -254,8 +254,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         return new IntervalTierImportDialog<>(
             owner,
             editor,
-            "Import to Record Segments",
-            "Create records from interval tier data",
+            "Import as records",
+            "Create records from interval tier data or overwrite existing record segments",
             intervalTierName,
             panel,
             panel::getSettings,
@@ -280,7 +280,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         return new IntervalTierImportDialog<>(
             owner,
             editor,
-            "Import to User Tier",
+            "Import into User tier",
             "Import interval tier data to a user-defined tier",
             intervalTierName,
             panel,
