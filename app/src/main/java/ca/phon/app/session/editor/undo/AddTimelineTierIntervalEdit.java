@@ -39,7 +39,7 @@ public class AddTimelineTierIntervalEdit extends SessionUndoableEdit {
         if (session.getTimeline().getTierNames().contains(tierName)) {
             final IntervalTier intervalTier = session.getTimeline().getTier(tierName);
             if(intervalTier == null) return;
-            if (intervalTier.addInterval(this.interval, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS)) {
+            if (intervalTier.addInterval(this.interval, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS) >= 0) {
                 // fire event
                 final EditorEventManager editorEventManager = getEditorEventManager();
                 if (editorEventManager != null) {

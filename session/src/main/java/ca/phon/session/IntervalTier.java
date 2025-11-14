@@ -97,7 +97,7 @@ public final class IntervalTier extends ExtendableObject {
      */
     public Interval addInterval(float start, float end, String label, InsertionStrategy insertionStrategy) {
         Interval retVal = new Interval(start, end, label);
-        if(addInterval(retVal, insertionStrategy))
+        if(addInterval(retVal, insertionStrategy) >= 0)
             return retVal;
         return null;
     }
@@ -112,7 +112,7 @@ public final class IntervalTier extends ExtendableObject {
      * @throws IllegalArgumentException if insertionStrategy is ERROR_ON_OVERLAPS and
      *  the given interval overlaps an existing interval in the tier
      */
-    public boolean addInterval(Interval interval, InsertionStrategy insertionStrategy) {
+    public int addInterval(Interval interval, InsertionStrategy insertionStrategy) {
         return spi.addInterval(interval, insertionStrategy);
     }
 

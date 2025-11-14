@@ -44,13 +44,40 @@ public class IntervalTierImpl implements IntervalTierSPI {
     }
 
     @Override
-    public boolean addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy) {
-        return this.intervals.add(interval);
+    public int addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy) {
+        int insertIdx = -1;
+        for (int i = 0; i < this.intervals.size(); i++) {
+            final IntervalTier.Interval currentInterval = this.intervals.get(i);
+            if (interval.getEnd() <= currentInterval.getStart()) {
+                insertIdx = i;
+                break;
+            } else if (interval.getStart() < currentInterval.getEnd()) {
+                // overlap detected
+                if (insertionStrategy == IntervalTier.InsertionStrategy.ERROR_ON_OVERLAP) {
+                    throw new IllegalArgumentException("Interval overlaps existing interval in tier");
+                } else if(insertionStrategy == IntervalTier.InsertionStrategy.ALLOW_OVERLAPS) {
+                    insertIdx = i;
+                    break;
+                } else if(insertionStrategy == IntervalTier.InsertionStrategy.DIVIDE_INTERVALS_ON_OVERLAP) {
+                    // TODO implement divide intervals on overlap
+                }
+            }
+        }
+        if (insertIdx == -1) {
+            insertIdx = this.intervals.size();
+        }
+        this.intervals.add(insertIdx, interval);
+        return insertIdx;
     }
 
     @Override
     public boolean removeInterval(IntervalTier.Interval interval) {
         return this.intervals.remove(interval);
+    }
+
+    @Override
+    public IntervalTier.Interval removeIntervalAt(int index) {
+        return this.intervals.remove(index);
     }
 
 }

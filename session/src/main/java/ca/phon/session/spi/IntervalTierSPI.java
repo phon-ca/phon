@@ -26,11 +26,11 @@ public interface IntervalTierSPI {
      * @param interval
      * @param insertionStrategy
      *
-     * @return boolean if interval was added, false otherwise
+     * @return index of new interval added
      * @throws IllegalArgumentException if insertionStrategy is ERROR_ON_OVERLAPS and
      *  the given interval overlaps an existing interval in the tier
      */
-    public boolean addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy);
+    public int addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy);
 
     /**
      * Remove interval from tier
@@ -38,5 +38,14 @@ public interface IntervalTierSPI {
      * @param interval
      */
     public boolean removeInterval(IntervalTier.Interval interval);
+
+    /**
+     * Remove interval at given index from tier
+     *
+     * @param index the index of the interval to remove
+     * @return the removed interval
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
+    public IntervalTier.Interval removeIntervalAt(int index);
 
 }

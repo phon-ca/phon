@@ -219,14 +219,20 @@ public class RecordIntervalTier implements IntervalTierSPI {
 
     // not implemented
     @Override
-    public boolean addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy) {
-        return false;
+    public int addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy) {
+        return -1;
     }
 
     // not implemented
     @Override
     public boolean removeInterval(IntervalTier.Interval interval) {
         return false;
+    }
+
+    // not implemented
+    @Override
+    public IntervalTier.Interval removeIntervalAt(int index) {
+        return null;
     }
 
 }

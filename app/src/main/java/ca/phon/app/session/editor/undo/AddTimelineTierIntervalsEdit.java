@@ -47,7 +47,7 @@ public class AddTimelineTierIntervalsEdit extends SessionUndoableEdit {
 
             addedIntervals.clear();
             for (IntervalTier.Interval interval : intervals) {
-                if (intervalTier.addInterval(interval, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS)) {
+                if (intervalTier.addInterval(interval, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS) >= 0) {
                     addedIntervals.add(interval);
                 }
             }
