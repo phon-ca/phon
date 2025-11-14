@@ -37,12 +37,12 @@ public class IPATierElementFilter implements TierElementFilter {
             final IPATranscript transcript = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
                     (IPATranscript) tier.getBlindTranscription(transcriber.getUsername()) :
                     (IPATranscript) tier.getValue();
-            return transcript.words().stream().filter(this::test).toList();
+            return transcript != null ? transcript.words().stream().filter(this::test).toList() : List.of();
         } else if(declaredType == PhoneAlignment.class) {
             final PhoneAlignment phoneAlignment = tier.isBlind() && transcriber != Transcriber.VALIDATOR && tier.hasBlindTranscription(transcriber.getUsername()) ?
                     (PhoneAlignment) tier.getBlindTranscription(transcriber.getUsername()) :
                     (PhoneAlignment) tier.getValue();
-            return phoneAlignment.getAlignments().stream().filter(this::test).toList();
+            return phoneAlignment != null ? phoneAlignment.getAlignments().stream().filter(this::test).toList() : List.of();
         } else {
             throw new IllegalArgumentException();
         }

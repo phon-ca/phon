@@ -66,6 +66,9 @@ public class PhointTierUpdater2 implements TierEdit.DependentTierChanges<Orthogr
         final Tier<TierData> phoneIntervalsTier = record.getTier(phoTierDesc.getName(), TierData.class);
         if(phoneIntervalsTier == null) return;
 
+        final RecordIntervalTier recordIntervalTier = new RecordIntervalTier(session, wordIntervalsTier.getName());
+        final RecordIntervalTier ipaIntervalTier = new RecordIntervalTier(session, phoneIntervalsTier.getName());
+
         final TierData oldPhoneIntervals = phoneIntervalsTier.hasValue() ? phoneIntervalsTier.getValue() : new TierData();
         final List<TierElement> newPhoneIntervals = new ArrayList<>();
         final TierAlignment ipaToWorAlignment = TierAligner.alignTiers(ipaTier, wordIntervalsTier);

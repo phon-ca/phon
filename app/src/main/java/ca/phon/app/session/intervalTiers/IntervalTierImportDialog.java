@@ -138,6 +138,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
                 deleteIntervalTier();
             }
 
+            editor.setCurrentRecordIndex(startIndex);
+
             wasCancelled = false;
             setVisible(false);
         } catch (Exception ex) {
