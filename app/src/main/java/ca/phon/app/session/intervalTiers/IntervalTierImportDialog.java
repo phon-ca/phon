@@ -80,6 +80,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         setLayout(new BorderLayout());
 
         setModal(false);
+        setMinimumSize(new Dimension(500, 400));
 
         // Header
         DialogHeader header = new DialogHeader(title, description);
