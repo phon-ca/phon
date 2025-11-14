@@ -1,9 +1,11 @@
 package ca.phon.app.session.intervalTiers;
 
+import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.RemoveTimelineTierEdit;
 import ca.phon.session.IntervalTier;
 import ca.phon.session.Session;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 
@@ -28,9 +30,12 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
     private final Supplier<String> validationSupplier;
     private final Supplier<Boolean> shouldDeleteTierSupplier;
     private final String intervalTierName;
-    
+    private final boolean showRecordFilterButtons;
+
     private boolean wasCancelled = true;
-    
+    private RecordFilter recordFilter = null;
+    private JButton resetFilterButton;
+
     /**
      * Create a new interval tier import dialog.
      *
@@ -44,6 +49,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
      * @param importerFactory factory to create importer from settings
      * @param validationSupplier supplier to validate settings (returns null if valid, error message otherwise)
      * @param shouldDeleteTierSupplier supplier to check if tier should be deleted after import
+     * @param showRecordFilterButtons whether to show record filter buttons
      */
     public IntervalTierImportDialog(
             Frame owner,
@@ -55,7 +61,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             Supplier<T> settingsSupplier,
             Function<T, R> importerFactory,
             Supplier<String> validationSupplier,
-            Supplier<Boolean> shouldDeleteTierSupplier) {
+            Supplier<Boolean> shouldDeleteTierSupplier,
+            boolean showRecordFilterButtons) {
         super(owner, title, true);
         this.editor = editor;
         this.intervalTierName = intervalTierName;
@@ -64,7 +71,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         this.importerFactory = importerFactory;
         this.validationSupplier = validationSupplier;
         this.shouldDeleteTierSupplier = shouldDeleteTierSupplier;
-        
+        this.showRecordFilterButtons = showRecordFilterButtons;
+
         init(title, description);
     }
     
@@ -90,7 +98,15 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> onCancel());
         
-        JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton);
+        JButton filterButton = new JButton("Select records...");
+        filterButton.addActionListener(e -> showRecordFilterDialog());
+        filterButton.setVisible(showRecordFilterButtons);
+
+        resetFilterButton = new JButton("Reset filter");
+        resetFilterButton.addActionListener(e -> resetRecordFilter());
+        resetFilterButton.setVisible(false);
+
+        final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton, filterButton, resetFilterButton);
         buttonBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
         add(buttonBar, BorderLayout.SOUTH);
         
@@ -100,6 +116,44 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         setLocationRelativeTo(getOwner());
     }
     
+    private void showRecordFilterDialog() {
+        JDialog filterDialog = new JDialog(this, "Select records", true);
+        filterDialog.setLayout(new BorderLayout());
+
+        RecordFilterPanel filterPanel = new RecordFilterPanel(editor.getProject(), editor.getSession());
+        filterPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        filterDialog.add(filterPanel, BorderLayout.CENTER);
+
+        JButton applyButton = new JButton("Apply");
+        applyButton.addActionListener(e -> {
+            if (filterPanel.validatePanel()) {
+                recordFilter = filterPanel.getRecordFilter();
+                updateFilterStatus();
+                filterDialog.setVisible(false);
+            }
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(e -> filterDialog.setVisible(false));
+
+        JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(applyButton, cancelButton);
+        buttonBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+        filterDialog.add(buttonBar, BorderLayout.SOUTH);
+
+        filterDialog.pack();
+        filterDialog.setLocationRelativeTo(this);
+        filterDialog.setVisible(true);
+    }
+
+    private void resetRecordFilter() {
+        recordFilter = null;
+        updateFilterStatus();
+    }
+
+    private void updateFilterStatus() {
+        resetFilterButton.setVisible(showRecordFilterButtons && recordFilter != null);
+    }
+
     private void onOk() {
         // Validate settings
         String validationError = validationSupplier.get();
@@ -131,7 +185,9 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
                 }
             }
 
-            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), (r) -> true);
+            // Use record filter if set, otherwise accept all records
+            RecordFilter filter = (recordFilter != null) ? recordFilter : (r) -> true;
+            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), filter);
 
             // Delete interval tier if requested
             if (shouldDeleteTierSupplier.get()) {
@@ -192,7 +248,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             panel::getSettings,
             IntervalTierToIPATier::new,
             panel::validateSettings,
-            panel::shouldDeleteIntervalTier
+            panel::shouldDeleteIntervalTier,
+            true
         );
     }
     
@@ -218,7 +275,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             panel::getSettings,
             IntervalTierToOrthography::new,
             panel::validateSettings,
-            panel::shouldDeleteIntervalTier
+            panel::shouldDeleteIntervalTier,
+            true
         );
     }
     
@@ -244,7 +302,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             panel::getSettings,
             IntervalTierToPhoneIntervals::new,
             panel::validateSettings,
-            panel::shouldDeleteIntervalTier
+            panel::shouldDeleteIntervalTier,
+            true
         );
     }
     
@@ -273,7 +332,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             panel::getSettings,
             IntervalTierToRecordSegments::new,
             panel::validateSettings,
-            panel::shouldDeleteIntervalTier
+            panel::shouldDeleteIntervalTier,
+            false
         );
     }
     
@@ -299,7 +359,8 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             panel::getSettings,
             IntervalTierToUserTier::new,
             panel::validateSettings,
-            panel::shouldDeleteIntervalTier
+            panel::shouldDeleteIntervalTier,
+            true
         );
     }
 }
