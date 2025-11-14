@@ -306,7 +306,29 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<TimelineTierRemoveData> TimelineTierRemove =
 			new EditorEventType<>(EditorEventName.TIMELINE_TIER_REMOVED_EVT.getEventName(), TimelineTierRemoveData.class);
 
-	/**
+    /**
+     * Data for add of record data interval tier
+     */
+    public record RecordDataIntervalTierAddData(String tierName) {}
+
+    /**
+     * Data for remove of record data interval tier
+     */
+    public record RecordDataIntervalTierRemoveData(String tierName) {}
+
+    /**
+     * Add record data interval tier
+     */
+    public final static EditorEventType<RecordDataIntervalTierAddData> RecordDataIntervalTierAdd =
+            new EditorEventType<>(EditorEventName.RECORD_DATA_INTERVAL_TIER_ADDED_EVT.getEventName(), RecordDataIntervalTierAddData.class);
+
+    /**
+     * Remove record data interval tier
+     */
+    public final static EditorEventType<RecordDataIntervalTierRemoveData> RecordDataIntervalTierRemove =
+            new EditorEventType<>(EditorEventName.RECORD_DATA_INTERVAL_TIER_REMOVED_EVT.getEventName(), RecordDataIntervalTierRemoveData.class);
+
+    /**
 	 * Record for timeline interval addition
 	 * @param tierName
 	 * @param interval

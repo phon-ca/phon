@@ -1,6 +1,7 @@
 package ca.phon.app.session.intervalTiers;
 
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.undo.AddRecordDataIntervalTierEdit;
 import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
@@ -61,6 +62,11 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
             undoSupport.postEdit(tierEdit);
 
             modifiedRecords.add(recordIndex);
+        }
+
+        if(settings.includeIntervalText()) {
+            final AddRecordDataIntervalTierEdit edit = new AddRecordDataIntervalTierEdit(session, eventManager, settings.recordTierName());
+            undoSupport.postEdit(edit);
         }
 
         return modifiedRecords.stream().mapToInt(i -> i).toArray();

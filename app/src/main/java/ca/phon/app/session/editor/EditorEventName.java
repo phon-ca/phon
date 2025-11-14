@@ -101,6 +101,14 @@ public enum EditorEventName {
 	TIMELINE_TIER_MOVE_INTERVAL(MODIFICATION_EVENT + "TIMELINE_TIER_MOVE_INTERVAL_"),
 	RECORD_TIMELINE_TIER_ADDED_EVT(MODIFICATION_EVENT + "RECORD_TIMELINE_TIER_ADDED_"),
 	RECORD_TIMELINE_TIER_REMOVED_EVT(MODIFICATION_EVENT + "RECORD_TIMELINE_TIER_REMOVED_"),
+    /**
+     * Record data interval tier added
+     */
+    RECORD_DATA_INTERVAL_TIER_ADDED_EVT("_x_RECORD_DATA_INTERVAL_TIER_ADDED_"),
+    /**
+     * Record data interval tier removed
+     */
+    RECORD_DATA_INTERVAL_TIER_REMOVED_EVT("_x_RECORD_DATA_INTERVAL_TIER_REMOVED__"),
 	/**
 	 * A new background task was queued
 	 * data: task - PhonTask
@@ -126,6 +134,7 @@ public enum EditorEventName {
 	 * data: task - PhonTask
 	 */
 	TASK_ERROR("_TASK_ERROR_");
+
 
 	private String txt;
 

@@ -78,6 +78,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TimelineTierAdd, this::onIntervalTierAdd);
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TimelineTierRemove, this::onIntervalTierRemove);
         getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+        getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDataIntervalTierAdd, this::onRecordDataIntervalTierAdd);
+        getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDataIntervalTierRemove, this::onRecordDataIntervalTierRemove);
     }
 
     private void unregisterEditorEventHandlers() {
@@ -85,6 +87,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TimelineTierAdd, this::onIntervalTierAdd);
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TimelineTierRemove, this::onIntervalTierRemove);
         getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+        getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordDataIntervalTierAdd, this::onRecordDataIntervalTierAdd);
+        getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordDataIntervalTierRemove, this::onRecordDataIntervalTierRemove);
     }
 
     public void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> ee) {
@@ -140,6 +144,34 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             revalidate();
             repaint();
             sessionLevelIntervalTiers.remove(tierName);
+        }
+    }
+
+    public void onRecordDataIntervalTierAdd(EditorEvent<EditorEventType.RecordDataIntervalTierAddData> ee) {
+        final Session session = getParentView().getEditor().getSession();
+        final TierDescription tierDesc = session.getTier(ee.data().tierName());
+        if (tierDesc == null) return;
+        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, tierDesc.getName());
+        final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
+        intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
+        final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
+        intervalTierComponent.getSelectionModel().addListSelectionListener(wordAndPhoneSelectionListener);
+        intervalTierComponent.setIntervalClickedCallback( (index,interval) ->
+                setupSelectionInterval(intervalTierComponent, index, interval)
+        );
+        final int intervalTierInsertIdx = recordDataIntervalTiers.size();
+        add(intervalTierComponent, intervalTierInsertIdx);
+        recordDataIntervalTiers.put(tierDesc.getName(), intervalTierComponent);
+    }
+
+    public void onRecordDataIntervalTierRemove(EditorEvent<EditorEventType.RecordDataIntervalTierRemoveData> ee) {
+        final String tierName = ee.data().tierName();
+        if(recordDataIntervalTiers.containsKey(tierName)) {
+            final IntervalTierComponent intervalTierComponent = recordDataIntervalTiers.get(tierName);
+            remove(intervalTierComponent);
+            recordDataIntervalTiers.remove(tierName);
+            revalidate();
+            repaint();
         }
     }
 
