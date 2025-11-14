@@ -363,4 +363,31 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             true
         );
     }
+
+    /**
+     * Factory method to create a dialog for importing to word intervals.
+     */
+    public static IntervalTierImportDialog<IntervalTierToWordIntervalsSettings, IntervalTierToWordIntervals> createWordIntervalsImportDialog(
+            Frame owner,
+            SessionEditor editor,
+            String intervalTierName) {
+        Session session = editor.getSession();
+        IntervalTierToWordIntervalsSettings defaultSettings = new IntervalTierToWordIntervalsSettings(
+            intervalTierName, false, ca.phon.orthography.TerminatorType.PERIOD);
+        IntervalTierToWordIntervalsSettingsPanel panel = new IntervalTierToWordIntervalsSettingsPanel(session, defaultSettings);
+
+        return new IntervalTierImportDialog<>(
+            owner,
+            editor,
+            "Import as Word intervals",
+            "Import interval tier data to word intervals",
+            intervalTierName,
+            panel,
+            panel::getSettings,
+            IntervalTierToWordIntervals::new,
+            panel::validateSettings,
+            panel::shouldDeleteIntervalTier,
+            true
+        );
+    }
 }

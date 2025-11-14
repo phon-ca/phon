@@ -468,6 +468,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 });
                 tierMenuBuilder.addItem(".", importToPhoneIntervalsItem);
                 
+                // Import to Word Intervals
+                final JMenuItem importToWordIntervalsItem = new JMenuItem("Import as Word intervals...");
+                importToWordIntervalsItem.addActionListener( (e) -> {
+                    showImportToWordIntervalsDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToWordIntervalsItem);
+
                 // Import to User Tier
                 final JMenuItem importToUserTierItem = new JMenuItem("Import into User tier...");
                 importToUserTierItem.addActionListener( (e) -> {
@@ -898,7 +905,16 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         );
         dialog.setVisible(true);
     }
-    
+
+    private void showImportToWordIntervalsDialog(String tierName) {
+        var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createWordIntervalsImportDialog(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+            getParentView().getEditor(),
+            tierName
+        );
+        dialog.setVisible(true);
+    }
+
     private void showImportToRecordSegmentsDialog(String tierName) {
         var dialog = ca.phon.app.session.intervalTiers.IntervalTierImportDialog.createRecordSegmentsImportDialog(
             (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
