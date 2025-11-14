@@ -121,7 +121,17 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
         editor.getUndoSupport().beginUpdate("Import interval tier: " + intervalTierName);
         try {
             Session session = editor.getSession();
-            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), 0);
+
+            int startIndex = 0;
+            if(importer instanceof IntervalTierToRecordSegments) {
+                // Start after existing records if not overwriting
+                IntervalTierToRecordSegments segmentImporter = (IntervalTierToRecordSegments)importer;
+                if(!segmentImporter.getSettings().overwriteExistingRecords()) {
+                    startIndex = session.getRecordCount();
+                }
+            }
+
+            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), startIndex);
 
             // Delete interval tier if requested
             if (shouldDeleteTierSupplier.get()) {

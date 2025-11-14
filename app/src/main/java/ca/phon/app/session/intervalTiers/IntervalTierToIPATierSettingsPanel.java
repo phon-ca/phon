@@ -83,7 +83,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
             }
         }
         recordTierNameComboBox = new JComboBox<>(recordTierNames.toArray(new String[recordTierNames.size()]));
-        recordTierNameComboBox.setEditable(false);
+        recordTierNameComboBox.setEditable(true);
         if (settings.recordTierName() != null && !settings.recordTierName().isEmpty()) {
             recordTierNameComboBox.setSelectedItem(settings.recordTierName());
         }

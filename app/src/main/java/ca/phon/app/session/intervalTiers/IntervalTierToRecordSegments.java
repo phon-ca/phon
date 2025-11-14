@@ -27,6 +27,10 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
         this.settings = settings;
     }
 
+    public IntervalTierToRecordSegmentsSettings getSettings() {
+        return this.settings;
+    }
+
     /**
      * Create records from intervals in the specified session.
      *

@@ -1,6 +1,7 @@
 package ca.phon.app.session.intervalTiers;
 
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.fontconv.TranscriptConverter;
@@ -14,6 +15,7 @@ import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,6 +67,20 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
             }
             if(transliterationDict == null) {
                 LOGGER.log(Level.WARNING, "Transliteration dictionary not found: " + settings.transliterationScheme());
+            }
+        }
+
+        // add tier to session if necessary
+        TierDescription td = session.getTier(settings.recordTierName());
+        if(td == null) {
+            final SessionFactory factory = SessionFactory.newFactory();
+            td = factory.createTierDescription(settings.recordTierName(), IPATranscript.class, new HashMap<>(), false, false);
+            final TierViewItem tvi = factory.createTierViewItem(settings.recordTierName(), true);
+            final AddTierEdit addTierEdit = new AddTierEdit(session, eventManager, td,  tvi);
+            undoSupport.postEdit(addTierEdit);
+        } else {
+            if(!td.getDeclaredType().equals(IPATranscript.class)) {
+                throw new IllegalArgumentException("Tier '" + settings.recordTierName() + "' is not of type IPATranscript");
             }
         }
 
