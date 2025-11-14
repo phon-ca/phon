@@ -32,7 +32,6 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
     private JComboBox<String> transliterationSchemeComboBox;
     private JComboBox<String> fontConversionSchemeComboBox;
     private JCheckBox deleteIntervalTierCheckbox;
-    private JCheckBox importPhoneIntervalsCheckbox;
 
     public IntervalTierToIPATierSettingsPanel(Session session, IntervalTierToIPATierSettings settings) {
         super();
@@ -88,18 +87,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         if (settings.recordTierName() != null && !settings.recordTierName().isEmpty()) {
             recordTierNameComboBox.setSelectedItem(settings.recordTierName());
         }
-        recordTierNameComboBox.addActionListener(e -> updatePhoneIntervalsCheckboxVisibility());
         add(recordTierNameComboBox, gbc);
-
-        // Phone Intervals import option (only for IPA Actual)
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        importPhoneIntervalsCheckbox = new JCheckBox("Also import Phone Intervals tier");
-        importPhoneIntervalsCheckbox.setSelected(false);
-        add(importPhoneIntervalsCheckbox, gbc);
-        updatePhoneIntervalsCheckboxVisibility();
 
         // Syllabifier language
         gbc.gridx = 0;
@@ -188,12 +176,6 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         add(deleteIntervalTierCheckbox, gbc);
     }
     
-    private void updatePhoneIntervalsCheckboxVisibility() {
-        String selectedTier = (String) recordTierNameComboBox.getSelectedItem();
-        boolean isIPAActual = SystemTierType.IPAActual.getName().equals(selectedTier);
-        importPhoneIntervalsCheckbox.setVisible(isIPAActual);
-    }
-
     public IntervalTierToIPATierSettings getSettings() {
         String language = null;
         if (syllabifierSelector.getSelectedSyllabifier() != null) {
@@ -224,10 +206,6 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         );
     }
     
-    public boolean shouldImportPhoneIntervals() {
-        return importPhoneIntervalsCheckbox.isVisible() && importPhoneIntervalsCheckbox.isSelected();
-    }
-
     public boolean shouldDeleteIntervalTier() {
         return deleteIntervalTierCheckbox.isSelected();
     }
