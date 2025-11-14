@@ -7,6 +7,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
@@ -28,7 +29,7 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
         this.settings = settings;
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -43,8 +44,10 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
             undoSupport.postEdit(addTierEdit);
         }
 
-        for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
+        for(int recordIndex = 0; recordIndex < session.getRecordCount(); recordIndex++) {
             final Record record = session.getRecord(recordIndex);
+            if(!recordFilter.checkRecord(record)) continue;
+
             final MediaSegment segment = record.getMediaSegment();
             if(segment.isPoint()) continue;
 

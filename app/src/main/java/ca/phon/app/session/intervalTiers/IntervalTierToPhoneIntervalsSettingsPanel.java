@@ -41,7 +41,7 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         
         // Interval tier name
-        add(new JLabel("Interval Tier Name:"), gbc);
+        add(new JLabel("Interval tier:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -60,7 +60,7 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("Transliteration Scheme:"), gbc);
+        add(new JLabel("Transliteration scheme:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -85,7 +85,7 @@ public class IntervalTierToPhoneIntervalsSettingsPanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("Font Conversion Scheme:"), gbc);
+        add(new JLabel("Font conversion scheme:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;

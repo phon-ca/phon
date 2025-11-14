@@ -131,7 +131,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
                 }
             }
 
-            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), startIndex);
+            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), (r) -> true);
 
             // Delete interval tier if requested
             if (shouldDeleteTierSupplier.get()) {

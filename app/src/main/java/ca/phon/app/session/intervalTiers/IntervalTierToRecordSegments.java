@@ -6,6 +6,7 @@ import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.filter.RecordFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,12 +89,13 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
      * @param eventManager event manager for session change events
      * @param transcriber the transcriber
      * @param undoSupport undo support
+     * @param filter record filter (unused)
      */
     @Override
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter filter) {
         final List<MediaSegment> segments = segmentsFromSessionIntervals(session);
         final SessionFactory factory = SessionFactory.newFactory();
-        int recordIndex = recordStartIndex;
+        int recordIndex = settings.overwriteExistingRecords() ? 0 : session.getRecordCount();
         for(MediaSegment segment: segments) {
             boolean recordExists = recordIndex < session.getRecordCount();
             final Record record = (recordExists && settings.overwriteExistingRecords()) ? session.getRecord(recordIndex) : factory.createRecord();

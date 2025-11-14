@@ -50,7 +50,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         
         // Interval tier name
-        add(new JLabel("Interval Tier Name:"), gbc);
+        add(new JLabel("Interval tier:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -114,7 +114,7 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
                 }
             });
         }
-        syllabifierScroller.setBorder(BorderFactory.createTitledBorder("Syllabifier Language"));
+        syllabifierScroller.setBorder(BorderFactory.createTitledBorder("Syllabifier language"));
         syllabifierScroller.setPreferredSize(new Dimension(400, 150));
         add(syllabifierScroller, gbc);
         

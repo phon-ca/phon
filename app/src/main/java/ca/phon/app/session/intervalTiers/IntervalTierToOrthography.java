@@ -6,6 +6,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.orthography.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.filter.RecordFilter;
 
 /**
  * Import intervals from an interval tier into an orthography tier. The intervals
@@ -60,7 +61,7 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
     }
 
     @Override
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, int recordStartIndex) {
+    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -78,8 +79,10 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
             }
         }
 
-        for(int recordIndex = recordStartIndex; recordIndex < session.getRecordCount(); recordIndex++) {
+        for(int recordIndex = 0; recordIndex < session.getRecordCount(); recordIndex++) {
             final Record record = session.getRecord(recordIndex);
+            if(!recordFilter.checkRecord(record)) continue;
+
             final OrthographyBuilder builder = new OrthographyBuilder();
             final OrthographyBuilder worBuilder = new OrthographyBuilder();
             final MediaSegment segment = record.getMediaSegment();
