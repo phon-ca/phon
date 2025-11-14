@@ -16,6 +16,7 @@
 package ca.phon.app.csv;
 
 import ca.phon.csv.CSVQuoteType;
+import ca.phon.session.filter.RecordFilter;
 
 import java.util.*;
 
@@ -31,6 +32,8 @@ public class CSVExportSettings {
     private CSVQuoteType quoteType;
     private boolean trimSpaces;
     private String encoding;
+    
+    private RecordFilter recordFilter;
 
     private List<CSVColumn> exportColumnList = new ArrayList<>();
 
@@ -111,5 +114,23 @@ public class CSVExportSettings {
      */
     public String getEncoding() {
         return encoding;
+    }
+    
+    /**
+     * Get the record filter.
+     * 
+     * @return the record filter
+     */
+    public RecordFilter getRecordFilter() {
+        return recordFilter;
+    }
+    
+    /**
+     * Set the record filter.
+     * 
+     * @param recordFilter the record filter
+     */
+    public void setRecordFilter(RecordFilter recordFilter) {
+        this.recordFilter = recordFilter;
     }
 }

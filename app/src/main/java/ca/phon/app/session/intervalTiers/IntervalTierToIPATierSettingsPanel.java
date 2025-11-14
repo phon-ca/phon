@@ -1,9 +1,11 @@
 package ca.phon.app.session.intervalTiers;
 
+import ca.phon.app.session.RecordFilterSelectorPanel;
 import ca.phon.fontconv.TranscriptConverter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.TransliterationDictionaryProvider;
+import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.syllabifier.*;
 import ca.phon.ui.SyllabifierSelector;
@@ -32,16 +34,21 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
     private JComboBox<String> transliterationSchemeComboBox;
     private JComboBox<String> fontConversionSchemeComboBox;
     private JCheckBox deleteIntervalTierCheckbox;
+    private RecordFilterSelectorPanel recordFilterSelector;
 
     public IntervalTierToIPATierSettingsPanel(Session session, IntervalTierToIPATierSettings settings) {
+        this(session, settings, null);
+    }
+    
+    public IntervalTierToIPATierSettingsPanel(Session session, IntervalTierToIPATierSettings settings, Project project) {
         super();
         this.session = session;
         this.settings = settings;
         
-        init();
+        init(project);
     }
     
-    private void init() {
+    private void init(Project project) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -174,6 +181,20 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
         deleteIntervalTierCheckbox = new JCheckBox("Delete session-level interval tier after import");
         deleteIntervalTierCheckbox.setSelected(false);
         add(deleteIntervalTierCheckbox, gbc);
+        
+        // Record filter selector
+        if(project != null) {
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            recordFilterSelector = new RecordFilterSelectorPanel(project, session);
+            recordFilterSelector.setBorder(BorderFactory.createTitledBorder("Record Filter"));
+            if(settings.recordFilter() != null) {
+                recordFilterSelector.setRecordFilter(settings.recordFilter());
+            }
+            add(recordFilterSelector, gbc);
+        }
     }
     
     public IntervalTierToIPATierSettings getSettings() {
@@ -202,7 +223,8 @@ public class IntervalTierToIPATierSettingsPanel extends JPanel {
             (String) recordTierNameComboBox.getSelectedItem(),
             language,
             transliterationScheme,
-            fontConversionScheme
+            fontConversionScheme,
+            recordFilterSelector != null ? recordFilterSelector.getRecordFilter() : null
         );
     }
     
