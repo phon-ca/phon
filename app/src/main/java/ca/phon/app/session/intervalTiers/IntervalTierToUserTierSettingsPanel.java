@@ -1,6 +1,7 @@
 package ca.phon.app.session.intervalTiers;
 
 import ca.phon.session.Session;
+import ca.phon.session.UserTierType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ public class IntervalTierToUserTierSettingsPanel extends JPanel {
     private final IntervalTierToUserTierSettings settings;
     
     private JComboBox<String> intervalTierNameComboBox;
-    private JTextField recordTierNameField;
+    private JComboBox<String> recordTierNameField;
     private JCheckBox includeIntervalTextCheckbox;
     private JCheckBox deleteIntervalTierCheckbox;
     
@@ -54,11 +55,39 @@ public class IntervalTierToUserTierSettingsPanel extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("User Tier Name:"), gbc);
+        add(new JLabel("User tier:"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        recordTierNameField = new JTextField(settings.recordTierName() != null ? settings.recordTierName() : "", 20);
+        recordTierNameField = new JComboBox<>();
+        recordTierNameField.setEditable(true);
+
+        // Populate with UserTierType values
+        for (UserTierType tierType : UserTierType.values()) {
+            recordTierNameField.addItem(tierType.getPhonTierName());
+        }
+
+        // Set custom renderer to show "Phon name (CHAT name)"
+        recordTierNameField.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value != null && index >= 0) {
+                    String phonTierName = value.toString();
+                    UserTierType tierType = UserTierType.fromPhonTierName(phonTierName);
+                    if (tierType != null && !tierType.getChatTierName().isEmpty()) {
+                        setText(phonTierName + " (" + tierType.getChatTierName() + ")");
+                    }
+                }
+                return this;
+            }
+        });
+
+        // Set initial value from settings
+        if (settings.recordTierName() != null && !settings.recordTierName().isEmpty()) {
+            recordTierNameField.setSelectedItem(settings.recordTierName());
+        }
+
         add(recordTierNameField, gbc);
         
         // Include interval text checkbox
@@ -83,9 +112,16 @@ public class IntervalTierToUserTierSettingsPanel extends JPanel {
             intervalTierName = intervalTierName.trim();
         }
 
+        String recordTierName = (String) recordTierNameField.getSelectedItem();
+        if (recordTierName != null) {
+            recordTierName = recordTierName.trim();
+        } else {
+            recordTierName = "";
+        }
+
         return new IntervalTierToUserTierSettings(
             intervalTierName,
-            recordTierNameField.getText().trim(),
+            recordTierName,
             includeIntervalTextCheckbox.isSelected()
         );
     }
@@ -99,7 +135,8 @@ public class IntervalTierToUserTierSettingsPanel extends JPanel {
         if (intervalTierName == null || intervalTierName.trim().isEmpty()) {
             return "Interval tier name cannot be empty";
         }
-        if (recordTierNameField.getText().trim().isEmpty()) {
+        String recordTierName = (String) recordTierNameField.getSelectedItem();
+        if (recordTierName == null || recordTierName.trim().isEmpty()) {
             return "User tier name cannot be empty";
         }
         return null;

@@ -346,7 +346,7 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
             String intervalTierName) {
         Session session = editor.getSession();
         IntervalTierToUserTierSettings defaultSettings = new IntervalTierToUserTierSettings(
-            intervalTierName, "Custom", false);
+            intervalTierName, intervalTierName, false);
         IntervalTierToUserTierSettingsPanel panel = new IntervalTierToUserTierSettingsPanel(session, defaultSettings);
         
         return new IntervalTierImportDialog<>(

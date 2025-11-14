@@ -115,7 +115,7 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
-        add(new JLabel("Max Gap Length (s):"), gbc);
+        add(new JLabel("Max gap (s):"), gbc);
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
