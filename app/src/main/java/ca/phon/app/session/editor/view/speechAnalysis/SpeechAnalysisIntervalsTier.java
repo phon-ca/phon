@@ -438,7 +438,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 tierMenuBuilder.addItem(".", showTierItem);
                 
                 // Add separator before import options
-                tierMenuBuilder.addSeparator(".", "import");
+                tierMenuBuilder.addSeparator(".", "import_records");
 
                 // Import to Record Segments
                 final JMenuItem importToRecordSegmentsItem = new JMenuItem("Import as records...");
@@ -446,9 +446,12 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     showImportToRecordSegmentsDialog(tierName);
                 });
                 tierMenuBuilder.addItem(".", importToRecordSegmentsItem);
+
+                tierMenuBuilder.addSeparator(".", "import_tiers");
                 
                 // Import to Orthography
                 final JMenuItem importToOrthographyItem = new JMenuItem("Import into Orthography...");
+                importToOrthographyItem.setEnabled(getParentView().getEditor().getSession().getRecordCount() > 0);
                 importToOrthographyItem.addActionListener( (e) -> {
                     showImportToOrthographyDialog(tierName);
                 });
@@ -456,27 +459,31 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
                 // Import to IPA tier
                 final JMenuItem importToIPATierItem = new JMenuItem("Import into IPA tier...");
+                importToIPATierItem.setEnabled(getParentView().getEditor().getSession().getRecordCount() > 0);
                 importToIPATierItem.addActionListener( (e) -> {
                     showImportToIPATierDialog(tierName);
                 });
                 tierMenuBuilder.addItem(".", importToIPATierItem);
 
-                // Import to Phone Intervals
-                final JMenuItem importToPhoneIntervalsItem = new JMenuItem("Import into Phone Intervals...");
-                importToPhoneIntervalsItem.addActionListener( (e) -> {
-                    showImportToPhoneIntervalsDialog(tierName);
-                });
-                tierMenuBuilder.addItem(".", importToPhoneIntervalsItem);
-                
                 // Import to Word Intervals
-                final JMenuItem importToWordIntervalsItem = new JMenuItem("Import as Word intervals...");
+                final JMenuItem importToWordIntervalsItem = new JMenuItem("Import into Word intervals...");
+                importToWordIntervalsItem.setEnabled(getParentView().getEditor().getSession().getRecordCount() > 0);
                 importToWordIntervalsItem.addActionListener( (e) -> {
                     showImportToWordIntervalsDialog(tierName);
                 });
                 tierMenuBuilder.addItem(".", importToWordIntervalsItem);
 
+                // Import to Phone Intervals
+                final JMenuItem importToPhoneIntervalsItem = new JMenuItem("Import into Phone Intervals...");
+                importToPhoneIntervalsItem.setEnabled(getParentView().getEditor().getSession().getRecordCount() > 0);
+                importToPhoneIntervalsItem.addActionListener( (e) -> {
+                    showImportToPhoneIntervalsDialog(tierName);
+                });
+                tierMenuBuilder.addItem(".", importToPhoneIntervalsItem);
+
                 // Import to User Tier
                 final JMenuItem importToUserTierItem = new JMenuItem("Import into User tier...");
+                importToUserTierItem.setEnabled(getParentView().getEditor().getSession().getRecordCount() > 0);
                 importToUserTierItem.addActionListener( (e) -> {
                     showImportToUserTierDialog(tierName);
                 });
