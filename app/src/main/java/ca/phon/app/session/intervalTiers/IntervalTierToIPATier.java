@@ -16,7 +16,9 @@ import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,11 +41,11 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
         this.settings = settings;
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
-        importTier(session, eventManager, Transcriber.VALIDATOR, undoSupport, recordFilter);
+    public int[] importTier(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
+        return importTier(session, eventManager, Transcriber.VALIDATOR, undoSupport, recordFilter);
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
+    public int[] importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -85,6 +87,7 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
             }
         }
 
+        List<Integer> updatedRecords = new ArrayList<>();
         for(int recordIndex = 0; recordIndex < session.getRecordCount(); recordIndex++) {
             final Record record = session.getRecord(recordIndex);
             if(!recordFilter.checkRecord(record)) continue;
@@ -153,8 +156,12 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
             if(ipaTier != null) {
                 final TierEdit<IPATranscript> tierEdit = new TierEdit<>(session, eventManager, transcriber, record, ipaTier, ipa, false);
                 undoSupport.postEdit(tierEdit);
+
+                updatedRecords.add(recordIndex);
             }
         }
+
+        return updatedRecords.stream().mapToInt(i->i).toArray();
     }
 
 }

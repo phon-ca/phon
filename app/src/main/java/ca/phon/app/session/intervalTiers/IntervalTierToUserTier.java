@@ -29,7 +29,7 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
         this.settings = settings;
     }
 
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
+    public int[] importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -44,6 +44,7 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
             undoSupport.postEdit(addTierEdit);
         }
 
+        final List<Integer> modifiedRecords = new java.util.ArrayList<>();
         for(int recordIndex = 0; recordIndex < session.getRecordCount(); recordIndex++) {
             final Record record = session.getRecord(recordIndex);
             if(!recordFilter.checkRecord(record)) continue;
@@ -58,7 +59,11 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
             final TierData tierData = getTierElements(containedIntervals, importTier);
             final TierEdit<TierData> tierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getTier(settings.recordTierName(), TierData.class), tierData, false);
             undoSupport.postEdit(tierEdit);
+
+            modifiedRecords.add(recordIndex);
         }
+
+        return modifiedRecords.stream().mapToInt(i -> i).toArray();
     }
 
     private TierData getTierElements(int[] containedIntervals, IntervalTier importTier) {

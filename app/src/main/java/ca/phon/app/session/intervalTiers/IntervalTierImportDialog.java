@@ -187,14 +187,14 @@ public class IntervalTierImportDialog<T, R extends IntervalTierImporter> extends
 
             // Use record filter if set, otherwise accept all records
             RecordFilter filter = (recordFilter != null) ? recordFilter : (r) -> true;
-            importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), filter);
+            final int[] modifiedRecords = importer.importTier(session, editor.getEventManager(), editor.getUndoSupport(), filter);
 
             // Delete interval tier if requested
             if (shouldDeleteTierSupplier.get()) {
                 deleteIntervalTier();
             }
 
-            editor.setCurrentRecordIndex(startIndex);
+            editor.setCurrentRecordIndex(modifiedRecords.length > 0 ? modifiedRecords[0] : startIndex);
 
             wasCancelled = false;
             setVisible(false);

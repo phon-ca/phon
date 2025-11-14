@@ -92,10 +92,11 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
      * @param filter record filter (unused)
      */
     @Override
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter filter) {
+    public int[] importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter filter) {
         final List<MediaSegment> segments = segmentsFromSessionIntervals(session);
         final SessionFactory factory = SessionFactory.newFactory();
         int recordIndex = settings.overwriteExistingRecords() ? 0 : session.getRecordCount();
+        List<Integer> modifiedRecords = new ArrayList<>();
         for(MediaSegment segment: segments) {
             boolean recordExists = recordIndex < session.getRecordCount();
             final Record record = (recordExists && settings.overwriteExistingRecords()) ? session.getRecord(recordIndex) : factory.createRecord();
@@ -103,14 +104,17 @@ public final class IntervalTierToRecordSegments extends IntervalTierImporter {
                 final TierEdit<MediaSegment> tierEdit =
                         new TierEdit<>(session, eventManager, transcriber, record, record.getSegmentTier(), segment);
                 undoSupport.postEdit(tierEdit);
+
             } else {
                 record.setMediaSegment(segment);
                 record.setSpeaker(settings.speaker());
                 final AddRecordEdit addRecordEdit = new AddRecordEdit(session, eventManager, record, recordIndex);
                 undoSupport.postEdit(addRecordEdit);
             }
+            modifiedRecords.add(recordIndex);
             recordIndex++;
         }
+        return modifiedRecords.stream().mapToInt(i -> i).toArray();
     }
 
 }

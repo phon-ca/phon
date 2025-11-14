@@ -8,6 +8,9 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.filter.RecordFilter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Import intervals from an interval tier into an orthography tier. The intervals
  * that fully contain each record's media segment will be concatenated
@@ -61,7 +64,7 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
     }
 
     @Override
-    public void importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
+    public int[] importTier(Session session, EditorEventManager eventManager, Transcriber transcriber, SessionEditUndoSupport undoSupport, RecordFilter recordFilter) {
         final IntervalTier importTier = session.getTimeline().getTier(settings.intervalTierName());
         if(importTier == null) {
             throw new IllegalArgumentException("Interval tier '" + settings.intervalTierName() + "' not found in session");
@@ -79,6 +82,7 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
             }
         }
 
+        final List<Integer> updatedRecords = new ArrayList<>();
         for(int recordIndex = 0; recordIndex < session.getRecordCount(); recordIndex++) {
             final Record record = session.getRecord(recordIndex);
             if(!recordFilter.checkRecord(record)) continue;
@@ -119,6 +123,8 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
             final TierEdit<Orthography> orthoTierEdit = new TierEdit<>(session, eventManager, transcriber, record, record.getOrthographyTier(), orthography, false);
             undoSupport.postEdit(orthoTierEdit);
 
+            updatedRecords.add(recordIndex);
+
             if(settings.importWorTier()) {
                 if (settings.addTerminator()) {
                     worBuilder.append(new Terminator(settings.terminatorType()));
@@ -128,6 +134,8 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
                 undoSupport.postEdit(worTierEdit);
             }
         }
+
+        return updatedRecords.stream().mapToInt(i -> i).toArray();
     }
 
 }
