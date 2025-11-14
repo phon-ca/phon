@@ -21,16 +21,17 @@ import ca.phon.session.Record;
  * Interface for filtering a list of records. 
  *
  */
+@FunctionalInterface
 public interface RecordFilter {
 	
 	/**
 	 * Does the given utterance match our pattern?
 	 * 
-	 * @param utterance
-	 * @return boolean
+	 * @param r the record to check
+	 * @return boolean indicating whether the record is accepted by the filter
 	 * 
 	 */
-	public boolean checkRecord(Record utt);
+	public boolean checkRecord(Record r);
 	
 
 }
