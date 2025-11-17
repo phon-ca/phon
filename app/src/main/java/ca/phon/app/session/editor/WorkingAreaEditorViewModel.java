@@ -447,13 +447,29 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		return false;
 	}
 
+    public boolean isInStack(String viewName) {
+        boolean retVal = false;
+        final CControlRegister register = dockControl.getRegister();
+        for (CDockable currentDockable : register.getDockables()) {
+            if (currentDockable.intern().getTitleText().equals(viewName)) {
+                DockStation station = currentDockable.intern().getDockParent();
+                if (station instanceof StackDockStation) {
+                    retVal = true;
+                } else {
+                    retVal = false;
+                }
+            }
+        }
+        return retVal;
+    }
+
 	@Override
 	public boolean isShowingInStack(String viewName) {
 		boolean retVal = false;
 		final CControlRegister register = dockControl.getRegister();
 		for (CDockable currentDockable : register.getDockables()) {
 			if (currentDockable.intern().getTitleText().equals(viewName)) {
-				retVal = currentDockable.isVisible();
+				retVal = currentDockable.isShowing();
 
 				DockStation station = currentDockable.intern().getDockParent();
 				if (station instanceof StackDockStation) {
@@ -626,6 +642,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void hideView(String viewName) {
+        if(TranscriptView.VIEW_NAME.equals(viewName)) {
+            isShowingInStack(viewName);
+            showView(viewName);
+            return;
+        }
 		final EditorView view = registeredViews.get(viewName);
 		if (view == null) {
 			LogUtil.warning("View '" + viewName + "' not registered, cannot hide");

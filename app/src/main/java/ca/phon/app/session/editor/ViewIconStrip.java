@@ -68,7 +68,7 @@ public class ViewIconStrip extends IconStrip {
             viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
             viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
             viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
-            final FlatButton moreButton = createMoreButton();
+            final FlatButton moreButton = createLayoutButton();
 
             add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
@@ -86,6 +86,14 @@ public class ViewIconStrip extends IconStrip {
             add(viewButtons.get(SearchView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(SyllabificationAlignmentEditorView.VIEW_NAME), IconStripPosition.LEFT);
+
+            var pluginViews = viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS);
+            if(pluginViews != null) {
+                for (String viewName : pluginViews) {
+                    viewButtons.put(viewName, createViewButton(viewName));
+                    add(viewButtons.get(viewName), IconStripPosition.RIGHT);
+                }
+            }
         }
 
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {
@@ -150,40 +158,20 @@ public class ViewIconStrip extends IconStrip {
         return null;
     }
 
-    public FlatButton createMoreButton() {
-        final PhonUIAction showMoreMenu = PhonUIAction.eventConsumer(this::onShowMoreMenu);
-        showMoreMenu.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
-        showMoreMenu.putValue(FlatButton.ICON_NAME_PROP, "more_horiz");
-        showMoreMenu.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        final FlatButton moreButton = createButton(showMoreMenu);
+    public FlatButton createLayoutButton() {
+        final PhonUIAction showLayoutMenu = PhonUIAction.eventConsumer(this::onShowLayoutMenu);
+        showLayoutMenu.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
+        showLayoutMenu.putValue(FlatButton.ICON_NAME_PROP, "auto_awesome_mosaic");
+        showLayoutMenu.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        final FlatButton moreButton = createButton(showLayoutMenu);
         moreButton.setPadding(2);
         moreButton.setPopupLocation(SwingConstants.EAST);
-        moreButton.setPopupText("More...");
+        moreButton.setPopupText("Layout...");
         return moreButton;
     }
 
-    private void onShowMoreMenu(PhonActionEvent pae) {
-        final JMenu menu = new JMenu("More...");
-
-        var pluginViews = viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS);
-        if(pluginViews != null) {
-            for (String viewName : pluginViews) {
-                final IconData iconData = getViewIcon(viewName);
-                final Action showHideAct = PhonUIAction.runnable(() -> {
-                    final ShowHideViewEdit showHideEdit =
-                            new ShowHideViewEdit(session, editorEventManager, viewModel, viewName,
-                                    !viewModel.isShowing(viewName));
-                    undoSupport.postEdit(showHideEdit);
-                });
-                showHideAct.putValue(Action.SMALL_ICON,
-                        IconManager.getInstance().getFontIcon(iconData.fontName(), iconData.iconName(), IconSize.SMALL, UIManager.getColor("MenuItem.foreground")));
-                showHideAct.putValue(Action.NAME, viewName);
-                showHideAct.putValue(Action.SHORT_DESCRIPTION, "Toggle " + viewName);
-                final JMenuItem menuItem = new JMenuItem(showHideAct);
-                menu.add(menuItem);
-            }
-            if (pluginViews.size() > 0) menu.addSeparator();
-        }
+    private void onShowLayoutMenu(PhonActionEvent pae) {
+        final JMenu menu = new JMenu("Layout...");
 
         viewModel.setupPerspectiveMenu(menu);
         final JComponent source = (JComponent)pae.getActionEvent().getSource();
