@@ -10,7 +10,6 @@ import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.alignment.PhoneIntervalsElementFilter;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.tierdata.TierData;
@@ -26,7 +25,7 @@ import java.util.List;
  * changes.
  */
 @Extension(Tier.class)
-public class PhointTierUpdater implements TierEdit.DependentTierChanges<IPATranscript>, ExtensionProvider {
+public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges<IPATranscript>, ExtensionProvider {
 
     @Override
     public void performDependentTierChanges(TierEdit<IPATranscript> tierEdit) {
@@ -89,7 +88,7 @@ public class PhointTierUpdater implements TierEdit.DependentTierChanges<IPATrans
     public void installExtension(IExtendable obj) {
         if (obj instanceof Tier<?> tier) {
             if (SystemTierType.IPAActual.getName().equals(tier.getName()) && tier.getDeclaredType() == IPATranscript.class) {
-                final PhointTierUpdater extension = new PhointTierUpdater();
+                final UpdatePhointAfterIPAActual extension = new UpdatePhointAfterIPAActual();
                 final TierEdit.DependentTierChanges existingExtension =  obj.getExtension(TierEdit.DependentTierChanges.class);
                 if(existingExtension == null) {
                     obj.putExtension(TierEdit.DependentTierChanges.class, extension);

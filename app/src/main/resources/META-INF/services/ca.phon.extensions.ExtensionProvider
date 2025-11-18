@@ -3,6 +3,6 @@ ca.phon.app.session.editor.extensions.IPADependentTierChanges
 ca.phon.app.session.editor.view.transcript.extensions.DefaultEditorExtensionProvider
 ca.phon.app.session.intervalTiers.IntervalTierDependentTierChanges
 ca.phon.app.session.intervalTiers.WordIntervalsTextUpdater
-ca.phon.app.session.intervalTiers.PhointTierUpdater
-ca.phon.app.session.intervalTiers.PhointTierUpdater2
+ca.phon.app.session.intervalTiers.UpdatePhointAfterIPAActual
+ca.phon.app.session.intervalTiers.UpdatePhointAfterWor
 

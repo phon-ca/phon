@@ -221,6 +221,25 @@ public final class IntervalTier extends ExtendableObject {
             }
         }
 
+        public int hashCode() {
+            int retVal = 17;
+            retVal = 37 * retVal + Float.floatToIntBits(this.start);
+            retVal = 37 * retVal + Float.floatToIntBits(this.end);
+            retVal = 37 * retVal + this.label.hashCode();
+            return retVal;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if(other instanceof Interval) {
+                final Interval oInterval = (Interval)other;
+                return this.start == oInterval.start
+                        && this.end == oInterval.end
+                        && this.label.equals(oInterval.label);
+            }
+            return super.equals(other);
+        }
+
     }
 
     /**
