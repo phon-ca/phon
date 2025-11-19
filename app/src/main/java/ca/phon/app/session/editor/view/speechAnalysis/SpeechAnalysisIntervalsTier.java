@@ -151,7 +151,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final Session session = getParentView().getEditor().getSession();
         final TierDescription tierDesc = session.getTier(ee.data().tierName());
         if (tierDesc == null) return;
-        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, tierDesc.getName());
+        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, tierDesc.getName(), getParentView().getEditor().getDataModel().getTranscriber());
         final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
         intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
         final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
@@ -179,7 +179,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final Session session = getParentView().getEditor().getSession();
         final TierDescription worTierDesc = session.getTier(UserTierType.Wor.getPhonTierName());
         if (worTierDesc == null) return;
-        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, worTierDesc.getName());
+        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, worTierDesc.getName(), getParentView().getEditor().getDataModel().getTranscriber());
         final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
         intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
         final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
@@ -206,7 +206,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final Session session = getParentView().getEditor().getSession();
         final TierDescription phoTierDesc = session.getTier(UserTierType.PhoneIntervals.getPhonTierName());
         if (phoTierDesc == null) return;
-        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, phoTierDesc.getName());
+        final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, phoTierDesc.getName(), getParentView().getEditor().getDataModel().getTranscriber());
         final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
         intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
         final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(intervalTierTimeModel, intervalTier);
@@ -283,7 +283,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
 
         for(String timelineTierName: intervalTiers.getRecordIntervalTiers()) {
-            final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, timelineTierName);
+            final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, timelineTierName, getParentView().getEditor().getDataModel().getTranscriber());
             final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
             intervalTier.putExtension(RecordIntervalTier.class, recordTimelineTier);
             final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(this.intervalTierTimeModel, intervalTier);
@@ -800,7 +800,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 //                }
 
                 final TierEdit<Orthography> worEdit =
-                        new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
+                        new TierEdit<>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
                                 getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
                                 (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
                 getParentView().getEditor().getUndoSupport().postEdit(worEdit);

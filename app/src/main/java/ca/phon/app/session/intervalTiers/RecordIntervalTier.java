@@ -24,9 +24,12 @@ public class RecordIntervalTier implements IntervalTierSPI {
 
     private final String tierName;
 
-    public RecordIntervalTier(Session session, String tierName) {
+    private final Transcriber transcriber;
+
+    public RecordIntervalTier(Session session, String tierName, Transcriber transcriber) {
         this.session = session;
         this.tierName = tierName;
+        this.transcriber = transcriber;
     }
 
     @Override
@@ -45,13 +48,15 @@ public class RecordIntervalTier implements IntervalTierSPI {
         // process tier data
         if(tier == null) return List.of();
 
-        if(tier.getValue() instanceof TierData tierData) {
+        if(tier.getDeclaredType() == TierData.class) {
+            final TierData tierData = ((Tier<TierData>)tier).getValueForTranscriber(transcriber).orElse(new TierData());
             if(UserTierType.PhoneIntervals.getPhonTierName().equals(tier.getName())) {
                 return phoneIntervals(tierData);
             } else {
                 return tierDataIntervals(tierData);
             }
-        } else if(tier.getValue() instanceof Orthography orthography) {
+        } else if(tier.getDeclaredType() == Orthography.class) {
+            final Orthography orthography = ((Tier<Orthography>)tier).getValueForTranscriber(transcriber).orElse(new Orthography());
             return orthographyIntervals(orthography);
         }
         return List.of();
