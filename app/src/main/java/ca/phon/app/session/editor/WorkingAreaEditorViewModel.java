@@ -606,9 +606,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				}
 			}
 			if (dockPosition == ViewPosition.WORK) {
-				workingArea.show(dockable);
-				dockable.setVisible(true);
-			} else if(dockPosition == ViewPosition.EMBEDDED) {
+                workingArea.show(dockable);
+                dockable.setVisible(true);
+            } else if(dockPosition == ViewPosition.EMBEDDED) {
 				// special case for media player views
 
 				// embedded into the transcript view
@@ -854,9 +854,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			if(dockPosition == ViewPosition.EXTERNAL || dockPosition == ViewPosition.EMBEDDED) continue;
 			if (dockPosition == ViewPosition.WORK) {
 				if (TranscriptView.VIEW_NAME.equals(viewName)) {
-					workingPerspective.gridAdd(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), dockables.get(viewName));
+					workingPerspective.gridAdd(dockPosition.getX(), dockPosition.getY(), dockPosition.getWidth(), dockPosition.getHeight(), dockables.get(viewName));
 				} else {
-					workingPerspective.gridPlaceholder(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), new Path("dock", "single", dockPosition.getName()));
+					workingPerspective.gridPlaceholder(dockPosition.getX(), dockPosition.getY(), dockPosition.getWidth(), dockPosition.getHeight(), new Path("dock", "single", dockPosition.getName()));
 				}
 			} else {
 				center.gridPlaceholder(dockPosition.getX(), dockPosition.getY(), dockPosition.getWidth(), dockPosition.getHeight(), new Path("dock", "single", dockPosition.getName()));

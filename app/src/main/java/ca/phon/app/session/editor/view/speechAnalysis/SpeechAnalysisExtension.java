@@ -27,7 +27,7 @@ import ca.phon.plugin.*;
 @EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_NAME,
 		category=EditorViewCategory.MEDIA,
 		icon = SpeechAnalysisEditorView.VIEW_ICON,
-		dockPosition = ViewPosition.WORK)
+		dockPosition = ViewPosition.WORK_BOTTOM)
 public class SpeechAnalysisExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

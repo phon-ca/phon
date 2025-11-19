@@ -2,6 +2,8 @@ package ca.phon.app.session;
 
 public enum ViewPosition {
     WORK(25, 0, 50, 100, "work"),
+    WORK_TOP(25, 0, 50, 50, "work-top"),
+    WORK_BOTTOM(25, 50, 50, 50, "work-bottom"),
     LEFT_TOP(0, 0, 25, 50, "left-top"),
     LEFT_BOTTOM(0, 50, 25, 50, "left-bottom"),
     RIGHT_TOP(75, 0, 25, 50, "right-top"),

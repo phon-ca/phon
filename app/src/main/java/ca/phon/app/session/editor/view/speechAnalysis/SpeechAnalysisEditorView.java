@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.RecordSegmentEdit;
