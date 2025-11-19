@@ -8,6 +8,8 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.alignment.TierAligner;
@@ -61,16 +63,37 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
             if(wordIntervalPair.elementAt(wordIntervalPair.length()-1) instanceof InternalMedia wordInterval) {
                 final float duration = wordInterval.getEndTime() - wordInterval.getStartTime();
                 final IPATranscript audiblePhones = ipaWord != null ? ipaWord.audiblePhones() : new IPATranscript();
+
                 if(audiblePhones.length() > 0) {
-                    final float phoneDuration = duration / audiblePhones.length();
+                    final PhonexPattern geminatePattern = PhonexPattern.compile("(\\c)\\-1");
+                    final PhonexMatcher geminateMatcher = geminatePattern.matcher(audiblePhones);
+                    List<Integer> gemStarts = new ArrayList<>();
+                    int numUnits = audiblePhones.length();
+                    while(geminateMatcher.find()) {
+                        gemStarts.add(geminateMatcher.start(1));
+                        numUnits--;
+                    }
+                    // shouldn't happen, but just in case
+                    if(numUnits <= 0) numUnits = 1;
+
+                    final float phoneDuration = duration / numUnits;
+                    final StringBuilder sb = new StringBuilder();
+                    int unitIdx = 0;
                     for(int phoneIndex = 0; phoneIndex < audiblePhones.length(); phoneIndex++) {
                         final IPAElement ele = audiblePhones.elementAt(phoneIndex);
-                        final TierString ipaString = new TierString(ele.toString());
-                        final float startTime = wordInterval.getStartTime() + (phoneIndex * phoneDuration);
+                        sb.append(ele.toString());
+                        if(gemStarts.contains(phoneIndex)) {
+                            // skip next element
+                            continue;
+                        }
+                        final TierString ipaString = new TierString(sb.toString());
+                        final float startTime = wordInterval.getStartTime() + (unitIdx * phoneDuration);
                         final float endTime = startTime + phoneDuration;
                         final TierInternalMedia phoneInterval = new TierInternalMedia(new InternalMedia(startTime, endTime));
                         newPhoneIntervals.add(ipaString);
                         newPhoneIntervals.add(phoneInterval);
+                        sb.setLength(0);
+                        unitIdx++;
                     }
                 }
             }
