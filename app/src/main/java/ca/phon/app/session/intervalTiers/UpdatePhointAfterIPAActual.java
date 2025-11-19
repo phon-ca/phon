@@ -51,9 +51,13 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
         final Tier<Orthography> wordIntervalsTier = record.getTier(worTierDesc.getName(), Orthography.class);
         final Tier<TierData> phoneIntervalsTier = record.getTier(phoTierDesc.getName(), TierData.class);
 
-        final TierData oldPhoneIntervals = phoneIntervalsTier.hasValue() ? phoneIntervalsTier.getValue() : new TierData();
+        final TierData oldPhoneIntervalsTierData = phoneIntervalsTier.getValueForTranscriber(tierEdit.getTranscriber()).orElse(new TierData());
+        final TierDataIntervalVisitor oldPhoneIntervalVisitor = new TierDataIntervalVisitor();
+        oldPhoneIntervalsTierData.accept(oldPhoneIntervalVisitor);
+        final List<IntervalTier.Interval> oldPhoneIntervals = oldPhoneIntervalVisitor.getIntervals();
+
         final List<TierElement> newPhoneIntervals = new ArrayList<>();
-        final TierAlignment ipaToWorAlignment = TierAligner.alignTiers(ipaTier, wordIntervalsTier);
+        final TierAlignment ipaToWorAlignment = TierAligner.alignTiers(ipaTier, wordIntervalsTier, tierEdit.getTranscriber());
         final var alignedElementList = ipaToWorAlignment.getAlignedElements();
         for(int alignedIndex = 0; alignedIndex < alignedElementList.size(); alignedIndex++) {
             final var alignedElements = alignedElementList.get(alignedIndex);
@@ -66,32 +70,42 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
 
                 if(audiblePhones.length() > 0) {
                     final PhonexPattern geminatePattern = PhonexPattern.compile("(\\c)\\-1");
-                    final PhonexMatcher geminateMatcher = geminatePattern.matcher(audiblePhones);
+                    final PhonexMatcher geminateMatcher = geminatePattern.matcher(ipaWord);
                     List<Integer> gemStarts = new ArrayList<>();
                     int numUnits = audiblePhones.length();
                     while(geminateMatcher.find()) {
-                        gemStarts.add(geminateMatcher.start(1));
+                        gemStarts.add(audiblePhones.indexOf(geminateMatcher.group(1).get(0)));
                         numUnits--;
                     }
                     // shouldn't happen, but just in case
                     if(numUnits <= 0) numUnits = 1;
 
+                    boolean overwriteIntervals = (numUnits != oldPhoneIntervals.size());
+
                     final float phoneDuration = duration / numUnits;
                     final StringBuilder sb = new StringBuilder();
                     int unitIdx = 0;
-                    for(int phoneIndex = 0; phoneIndex < audiblePhones.length(); phoneIndex++) {
+                    for (int phoneIndex = 0; phoneIndex < audiblePhones.length(); phoneIndex++) {
                         final IPAElement ele = audiblePhones.elementAt(phoneIndex);
                         sb.append(ele.toString());
-                        if(gemStarts.contains(phoneIndex)) {
+                        if (gemStarts.contains(phoneIndex)) {
                             // skip next element
                             continue;
                         }
                         final TierString ipaString = new TierString(sb.toString());
-                        final float startTime = wordInterval.getStartTime() + (unitIdx * phoneDuration);
-                        final float endTime = startTime + phoneDuration;
-                        final TierInternalMedia phoneInterval = new TierInternalMedia(new InternalMedia(startTime, endTime));
                         newPhoneIntervals.add(ipaString);
-                        newPhoneIntervals.add(phoneInterval);
+
+                        if(overwriteIntervals) {
+                            final float startTime = wordInterval.getStartTime() + (unitIdx * phoneDuration);
+                            final float endTime = startTime + phoneDuration;
+                            final TierInternalMedia phoneInterval = new TierInternalMedia(new InternalMedia(startTime, endTime));
+                            newPhoneIntervals.add(phoneInterval);
+                        } else {
+                            // reuse old interval
+                            final IntervalTier.Interval oldInterval = oldPhoneIntervals.get(unitIdx);
+                            final TierInternalMedia oldIntervalEle = new TierInternalMedia(new InternalMedia(oldInterval.getStart(), oldInterval.getEnd()));
+                            newPhoneIntervals.add(oldIntervalEle);
+                        }
                         sb.setLength(0);
                         unitIdx++;
                     }
@@ -104,7 +118,7 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
         final TierData newPhoneIntervalsTierData = new TierData(newPhoneIntervals);
         phoneIntervalsTier.setValue(newPhoneIntervalsTierData);
         tierEdit.putAdditionalTierChange(phoneIntervalsTier.getName(), newPhoneIntervalsTierData);
-        tierEdit.fireTierChange(phoneIntervalsTier, oldPhoneIntervals, newPhoneIntervalsTierData);
+        tierEdit.fireTierChange(phoneIntervalsTier, oldPhoneIntervalsTierData, newPhoneIntervalsTierData);
     }
 
     @Override
