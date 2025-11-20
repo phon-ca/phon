@@ -111,8 +111,6 @@ public class TranscriptView extends EditorView {
             transcriptEditor.recalculateTierLabelWidth();
         });
         setupKeyboardShortcuts();
-
-        editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(SegmentPlayback.PLAYBACK_PROP, this::onSegmentPlaybackChange);
     }
 
     private void setupKeyboardShortcuts() {
@@ -326,18 +324,7 @@ public class TranscriptView extends EditorView {
         return this.transcriptStatusBar;
     }
 
-    private void onSegmentPlaybackChange(PropertyChangeEvent evt) {
-        SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
-        if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
-            if(segmentPlayback.isPlaying()) {
-                final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
-                playSegmentButton.setIcon(stopIcon);
-            } else {
-                final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
-                playSegmentButton.setIcon(playIcon);
-            }
-        }
-    }
+
 
     public void playPause(PhonActionEvent<Void> pae) {
         final SessionMediaModel mediaModel = getEditor().getMediaModel();

@@ -16,11 +16,14 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Range;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 import org.jdesktop.swingx.VerticalLayout;
@@ -393,7 +396,10 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         });
         phonUIAction.putValue(PhonUIAction.NAME, "Interval Tiers");
         phonUIAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show interval tiers menu");
-        final JButton intervalTierMenuButton = new JButton(phonUIAction);
+        phonUIAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        phonUIAction.putValue(FlatButton.ICON_NAME_PROP, "arrow_drop_down");
+        phonUIAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        final JButton intervalTierMenuButton = new FlatButton(phonUIAction);
         getParentView().getToolbar().add(intervalTierMenuButton, IconStrip.IconStripPosition.LEFT);
     }
 

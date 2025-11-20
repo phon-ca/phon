@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 
 public class PlaySegmentButton extends DropDownButton {
 
@@ -27,6 +28,7 @@ public class PlaySegmentButton extends DropDownButton {
         this.editor = editor;
 
         init();
+        editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(SegmentPlayback.PLAYBACK_PROP, this::onSegmentPlaybackChange);
     }
 
     private void init() {
@@ -64,6 +66,19 @@ public class PlaySegmentButton extends DropDownButton {
         setFocusPainted(false);
         setContentAreaFilled(false);
         setRolloverEnabled(true);
+    }
+
+    private void onSegmentPlaybackChange(PropertyChangeEvent evt) {
+        SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
+        if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
+            if(segmentPlayback.isPlaying()) {
+                final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+                setIcon(stopIcon);
+            } else {
+                final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+                setIcon(playIcon);
+            }
+        }
     }
 
     public SessionEditor getEditor() {

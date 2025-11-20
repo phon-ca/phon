@@ -15,6 +15,9 @@
  */
 package ca.phon.ui;
 
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -29,7 +32,7 @@ public class DropDownIcon implements Icon {
 	
 	private final static String ARROW_LOCATION = "ca/phon/ui/arrow.png";
 	
-	public final static int DEFAULT_GAP = 6;
+	public final static int DEFAULT_GAP = 0;
 	
 	private Icon icn;
 	
@@ -85,11 +88,8 @@ public class DropDownIcon implements Icon {
 	}
 	
 	private static ImageIcon loadArrow() {
-		URL arrowURL = ClassLoader.getSystemResource(ARROW_LOCATION);
-		if(arrowURL != null) {
-			return new ImageIcon(arrowURL);
-		}
-		return null;
+		return IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+                "arrow_drop_down", IconSize.MEDIUM, UIManager.getColor("textText"));
 	}
 	
 	public void setArrowPainted(boolean painted) {

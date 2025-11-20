@@ -899,7 +899,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playbackMarker.setOwner(waveformTier.getWaveformDisplay());
 					playbackMarker.setDraggable(false);
 					
-					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 					playButton.setText("Stop playback");
 					
 				} else {
@@ -907,7 +906,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 						timeModel.removeMarker(playbackMarker);
 					playbackMarker = null;
 					
-					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 					playButton.setText("Play segment");
 				}
 			} else if(SegmentPlayback.TIME_PROP.equals(evt.getPropertyName())) {
