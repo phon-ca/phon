@@ -55,7 +55,7 @@ public class TranscriptView extends EditorView {
 
     private IconStrip iconStrip;
 
-    private DropDownButton playSegmentButton;
+    private PlaySegmentButton playSegmentButton;
 
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
@@ -293,37 +293,7 @@ public class TranscriptView extends EditorView {
         final FlatButton transcriptBtn = new FlatButton(showMenuAct);
         transcriptBtn.setPadding(2);
 
-        JPopupMenu playSegmentMenu = new JPopupMenu();
-        playSegmentMenu.addPopupMenuListener(new PopupMenuListener() {
-
-            @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                playSegmentMenu.removeAll();
-                setupPlaySegmentMenu(new MenuBuilder(playSegmentMenu));
-            }
-
-            @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            }
-
-            @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
-            }
-
-        });
-
-        final ImageIcon playIcn = IconManager.getInstance()
-                .getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, Color.black);
-        final PhonUIAction playSegmentAct = PhonUIAction.eventConsumer(this::playPause);
-        playSegmentAct.putValue(PhonUIAction.NAME, "Play segment");
-        playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment");
-        playSegmentAct.putValue(PhonUIAction.SMALL_ICON, playIcn);
-        playSegmentAct.putValue(DropDownButton.BUTTON_POPUP, playSegmentMenu);
-        playSegmentButton = new DropDownButton(playSegmentAct);
-        playSegmentButton.setBorderPainted(false);
-        playSegmentButton.setFocusPainted(false);
-        playSegmentButton.setContentAreaFilled(false);
-        playSegmentButton.setRolloverEnabled(true);
+        playSegmentButton = new PlaySegmentButton(getEditor());
 
         PhonUIAction<Void> fontScaleMenuAct = PhonUIAction.eventConsumer(this::showFontScaleMenu, null);
         fontScaleMenuAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
@@ -379,32 +349,9 @@ public class TranscriptView extends EditorView {
         }
     }
 
-    private void setupPlaySegmentMenu(MenuBuilder builder) {
-        final SessionMediaModel mediaModel = getEditor().getMediaModel();
-        final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
-
-        if(segPlayback.isPlaying()) {
-            final PhonUIAction stopAct = PhonUIAction.runnable(segPlayback::stopPlaying);
-            stopAct.putValue(PhonUIAction.NAME, "Stop playback");
-            stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-            stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop segment playback");
-            builder.addItem(".", stopAct);
-
-            builder.addSeparator(".", "s1");
-        }
-
-        boolean enabled = (mediaModel.isSessionAudioAvailable() ||
-                (mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
-        builder.addItem(".", new PlaySegmentAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new PlayCustomSegmentAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new PlaySpeechTurnAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new PlayAdjacencySequenceAction(getEditor())).setEnabled(enabled);
-    }
-
     public TranscriptEditor getTranscriptEditor() {
         return this.transcriptEditor;
     }
-
 
     /**
      * Shows the font scale menu

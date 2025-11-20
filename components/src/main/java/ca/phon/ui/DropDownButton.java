@@ -85,7 +85,12 @@ public class DropDownButton extends JButton {
 	private boolean popupVisible = false;
 	private boolean onlyPopup = false;
 	private boolean mouseInArrowArea = false;
-	
+
+    public DropDownButton() {
+        super();
+        installListeners();
+        setModel(new DropDownButtonModel());
+    }
 	
 	public DropDownButton(Icon icon, JComponent popup) {
 		this(icon, new ButtonPopup(popup));

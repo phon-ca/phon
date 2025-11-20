@@ -17,6 +17,7 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.HidablePanel;
+import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Range;
@@ -66,6 +67,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     private final Map<String, IntervalTierComponent> sessionLevelIntervalTiers = new HashMap<>();
 
     final WordAndPhoneSelectionListener wordAndPhoneSelectionListener = new WordAndPhoneSelectionListener();
+
+    private JSeparator separator;
 
     public SpeechAnalysisIntervalsTier(SpeechAnalysisEditorView parentView) {
         super(parentView);
@@ -132,7 +135,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             );
             if(!recordDataIntervalTiers.isEmpty() && sessionLevelIntervalTiers.isEmpty()) {
                 // first session level interval tier, add separator before
-                add(new JSeparator(SwingConstants.HORIZONTAL));
+                add(separator);
             }
             add(intervalTierComponent);
             revalidate();
@@ -179,7 +182,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         recordDataIntervalTiers.put(tierDesc.getName(), intervalTierComponent);
         if(recordDataIntervalTiers.size() == 1 && !sessionLevelIntervalTiers.isEmpty()) {
             // first record data interval tier, add separator after
-            add(new JSeparator(SwingConstants.HORIZONTAL), intervalTierInsertIdx + 1);
+            add(separator, intervalTierInsertIdx + 1);
         }
     }
 
@@ -220,7 +223,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         recordDataIntervalTiers.put(worTierDesc.getName(), intervalTierComponent);
         if(recordDataIntervalTiers.size() == 1 && !sessionLevelIntervalTiers.isEmpty()) {
             // first record data interval tier, add separator after
-            add(new JSeparator(SwingConstants.HORIZONTAL), 1);
+            add(separator, 1);
         }
     }
 
@@ -265,7 +268,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         recordDataIntervalTiers.put(phoTierDesc.getName(), intervalTierComponent);
         if(recordDataIntervalTiers.size() == 1 && !sessionLevelIntervalTiers.isEmpty()) {
             // first record data interval tier, add separator after
-            add(new JSeparator(SwingConstants.HORIZONTAL), 1);
+            add(separator, 1);
         }
     }
 
@@ -319,6 +322,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final Session session = getParentView().getEditor().getSession();
         final IntervalTiers intervalTiers = session.getTimeline();
 
+        separator = new JSeparator(SwingConstants.HORIZONTAL);
+
         // check for word intervals tier
         final TierDescription worTierDesc = session.getUserTiers()
                 .stream()
@@ -350,7 +355,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
 
         if(!recordDataIntervalTiers.isEmpty()) {
-            add(new JSeparator(SwingConstants.HORIZONTAL));
+            add(separator);
         }
 
         for(var timelineTier : intervalTiers.getTiers()) {
@@ -389,7 +394,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         phonUIAction.putValue(PhonUIAction.NAME, "Interval Tiers");
         phonUIAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show interval tiers menu");
         final JButton intervalTierMenuButton = new JButton(phonUIAction);
-        getParentView().getToolbar().add(intervalTierMenuButton, getParentView().getToolbar().getComponentCount()-1);
+        getParentView().getToolbar().add(intervalTierMenuButton, IconStrip.IconStripPosition.LEFT);
     }
 
     /**

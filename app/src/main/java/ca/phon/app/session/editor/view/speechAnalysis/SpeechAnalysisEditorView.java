@@ -99,7 +99,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private Interval selectionInterval;
 
 	/* Toolbar and buttons */
-	private JToolBar toolbar;
+	private IconStrip toolbar;
 
 	private DropDownButton playButton;
 	private DropDownButton exportButton;
@@ -248,7 +248,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		return VIEW_NAME;
 	}
 
-	public JToolBar getToolbar() {
+	public IconStrip getToolbar() {
 		return this.toolbar;
 	}
 
@@ -312,69 +312,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 	}
 
-	private JToolBar setupToolbar() {
-		JToolBar toolbar = new JToolBar();
-		toolbar.setFloatable(false);
+	private IconStrip setupToolbar() {
+		IconStrip toolbar = new IconStrip(SwingConstants.HORIZONTAL);
 
-		final JPopupMenu playMenu = new JPopupMenu();
-		playMenu.addPopupMenuListener(new PopupMenuListener() {
-			
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				playMenu.removeAll();
-				setupPlaybackMenu(new MenuBuilder(playMenu));
-			}
-			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			
-		});
-		
-		final PhonUIAction<Void> playAct = PhonUIAction.runnable(this::playPause);
-		playAct.putValue(PhonUIAction.NAME, "Play segment");
-		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
-		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
-		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
-		playButton = new DropDownButton(playAct);
-		playButton.setFocusable(false);
-		playButton.setEnabled(false);
+		playButton = new PlaySegmentButton(getEditor());
+		exportButton = new ExportSegmentButton(this);
 
-		final JPopupMenu saveMenu = new JPopupMenu();
-		saveMenu.addPopupMenuListener(new PopupMenuListener() {
-			
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				saveMenu.removeAll();
-				setupExportMenu(new MenuBuilder(saveMenu));
-			}
-			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				
-			}
-			
-		});
-		
-		final PhonUIAction<Void> exportAct = PhonUIAction.runnable(this::onExportSelectionOrSegment);
-		exportAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
-		exportAct.putValue(PhonUIAction.NAME, "Export segment...");
-		exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
-		
-		exportButton = new DropDownButton(exportAct);
-		exportButton.setFocusable(false);
-		exportButton.setEnabled(false);
-		
 		final ResetAction refreshAct = new ResetAction(getEditor(), this);
 		refreshButton = new JButton(refreshAct);
 		refreshButton.setFocusable(false);
@@ -387,12 +330,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 		zoomOutButton = new JButton(zoomOutAct);
 		zoomOutButton.setFocusable(false);
 
-		toolbar.add(playButton);
-		toolbar.add(exportButton);
-		toolbar.addSeparator();
-		toolbar.add(refreshButton);
-		toolbar.add(showMoreButton);
-		toolbar.add(zoomOutButton);
+		toolbar.add(playButton, IconStrip.IconStripPosition.LEFT);
+		toolbar.add(exportButton, IconStrip.IconStripPosition.LEFT);
+		toolbar.add(refreshButton, IconStrip.IconStripPosition.LEFT);
+		toolbar.add(showMoreButton, IconStrip.IconStripPosition.LEFT);
+		toolbar.add(zoomOutButton, IconStrip.IconStripPosition.LEFT);
 
 		return toolbar;
 	}
@@ -424,21 +366,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		builder.addItem(".", playSelectionItem);
 		builder.addItem(".", playSegmentItem);
-	}
-	
-	private void setupExportMenu(MenuBuilder builder) {
-		final PhonUIAction<Void> exportSelectionAct = PhonUIAction.runnable(this::exportSelection);
-		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
-		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
-		exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		
-		final PhonUIAction<Void> exportSegmentAct = PhonUIAction.runnable(this::exportSegment);
-		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
-		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
-		exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		
-		builder.addItem(".", exportSelectionAct).setEnabled(selectionInterval != null);
-		builder.addItem(".", exportSegmentAct).setEnabled(currentRecordInterval != null);
 	}
 	
 	public void onExportSelectionOrSegment() {

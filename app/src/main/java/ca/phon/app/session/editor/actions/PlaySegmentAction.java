@@ -45,10 +45,12 @@ public class PlaySegmentAction extends SessionEditorAction {
 
 	public PlaySegmentAction(SessionEditor editor) {
 		this(editor, SegmentType.CURRENT_RECORD);
-		
+
+        final ImageIcon playIcon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, UIManager.getColor("textText"));
+		putValue(Action.SMALL_ICON, playIcon);
 		putValue(Action.NAME, "Play current record segment");
 		putValue(Action.SHORT_DESCRIPTION, "Play segment for current record");
-		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Y,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
@@ -57,9 +59,11 @@ public class PlaySegmentAction extends SessionEditorAction {
 		super(editor);
 		
 		this.segmentType = segmentType;
+        final ImageIcon playIcon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, UIManager.getColor("textText"));
+        putValue(Action.SMALL_ICON, playIcon);
 		putValue(Action.NAME, "Play segment");
 		putValue(Action.SHORT_DESCRIPTION, "Play segment for current record");
-		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 	}
 	
 	/**
