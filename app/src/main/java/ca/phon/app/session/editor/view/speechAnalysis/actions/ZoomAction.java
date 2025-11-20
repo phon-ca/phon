@@ -34,11 +34,11 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 	
 	private final static String CMD_NAME_ZOOMOUT = "Zoom out";
 	
-	private final static ImageIcon ZOOMIN_ICON = 
-			IconManager.getInstance().getIcon("actions/zoom-in-3", IconSize.SMALL);
+	private final static ImageIcon ZOOMIN_ICON =
+            IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "zoom_in_map", IconSize.SMALL, UIManager.getColor("textText"));
 	
 	private final static ImageIcon ZOOMOUT_ICON =
-			IconManager.getInstance().getIcon("actions/zoom-out-3", IconSize.SMALL);
+            IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "zoom_out_map", IconSize.SMALL, UIManager.getColor("textText"));
 	
 	private final static String ZOOM_AMOUNT_PROP = 
 			SpeechAnalysisEditorView.class.getName() + ".zoomAmount";

@@ -319,22 +319,33 @@ public class SpeechAnalysisEditorView extends EditorView {
 		exportButton = new ExportSegmentButton(this);
 
 		final ResetAction refreshAct = new ResetAction(getEditor(), this);
-		refreshButton = new JButton(refreshAct);
-		refreshButton.setFocusable(false);
+
+        refreshAct.putValue(FlatButton.ICON_NAME_PROP, "recenter");
+        refreshAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        refreshAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        refreshAct.putValue(Action.NAME, "");
+		refreshButton = new FlatButton(refreshAct);
 
 		final ZoomAction showMoreAct = new ZoomAction(getEditor(), this);
-		showMoreButton = new JButton(showMoreAct);
-		showMoreButton.setFocusable(false);
+        showMoreAct.putValue(Action.NAME, "");
+        showMoreAct.putValue(FlatButton.ICON_NAME_PROP, "zoom_in_map");
+        showMoreAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        showMoreAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		showMoreButton = new FlatButton(showMoreAct);
 
 		final ZoomAction zoomOutAct = new ZoomAction(getEditor(), this, false);
-		zoomOutButton = new JButton(zoomOutAct);
-		zoomOutButton.setFocusable(false);
+        zoomOutAct.putValue(Action.NAME, "");
+        zoomOutAct.putValue(FlatButton.ICON_NAME_PROP, "zoom_out_map");
+        zoomOutAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        zoomOutAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		zoomOutButton = new FlatButton(zoomOutAct);
 
 		toolbar.add(playButton, IconStrip.IconStripPosition.LEFT);
 		toolbar.add(exportButton, IconStrip.IconStripPosition.LEFT);
-		toolbar.add(refreshButton, IconStrip.IconStripPosition.LEFT);
-		toolbar.add(showMoreButton, IconStrip.IconStripPosition.LEFT);
-		toolbar.add(zoomOutButton, IconStrip.IconStripPosition.LEFT);
+
+		toolbar.add(refreshButton, IconStrip.IconStripPosition.RIGHT);
+		toolbar.add(showMoreButton, IconStrip.IconStripPosition.RIGHT);
+		toolbar.add(zoomOutButton, IconStrip.IconStripPosition.RIGHT);
 
 		return toolbar;
 	}

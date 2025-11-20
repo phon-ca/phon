@@ -26,19 +26,18 @@ public class ResetAction extends SpeechAnalysisEditorViewAction {
 
 	private static final long serialVersionUID = 2541481642552447379L;
 	
-	private final static String CMD_NAME = "Reset";
+	private final static String CMD_NAME = "Recenter";
 	
-	private final static String SHORT_DESC = "Fit segement to view";
-	
-	private final static ImageIcon ICON =
-			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
+	private final static String SHORT_DESC = "Recenter speech analysis view on current record";
 
 	public ResetAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
-		putValue(SMALL_ICON, ICON);
+        final ImageIcon icon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "recenter", IconSize.SMALL, UIManager.getColor("textText"));
+        putValue(SMALL_ICON, icon);
 	}
 
 	@Override
