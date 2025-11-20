@@ -651,7 +651,15 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	public IPATranscript resetSyllabification() {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 		for(IPAElement ele:this) {
-            if(ele instanceof Phone) {
+            if(ele instanceof CompoundPhone cp) {
+                final Phone firstP = cp.getFirstPhone();
+                final Phone secondP = cp.getSecondPhone();
+                final CompoundPhone ncp = new CompoundPhone(
+                        firstP, secondP, cp.getLigature(),
+                        cp.overrideFeatureSet(),
+                        new SyllableInfo());
+                builder.append(ncp);
+            } else if(ele instanceof Phone) {
                 final Phone p = (Phone)ele;
                 final Phone np = new Phone(
                         p.getPrefixDiacritics(),
@@ -661,15 +669,6 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
                         p.overrideFeatureSet(),
                         new SyllableInfo());
                 builder.append(np);
-            } else if(ele instanceof CompoundPhone) {
-                final CompoundPhone cp = (CompoundPhone)ele;
-                final Phone firstP = cp.getFirstPhone();
-                final Phone secondP = cp.getSecondPhone();
-                final CompoundPhone ncp = new CompoundPhone(
-                        firstP, secondP, cp.getLigature(),
-                        cp.overrideFeatureSet(),
-                        new SyllableInfo());
-                builder.append(ncp);
             } else {
                 builder.append(ele);
             }

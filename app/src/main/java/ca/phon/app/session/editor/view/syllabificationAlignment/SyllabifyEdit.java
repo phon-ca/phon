@@ -76,9 +76,7 @@ public class SyllabifyEdit extends SessionUndoableEdit {
 
 	@Override
 	public void doIt() {
-		IPATranscript ipa = tier.isBlind()
-			? transcriber == Transcriber.VALIDATOR ? tier.getValue() : tier.getBlindTranscription(transcriber.getUsername())
-			: tier.getValue();
+		IPATranscript ipa = tier.getValueForTranscriber(transcriber).orElse(new IPATranscript());
 		oldVal = ipa;
 
         ipa = ipa.resetSyllabification();
