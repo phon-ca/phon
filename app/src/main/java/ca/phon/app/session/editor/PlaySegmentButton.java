@@ -52,7 +52,7 @@ public class PlaySegmentButton extends DropDownButton {
         });
 
         final ImageIcon playIcn = IconManager.getInstance()
-                .getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, Color.black);
+                .getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, Color.black);
         final PhonUIAction playSegmentAct = PhonUIAction.eventConsumer(this::playPause);
         playSegmentAct.putValue(PhonUIAction.NAME, "Play segment");
         playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment");
@@ -72,11 +72,13 @@ public class PlaySegmentButton extends DropDownButton {
         SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
         if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
             if(segmentPlayback.isPlaying()) {
-                final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+                final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
                 setIcon(stopIcon);
+                setText("Stop playback");
             } else {
-                final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+                final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
                 setIcon(playIcon);
+                setText("Play segment");
             }
         }
     }

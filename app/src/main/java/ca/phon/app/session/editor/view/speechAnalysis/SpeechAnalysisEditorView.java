@@ -340,6 +340,9 @@ public class SpeechAnalysisEditorView extends EditorView {
         zoomOutAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		zoomOutButton = new FlatButton(zoomOutAct);
 
+        NavigationPanel navPanel = new NavigationPanel(getEditor());
+        toolbar.add(navPanel, IconStrip.IconStripPosition.LEFT);
+
 		toolbar.add(playButton, IconStrip.IconStripPosition.LEFT);
 		toolbar.add(exportButton, IconStrip.IconStripPosition.LEFT);
 
@@ -898,15 +901,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playbackMarker = timeModel.addMarker(segmentPlayback.getTime(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
 					playbackMarker.setOwner(waveformTier.getWaveformDisplay());
 					playbackMarker.setDraggable(false);
-					
-					playButton.setText("Stop playback");
-					
 				} else {
 					if(playbackMarker != null)
 						timeModel.removeMarker(playbackMarker);
 					playbackMarker = null;
-					
-					playButton.setText("Play segment");
 				}
 			} else if(SegmentPlayback.TIME_PROP.equals(evt.getPropertyName())) {
 				if(playbackMarker != null) {
