@@ -20,6 +20,8 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.spi.MediaSegmentSPI;
+import ca.phon.util.SegmentOverlapUtil;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 
 /**
  * Media segment
@@ -272,36 +274,13 @@ public final class MediaSegment extends ExtendableObject {
 	}
 
     /**
-     * Media segment overlap type
-     */
-    public enum OverlapType {
-        NO_OVERLAP,
-        PARTIAL_OVERLAP_START,
-        PARTIAL_OVERLAP_END,
-        FULLY_CONTAINS,
-        IS_FULLY_CONTAINED
-    };
-
-    /**
      * Does this segment overlap the given segment
      *
      * @param seg the segment to check against
      * @return the overlap type of the two segments
      */
     public OverlapType overlaps(MediaSegment seg) {
-        if( (getEndTime() <= seg.getStartTime()) || (getStartTime() >= seg.getEndTime()) ) {
-            return OverlapType.NO_OVERLAP;
-        } else if( (getStartTime() < seg.getStartTime()) && (getEndTime() < seg.getEndTime()) ) {
-            return OverlapType.PARTIAL_OVERLAP_START;
-        } else if( (getStartTime() > seg.getStartTime()) && (getEndTime() > seg.getEndTime()) ) {
-            return OverlapType.PARTIAL_OVERLAP_END;
-        } else if( (getStartTime() <= seg.getStartTime()) && (getEndTime() >= seg.getEndTime()) ) {
-            return OverlapType.FULLY_CONTAINS;
-        } else if( (getStartTime() >= seg.getStartTime()) && (getEndTime() <= seg.getEndTime()) ) {
-            return OverlapType.IS_FULLY_CONTAINED;
-        } else {
-            return OverlapType.NO_OVERLAP;
-        }
+        return SegmentOverlapUtil.computeOverlap(getStartTime(), getEndTime(), seg.getStartTime(), seg.getEndTime());
     }
 
 }

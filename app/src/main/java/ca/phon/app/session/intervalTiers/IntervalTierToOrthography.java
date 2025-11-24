@@ -7,6 +7,7 @@ import ca.phon.orthography.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.filter.RecordFilter;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,7 @@ public final class IntervalTierToOrthography extends IntervalTierImporter {
             if(segment.isPoint()) continue;
 
             final IntervalTier.Interval recordInterval = new IntervalTier.Interval(segment.getStartTime(), segment.getEndTime());
-            final int[] containedIntervals = importTier.overlappingIntervals(recordInterval, IntervalTier.OverlapType.FULLY_CONTAINS);
+            final int[] containedIntervals = importTier.overlappingIntervals(recordInterval, OverlapType.FULLY_CONTAINS);
             if(containedIntervals.length == 0) continue;
 
             for(int intervalIdx:containedIntervals) {

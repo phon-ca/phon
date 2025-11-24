@@ -13,6 +13,7 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
 import ca.phon.session.tierdata.TierString;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public final class IntervalTierToUserTier extends IntervalTierImporter {
             if(segment.isPoint()) continue;
 
             final IntervalTier.Interval recordInterval = new IntervalTier.Interval(segment.getStartTime(), segment.getEndTime());
-            final int[] containedIntervals = importTier.overlappingIntervals(recordInterval, IntervalTier.OverlapType.FULLY_CONTAINS);
+            final int[] containedIntervals = importTier.overlappingIntervals(recordInterval, OverlapType.FULLY_CONTAINS);
             if(containedIntervals.length == 0) continue;
 
             final TierData tierData = getTierElements(containedIntervals, importTier);

@@ -14,6 +14,7 @@ import ca.phon.session.Record;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public final class IntervalTierToIPATier extends IntervalTierImporter {
             if(segment.isPoint()) continue;
 
             final IntervalTier.Interval recordInterval = new IntervalTier.Interval(segment.getStartTime(), segment.getEndTime());
-            final int[] containedIntervals = importTier.overlappingIntervals(recordInterval, IntervalTier.OverlapType.FULLY_CONTAINS);
+            final int[] containedIntervals = importTier.overlappingIntervals(recordInterval, OverlapType.FULLY_CONTAINS);
             if(containedIntervals.length == 0) continue;
 
             final StringBuilder sb = new StringBuilder();

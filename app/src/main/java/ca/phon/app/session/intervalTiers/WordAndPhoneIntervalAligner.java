@@ -7,6 +7,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 import ca.phon.visitor.VisitorAdapter;
 
 import java.util.*;
@@ -41,8 +42,8 @@ public final class WordAndPhoneIntervalAligner {
             List<IntervalTier.Interval> phoneIntervalsForWord = new ArrayList<>();
             for(int j = lastPhoneIntervalIdx; j < phoneIntervals.size(); j++) {
                 final IntervalTier.Interval phoneInterval = phoneIntervals.get(j);
-                final IntervalTier.OverlapType overlapType = wordInterval.overlapType(phoneInterval);
-                if(overlapType != IntervalTier.OverlapType.NO_OVERLAP) {
+                final OverlapType overlapType = wordInterval.overlapType(phoneInterval);
+                if(overlapType != OverlapType.NO_OVERLAP) {
                     phoneIntervalsForWord.add(phoneInterval);
                     lastPhoneIntervalIdx = j + 1;
                 } else if(phoneInterval.getStart() > wordInterval.getEnd()) {

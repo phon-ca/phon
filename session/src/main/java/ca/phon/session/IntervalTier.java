@@ -2,6 +2,8 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.IntervalTierSPI;
+import ca.phon.util.SegmentOverlapUtil;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -148,16 +150,6 @@ public final class IntervalTier extends ExtendableObject {
         return overlappingIndices.stream().mapToInt(i->i).toArray();
     }
 
-    /**
-     * Interval overlap type
-     */
-    public enum OverlapType {
-        NO_OVERLAP,
-        PARTIAL_OVERLAP_START,
-        PARTIAL_OVERLAP_END,
-        FULLY_CONTAINS,
-        IS_FULLY_CONTAINED
-    };
 
     /**
      * Interval entity for timeline tier
@@ -206,19 +198,7 @@ public final class IntervalTier extends ExtendableObject {
         }
 
         public OverlapType overlapType(Interval other) {
-            if( (this.end <= other.start) || (this.start >= other.end) ) {
-                return OverlapType.NO_OVERLAP;
-            } else if( (this.start < other.start) && (this.end < other.end) ) {
-                return OverlapType.PARTIAL_OVERLAP_START;
-            } else if( (this.start > other.start) && (this.end > other.end) ) {
-                return OverlapType.PARTIAL_OVERLAP_END;
-            } else if( (this.start <= other.start) && (this.end >= other.end) ) {
-                return OverlapType.FULLY_CONTAINS;
-            } else if( (this.start >= other.start) && (this.end <= other.end) ) {
-                return OverlapType.IS_FULLY_CONTAINED;
-            } else {
-                return OverlapType.NO_OVERLAP;
-            }
+            return SegmentOverlapUtil.computeOverlap(this.start, this.end, other.start, other.end);
         }
 
         public int hashCode() {

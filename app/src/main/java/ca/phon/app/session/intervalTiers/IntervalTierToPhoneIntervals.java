@@ -16,6 +16,7 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
 import ca.phon.session.tierdata.TierString;
+import ca.phon.util.SegmentOverlapUtil.OverlapType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public final class IntervalTierToPhoneIntervals extends IntervalTierImporter {
                 for(InternalMedia worInterval:wordIntervals) {
                     // get phone intervals which are contained withing the word interval
                     final IntervalTier.Interval wordInterval = new IntervalTier.Interval(worInterval.getStartTime(), worInterval.getEndTime());
-                    final int[] containedIntervals = importTier.overlappingIntervals(wordInterval, IntervalTier.OverlapType.FULLY_CONTAINS);
+                    final int[] containedIntervals = importTier.overlappingIntervals(wordInterval, OverlapType.FULLY_CONTAINS);
                     if(containedIntervals.length > 0) {
                         if(!phoTierElements.isEmpty()) {
                             final TierString separator = new TierString("/");
