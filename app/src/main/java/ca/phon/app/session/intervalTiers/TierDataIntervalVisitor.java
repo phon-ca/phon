@@ -54,6 +54,7 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
     @Visits
     public void visitTierWord(TierString tierWord) {
         if(ignoreWords.contains(tierWord.text())) return;
+        if("/".equals(tierWord.text())) { return; } // skip word separators
         if(buffer.length() > 0) buffer.append(" ");
         buffer.append(tierWord.text());
     }

@@ -36,10 +36,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.undo.AbstractUndoableEdit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Tier for displaying intervals from the session {@link IntervalTiers}
@@ -820,6 +817,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
     };
 
+    private Orthography originalWor = null;
+
     private final PropertyChangeListener currentIntervalListener = (e) -> {
         if(currentIntervalTierComponent == null || currentIntervalIndex == -1) return;
         String tierName = null;
@@ -901,26 +900,25 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             }
         } else if("valueAdjusting".equals(e.getPropertyName())) {
             if((boolean)e.getNewValue()) {
+                final Record currentRecord = getParentView().getEditor().currentRecord();
+                final Tier<Orthography> worTier = currentRecord.getTier(UserTierType.Wor.getPhonTierName(), Orthography.class);
+                if(worTier == null) {
+                    return;
+                }
                 getParentView().getEditor().getUndoSupport().beginUpdate("Adjust interval");
+                originalWor = worTier.getValueForTranscriber(getParentView().getEditor().getDataModel().getTranscriber()).orElse(new Orthography());
             } else {
                 if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
+                    // edits have already been completed, fire tier changed event
                     final Record currentRecord = getParentView().getEditor().currentRecord();
-                    final MediaSegment seg = currentRecord.getMediaSegment();
-                    if(seg.isPoint()) return;
-                    final int[] recordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(seg.getStartTime(), seg.getEndTime());
-                    final int offset = (recordIntervalIndices.length > 0 ? recordIntervalIndices[0] : 0);
-                    final int idx = Math.max(0, currentIntervalIndex - offset);
-                    final InternalMedia newInterval = new InternalMedia(this.currentInterval.getStartMarker().getTime(), this.currentInterval.getEndMarker().getTime());
-                    final WorTierUpdater updater = new WorTierUpdater(idx, newInterval);
                     final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
-                    final Orthography wor = worTier.getValue();
-                    wor.accept(updater);
-                    final Orthography updatedWor = updater.getUpdatedOrthography();
-                    final TierEdit<Orthography> worEdit =
-                            new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
-                                    getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
-                                    (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
-                    getParentView().getEditor().getUndoSupport().postEdit(worEdit);
+                    if(worTier == null) return;
+                    final EditorEventType.TierChangeData tierChangeData =
+                            new EditorEventType.TierChangeData(getParentView().getEditor().getDataModel().getTranscriber(),
+                                    getParentView().getEditor().currentRecord(),
+                                    (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()),
+                                    originalWor, worTier.getValueForTranscriber(getParentView().getEditor().getDataModel().getTranscriber()).orElse(new Orthography()), false);
+                    getParentView().getEditor().getEventManager().queueEvent(new EditorEvent<>(EditorEventType.TierChange, this, tierChangeData));
                 }
                 getParentView().getEditor().getUndoSupport().endUpdate();
             }
