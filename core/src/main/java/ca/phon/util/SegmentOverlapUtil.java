@@ -143,5 +143,120 @@ public final class SegmentOverlapUtil {
         }
     }
 
-}
+    /**
+     * Determine if two segments are contiguous within a specified limit.
+     * Two segments are contiguous if the gap between them is within the limit.
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @param limit the maximum gap allowed for segments to be considered contiguous
+     * @return true if the segments are contiguous within the limit, false otherwise
+     */
+    public static boolean areContiguous(float thisStart, float thisEnd, float otherStart, float otherEnd, float limit) {
+        float gap = Math.min(Math.abs(otherStart - thisEnd), Math.abs(thisStart - otherEnd));
+        return gap <= limit;
+    }
 
+    /**
+     * Determine if two segments are contiguous (with a default limit of 0).
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @return true if the segments are contiguous, false otherwise
+     */
+    public static boolean areContiguous(float thisStart, float thisEnd, float otherStart, float otherEnd) {
+        return areContiguous(thisStart, thisEnd, otherStart, otherEnd, 0.0f);
+    }
+
+    /**
+     * Determine if two segments are contiguous within a specified limit.
+     * Two segments are contiguous if the gap between them is within the limit.
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @param limit the maximum gap allowed for segments to be considered contiguous
+     * @return true if the segments are contiguous within the limit, false otherwise
+     */
+    public static boolean areContiguous(double thisStart, double thisEnd, double otherStart, double otherEnd, double limit) {
+        double gap = Math.min(Math.abs(otherStart - thisEnd), Math.abs(thisStart - otherEnd));
+        return gap <= limit;
+    }
+
+    /**
+     * Determine if two segments are contiguous (with a default limit of 0).
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @return true if the segments are contiguous, false otherwise
+     */
+    public static boolean areContiguous(double thisStart, double thisEnd, double otherStart, double otherEnd) {
+        return areContiguous(thisStart, thisEnd, otherStart, otherEnd, 0.0);
+    }
+
+    /**
+     * Determine if two segments are contiguous within a specified limit.
+     * Two segments are contiguous if the gap between them is within the limit.
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @param limit the maximum gap allowed for segments to be considered contiguous
+     * @return true if the segments are contiguous within the limit, false otherwise
+     */
+    public static boolean areContiguous(int thisStart, int thisEnd, int otherStart, int otherEnd, int limit) {
+        int gap = Math.min(Math.abs(otherStart - thisEnd), Math.abs(thisStart - otherEnd));
+        return gap <= limit;
+    }
+
+    /**
+     * Determine if two segments are contiguous (with a default limit of 0).
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @return true if the segments are contiguous, false otherwise
+     */
+    public static boolean areContiguous(int thisStart, int thisEnd, int otherStart, int otherEnd) {
+        return areContiguous(thisStart, thisEnd, otherStart, otherEnd, 0);
+    }
+
+    /**
+     * Determine if two segments are contiguous within a specified limit.
+     * Two segments are contiguous if the gap between them is within the limit.
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @param limit the maximum gap allowed for segments to be considered contiguous
+     * @return true if the segments are contiguous within the limit, false otherwise
+     */
+    public static boolean areContiguous(long thisStart, long thisEnd, long otherStart, long otherEnd, long limit) {
+        long gap = Math.min(Math.abs(otherStart - thisEnd), Math.abs(thisStart - otherEnd));
+        return gap <= limit;
+    }
+
+    /**
+     * Determine if two segments are contiguous (with a default limit of 0).
+     *
+     * @param thisStart the start value of the first segment
+     * @param thisEnd the end value of the first segment
+     * @param otherStart the start value of the second segment
+     * @param otherEnd the end value of the second segment
+     * @return true if the segments are contiguous, false otherwise
+     */
+    public static boolean areContiguous(long thisStart, long thisEnd, long otherStart, long otherEnd) {
+        return areContiguous(thisStart, thisEnd, otherStart, otherEnd, 0L);
+    }
+
+}
