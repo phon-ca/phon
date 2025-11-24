@@ -5,10 +5,7 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.undo.AddTierEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.intervalTiers.IntervalTierComponent;
-import ca.phon.app.session.intervalTiers.IntervalTierComponentUI;
-import ca.phon.app.session.intervalTiers.RecordIntervalTier;
-import ca.phon.app.session.intervalTiers.WordIntervalsTextUpdater;
+import ca.phon.app.session.intervalTiers.*;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModelAdapter;
 import ca.phon.orthography.*;
@@ -16,16 +13,19 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Range;
+import ca.phon.util.SegmentOverlapUtil;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
+import org.apache.commons.logging.Log;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
@@ -34,6 +34,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
@@ -818,6 +819,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     };
 
     private Orthography originalWor = null;
+    private TierEdit<Orthography> lastWorEdit = null;
 
     private final PropertyChangeListener currentIntervalListener = (e) -> {
         if(currentIntervalTierComponent == null || currentIntervalIndex == -1) return;
@@ -849,8 +851,49 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 final WorTierUpdater updater = new WorTierUpdater(idx, newInterval);
                 final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
                 final Orthography wor = worTier.getValue();
+                final OrthoIntervalVisitor worIntervalVisitor = new OrthoIntervalVisitor();
+                wor.accept(worIntervalVisitor);
+                final List<IntervalTier.Interval> worIntervals = worIntervalVisitor.getIntervals();
                 wor.accept(updater);
-                final Orthography updatedWor = updater.getUpdatedOrthography();
+                Orthography updatedWor = updater.getUpdatedOrthography();
+                final OrthoIntervalVisitor updatedWorIntervalVisitor = new OrthoIntervalVisitor();
+                updatedWor.accept(updatedWorIntervalVisitor);
+                final List<IntervalTier.Interval> updatedWorIntervals = updatedWorIntervalVisitor.getIntervals();
+
+                for(int i = 0; i < worIntervals.size(); i++) {
+                    final IntervalTier.Interval oldInterval = worIntervals.get(i);
+                    final IntervalTier.Interval updatedInterval = updatedWorIntervals.get(i);
+                    if(oldInterval.getStart() != updatedInterval.getStart() ||
+                            oldInterval.getEnd() != updatedInterval.getEnd()) {
+                        // interval has changed, check previous interval if start time has changed
+                        if(oldInterval.getStart() != updatedInterval.getStart() && i > 0) {
+                            final IntervalTier.Interval prevInterval = worIntervals.get(i - 1);
+                            if(SegmentOverlapUtil.areContiguous(oldInterval.getStart(), oldInterval.getEnd(), prevInterval.getStart(), prevInterval.getEnd())
+                                    || SegmentOverlapUtil.computeOverlap(prevInterval.getStart(), prevInterval.getEnd(), updatedInterval.getStart(), updatedInterval.getEnd()) == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                                final InternalMedia replacedPrevInterval = new InternalMedia(prevInterval.getStart(), updatedInterval.getStart());
+                                final WorTierUpdater prevUpdater = new WorTierUpdater(i - 1, replacedPrevInterval);
+                                updatedWor.accept(prevUpdater);
+                                updatedWor = prevUpdater.getUpdatedOrthography();
+                            }
+                        }
+
+                        if(oldInterval.getEnd() != updatedInterval.getEnd() && i < worIntervals.size() - 1) {
+                            final IntervalTier.Interval nextInterval = worIntervals.get(i + 1);
+                            if(SegmentOverlapUtil.areContiguous(oldInterval.getStart(), oldInterval.getEnd(), nextInterval.getStart(), nextInterval.getEnd())
+                                    || SegmentOverlapUtil.computeOverlap(nextInterval.getStart(), nextInterval.getEnd(), updatedInterval.getStart(), updatedInterval.getEnd()) == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                                final InternalMedia replacedNextInterval = new InternalMedia(updatedInterval.getEnd(), nextInterval.getEnd());
+                                final WorTierUpdater nextUpdater = new WorTierUpdater(i + 1, replacedNextInterval);
+                                updatedWor.accept(nextUpdater);
+                                updatedWor = nextUpdater.getUpdatedOrthography();
+                            }
+                        }
+                    }
+                }
+                LogUtil.info("Updated wor: " + updatedWor);
+
+                // check for interval contiguity with previous/next intervals in old data
+                // if the start time of the modified interval is less than the end time of the previous interval,
+                // extend the previous interval to the new start time
 
 //                // if modifying the first or last interval, and the start/end time overlaps the previous/next
 //                // record segment, update the %wor tier for the previous/next record as well  Do this first to avoid
@@ -887,6 +930,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                         new TierEdit<>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
                                 getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
                                 (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
+                lastWorEdit = worEdit;
                 getParentView().getEditor().getUndoSupport().postEdit(worEdit);
             } else if(UserTierType.PhoneIntervals.getPhonTierName().equals(tierName)) {
                 // first get the word interval that contains this phone interval,
@@ -909,16 +953,19 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 originalWor = worTier.getValueForTranscriber(getParentView().getEditor().getDataModel().getTranscriber()).orElse(new Orthography());
             } else {
                 if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
-                    // edits have already been completed, fire tier changed event
-                    final Record currentRecord = getParentView().getEditor().currentRecord();
-                    final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(tierName);
-                    if(worTier == null) return;
-                    final EditorEventType.TierChangeData tierChangeData =
-                            new EditorEventType.TierChangeData(getParentView().getEditor().getDataModel().getTranscriber(),
-                                    getParentView().getEditor().currentRecord(),
-                                    (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()),
-                                    originalWor, worTier.getValueForTranscriber(getParentView().getEditor().getDataModel().getTranscriber()).orElse(new Orthography()), false);
-                    getParentView().getEditor().getEventManager().queueEvent(new EditorEvent<>(EditorEventType.TierChange, this, tierChangeData));
+                    if(lastWorEdit != null) {
+                        final TierEdit<Orthography> lastEdit = new TierEdit<>(
+                                lastWorEdit.getSession(),
+                                lastWorEdit.getEditorEventManager(),
+                                lastWorEdit.getTranscriber(),
+                                lastWorEdit.getRecord(),
+                                lastWorEdit.getTier(),
+                                lastWorEdit.getNewValue(),
+                                false
+                        );
+                        getParentView().getEditor().getUndoSupport().postEdit(lastEdit);
+                        lastWorEdit = null;
+                    }
                 }
                 getParentView().getEditor().getUndoSupport().endUpdate();
             }
