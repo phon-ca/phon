@@ -32,7 +32,7 @@ public class DropDownIcon implements Icon {
 	
 	private final static String ARROW_LOCATION = "ca/phon/ui/arrow.png";
 	
-	public final static int DEFAULT_GAP = 0;
+	public final static int DEFAULT_GAP = -4;
 	
 	private Icon icn;
 	
