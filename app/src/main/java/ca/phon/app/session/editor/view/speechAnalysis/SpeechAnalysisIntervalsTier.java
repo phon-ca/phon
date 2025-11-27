@@ -415,6 +415,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             intervalTierTimeModel.removeInterval(currentInterval);
         }
 
+        float secsPerPixel = 1.0f / getParentView().getTimeModel().getPixelsPerSecond();
+
         currentIntervalTierComponent = tierComponent;
         currentIntervalIndex = intervalIndex;
         final IntervalTier.Interval previousInterval = currentIntervalIndex > 0 ? tierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex-1) : null;
@@ -423,11 +425,11 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         currentInterval = new TimeUIModel.Interval(interval.getStart(), interval.getEnd());
         currentInterval.getStartMarker().setMaxTime(interval.getEnd());
         if(previousInterval != null) {
-            currentInterval.getStartMarker().setMinTime(previousInterval.getStart());
+            currentInterval.getStartMarker().setMinTime(previousInterval.getStart()+secsPerPixel);
         }
-        currentInterval.getEndMarker().setMinTime(interval.getStart());
+        currentInterval.getEndMarker().setMinTime(interval.getStart() + secsPerPixel);
         if(nextInterval != null) {
-            currentInterval.getEndMarker().setMaxTime(nextInterval.getEnd());
+            currentInterval.getEndMarker().setMaxTime(nextInterval.getEnd() - secsPerPixel);
         }
         currentInterval.setAutoSwapMarkers(false);
         currentInterval.addPropertyChangeListener(currentIntervalListener);
@@ -890,41 +892,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     }
                 }
                 LogUtil.info("Updated wor: " + updatedWor);
-
-                // check for interval contiguity with previous/next intervals in old data
-                // if the start time of the modified interval is less than the end time of the previous interval,
-                // extend the previous interval to the new start time
-
-//                // if modifying the first or last interval, and the start/end time overlaps the previous/next
-//                // record segment, update the %wor tier for the previous/next record as well  Do this first to avoid
-//                // issues with overlapping record intervals
-//                if(idx == 0) {
-//                    final int prevRecordIdx = getParentView().getEditor().getCurrentRecordIndex() - 1;
-//                    if(prevRecordIdx >= 0) {
-//                        final Record prevRecord = getParentView().getEditor().getSession().getRecord(prevRecordIdx);
-//                        final MediaSegment prevSeg = prevRecord.getMediaSegment();
-//                        final int[] prevRecordIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(prevSeg.getStartTime(), prevSeg.getEndTime());
-//                        if(prevRecordIntervalIndices.length == 0) return;
-//
-//                        // modify the previous segment end time if it overlaps
-//                        if(prevSeg.getEndTime() > currentInterval.getStartMarker().getTime()) {
-//                            final Tier<Orthography> prevWorTier = (Tier<Orthography>)prevRecord.getTier(tierName);
-//                            final Orthography prevWor = prevWorTier.getValue();
-//                            final var lastRecordInterval = prevRecordIntervalIndices[prevRecordIntervalIndices.length - 1];
-//                            final int prevIdx = Math.max(0, lastRecordInterval - prevRecordIntervalIndices[0]);
-//                            final InternalMedia prevNewInterval = new InternalMedia(prevSeg.getStartTime(), currentInterval.getStartMarker().getTime());
-//                            final WorTierUpdater prevUpdater = new WorTierUpdater(prevIdx, prevNewInterval);
-//                            prevWor.accept(prevUpdater);
-//                            final Orthography updatedPrevWor = prevUpdater.getUpdatedOrthography();
-//                            System.out.println(updatedPrevWor);
-//                            final TierEdit<Orthography> prevWorEdit =
-//                                    new TierEdit<Orthography>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
-//                                            getParentView().getEditor().getDataModel().getTranscriber(), prevRecord,
-//                                            (Tier<Orthography>)prevRecord.getTier(UserTierType.Wor.getPhonTierName()), updatedPrevWor, currentInterval.isValueAdjusting());
-//                            getParentView().getEditor().getUndoSupport().postEdit(prevWorEdit);
-//                        }
-//                    }
-//                }
 
                 final TierEdit<Orthography> worEdit =
                         new TierEdit<>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
