@@ -415,7 +415,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             intervalTierTimeModel.removeInterval(currentInterval);
         }
 
-        float secsPerPixel = 1.0f / getParentView().getTimeModel().getPixelsPerSecond();
+        float secsPerPixel = 1.0f / getTimeModel().getPixelsPerSecond();
 
         currentIntervalTierComponent = tierComponent;
         currentIntervalIndex = intervalIndex;
@@ -423,9 +423,9 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final IntervalTier.Interval nextInterval = (currentIntervalIndex < tierComponent.getTimelineTier().getIntervals().size() - 1) ?
                 tierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex+1) : null;
         currentInterval = new TimeUIModel.Interval(interval.getStart(), interval.getEnd());
-        currentInterval.getStartMarker().setMaxTime(interval.getEnd());
+        currentInterval.getStartMarker().setMaxTime(interval.getEnd() - secsPerPixel);
         if(previousInterval != null) {
-            currentInterval.getStartMarker().setMinTime(previousInterval.getStart()+secsPerPixel);
+            currentInterval.getStartMarker().setMinTime(previousInterval.getStart() + secsPerPixel);
         }
         currentInterval.getEndMarker().setMinTime(interval.getStart() + secsPerPixel);
         if(nextInterval != null) {
