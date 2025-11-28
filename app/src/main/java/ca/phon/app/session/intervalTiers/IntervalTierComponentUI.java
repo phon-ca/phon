@@ -78,6 +78,10 @@ public class IntervalTierComponentUI extends TimeComponentUI {
             @Override
             public void focusLost(FocusEvent e) {
                 // repaint selection to hide focus rectangle
+                if(timeComponent.getTimeModel().getIntervals().size() > 0) {
+                    timeComponent.getTimeModel().clearIntervals();
+                }
+                timeComponent.getSelectionModel().clearSelection();
                 timeComponent.repaint();
             }
         });
@@ -307,24 +311,25 @@ public class IntervalTierComponentUI extends TimeComponentUI {
                 .map( entry -> new Tuple<>(entry.geometry(), entry.value()))
                 .subscribe(tupleList::add);
 
-            if(tupleList.size() == 1) {
-                final int selectedIdx = tupleList.get(0).getObj2();
-                if(e.getButton() == MouseEvent.BUTTON1) {
-                    if(tc.getSelectedIndex() == selectedIdx) {
-                        // already selected, do nothing
-                    } else {
-                        tc.setSelectedIndex(selectedIdx);
-                    }
-                    if(tc.getIntervalClickedCallback() != null) {
-                        final var interval = tc.getTimelineTier().getIntervals().get(selectedIdx);
-                        tc.getIntervalClickedCallback().accept(selectedIdx, interval);
-                    }
-                }
-            }
-
-            tc.repaint();
             tc.requestFocus();
 
+            SwingUtilities.invokeLater(() -> {
+                if(tupleList.size() == 1) {
+                    final int selectedIdx = tupleList.get(0).getObj2();
+                    if(e.getButton() == MouseEvent.BUTTON1) {
+                        if(tc.getSelectedIndex() == selectedIdx) {
+                            // already selected, do nothing
+                        } else {
+                            tc.setSelectedIndex(selectedIdx);
+                        }
+                        if(tc.getIntervalClickedCallback() != null) {
+                            final var interval = tc.getTimelineTier().getIntervals().get(selectedIdx);
+                            tc.getIntervalClickedCallback().accept(selectedIdx, interval);
+                        }
+                    }
+                }
+            });
+            tc.repaint();
             e.consume();
         }
 
