@@ -777,7 +777,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 // select the record which contains this word interval
                 for(int i = 0; i < getParentView().getEditor().getSession().getRecordCount(); i++) {
                     final Record r = getParentView().getEditor().getSession().getRecord(i);
-                    final Range intervalRange = worIntervalTier.getRecordIntervalData(true).recordRanges().get(r);
+                    final Range intervalRange = worIntervalTier.getIntervalRangeForRecord(r);
                     if(intervalRange != null && intervalRange.contains(selectedWord)) {
                         if(getParentView().getEditor().getCurrentRecordIndex() != i) {
                             getParentView().getEditor().setCurrentRecordIndex(i);
@@ -795,7 +795,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 int recordIdx = -1;
                 for(int i = 0; i < getParentView().getEditor().getSession().getRecordCount(); i++) {
                     final Record r = getParentView().getEditor().getSession().getRecord(i);
-                    final Range intervalRange = phoIntervalTier.getRecordIntervalData(true).recordRanges().get(r);
+                    final Range intervalRange = phoIntervalTier.getIntervalRangeForRecord(r);
                     if(intervalRange != null && intervalRange.contains(selectedPhone)) {
                         recordIdx = i;
                         break;
@@ -805,7 +805,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 final Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
 
                 // find the word interval that contains the phone interval
-                final var wordIndicesForRecord = worIntervalTier.getRecordIntervalData(true).recordRanges().get(r);
+                final var wordIndicesForRecord = worIntervalTier.getIntervalRangeForRecord(r);
                 if(wordIndicesForRecord == null) return;
 
                 for(int wordIndex:wordIndicesForRecord) {
@@ -844,7 +844,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             if(UserTierType.Wor.getPhonTierName().equals(tierName)) {
                 final RecordIntervalTier worIntervalTier = currentIntervalTierComponent.getTimelineTier().getExtension(RecordIntervalTier.class);
                 if(worIntervalTier == null) return;
-                final Range recordIntervalIndices = worIntervalTier.getRecordIntervalData(true).recordRanges().get(currentRecord);
+                final Range recordIntervalIndices = worIntervalTier.getIntervalRangeForRecord(currentRecord);
                 if(recordIntervalIndices == null) return;
                 final int offset = recordIntervalIndices.getStart();
                 final int idx = currentIntervalIndex - offset;
@@ -903,7 +903,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             } else if(UserTierType.PhoneIntervals.getPhonTierName().equals(tierName)) {
                 final RecordIntervalTier phointIntervalTier = currentIntervalTierComponent.getTimelineTier().getExtension(RecordIntervalTier.class);
                 if(phointIntervalTier == null) return;
-                final Range recordIntervalIndices = phointIntervalTier.getRecordIntervalData(true).recordRanges().get(currentRecord);
+                final Range recordIntervalIndices = phointIntervalTier.getIntervalRangeForRecord(currentRecord);
                 if(recordIntervalIndices == null) return;
                 final int offset = recordIntervalIndices.getStart();
                 final int idx = currentIntervalIndex - offset;

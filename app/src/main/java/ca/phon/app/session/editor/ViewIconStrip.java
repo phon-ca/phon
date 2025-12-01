@@ -68,14 +68,12 @@ public class ViewIconStrip extends IconStrip {
             viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
             viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
             viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
-            final FlatButton moreButton = createLayoutButton();
 
             add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(TierManagementView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), IconStripPosition.LEFT);
-            add(moreButton, IconStripPosition.LEFT);
             add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);
             add(viewButtons.get(SessionCheckView.VIEW_NAME), IconStripPosition.RIGHT);
         } else {

@@ -8,6 +8,7 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Range;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -63,26 +64,6 @@ public class RecordIntervalTier implements IntervalTierSPI {
     }
 
     /**
-     * Get record index from given interval index.
-     *
-     * @param intervalIndex
-     * @return record index, or -1 if not found
-     */
-    public int getRecordIndexFromIntervalIndex(int intervalIndex) {
-        int currentIndex = 0;
-        for(int i = 0; i < session.getRecordCount(); i++) {
-            final Record record = session.getRecord(i);
-            final List<IntervalTier.Interval> intervals = getIntervals(record);
-            if(intervalIndex < currentIndex + intervals.size()) {
-                return i;
-            } else {
-                currentIndex += intervals.size();
-            }
-        }
-        return -1;
-    }
-
-    /**
      * Get intervals from the given {@link Orthography} object.
      *
      * @param orthography
@@ -127,7 +108,13 @@ public class RecordIntervalTier implements IntervalTierSPI {
 
     @Override
     public List<IntervalTier.Interval> getIntervals() {
-        return getRecordIntervalData(true).intervals;
+        final Map<Record, List<IntervalTier.Interval>> recordIntervals =
+                getRecordIntervalData(true);
+        final List<IntervalTier.Interval> intervals = new ArrayList<>();
+        for(Record record:session.getRecords()) {
+            intervals.addAll(recordIntervals.get(record));
+        }
+        return Collections.unmodifiableList(intervals);
     }
 
     /**
@@ -145,56 +132,42 @@ public class RecordIntervalTier implements IntervalTierSPI {
      * @param record
      */
     public void updateCachedIntervals(Record record) {
-        if(cachedRecordIntervalData == null) return;
-
-        final List<IntervalTier.Interval> intervals = new ArrayList<>(cachedRecordIntervalData.intervals);
-        final Map<Record, Range> recordRanges = new java.util.HashMap<>(cachedRecordIntervalData.recordRanges);
-
-        final var recIntervals = getIntervals(record);
-        final var range = recordRanges.get(record);
-        if(range != null) {
-            // check ranges
-            if(range.getStart() < 0 || range.getStart() >= intervals.size()
-                    || range.getEnd() < 0 || range.getEnd() >= intervals.size()
-                    || range.getStart() > range.getEnd()) {
-                return;
-            }
-
-            // replace existing intervals
-            intervals.subList(range.getStart(), range.getEnd() + 1).clear();
-            intervals.addAll(range.getStart(), recIntervals);
-
-            // update ranges for subsequent records
-            final int sizeDiff = recIntervals.size() - (range.getEnd() - range.getStart() + 1);
-            if(sizeDiff != 0) {
-                boolean found = false;
-                for(var entry:recordRanges.entrySet()) {
-                    if(entry.getKey().equals(record)) {
-                        found = true;
-                        recordRanges.put(entry.getKey(), new Range(entry.getValue().getStart(), entry.getValue().getStart() + recIntervals.size() - 1));
-                    } else if(found) {
-                        recordRanges.put(entry.getKey(), new Range(entry.getValue().getStart() + sizeDiff, entry.getValue().getEnd() + sizeDiff));
-                    }
-                }
-            }
-        } else {
-            // add new record intervals at the end
-            recordRanges.put(record, new Range(intervals.size(), intervals.size() + recIntervals.size() - 1));
-            intervals.addAll(recIntervals);
+        if(cachedRecordIntervalData == null) {
+            updateCachedIntervals();
+            return;
         }
-
-        cachedRecordIntervalData = new RecordIntervalData(intervals, recordRanges);
+        cachedRecordIntervalData.put(record, getIntervals(record));
     }
 
     /**
-     * Data structure holding record interval data.
-     *
-     * @param intervals all intervals
-     * @param recordRanges interval ranges mapped to records
+     * Get range of intervals for the given record in the overall
+     * interval list.
+     * @param record
+     * @return range of intervals for record, or null if record has no intervals or Range(-1, -1) if record not found
      */
-    public record RecordIntervalData(List<IntervalTier.Interval> intervals, Map<Record, Range> recordRanges) {}
+    public Range getIntervalRangeForRecord(Record record) {
+        final Map<Record, List<IntervalTier.Interval>> cachedRecordIntervalData =
+                getRecordIntervalData(true);
+        if(cachedRecordIntervalData.containsKey(record)) {
+            final List<IntervalTier.Interval> intervals = cachedRecordIntervalData.get(record);
+            if(intervals.size() > 0) {
+                int startIdx = 0;
+                for(Record rec:session.getRecords()) {
+                    if(rec.equals(record)) {
+                        break;
+                    } else {
+                        startIdx += cachedRecordIntervalData.get(rec).size();
+                    }
+                }
+                final int endIdx = startIdx + intervals.size();
+                return new Range(startIdx, endIdx, true);
+            }
+        }
+        return new Range(-1, -1, true);
+    }
 
-    private RecordIntervalData cachedRecordIntervalData = null;
+
+    private Map<Record, List<IntervalTier.Interval>> cachedRecordIntervalData = null;
 
     /**
      * Get intervals for all records along with their ranges in the
@@ -203,22 +176,18 @@ public class RecordIntervalTier implements IntervalTierSPI {
      * @param cached if true, use cached data if available
      * @return record interval data
      */
-    public RecordIntervalData getRecordIntervalData(boolean cached) {
+    public Map<Record, List<IntervalTier.Interval>> getRecordIntervalData(boolean cached) {
         if(cached && cachedRecordIntervalData != null) {
             return cachedRecordIntervalData;
         } else {
-            final List<IntervalTier.Interval> intervals = new ArrayList<>();
-            final Map<Record, Range> recordRanges = new java.util.HashMap<>();
-            int currentIndex = 0;
-            for (var record : session.getRecords()) {
-                final var recIntervals = getIntervals(record);
-                intervals.addAll(recIntervals);
-                recordRanges.put(record, new Range(currentIndex, currentIndex + recIntervals.size() - 1));
-                currentIndex += recIntervals.size();
+            if(cachedRecordIntervalData == null)
+                cachedRecordIntervalData = new java.util.HashMap<>();
+             else
+                cachedRecordIntervalData.clear();
+            for(Record record:session.getRecords()) {
+                cachedRecordIntervalData.put(record, getIntervals(record));
             }
-            final RecordIntervalData retVal = new RecordIntervalData(intervals, recordRanges);
-            cachedRecordIntervalData = retVal;
-            return retVal;
+            return cachedRecordIntervalData;
         }
     }
 
