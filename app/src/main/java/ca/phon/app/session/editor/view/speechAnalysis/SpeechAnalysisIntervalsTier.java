@@ -27,7 +27,6 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
-import org.apache.commons.logging.Log;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
@@ -36,7 +35,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.UndoableEdit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
@@ -672,7 +670,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         for(int i = 0; i < session.getRecordCount(); i++) {
             final Record r = session.getRecord(i);
             final Orthography orthography = r.getOrthography();
-            final Orthography wor = WordIntervalsTextUpdater.worFromOrthography(orthography, r.getMediaSegment());
+            final Orthography wor = UpdateWorAfterOrthography.worFromOrthography(orthography, r.getMediaSegment());
 
             final Tier<Orthography> worTier = r.getTier(UserTierType.Wor.getPhonTierName(), Orthography.class);
             final TierEdit<Orthography> worTierEdit = new TierEdit<>(getParentView().getEditor().getSession(),

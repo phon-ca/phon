@@ -22,7 +22,7 @@ import java.util.List;
  * will be updated to match the new text.
  */
 @Extension(Tier.class)
-public class WordIntervalsTextUpdater implements TierEdit.DependentTierChanges<Orthography>, ExtensionProvider {
+public class UpdateWorAfterOrthography implements TierEdit.DependentTierChanges<Orthography>, ExtensionProvider {
 
     /**
      * Generate a new word intervals tier from an orthography tier using the provided
@@ -47,9 +47,16 @@ public class WordIntervalsTextUpdater implements TierEdit.DependentTierChanges<O
         } else {
             final float segmentDuration = segment.getEndTime() - segment.getStartTime();
             final float wordDuration = segmentDuration / (float)orthoWords.size();
+            float lastEndTime = segment.getStartTime();
             for(int i = 0; i < orthoWords.size(); i++) {
-                final float startTime = segment.getStartTime() + (i * wordDuration);
-                final float endTime = startTime + wordDuration;
+                float startTime = lastEndTime;
+                float endTime = Math.min(segment.getEndTime(), startTime + wordDuration);
+
+                // convert to 3 decimal places
+                startTime = Math.round(startTime * 1000f) / 1000f;
+                endTime = Math.round(endTime * 1000f) / 1000f;
+                lastEndTime = endTime;
+
                 final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
                 internalMediaList.add(internalMedia);
             }
@@ -106,9 +113,16 @@ public class WordIntervalsTextUpdater implements TierEdit.DependentTierChanges<O
             } else {
                 final float segmentDuration = segment.getEndTime() - segment.getStartTime();
                 final float wordDuration = segmentDuration / (float)orthoWords.size();
+                float lastEndTime = segment.getStartTime();
                 for(int i = 0; i < orthoWords.size(); i++) {
-                    final float startTime = segment.getStartTime() + (i * wordDuration);
-                    final float endTime = startTime + wordDuration;
+                    float startTime = lastEndTime;
+                    float endTime = Math.min(segment.getEndTime(), startTime + wordDuration);
+
+                    // convert to 3 decimal places
+                    startTime = Math.round(startTime * 1000f) / 1000f;
+                    endTime = Math.round(endTime * 1000f) / 1000f;
+                    lastEndTime = endTime;
+
                     final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
                     internalMediaList.add(internalMedia);
                 }
@@ -127,7 +141,7 @@ public class WordIntervalsTextUpdater implements TierEdit.DependentTierChanges<O
     public void installExtension(IExtendable obj) {
         if(obj instanceof Tier<?> tier) {
             if (SystemTierType.Orthography.getName().equals(tier.getName()) && tier.getDeclaredType() == Orthography.class) {
-                final WordIntervalsTextUpdater extension = new WordIntervalsTextUpdater();
+                final UpdateWorAfterOrthography extension = new UpdateWorAfterOrthography();
                 final TierEdit.DependentTierChanges existingExtension =  obj.getExtension(TierEdit.DependentTierChanges.class);
                 if(existingExtension == null) {
                     obj.putExtension(TierEdit.DependentTierChanges.class, extension);
