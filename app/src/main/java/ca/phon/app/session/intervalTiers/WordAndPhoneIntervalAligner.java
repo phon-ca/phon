@@ -43,7 +43,7 @@ public final class WordAndPhoneIntervalAligner {
             for(int j = lastPhoneIntervalIdx; j < phoneIntervals.size(); j++) {
                 final IntervalTier.Interval phoneInterval = phoneIntervals.get(j);
                 final OverlapType overlapType = wordInterval.overlapType(phoneInterval);
-                if(overlapType != OverlapType.NO_OVERLAP) {
+                if(overlapType == OverlapType.FULLY_CONTAINS) {
                     phoneIntervalsForWord.add(phoneInterval);
                     lastPhoneIntervalIdx = j + 1;
                 } else if(phoneInterval.getStart() > wordInterval.getEnd()) {

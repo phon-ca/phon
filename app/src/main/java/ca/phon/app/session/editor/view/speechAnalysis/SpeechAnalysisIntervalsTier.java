@@ -914,12 +914,12 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 final IntervalTierComponent wordIntervalTier = recordDataIntervalTiers.get(UserTierType.Wor.getPhonTierName());
                 if(wordIntervalTier == null) return;
                 final IntervalTier.Interval phoneInterval = currentIntervalTierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex);
-                final int[] wordIntervals = wordIntervalTier.getIntersectingIntervals(phoneInterval.getStart(), phoneInterval.getEnd());
+                final int[] wordIntervals = wordIntervalTier.getTimelineTier().overlappingIntervals(phoneInterval, SegmentOverlapUtil.OverlapType.IS_FULLY_CONTAINED);
                 if(wordIntervals.length == 0) return;
                 final int wordIntervalIndex = wordIntervals[0];
                 final IntervalTier.Interval wordInterval = wordIntervalTier.getTimelineTier().getIntervals().get(wordIntervalIndex);
                 // obtain all phone intervals within this word interval
-                final int[] phoneIntervalIndices = currentIntervalTierComponent.getIntersectingIntervals(wordInterval.getStart(), wordInterval.getEnd());
+                final int[] phoneIntervalIndices = currentIntervalTierComponent.getTimelineTier().overlappingIntervals(wordInterval, SegmentOverlapUtil.OverlapType.FULLY_CONTAINS);
 
                 if(currentIntervalIndex == phoneIntervalIndices[0] && "startMarker.time".equals(e.getPropertyName())) {
                     // TODO adjust wor tier instead
