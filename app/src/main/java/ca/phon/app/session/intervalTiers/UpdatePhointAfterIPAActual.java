@@ -117,7 +117,7 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
         }
         final TierData newPhoneIntervalsTierData = new TierData(newPhoneIntervals);
         phoneIntervalsTier.setValue(newPhoneIntervalsTierData);
-        tierEdit.putAdditionalTierChange(phoneIntervalsTier.getName(), newPhoneIntervalsTierData);
+        tierEdit.putAdditionalTierChange(phoneIntervalsTier.getName(), oldPhoneIntervalsTierData, newPhoneIntervalsTierData);
         tierEdit.fireTierChange(phoneIntervalsTier, oldPhoneIntervalsTierData, newPhoneIntervalsTierData);
     }
 

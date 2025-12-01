@@ -133,7 +133,7 @@ public class UpdateWorAfterOrthography implements TierEdit.DependentTierChanges<
         final Orthography newWordIntervals = updateVisitor.getOrthography();
         if(newWordIntervals == null) return;
         wordIntervalsTier.setValue(newWordIntervals);
-        tierEdit.putAdditionalTierChange(wordIntervalsTier.getName(), newWordIntervals);
+        tierEdit.putAdditionalTierChange(wordIntervalsTier.getName(), oldWordIntervals, newWordIntervals);
         tierEdit.fireTierChange(wordIntervalsTier, oldWordIntervals, newWordIntervals);
     }
 

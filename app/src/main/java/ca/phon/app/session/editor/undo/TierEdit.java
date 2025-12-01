@@ -29,8 +29,8 @@ import ca.phon.syllabifier.Syllabifier;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>A change to the value of a {@link Tier}. The record parameter is optional, however if it is not
@@ -82,10 +82,12 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	 */
 	private final T newValue;
 
+    public record AdditionalTierChangeEntry<T>(String tierName, T oldValue, T value) {}
+
 	/**
 	 * Map of dependent tier changes
 	 */
-	private final Map<String, Object> additionalTierChanges = new LinkedHashMap<>();
+	private final List<AdditionalTierChangeEntry<?>> additionalTierChanges = new ArrayList<>();
 
 	/**
 	 * Is this event one of many in a sequence (default: false)
@@ -256,12 +258,44 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		this.valueAdjusting = valueAdjusting;
 	}
 
-	public void putAdditionalTierChange(String tierName, Object value) {
-		additionalTierChanges.put(tierName, value);
+	public <R> void putAdditionalTierChange(String tierName, R oldValue, R value) {
+		additionalTierChanges.add(new AdditionalTierChangeEntry<>(tierName, oldValue, value));
 	}
 
+	/**
+	 * Get the most recent additional tier change entry for the given tier name.
+	 *
+	 * @param tierName name of the dependent tier
+	 * @param type     expected value type
+	 * @return the last {@link AdditionalTierChangeEntry} whose value can be assigned to {@code type},
+	 * or {@code null} if none exists
+	 */
+	@SuppressWarnings("unchecked")
+	public <R> AdditionalTierChangeEntry<R> getAdditionalTierChange(String tierName, Class<R> type) {
+		for (int i = additionalTierChanges.size() - 1; i >= 0; i--) {
+			final AdditionalTierChangeEntry<?> entry = additionalTierChanges.get(i);
+			if (entry.tierName().equals(tierName)) {
+				final Object oldVal = entry.oldValue();
+				final Object newVal = entry.value();
+				if ((oldVal == null || type.isInstance(oldVal)) && (newVal == null || type.isInstance(newVal))) {
+					return (AdditionalTierChangeEntry<R>) entry;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Legacy accessor for additional tier change values.
+	 *
+	 * @param tierName name of the dependent tier
+	 * @return value from the last change entry for the tier, or {@code null} if none exists
+	 * @deprecated use {@link #getAdditionalTierChange(String, Class)} to access the full entry instead
+	 */
+	@Deprecated
 	public Object getAdditionalTierChange(String tierName) {
-		return additionalTierChanges.get(tierName);
+		final AdditionalTierChangeEntry<?> entry = getAdditionalTierChange(tierName, Object.class);
+		return (entry != null ? entry.value() : null);
 	}
 
 	/**
@@ -353,10 +387,23 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		if(this.record != null && tierAddedToRecord) {
 			this.record.removeTier(getTier().getName());
 		}
-		
+
+		// revert any additional tier changes recorded for this edit
+		if (record != null) {
+			for (int i = additionalTierChanges.size() - 1; i >= 0; i--) {
+				final AdditionalTierChangeEntry<?> entry = additionalTierChanges.get(i);
+				final Tier<?> depTier = record.getTier(entry.tierName());
+				if (depTier == null) continue;
+				@SuppressWarnings("unchecked")
+				final Tier<Object> depTierObj = (Tier<Object>) depTier;
+				final Object newDependentVal = entry.oldValue();
+				final Object oldDependentVal = entry.value();
+				depTierObj.setValue(newDependentVal);
+				fireTierChange(depTierObj, oldDependentVal, newDependentVal);
+			}
+		}
+
 		fireTierChange(tier, newValue, oldVal);
-		if(record != null)
-			performDependentTierChanges();
 	}
 
 	/**

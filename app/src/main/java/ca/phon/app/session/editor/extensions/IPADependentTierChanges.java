@@ -21,21 +21,23 @@ public class IPADependentTierChanges implements TierEdit.DependentTierChanges<IP
         // TODO update potential user-defined tier alignments
         final SystemTierType systemTierType = SystemTierType.tierFromString(tierEdit.getTier().getName());
         if(systemTierType == SystemTierType.IPATarget || systemTierType == SystemTierType.IPAActual) {
-            PhoneAlignment prevAlignment = (PhoneAlignment) tierEdit.getAdditionalTierChange(SystemTierType.PhoneAlignment.getName());
-            if(prevAlignment == null) {
+            TierEdit.AdditionalTierChangeEntry<PhoneAlignment> prevAlignmentEntry =
+                    tierEdit.getAdditionalTierChange(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class);
+            if(prevAlignmentEntry == null) {
                 // update alignment
                 final PhoneAlignment pm = PhoneAlignment.fromTiers(tierEdit.getRecord().getIPATargetTier(), tierEdit.getRecord().getIPAActualTier(), tierEdit.getTranscriber());
                 PhoneAlignment oldVal = tierEdit.getRecord().getPhoneAlignmentTier().getValueForTranscriber(tierEdit.getTranscriber()).orElse(new PhoneAlignment());
                 tierEdit.getRecord().getPhoneAlignmentTier().setValueForTranscriber(tierEdit.getTranscriber(), pm);
-                tierEdit.putAdditionalTierChange(SystemTierType.PhoneAlignment.getName(), oldVal);
+                tierEdit.putAdditionalTierChange(SystemTierType.PhoneAlignment.getName(), oldVal, pm);
                 // fire event for phone alignment tier change
                 tierEdit.fireTierChange(tierEdit.getRecord().getPhoneAlignmentTier(), oldVal, pm);
             } else {
                 final PhoneAlignment currentVal = tierEdit.getRecord().getPhoneAlignmentTier().getValueForTranscriber(tierEdit.getTranscriber()).orElse(new PhoneAlignment());
-                tierEdit.getRecord().getPhoneAlignmentTier().setValueForTranscriber(tierEdit.getTranscriber(), prevAlignment);
-                tierEdit.putAdditionalTierChange(SystemTierType.PhoneAlignment.getName(), currentVal);
+                PhoneAlignment oldVal = prevAlignmentEntry.oldValue();
+                tierEdit.getRecord().getPhoneAlignmentTier().setValueForTranscriber(tierEdit.getTranscriber(), oldVal);
+                tierEdit.putAdditionalTierChange(SystemTierType.PhoneAlignment.getName(), currentVal, oldVal);
                 // fire event for phone alignment tier change
-                tierEdit.fireTierChange(tierEdit.getRecord().getPhoneAlignmentTier(), currentVal, prevAlignment);
+                tierEdit.fireTierChange(tierEdit.getRecord().getPhoneAlignmentTier(), currentVal, oldVal);
             }
         }
     }

@@ -157,7 +157,7 @@ public class UpdatePhointAfterWor implements TierEdit.DependentTierChanges<Ortho
         }
         final TierData newPhoneIntervalsTierData = new TierData(newPhoneIntervals);
         phoneIntervalsTier.setValue(newPhoneIntervalsTierData);
-        tierEdit.putAdditionalTierChange(phoneIntervalsTier.getName(), newPhoneIntervalsTierData);
+        tierEdit.putAdditionalTierChange(phoneIntervalsTier.getName(), oldPhoneIntervals, newPhoneIntervalsTierData);
         tierEdit.fireTierChange(phoneIntervalsTier, oldPhoneIntervals, newPhoneIntervalsTierData);
 
 //        // check to see if we should adjust media segment for the record
@@ -195,9 +195,9 @@ public class UpdatePhointAfterWor implements TierEdit.DependentTierChanges<Ortho
 //        newRecordSegment.setEndTime(recEnd);
 //        record.setMediaSegment(newRecordSegment);
 //        if(isUndo) {
-//            tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), null);
+//            tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), recordSegment, newRecordSegment);
 //        } else {
-//            tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), newRecordSegment);
+//            tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), recordSegment, newRecordSegment);
 //        }
 //        tierEdit.fireTierChange(record.getSegmentTier(), recordSegment, newRecordSegment);
     }

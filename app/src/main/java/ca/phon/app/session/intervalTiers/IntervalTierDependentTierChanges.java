@@ -53,7 +53,7 @@ public class IntervalTierDependentTierChanges implements TierEdit.DependentTierC
                 orthography.accept(updateVisitor);
                 final Orthography newOrtho = updateVisitor.getUpdatedOrthography();
                 ((Tier<Orthography>)tier).setValue(newOrtho);
-                tierEdit.putAdditionalTierChange(tierName, newOrtho);
+                tierEdit.putAdditionalTierChange(tierName, orthography, newOrtho);
                 tierEdit.fireTierChange((Tier<Orthography>)tier, orthography, newOrtho);
             } else if(tier.getValue() instanceof TierData tierData) {
                 final TierDataIntervalVisitor visitor = new TierDataIntervalVisitor();
@@ -64,7 +64,7 @@ public class IntervalTierDependentTierChanges implements TierEdit.DependentTierC
                 tierData.accept(updateVisitor);
                 final TierData newTierData = updateVisitor.getUpdatedTierData();
                 ((Tier<TierData>)tier).setValue(newTierData);
-                tierEdit.putAdditionalTierChange(tierName, newTierData);
+                tierEdit.putAdditionalTierChange(tierName, tierData, newTierData);
                 tierEdit.fireTierChange((Tier<TierData>)tier, tierData, newTierData);
             }
         }
