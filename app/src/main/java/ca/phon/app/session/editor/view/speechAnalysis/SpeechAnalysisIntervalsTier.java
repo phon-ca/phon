@@ -1004,6 +1004,11 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     }
                 }
                 getParentView().getEditor().getUndoSupport().endUpdate();
+
+                // update min/max times for interval markers
+                float secsPerPixel = 1.0f / getTimeModel().getPixelsPerSecond();
+                currentInterval.getStartMarker().setMaxTime(currentInterval.getEndMarker().getTime() - secsPerPixel);
+                currentInterval.getEndMarker().setMinTime(currentInterval.getStartMarker().getTime() + secsPerPixel);
             }
         }
     };
