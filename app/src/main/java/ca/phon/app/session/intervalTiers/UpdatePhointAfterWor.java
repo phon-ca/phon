@@ -61,6 +61,12 @@ public class UpdatePhointAfterWor implements TierEdit.DependentTierChanges<Ortho
                 .findAny().orElse(null);
         if(phoTierDesc == null) return;
 
+        if(tierEdit.getSource() instanceof IntervalTierComponent itc) {
+            if(itc.getTimelineTier().getName().equals(UserTierType.PhoneIntervals.getPhonTierName())) {
+                return;
+            }
+        }
+
         final Record record = tierEdit.getRecord();
         final Tier<Orthography> wordIntervalsTier = tierEdit.getTier();
         final Tier<IPATranscript> ipaTier = record.getIPAActualTier();

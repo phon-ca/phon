@@ -5,4 +5,5 @@ ca.phon.app.session.intervalTiers.IntervalTierDependentTierChanges
 ca.phon.app.session.intervalTiers.UpdateWorAfterOrthography
 ca.phon.app.session.intervalTiers.UpdatePhointAfterIPAActual
 ca.phon.app.session.intervalTiers.UpdatePhointAfterWor
+ca.phon.app.session.intervalTiers.UpdateSegmentAfterWor
 

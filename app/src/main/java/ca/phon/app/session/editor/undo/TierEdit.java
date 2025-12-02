@@ -388,6 +388,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			this.record.removeTier(getTier().getName());
 		}
 
+        fireTierChange(tier, newValue, oldVal);
 		// revert any additional tier changes recorded for this edit
 		if (record != null) {
 			for (int i = additionalTierChanges.size() - 1; i >= 0; i--) {
@@ -402,8 +403,6 @@ public class TierEdit<T> extends SessionUndoableEdit {
 				fireTierChange(depTierObj, oldDependentVal, newDependentVal);
 			}
 		}
-
-		fireTierChange(tier, newValue, oldVal);
 	}
 
 	/**
