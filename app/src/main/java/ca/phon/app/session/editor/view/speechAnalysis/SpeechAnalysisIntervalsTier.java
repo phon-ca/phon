@@ -893,8 +893,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         Orthography updatedWor =
                 updateWorIntervalsWithInterval(idx, newInterval, wor);
 
-        LogUtil.info("Updated wor: " + updatedWor);
-
         final TierEdit<Orthography> worEdit = createWorTierEdit(
                 updatedWor,
                 currentInterval.isValueAdjusting()
@@ -1192,8 +1190,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             }
         }
 
-        LogUtil.info("Updated phone intervals: " + updatedPhoneIntervals);
-
         final TierEdit<TierData> phoneIntervalsEdit =
                 createPhoneIntervalsEdit(updatedPhoneIntervals, currentInterval.isValueAdjusting());
         lastPhoneIntervalsEdit = phoneIntervalsEdit;
@@ -1211,8 +1207,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
         Orthography updatedWor =
                 updateWorIntervalsWithInterval(wordIdx, newWordInterval, wor);
-
-        LogUtil.info("Updated wor: " + updatedWor);
 
         final TierEdit<Orthography> worEdit =
                 createWorTierEdit(updatedWor, currentInterval.isValueAdjusting());
@@ -1300,8 +1294,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             }
         }
 
-        LogUtil.info("Updated phone intervals: " + updatedPhoneIntervals);
-
         final TierEdit<TierData> phoneIntervalsEdit =
                 createPhoneIntervalsEdit(updatedPhoneIntervals, currentInterval.isValueAdjusting());
         lastPhoneIntervalsEdit = phoneIntervalsEdit;
@@ -1320,8 +1312,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
         Orthography updatedWor =
                 updateWorIntervalsWithInterval(wordIdx, newWordInterval, wor);
-
-        LogUtil.info("Updated wor: " + updatedWor);
 
         final TierEdit<Orthography> worEdit =
                 createWorTierEdit(updatedWor, currentInterval.isValueAdjusting());
@@ -1389,8 +1379,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             updatedPhoneIntervals.accept(nextUpdater);
             updatedPhoneIntervals = nextUpdater.getUpdatedTierData();
         }
-
-        LogUtil.info("Updated phone intervals: " + updatedPhoneIntervals);
 
         final TierEdit<TierData> phoneIntervalsEdit =
                 createPhoneIntervalsEdit(updatedPhoneIntervals, currentInterval.isValueAdjusting());
