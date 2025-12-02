@@ -891,6 +891,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int idx = currentIntervalIndex - offset;
         if(idx < 0) return;
 
+        final int modifiers = currentInterval.getModifiers();
+
         final InternalMedia newInterval =
                 new InternalMedia(currentInterval.getStartMarker().getTime(), currentInterval.getEndMarker().getTime());
 
@@ -901,7 +903,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 .orElse(new Orthography());
 
         Orthography updatedWor =
-                updateWorIntervalsWithInterval(idx, newInterval, wor);
+                updateWorIntervalsWithInterval(idx, newInterval, wor, modifiers);
 
         final TierEdit<Orthography> worEdit = createWorTierEdit(
                 updatedWor,
@@ -1028,6 +1030,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int idx = currentIntervalIndex - offset;
         if(idx < 0) return;
 
+        final int modifiers = currentInterval.getModifiers();
+
         // first get the word interval that contains this phone interval,
         // then all of the other phone intervals within that word interval
         final IntervalTierComponent wordIntervalTier =
@@ -1062,17 +1066,17 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         if(currentIntervalIndex == phoneIntervalIndices[0] && isStartChange) {
             handlePhoneFirstIntervalStartChange(
                     idx, currentRecord, phoneInterval, wordInterval,
-                    wordIntervalIndex
+                    wordIntervalIndex, modifiers
             );
         } else if(currentIntervalIndex == phoneIntervalIndices[phoneIntervalIndices.length - 1]
                 && isEndChange) {
             handlePhoneLastIntervalEndChange(
                     idx, currentRecord, phoneInterval, wordInterval,
-                    wordIntervalIndex
+                    wordIntervalIndex, modifiers
             );
         } else {
             handlePhoneMiddleIntervalChange(
-                    idx, currentRecord, phoneIntervalIndices, isStartChange, isEndChange
+                    idx, currentRecord, phoneIntervalIndices, isStartChange, isEndChange, modifiers
             );
         }
     }
@@ -1083,7 +1087,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
      */
     private Orthography updateWorIntervalsWithInterval(int idx,
                                                        InternalMedia newInterval,
-                                                       Orthography wor) {
+                                                       Orthography wor,
+                                                       int modifiers) {
         final WorTierUpdater updater = new WorTierUpdater(idx, newInterval);
         final OrthoIntervalVisitor worIntervalVisitor = new OrthoIntervalVisitor();
         wor.accept(worIntervalVisitor);
@@ -1096,6 +1101,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         updatedWor.accept(updatedWorIntervalVisitor);
         final List<IntervalTier.Interval> updatedWorIntervals = updatedWorIntervalVisitor.getIntervals();
 
+        boolean altPressed = (modifiers & MouseEvent.ALT_DOWN_MASK) != 0;
+
         // adjust previous/next contiguous intervals as in original code
         for(int i = 0; i < worIntervals.size(); i++) {
             final IntervalTier.Interval oldInterval = worIntervals.get(i);
@@ -1105,47 +1112,49 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
                 if(oldInterval.getStart() != updatedInterval.getStart() && i > 0) {
                     final IntervalTier.Interval prevInterval = worIntervals.get(i - 1);
+                    final var overlapType = SegmentOverlapUtil.computeOverlap(
+                            prevInterval.getStart(), prevInterval.getEnd(),
+                            updatedInterval.getStart(), updatedInterval.getEnd());
                     if(SegmentOverlapUtil.areContiguous(
                                 oldInterval.getStart(), oldInterval.getEnd(),
                                 prevInterval.getStart(), prevInterval.getEnd())
-                            || SegmentOverlapUtil.computeOverlap(
-                                    prevInterval.getStart(), prevInterval.getEnd(),
-                                    updatedInterval.getStart(), updatedInterval.getEnd())
-                               == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                            || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                        if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                            final InternalMedia replacedPrevInterval =
+                                    new InternalMedia(prevInterval.getStart(), updatedInterval.getStart());
+                            final WorTierUpdater prevUpdater =
+                                    new WorTierUpdater(i - 1, replacedPrevInterval);
+                            updatedWor.accept(prevUpdater);
+                            updatedWor = prevUpdater.getUpdatedOrthography();
 
-                        final InternalMedia replacedPrevInterval =
-                                new InternalMedia(prevInterval.getStart(), updatedInterval.getStart());
-                        final WorTierUpdater prevUpdater =
-                                new WorTierUpdater(i - 1, replacedPrevInterval);
-                        updatedWor.accept(prevUpdater);
-                        updatedWor = prevUpdater.getUpdatedOrthography();
-
-                        // refresh intervals after mutation
-                        updatedWorIntervalVisitor.reset();
-                        updatedWor.accept(updatedWorIntervalVisitor);
+                            // refresh intervals after mutation
+                            updatedWorIntervalVisitor.reset();
+                            updatedWor.accept(updatedWorIntervalVisitor);
+                        }
                     }
                 }
 
                 if(oldInterval.getEnd() != updatedInterval.getEnd() && i < worIntervals.size() - 1) {
                     final IntervalTier.Interval nextInterval = worIntervals.get(i + 1);
+                    final var overlapType = SegmentOverlapUtil.computeOverlap(
+                            nextInterval.getStart(), nextInterval.getEnd(),
+                            updatedInterval.getStart(), updatedInterval.getEnd());
                     if(SegmentOverlapUtil.areContiguous(
                                 oldInterval.getStart(), oldInterval.getEnd(),
                                 nextInterval.getStart(), nextInterval.getEnd())
-                            || SegmentOverlapUtil.computeOverlap(
-                                    nextInterval.getStart(), nextInterval.getEnd(),
-                                    updatedInterval.getStart(), updatedInterval.getEnd())
-                               == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                            || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                        if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                            final InternalMedia replacedNextInterval =
+                                    new InternalMedia(updatedInterval.getEnd(), nextInterval.getEnd());
+                            final WorTierUpdater nextUpdater =
+                                    new WorTierUpdater(i + 1, replacedNextInterval);
+                            updatedWor.accept(nextUpdater);
+                            updatedWor = nextUpdater.getUpdatedOrthography();
 
-                        final InternalMedia replacedNextInterval =
-                                new InternalMedia(updatedInterval.getEnd(), nextInterval.getEnd());
-                        final WorTierUpdater nextUpdater =
-                                new WorTierUpdater(i + 1, replacedNextInterval);
-                        updatedWor.accept(nextUpdater);
-                        updatedWor = nextUpdater.getUpdatedOrthography();
-
-                        // refresh intervals after mutation
-                        updatedWorIntervalVisitor.reset();
-                        updatedWor.accept(updatedWorIntervalVisitor);
+                            // refresh intervals after mutation
+                            updatedWorIntervalVisitor.reset();
+                            updatedWor.accept(updatedWorIntervalVisitor);
+                        }
                     }
                 }
             }
@@ -1256,7 +1265,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                                                      Record currentRecord,
                                                      IntervalTier.Interval phoneInterval,
                                                      IntervalTier.Interval wordInterval,
-                                                     int wordIntervalIndex) {
+                                                     int wordIntervalIndex,
+                                                     int modifiers) {
         final RecordIntervalTier worIntervalTier =
                 recordDataIntervalTiers.get(UserTierType.Wor.getPhonTierName())
                         .getTimelineTier().getExtension(RecordIntervalTier.class);
@@ -1268,6 +1278,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
         final int worOffset = worRecordIntervalIndices.getStart();
         final int wordIdx = wordIntervalIndex - worOffset;
+        final boolean altPressed = (modifiers & MouseEvent.ALT_DOWN_MASK) != 0;
 
         // adjust phone interval first
         final InternalMedia newPhoneInterval =
@@ -1302,23 +1313,24 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     oldInterval.getEnd() != updatedInterval.getEnd()) {
                 if(oldInterval.getStart() != updatedInterval.getStart() && i > 0) {
                     final IntervalTier.Interval prevInterval = oldPhoneIntervals.get(i - 1);
+                    final var overlapType = SegmentOverlapUtil.computeOverlap(
+                            prevInterval.getStart(), prevInterval.getEnd(),
+                            updatedInterval.getStart(), updatedInterval.getEnd());
                     if(SegmentOverlapUtil.areContiguous(
                                 oldInterval.getStart(), oldInterval.getEnd(),
                                 prevInterval.getStart(), prevInterval.getEnd())
-                            || SegmentOverlapUtil.computeOverlap(
-                                    prevInterval.getStart(), prevInterval.getEnd(),
-                                    updatedInterval.getStart(), updatedInterval.getEnd())
-                               == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
-
-                        final InternalMedia replacedPrevInterval =
-                                new InternalMedia(prevInterval.getStart(),
-                                        updatedInterval.getStart());
-                        final TierInternalMedia replacedTierInternalMedia =
-                                new TierInternalMedia(replacedPrevInterval);
-                        final TierDataIntervalUpdater prevUpdater =
-                                new TierDataIntervalUpdater(i - 1, replacedTierInternalMedia);
-                        updatedPhoneIntervals.accept(prevUpdater);
-                        updatedPhoneIntervals = prevUpdater.getUpdatedTierData();
+                            || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                        if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                            final InternalMedia replacedPrevInterval =
+                                    new InternalMedia(prevInterval.getStart(),
+                                            updatedInterval.getStart());
+                            final TierInternalMedia replacedTierInternalMedia =
+                                    new TierInternalMedia(replacedPrevInterval);
+                            final TierDataIntervalUpdater prevUpdater =
+                                    new TierDataIntervalUpdater(i - 1, replacedTierInternalMedia);
+                            updatedPhoneIntervals.accept(prevUpdater);
+                            updatedPhoneIntervals = prevUpdater.getUpdatedTierData();
+                        }
                     }
                 }
             }
@@ -1340,7 +1352,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                         .orElse(new Orthography());
 
         Orthography updatedWor =
-                updateWorIntervalsWithInterval(wordIdx, newWordInterval, wor);
+                updateWorIntervalsWithInterval(wordIdx, newWordInterval, wor, modifiers);
 
         final TierEdit<Orthography> worEdit =
                 createWorTierEdit(updatedWor, currentInterval.isValueAdjusting());
@@ -1357,7 +1369,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                                                   Record currentRecord,
                                                   IntervalTier.Interval phoneInterval,
                                                   IntervalTier.Interval wordInterval,
-                                                  int wordIntervalIndex) {
+                                                  int wordIntervalIndex,
+                                                  int modifiers) {
         final IntervalTierComponent wordIntervalTier =
                 recordDataIntervalTiers.get(UserTierType.Wor.getPhonTierName());
         final RecordIntervalTier worIntervalTier =
@@ -1392,6 +1405,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         TierData updatedPhoneIntervals =
                 updatePhoneIntervalsWithInterval(idx, tierData, tierInternalMedia);
 
+        final boolean altPressed = (modifiers & MouseEvent.ALT_DOWN_MASK) != 0;
         // neighbor-fix for next interval, identical to original code
         final TierDataIntervalVisitor updatedTierDataIntervalVisitor =
                 new TierDataIntervalVisitor();
@@ -1406,23 +1420,24 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 if(oldInterval.getEnd() != updatedInterval.getEnd()
                         && i < oldPhoneIntervals.size() - 1) {
                     final IntervalTier.Interval nextInterval = oldPhoneIntervals.get(i + 1);
+                    final var overlapType = SegmentOverlapUtil.computeOverlap(
+                            nextInterval.getStart(), nextInterval.getEnd(),
+                            updatedInterval.getStart(), updatedInterval.getEnd());
                     if(SegmentOverlapUtil.areContiguous(
                                 oldInterval.getStart(), oldInterval.getEnd(),
                                 nextInterval.getStart(), nextInterval.getEnd())
-                            || SegmentOverlapUtil.computeOverlap(
-                                    nextInterval.getStart(), nextInterval.getEnd(),
-                                    updatedInterval.getStart(), updatedInterval.getEnd())
-                               == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
-
-                        final InternalMedia replacedNextInterval =
-                                new InternalMedia(updatedInterval.getEnd(),
-                                        nextInterval.getEnd());
-                        final TierInternalMedia replacedTierInternalMedia =
-                                new TierInternalMedia(replacedNextInterval);
-                        final TierDataIntervalUpdater nextUpdater =
-                                new TierDataIntervalUpdater(i + 1, replacedTierInternalMedia);
-                        updatedPhoneIntervals.accept(nextUpdater);
-                        updatedPhoneIntervals = nextUpdater.getUpdatedTierData();
+                            || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                        if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                            final InternalMedia replacedNextInterval =
+                                    new InternalMedia(updatedInterval.getEnd(),
+                                            nextInterval.getEnd());
+                            final TierInternalMedia replacedTierInternalMedia =
+                                    new TierInternalMedia(replacedNextInterval);
+                            final TierDataIntervalUpdater nextUpdater =
+                                    new TierDataIntervalUpdater(i + 1, replacedTierInternalMedia);
+                            updatedPhoneIntervals.accept(nextUpdater);
+                            updatedPhoneIntervals = nextUpdater.getUpdatedTierData();
+                        }
                     }
                 }
             }
@@ -1445,7 +1460,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                         .orElse(new Orthography());
 
         Orthography updatedWor =
-                updateWorIntervalsWithInterval(wordIdx, newWordInterval, wor);
+                updateWorIntervalsWithInterval(wordIdx, newWordInterval, wor, modifiers);
 
         final TierEdit<Orthography> worEdit =
                 createWorTierEdit(updatedWor, currentInterval.isValueAdjusting());
@@ -1463,7 +1478,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                                                  Record currentRecord,
                                                  int[] phoneIntervalIndices,
                                                  boolean isStartChange,
-                                                 boolean isEndChange) {
+                                                 boolean isEndChange,
+                                                 int modifiers) {
         final Tier<TierData> phoneIntervalsTier =
                 currentRecord.getTier(UserTierType.PhoneIntervals.getPhonTierName(), TierData.class);
 
@@ -1487,31 +1503,42 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         tierData.accept(updater);
         TierData updatedPhoneIntervals = updater.getUpdatedTierData();
 
+        boolean altPressed = (modifiers & MouseEvent.ALT_DOWN_MASK) != 0;
         if(isStartChange && currentIntervalIndex > phoneIntervalIndices[0]) {
             // adjust previous interval end time
             final var prevInterval = oldPhoneIntervals.get(idx - 1);
-            final InternalMedia adjustedPrevInternalMedia =
-                    new InternalMedia(prevInterval.getStart(),
-                            currentInterval.getStartMarker().getTime());
-            final TierInternalMedia adjustedPrevTierInternalMedia =
-                    new TierInternalMedia(adjustedPrevInternalMedia);
-            final TierDataIntervalUpdater prevUpdater =
-                    new TierDataIntervalUpdater(idx - 1, adjustedPrevTierInternalMedia);
-            updatedPhoneIntervals.accept(prevUpdater);
-            updatedPhoneIntervals = prevUpdater.getUpdatedTierData();
+            final var overlapType = SegmentOverlapUtil.computeOverlap(
+                    prevInterval.getStart(), prevInterval.getEnd(),
+                    currentInterval.getStartMarker().getTime(), currentInterval.getEndMarker().getTime());
+            if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                final InternalMedia adjustedPrevInternalMedia =
+                        new InternalMedia(prevInterval.getStart(),
+                                currentInterval.getStartMarker().getTime());
+                final TierInternalMedia adjustedPrevTierInternalMedia =
+                        new TierInternalMedia(adjustedPrevInternalMedia);
+                final TierDataIntervalUpdater prevUpdater =
+                        new TierDataIntervalUpdater(idx - 1, adjustedPrevTierInternalMedia);
+                updatedPhoneIntervals.accept(prevUpdater);
+                updatedPhoneIntervals = prevUpdater.getUpdatedTierData();
+            }
         } else if(isEndChange
                 && currentIntervalIndex < phoneIntervalIndices[phoneIntervalIndices.length - 1]) {
             // adjust next interval start time
             final var nextInterval = oldPhoneIntervals.get(idx + 1);
-            final InternalMedia adjustedNextInternalMedia =
-                    new InternalMedia(currentInterval.getEndMarker().getTime(),
-                            nextInterval.getEnd());
-            final TierInternalMedia adjustedNextTierInternalMedia =
-                    new TierInternalMedia(adjustedNextInternalMedia);
-            final TierDataIntervalUpdater nextUpdater =
-                    new TierDataIntervalUpdater(idx + 1, adjustedNextTierInternalMedia);
-            updatedPhoneIntervals.accept(nextUpdater);
-            updatedPhoneIntervals = nextUpdater.getUpdatedTierData();
+            final var overlapType = SegmentOverlapUtil.computeOverlap(
+                    currentInterval.getStartMarker().getTime(), currentInterval.getEndMarker().getTime(),
+                    nextInterval.getStart(), nextInterval.getEnd());
+            if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                final InternalMedia adjustedNextInternalMedia =
+                        new InternalMedia(currentInterval.getEndMarker().getTime(),
+                                nextInterval.getEnd());
+                final TierInternalMedia adjustedNextTierInternalMedia =
+                        new TierInternalMedia(adjustedNextInternalMedia);
+                final TierDataIntervalUpdater nextUpdater =
+                        new TierDataIntervalUpdater(idx + 1, adjustedNextTierInternalMedia);
+                updatedPhoneIntervals.accept(nextUpdater);
+                updatedPhoneIntervals = nextUpdater.getUpdatedTierData();
+            }
         }
 
         final TierEdit<TierData> phoneIntervalsEdit =
