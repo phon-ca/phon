@@ -881,9 +881,10 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int idx = currentIntervalIndex - offset;
         if(idx < 0) return;
 
+        final float roundedStart = Math.round(currentInterval.getStartMarker().getTime() * 1000f) / 1000f;
+        final float roundedEnd = Math.round(currentInterval.getEndMarker().getTime() * 1000f) / 1000f;
         final InternalMedia newInterval =
-                new InternalMedia(currentInterval.getStartMarker().getTime(),
-                        currentInterval.getEndMarker().getTime());
+                new InternalMedia(roundedStart, roundedEnd);
 
         final Tier<Orthography> worTier =
                 currentRecord.getTier(UserTierType.Wor.getPhonTierName(), Orthography.class);
@@ -1138,10 +1139,11 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int worOffset = worRecordIntervalIndices.getStart();
         final int wordIdx = wordIntervalIndex - worOffset;
 
+        final float roundedStart = Math.round(currentInterval.getStartMarker().getTime() * 1000f) / 1000f;
+
         // adjust phone interval first
         final InternalMedia newPhoneInterval =
-                new InternalMedia(currentInterval.getStartMarker().getTime(),
-                        phoneInterval.getEnd());
+                new InternalMedia(roundedStart, phoneInterval.getEnd());
         final TierInternalMedia tierInternalMedia =
                 new TierInternalMedia(newPhoneInterval);
 
@@ -1245,10 +1247,11 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int worOffset = worRecordIntervalIndices.getStart();
         final int wordIdx = wordIntervalIndex - worOffset;
 
+        final float roundedEnd = Math.round(currentInterval.getEndMarker().getTime() * 1000f) / 1000f;
+
         // adjust end time of phone interval
         final InternalMedia newPhoneInterval =
-                new InternalMedia(phoneInterval.getStart(),
-                        currentInterval.getEndMarker().getTime());
+                new InternalMedia(phoneInterval.getStart(), roundedEnd);
         final TierInternalMedia tierInternalMedia =
                 new TierInternalMedia(newPhoneInterval);
 
