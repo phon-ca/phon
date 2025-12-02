@@ -1032,15 +1032,58 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                     final int worOffset = worRecordIntervalIndices.getStart();
                     final int wordIdx = wordIntervalIndex - worOffset;
 
+                    // adjust end time of phone interval first, then adjust word interval
+                    final InternalMedia newPhoneInterval = new InternalMedia(phoneInterval.getStart(), currentInterval.getEndMarker().getTime());
+                    final TierInternalMedia tierInternalMedia = new TierInternalMedia(newPhoneInterval);
+                    final TierDataIntervalUpdater updater = new TierDataIntervalUpdater(idx, tierInternalMedia);
+                    final Tier<TierData> phoneIntervalsTier = (Tier<TierData>)currentRecord.getTier(UserTierType.PhoneIntervals.getPhonTierName());
+                    final TierData tierData = phoneIntervalsTier.getValueForTranscriber(getParentView().getEditor().getDataModel().getTranscriber()).orElse(new TierData());
+                    final TierDataIntervalVisitor tierDataIntervalVisitor = new TierDataIntervalVisitor();
+                    tierData.accept(tierDataIntervalVisitor);
+                    final List<IntervalTier.Interval> oldPhoneIntervals = tierDataIntervalVisitor.getIntervals();
+                    tierData.accept(updater);
+                    TierData updatedPhoneIntervals = updater.getUpdatedTierData();
+
+                    final TierDataIntervalVisitor updatedTierDataIntervalVisitor = new TierDataIntervalVisitor();
+                    updatedPhoneIntervals.accept(updatedTierDataIntervalVisitor);
+                    final List<IntervalTier.Interval> updatedPhoneIntervalsList = updatedTierDataIntervalVisitor.getIntervals();
+                    for(int i = 0; i < oldPhoneIntervals.size(); i++) {
+                        final IntervalTier.Interval oldInterval = oldPhoneIntervals.get(i);
+                        final IntervalTier.Interval updatedInterval = updatedPhoneIntervalsList.get(i);
+                        if(oldInterval.getStart() != updatedInterval.getStart() ||
+                                oldInterval.getEnd() != updatedInterval.getEnd()) {
+                            // interval has changed, check next interval if end time has changed
+                            if(oldInterval.getEnd() != updatedInterval.getEnd() && i < oldPhoneIntervals.size() - 1) {
+                                final IntervalTier.Interval nextInterval = oldPhoneIntervals.get(i + 1);
+                                if(SegmentOverlapUtil.areContiguous(oldInterval.getStart(), oldInterval.getEnd(), nextInterval.getStart(), nextInterval.getEnd())
+                                        || SegmentOverlapUtil.computeOverlap(nextInterval.getStart(), nextInterval.getEnd(), updatedInterval.getStart(), updatedInterval.getEnd()) == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                                    final InternalMedia replacedNextInterval = new InternalMedia(updatedInterval.getEnd(), nextInterval.getEnd());
+                                    final TierInternalMedia replacedTierInternalMedia = new TierInternalMedia(replacedNextInterval);
+                                    final TierDataIntervalUpdater nextUpdater = new TierDataIntervalUpdater(i + 1, replacedTierInternalMedia);
+                                    updatedPhoneIntervals.accept(nextUpdater);
+                                    updatedPhoneIntervals = nextUpdater.getUpdatedTierData();
+                                }
+                            }
+                        }
+                    }
+                    LogUtil.info("Updated phone intervals: " + updatedPhoneIntervals);
+
+                    final TierEdit<TierData> phoneIntervalsEdit =
+                            new TierEdit<>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
+                                    getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
+                                    (Tier<TierData>)getParentView().getEditor().currentRecord().getTier(UserTierType.PhoneIntervals.getPhonTierName()), updatedPhoneIntervals, currentInterval.isValueAdjusting());
+                    lastPhoneIntervalsEdit = phoneIntervalsEdit;
+                    getParentView().getEditor().getUndoSupport().postEdit(phoneIntervalsEdit);
+
                     final InternalMedia newInterval = new InternalMedia(wordInterval.getStart(), currentInterval.getEndMarker().getTime());
-                    final WorTierUpdater updater = new WorTierUpdater(wordIdx, newInterval);
+                    final WorTierUpdater worUpdater = new WorTierUpdater(wordIdx, newInterval);
                     final Tier<Orthography> worTier = (Tier<Orthography>)currentRecord.getTier(UserTierType.Wor.getPhonTierName());
                     final Orthography wor = worTier.getValueForTranscriber(getParentView().getEditor().getDataModel().getTranscriber()).orElse(new Orthography());
                     final OrthoIntervalVisitor worIntervalVisitor = new OrthoIntervalVisitor();
                     wor.accept(worIntervalVisitor);
                     final List<IntervalTier.Interval> worIntervals = worIntervalVisitor.getIntervals();
-                    wor.accept(updater);
-                    Orthography updatedWor = updater.getUpdatedOrthography();
+                    wor.accept(worUpdater);
+                    Orthography updatedWor = worUpdater.getUpdatedOrthography();
                     final OrthoIntervalVisitor updatedWorIntervalVisitor = new OrthoIntervalVisitor();
                     updatedWor.accept(updatedWorIntervalVisitor);
                     final List<IntervalTier.Interval> updatedWorIntervals = updatedWorIntervalVisitor.getIntervals();
@@ -1061,16 +1104,6 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                                     updatedWor = nextUpdater.getUpdatedOrthography();
                                 }
                             }
-                            if(oldInterval.getStart() != updatedInterval.getStart() && i > 0) {
-                                final IntervalTier.Interval prevInterval = worIntervals.get(i - 1);
-                                if(SegmentOverlapUtil.areContiguous(oldInterval.getStart(), oldInterval.getEnd(), prevInterval.getStart(), prevInterval.getEnd())
-                                        || SegmentOverlapUtil.computeOverlap(prevInterval.getStart(), prevInterval.getEnd(), updatedInterval.getStart(), updatedInterval.getEnd()) == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
-                                    final InternalMedia replacedPrevInterval = new InternalMedia(prevInterval.getStart(), updatedInterval.getStart());
-                                    final WorTierUpdater prevUpdater = new WorTierUpdater(i - 1, replacedPrevInterval);
-                                    updatedWor.accept(prevUpdater);
-                                    updatedWor = prevUpdater.getUpdatedOrthography();
-                                }
-                            }
                         }
                     }
                     LogUtil.info("Updated wor: " + updatedWor);
@@ -1079,6 +1112,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                             new TierEdit<>(getParentView().getEditor().getSession(), getParentView().getEditor().getEventManager(),
                                     getParentView().getEditor().getDataModel().getTranscriber(), getParentView().getEditor().currentRecord(),
                                     (Tier<Orthography>)getParentView().getEditor().currentRecord().getTier(UserTierType.Wor.getPhonTierName()), updatedWor, currentInterval.isValueAdjusting());
+                    worEdit.setSource(recordDataIntervalTiers.get(UserTierType.PhoneIntervals.getPhonTierName()));
                     lastWorEdit = worEdit;
                     getParentView().getEditor().getUndoSupport().postEdit(worEdit);
                 } else {

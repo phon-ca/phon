@@ -19,6 +19,7 @@ public class UpdateSegmentAfterWor implements TierEdit.DependentTierChanges<Orth
 
     @Override
     public void performDependentTierChanges(TierEdit<Orthography> tierEdit) {
+        if(tierEdit.isValueAdjusting()) return;
         if(!tierEdit.getTier().getName().equals(UserTierType.Wor.getPhonTierName())) {
             return;
         }
@@ -45,9 +46,6 @@ public class UpdateSegmentAfterWor implements TierEdit.DependentTierChanges<Orth
             newSegment.setStartTime(minTime);
             newSegment.setEndTime(maxTime);
             record.setMediaSegment(newSegment);
-
-            LogUtil.info("Updating segment " + newSegment);
-
             tierEdit.putAdditionalTierChange(SystemTierType.Segment.getName(), currentSegment, newSegment);
             tierEdit.fireTierChange(record.getSegmentTier(), currentSegment, newSegment);
         }
