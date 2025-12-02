@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.undo.AbstractUndoableEdit;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
@@ -925,6 +926,9 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int idx = currentIntervalIndex - offset;
         if(idx < 0) return;
 
+        int modifiers = currentInterval.getModifiers();
+        boolean altPressed = (modifiers & MouseEvent.ALT_DOWN_MASK) != 0;
+
         final InternalMedia newInterval =
                 new InternalMedia(currentInterval.getStartMarker().getTime(), currentInterval.getEndMarker().getTime());
         final Tier<TierData> tierDataTier =
@@ -952,47 +956,49 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
                 if(oldInterval.getStart() != updatedInterval.getStart() && i > 0) {
                     final IntervalTier.Interval prevInterval = tierDataIntervals.get(i - 1);
+                    final var overlapType = SegmentOverlapUtil.computeOverlap(
+                            prevInterval.getStart(), prevInterval.getEnd(),
+                            updatedInterval.getStart(), updatedInterval.getEnd());
                     if(SegmentOverlapUtil.areContiguous(
                                 oldInterval.getStart(), oldInterval.getEnd(),
                                 prevInterval.getStart(), prevInterval.getEnd())
-                            || SegmentOverlapUtil.computeOverlap(
-                                    prevInterval.getStart(), prevInterval.getEnd(),
-                                    updatedInterval.getStart(), updatedInterval.getEnd())
-                               == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                            || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                        if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                            final InternalMedia replacedPrevInterval =
+                                    new InternalMedia(prevInterval.getStart(), updatedInterval.getStart());
+                            final TierDataIntervalUpdater prevUpdater =
+                                    new TierDataIntervalUpdater(i - 1, new TierInternalMedia(replacedPrevInterval));
+                            updatedTierData.accept(prevUpdater);
+                            updatedTierData = prevUpdater.getUpdatedTierData();
 
-                        final InternalMedia replacedPrevInterval =
-                                new InternalMedia(prevInterval.getStart(), updatedInterval.getStart());
-                        final TierDataIntervalUpdater prevUpdater =
-                                new TierDataIntervalUpdater(i - 1, new TierInternalMedia(replacedPrevInterval));
-                        updatedTierData.accept(prevUpdater);
-                        updatedTierData = prevUpdater.getUpdatedTierData();
-
-                        // refresh intervals after mutation
-                        updatedTierDataIntervalVisitor.reset();
-                        updatedTierData.accept(updatedTierDataIntervalVisitor);
+                            // refresh intervals after mutation
+                            updatedTierDataIntervalVisitor.reset();
+                            updatedTierData.accept(updatedTierDataIntervalVisitor);
+                        }
                     }
                 }
 
                 if(oldInterval.getEnd() != updatedInterval.getEnd() && i < tierDataIntervals.size() - 1) {
                     final IntervalTier.Interval nextInterval = tierDataIntervals.get(i + 1);
+                    final var overlapType = SegmentOverlapUtil.computeOverlap(
+                            nextInterval.getStart(), nextInterval.getEnd(),
+                            updatedInterval.getStart(), updatedInterval.getEnd());
                     if(SegmentOverlapUtil.areContiguous(
                                 oldInterval.getStart(), oldInterval.getEnd(),
                                 nextInterval.getStart(), nextInterval.getEnd())
-                            || SegmentOverlapUtil.computeOverlap(
-                                    nextInterval.getStart(), nextInterval.getEnd(),
-                                    updatedInterval.getStart(), updatedInterval.getEnd())
-                               == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_START) {
+                            || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                        if(!altPressed || overlapType == SegmentOverlapUtil.OverlapType.PARTIAL_OVERLAP_END) {
+                            final InternalMedia replacedNextInterval =
+                                    new InternalMedia(updatedInterval.getEnd(), nextInterval.getEnd());
+                            final TierDataIntervalUpdater nextUpdater =
+                                    new TierDataIntervalUpdater(i + 1, new TierInternalMedia(replacedNextInterval));
+                            updatedTierData.accept(nextUpdater);
+                            updatedTierData = nextUpdater.getUpdatedTierData();
 
-                        final InternalMedia replacedNextInterval =
-                                new InternalMedia(updatedInterval.getEnd(), nextInterval.getEnd());
-                        final TierDataIntervalUpdater nextUpdater =
-                                new TierDataIntervalUpdater(i + 1, new TierInternalMedia(replacedNextInterval));
-                        updatedTierData.accept(nextUpdater);
-                        updatedTierData = nextUpdater.getUpdatedTierData();
-
-                        // refresh intervals after mutation
-                        updatedTierDataIntervalVisitor.reset();
-                        updatedTierData.accept(updatedTierDataIntervalVisitor);
+                            // refresh intervals after mutation
+                            updatedTierDataIntervalVisitor.reset();
+                            updatedTierData.accept(updatedTierDataIntervalVisitor);
+                        }
                     }
                 }
             }

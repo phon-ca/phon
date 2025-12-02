@@ -372,6 +372,9 @@ public class TimeComponentUI extends ComponentUI {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if(currentlyDraggedMarker != null) {
+                int modifiers = e.getModifiersEx();
+                currentlyDraggedInterval.setModifiers(modifiers);
+
 				float newTime = timeComp.timeAtX(e.getX());
 				float oldTime = currentlyDraggedMarker.getTime();
 				int oldX = (int)Math.round(timeComp.xForTime(oldTime));

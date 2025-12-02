@@ -312,6 +312,8 @@ public class TimeUIModel {
 		private Color color = Color.black;
 		
 		private boolean repaintOnTimeChange = true;
+
+        private int modifiers = 0;
 		
 		private TimeComponent owner = null;
 
@@ -338,7 +340,17 @@ public class TimeUIModel {
 		public void setRepaintOnTimeChange(boolean repaintOnTimeChange) {
 			this.repaintOnTimeChange = repaintOnTimeChange;
 		}
-		
+
+        public int getModifiers() {
+            return this.modifiers;
+        }
+
+        public void setModifiers(int modifiers) {
+            var oldVal = this.modifiers;
+            this.modifiers = modifiers;
+            propSupport.firePropertyChange("modifiers", oldVal, modifiers);
+        }
+
 		public float getTime() {
 			return this.time;
 		}
@@ -455,6 +467,8 @@ public class TimeUIModel {
 
 		/* Visible */
 		private boolean visible = true;
+
+        private int modifiers = 0;
 		
 		/* Owner, if not null interval will only be painted on owner component */
 		private TimeComponent owner = null;
@@ -478,6 +492,16 @@ public class TimeUIModel {
 			this.endMarker = endMarker;
 			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener(this, "endMarker.", propSupport));
 		}
+
+        public int getModifiers() {
+            return this.modifiers;
+        }
+
+        public void setModifiers(int modifiers) {
+            var oldVal = this.modifiers;
+            this.modifiers = modifiers;
+            propSupport.firePropertyChange("modifiers", oldVal, modifiers);
+        }
 
         public boolean isAutoSwapMarkers() {
             return this.autoSwapMarkers;
