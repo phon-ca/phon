@@ -864,6 +864,12 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         } else {
             // other tiers not yet supported
         }
+
+        // update selection in parent view
+        getParentView().setSelection(
+                currentInterval.getStartMarker().getTime(),
+                currentInterval.getEndMarker().getTime()
+        );
     }
 
     /**
