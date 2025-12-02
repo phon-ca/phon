@@ -1093,8 +1093,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 getParentView().getEditor().getEventManager(),
                 getParentView().getEditor().getDataModel().getTranscriber(),
                 getParentView().getEditor().currentRecord(),
-                (Tier<Orthography>)getParentView().getEditor().currentRecord()
-                        .getTier(UserTierType.Wor.getPhonTierName()),
+                getParentView().getEditor().currentRecord()
+                        .getTier(UserTierType.Wor.getPhonTierName(), Orthography.class),
                 updatedWor,
                 valueAdjusting
         );
@@ -1110,8 +1110,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
                 getParentView().getEditor().getEventManager(),
                 getParentView().getEditor().getDataModel().getTranscriber(),
                 getParentView().getEditor().currentRecord(),
-                (Tier<TierData>)getParentView().getEditor().currentRecord()
-                        .getTier(UserTierType.PhoneIntervals.getPhonTierName()),
+                getParentView().getEditor().currentRecord()
+                        .getTier(UserTierType.PhoneIntervals.getPhonTierName(), TierData.class),
                 updated,
                 valueAdjusting
         );
