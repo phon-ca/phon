@@ -131,6 +131,26 @@ public class UpdateWorAfterOrthography implements TierEdit.DependentTierChanges<
         wordIntervalsTier.setValue(newWordIntervals);
         tierEdit.putAdditionalTierChange(wordIntervalsTier.getName(), oldWordIntervals, newWordIntervals);
         tierEdit.fireTierChange(wordIntervalsTier, oldWordIntervals, newWordIntervals);
+
+        if(orthoWords.size() != worWords.size()) {
+            final TierEdit<Orthography> fakeWorEdit = new TierEdit<>(tierEdit.getSession(),
+                    tierEdit.getEditorEventManager(), tierEdit.getTranscriber(), tierEdit.getRecord(),
+                    wordIntervalsTier, newWordIntervals, tierEdit.isValueAdjusting()) {
+                @Override
+                public <R> void putAdditionalTierChange(String tierName, R oldValue, R value) {
+                    tierEdit.putAdditionalTierChange(tierName, oldValue, value);
+                }
+
+                @Override
+                public <R> void fireTierChange(Tier<R> tier, R oldValue, R newValue) {
+                    tierEdit.fireTierChange(tier, oldValue, newValue);
+                }
+            };
+            fakeWorEdit.setOldValue(oldWordIntervals);
+            // update Phone intervals tier as well
+            final UpdatePhointAfterWor updatePhointAfterWor = new UpdatePhointAfterWor();
+            updatePhointAfterWor.performDependentTierChanges(fakeWorEdit);
+        }
     }
 
     @Override

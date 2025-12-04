@@ -75,7 +75,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	/**
 	 * Old value
 	 */
-	private final T oldValue;
+	private T oldValue;
 	
 	/**
 	 * New value
@@ -241,6 +241,10 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	public T getOldValue() {
 		return oldValue;
 	}
+
+    public void setOldValue(T oldValue) {
+        this.oldValue = oldValue;
+    }
 
 	public Tier<T> getTier() {
 		return tier;
