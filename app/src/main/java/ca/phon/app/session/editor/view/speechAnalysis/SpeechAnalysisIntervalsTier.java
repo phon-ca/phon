@@ -1044,7 +1044,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final int[] wordIntervals =
                 wordIntervalTier.getTimelineTier().overlappingIntervals(
                         phoneInterval,
-                        SegmentOverlapUtil.OverlapType.IS_FULLY_CONTAINED
+                        SegmentOverlapUtil.OverlapType.IS_FULLY_CONTAINED,
+                        SegmentOverlapUtil.OverlapType.FULLY_CONTAINS
                 );
         if(wordIntervals.length == 0) return;
 
