@@ -20,6 +20,7 @@ import ca.phon.session.tierdata.TierInternalMedia;
 import ca.phon.session.tierdata.TierString;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -52,9 +53,12 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
         final Tier<TierData> phoneIntervalsTier = record.getTier(phoTierDesc.getName(), TierData.class);
 
         final TierData oldPhoneIntervalsTierData = phoneIntervalsTier.getValueForTranscriber(tierEdit.getTranscriber()).orElse(new TierData());
-        final TierDataIntervalVisitor oldPhoneIntervalVisitor = new TierDataIntervalVisitor();
-        oldPhoneIntervalsTierData.accept(oldPhoneIntervalVisitor);
-        final List<IntervalTier.Interval> oldPhoneIntervals = oldPhoneIntervalVisitor.getIntervals();
+//        final TierDataIntervalVisitor oldPhoneIntervalVisitor = new TierDataIntervalVisitor();
+//        oldPhoneIntervalsTierData.accept(oldPhoneIntervalVisitor);
+//        final List<IntervalTier.Interval> oldPhoneIntervals = oldPhoneIntervalVisitor.getIntervals();
+
+        final var alignedWordAndPhoneIntervals = WordAndPhoneIntervalAligner.alignedWordAndPhoneIntervals(wordIntervalsTier, phoneIntervalsTier, tierEdit.getTranscriber());
+        final Iterator<IntervalTier.Interval[]> phoneIntervalsIter = alignedWordAndPhoneIntervals.values().iterator();
 
         final List<TierElement> newPhoneIntervals = new ArrayList<>();
         final TierAlignment ipaToWorAlignment = TierAligner.alignTiers(ipaTier, wordIntervalsTier, tierEdit.getTranscriber());
@@ -64,6 +68,8 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
             final IPATranscript ipaWord = (IPATranscript) alignedElements.getObj1();
             final Orthography wordIntervalPair = (Orthography) alignedElements.getObj2();
             if(wordIntervalPair == null) continue;
+            final IntervalTier.Interval[] previousIntervals = phoneIntervalsIter.hasNext() ? phoneIntervalsIter.next() : null;
+
             if(wordIntervalPair.elementAt(wordIntervalPair.length()-1) instanceof InternalMedia wordInterval) {
                 final float duration = wordInterval.getEndTime() - wordInterval.getStartTime();
                 final IPATranscript audiblePhones = ipaWord != null ? ipaWord.audiblePhones() : new IPATranscript();
@@ -80,7 +86,7 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
                     // shouldn't happen, but just in case
                     if(numUnits <= 0) numUnits = 1;
 
-                    boolean overwriteIntervals = (numUnits != oldPhoneIntervals.size());
+                    boolean overwriteIntervals = (previousIntervals == null ||  numUnits != previousIntervals.length);
 
                     final float phoneDuration = duration / numUnits;
                     final StringBuilder sb = new StringBuilder();
@@ -96,13 +102,13 @@ public class UpdatePhointAfterIPAActual implements TierEdit.DependentTierChanges
                         newPhoneIntervals.add(ipaString);
 
                         if(overwriteIntervals) {
-                            final float startTime = wordInterval.getStartTime() + (unitIdx * phoneDuration);
-                            final float endTime = startTime + phoneDuration;
+                            final float startTime = Math.max(wordInterval.getStartTime(), wordInterval.getStartTime() + (unitIdx * phoneDuration));
+                            final float endTime = Math.min(wordInterval.getEndTime(), startTime + phoneDuration);
                             final TierInternalMedia phoneInterval = new TierInternalMedia(new InternalMedia(startTime, endTime));
                             newPhoneIntervals.add(phoneInterval);
                         } else {
                             // reuse old interval
-                            final IntervalTier.Interval oldInterval = oldPhoneIntervals.get(unitIdx);
+                            final IntervalTier.Interval oldInterval = previousIntervals[unitIdx];
                             final TierInternalMedia oldIntervalEle = new TierInternalMedia(new InternalMedia(oldInterval.getStart(), oldInterval.getEnd()));
                             newPhoneIntervals.add(oldIntervalEle);
                         }

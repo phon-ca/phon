@@ -122,8 +122,8 @@ public class UpdatePhointAfterWor implements TierEdit.DependentTierChanges<Ortho
                         final float phoneEnd = alignedPhoneInterval.getEnd();
                         final float startRatio = (phoneStart - oldWordStart) / oldWordDuration;
                         final float endRatio = (phoneEnd - oldWordStart) / oldWordDuration;
-                        final float newPhoneStart = newWordStart + (startRatio * newWordDuration);
-                        final float newPhoneEnd = newWordStart + (endRatio * newWordDuration);
+                        final float newPhoneStart = Math.max(newWordStart, newWordStart + (startRatio * newWordDuration));
+                        final float newPhoneEnd = Math.min(newWordEnd, newWordStart + (endRatio * newWordDuration));
                         final TierString ts = new TierString(alignedPhoneInterval.getLabel());
                         final TierInternalMedia tim = new TierInternalMedia(
                                 new InternalMedia(newPhoneStart, newPhoneEnd));
@@ -148,8 +148,8 @@ public class UpdatePhointAfterWor implements TierEdit.DependentTierChanges<Ortho
                         for (int phoneIndex = 0; phoneIndex < audiblePhones.length(); phoneIndex++) {
                             final IPAElement ele = audiblePhones.elementAt(phoneIndex);
                             final TierString ipaString = new TierString(ele.toString());
-                            final float startTime = wordInterval.getStartTime() + (phoneIndex * phoneDuration);
-                            final float endTime = startTime + phoneDuration;
+                            final float startTime = Math.max(wordInterval.getStartTime(), wordInterval.getStartTime() + (phoneIndex * phoneDuration));
+                            final float endTime = Math.min(wordInterval.getEndTime(), startTime + phoneDuration);
                             final TierInternalMedia phoneInterval = new TierInternalMedia(new InternalMedia(startTime, endTime));
                             newPhoneIntervals.add(ipaString);
                             newPhoneIntervals.add(phoneInterval);

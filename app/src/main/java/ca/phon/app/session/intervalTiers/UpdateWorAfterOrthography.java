@@ -117,10 +117,6 @@ public class UpdateWorAfterOrthography implements TierEdit.DependentTierChanges<
                 for(int i = 0; i < orthoWords.size(); i++) {
                     float startTime = lastEndTime;
                     float endTime = Math.min(segment.getEndTime(), startTime + wordDuration);
-
-                    // convert to 3 decimal places
-                    startTime = Math.round(startTime * 1000f) / 1000f;
-                    endTime = Math.round(endTime * 1000f) / 1000f;
                     lastEndTime = endTime;
 
                     final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
