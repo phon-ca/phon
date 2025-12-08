@@ -23,6 +23,9 @@ import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.undo.UndoableEditSupport;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +59,66 @@ public class ViewIconStrip extends IconStrip {
         this.undoSupport= undoableEditSupport;
         this.session = session;
         initButtons();
+        initKeystrokes();
+    }
+
+    private void initKeystrokes() {
+        final KeyStroke transcriptKs = KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(TranscriptView.VIEW_NAME, transcriptKs);
+
+        final KeyStroke participantsKs = KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(ParticipantsView.VIEW_NAME, participantsKs);
+
+        final KeyStroke tierManagementKs = KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(TierManagementView.VIEW_NAME, tierManagementKs);
+
+        final KeyStroke mediaPlayerKs = KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(MediaPlayerEditorView.VIEW_NAME, mediaPlayerKs);
+
+        final KeyStroke speechAnalysisKs = KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(SpeechAnalysisEditorView.VIEW_NAME, speechAnalysisKs);
+
+        final KeyStroke timelineKs = KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(TimelineView.VIEW_NAME, timelineKs);
+
+        final KeyStroke sessionCheckKs = KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(SessionCheckView.VIEW_NAME, sessionCheckKs);
+
+        final KeyStroke ipaDictionaryKs = KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(IPADictionaryView.VIEW_NAME, ipaDictionaryKs);
+
+        final KeyStroke searchKs = KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(SearchView.VIEW_NAME, searchKs);
+
+        final KeyStroke syllabificationAlignmentKs = KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        setupViewKeystroke(SyllabificationAlignmentEditorView.VIEW_NAME, syllabificationAlignmentKs);
+
+        int pluginIdx = 0;
+        for(String viewName: viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS)) {
+            final KeyStroke pluginViewKs = KeyStroke.getKeyStroke(KeyEvent.VK_1 + pluginIdx++, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_DOWN_MASK);
+            setupViewKeystroke(viewName, pluginViewKs);
+        }
+    }
+
+    private void setupViewKeystroke(String viewName, KeyStroke keyStroke) {
+        final InputMap inputMap = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        final ActionMap actionMap = this.getActionMap();
+
+        final Action showToggleViewAct = new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                final boolean isShowing = viewModel.isShowing(viewName);
+                if(isShowing) {
+                    viewModel.showView(viewName);
+                } else {
+                    final ShowHideViewEdit showHideEdit =
+                            new ShowHideViewEdit(session, editorEventManager, viewModel, viewName, true);
+                    undoSupport.postEdit(showHideEdit);
+                }
+            }
+        };
+        inputMap.put(keyStroke, viewName);
+        actionMap.put(viewName, showToggleViewAct);
     }
 
     protected void initButtons() {
