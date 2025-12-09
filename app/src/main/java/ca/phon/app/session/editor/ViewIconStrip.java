@@ -16,6 +16,7 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.session.Session;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
+import ca.phon.ui.KeyStrokeUtil;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -59,45 +60,6 @@ public class ViewIconStrip extends IconStrip {
         this.undoSupport= undoableEditSupport;
         this.session = session;
         initButtons();
-        initKeystrokes();
-    }
-
-    private void initKeystrokes() {
-        final KeyStroke transcriptKs = KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(TranscriptView.VIEW_NAME, transcriptKs);
-
-        final KeyStroke participantsKs = KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(ParticipantsView.VIEW_NAME, participantsKs);
-
-        final KeyStroke tierManagementKs = KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(TierManagementView.VIEW_NAME, tierManagementKs);
-
-        final KeyStroke mediaPlayerKs = KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(MediaPlayerEditorView.VIEW_NAME, mediaPlayerKs);
-
-        final KeyStroke speechAnalysisKs = KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(SpeechAnalysisEditorView.VIEW_NAME, speechAnalysisKs);
-
-        final KeyStroke timelineKs = KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(TimelineView.VIEW_NAME, timelineKs);
-
-        final KeyStroke sessionCheckKs = KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(SessionCheckView.VIEW_NAME, sessionCheckKs);
-
-        final KeyStroke ipaDictionaryKs = KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(IPADictionaryView.VIEW_NAME, ipaDictionaryKs);
-
-        final KeyStroke searchKs = KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(SearchView.VIEW_NAME, searchKs);
-
-        final KeyStroke syllabificationAlignmentKs = KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-        setupViewKeystroke(SyllabificationAlignmentEditorView.VIEW_NAME, syllabificationAlignmentKs);
-
-        int pluginIdx = 0;
-        for(String viewName: viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS)) {
-            final KeyStroke pluginViewKs = KeyStroke.getKeyStroke(KeyEvent.VK_1 + pluginIdx++, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_DOWN_MASK);
-            setupViewKeystroke(viewName, pluginViewKs);
-        }
     }
 
     private void setupViewKeystroke(String viewName, KeyStroke keyStroke) {
@@ -123,14 +85,38 @@ public class ViewIconStrip extends IconStrip {
 
     protected void initButtons() {
         if(side == SwingConstants.LEFT) {
-            viewButtons.put(TranscriptView.VIEW_NAME, createViewButton(TranscriptView.VIEW_NAME));
-            viewButtons.put(ParticipantsView.VIEW_NAME, createViewButton(ParticipantsView.VIEW_NAME));
-            viewButtons.put(TierManagementView.VIEW_NAME, createViewButton(TierManagementView.VIEW_NAME));
-            viewButtons.put(MediaPlayerEditorView.VIEW_NAME, createViewButton(MediaPlayerEditorView.VIEW_NAME));
-            viewButtons.put(SpeechAnalysisEditorView.VIEW_NAME, createViewButton(SpeechAnalysisEditorView.VIEW_NAME));
-            viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
-            viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
-            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
+            viewButtons.put(TranscriptView.VIEW_NAME, createViewButton(
+                TranscriptView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(ParticipantsView.VIEW_NAME, createViewButton(
+                ParticipantsView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(TierManagementView.VIEW_NAME, createViewButton(
+                TierManagementView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(MediaPlayerEditorView.VIEW_NAME, createViewButton(
+                MediaPlayerEditorView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(SpeechAnalysisEditorView.VIEW_NAME, createViewButton(
+                SpeechAnalysisEditorView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(TimelineView.VIEW_NAME, createViewButton(
+                TimelineView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(
+                SessionCheckView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(
+                IPADictionaryView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
 
             add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
@@ -140,9 +126,18 @@ public class ViewIconStrip extends IconStrip {
             add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);
             add(viewButtons.get(SessionCheckView.VIEW_NAME), IconStripPosition.RIGHT);
         } else {
-            viewButtons.put(SearchView.VIEW_NAME, createViewButton(SearchView.VIEW_NAME));
-            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
-            viewButtons.put(SyllabificationAlignmentEditorView.VIEW_NAME, createViewButton(SyllabificationAlignmentEditorView.VIEW_NAME));
+            viewButtons.put(SearchView.VIEW_NAME, createViewButton(
+                SearchView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(
+                IPADictionaryView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
+            viewButtons.put(SyllabificationAlignmentEditorView.VIEW_NAME, createViewButton(
+                SyllabificationAlignmentEditorView.VIEW_NAME,
+                KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+            ));
 
             add(viewButtons.get(SearchView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.LEFT);
@@ -150,8 +145,13 @@ public class ViewIconStrip extends IconStrip {
 
             var pluginViews = viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS);
             if(pluginViews != null) {
+                int pluginIdx = 0;
                 for (String viewName : pluginViews) {
-                    viewButtons.put(viewName, createViewButton(viewName));
+                    KeyStroke pluginViewKs = KeyStroke.getKeyStroke(
+                        KeyEvent.VK_1 + pluginIdx++,
+                        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_DOWN_MASK
+                    );
+                    viewButtons.put(viewName, createViewButton(viewName, pluginViewKs));
                     add(viewButtons.get(viewName), IconStripPosition.RIGHT);
                 }
             }
@@ -239,7 +239,7 @@ public class ViewIconStrip extends IconStrip {
         menu.getPopupMenu().show(source, 0, source.getHeight());
     }
 
-    public FlatButton createViewButton(String viewName) {
+    public FlatButton createViewButton(String viewName, KeyStroke keyStroke) {
         final IconData iconData = getViewIcon(viewName);
         final Action showHideAct = PhonUIAction.runnable(() -> {
             final ShowHideViewEdit showHideEdit =
@@ -253,11 +253,16 @@ public class ViewIconStrip extends IconStrip {
         final FlatButton retVal = createButton(showHideAct);
         retVal.setSelected(viewModel.isShowing(viewName));
         retVal.setPadding(2);
-        retVal.setPopupText(viewName);
+        // make string from keystroke
+        retVal.setPopupText(viewName + " (" + KeyStrokeUtil.keyStrokeToString(keyStroke) + ")");
         if(side == SwingConstants.LEFT)
             retVal.setPopupLocation(SwingConstants.EAST);
         else
             retVal.setPopupLocation(SwingConstants.WEST);
+
+        if(keyStroke != null) {
+            setupViewKeystroke(viewName, keyStroke);
+        }
         return retVal;
     }
 
