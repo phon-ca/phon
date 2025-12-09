@@ -32,9 +32,11 @@ import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.TableColumn;
 import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Properties;
 
 /**
  * Participants view for session editor.  This view displays a list of participants in the session.
@@ -271,5 +273,35 @@ public class ParticipantsView extends EditorView {
 	public DockPosition getPreferredDockPosition() {
 		return DockPosition.CENTER;
 	}
-	
+
+    @Override
+    public Properties getStateProperties() {
+        final Properties props = new Properties();
+
+        final StringBuilder visibleCols = new StringBuilder();
+        for(int i = 0; i < participantTable.getColumnCount(false); i++) {
+            final TableColumn col = participantTable.getColumnModel().getColumn(i);
+            if(participantTable.getColumnExt(col.getIdentifier()).isVisible()) {
+                if(!visibleCols.isEmpty())
+                    visibleCols.append(",");
+                visibleCols.append(col.getIdentifier().toString());
+            }
+        }
+        props.setProperty("visibleColumns", visibleCols.toString());
+
+        return props;
+    }
+
+    @Override
+    public void loadStateProperties(Properties props) {
+        final String visibleColsStr = props.getProperty("visibleColumns", "");
+        final String[] visibleCols = visibleColsStr.split(",");
+
+        for(String colId:visibleCols) {
+            if(!colId.isEmpty()) {
+                participantTable.getColumnExt(colId).setVisible(true);
+            }
+        }
+    }
+
 }

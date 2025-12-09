@@ -62,6 +62,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -282,7 +283,8 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		saveButton.setIconSelectedColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_ICON_SELECTED_COLOR));
 		saveButton.setText("");
 		saveButton.setToolTipText(null);
-		saveButton.setPopupText("Save session");
+        final KeyStroke saveKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        saveButton.setPopupText("Save session (" + KeyStrokeUtil.keyStrokeToString(saveKs) + ")");
 		saveButton.setPopupLocation(SwingConstants.EAST);
 		saveButton.setEnabled(isModified());
 
