@@ -27,11 +27,14 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.table.TableColumnExt;
+import org.jdesktop.swingx.table.TableColumnModelExt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -88,6 +91,11 @@ public class TierManagementView extends EditorView {
 	private final AtomicReference<List<TierViewItem>> tierOrderRef = 
 			new AtomicReference<List<TierViewItem>>(null);
 	
+	private static final String COLUMN_PREFIX = "column.";
+	private static final String VISIBLE_SUFFIX = ".visible";
+	private static final String WIDTH_SUFFIX = ".width";
+	private static final String ORDER_SUFFIX = ".order";
+
 	/**
 	 * Constructor
 	 */
@@ -538,19 +546,82 @@ public class TierManagementView extends EditorView {
 
     @Override
     public void loadStateProperties(Properties props) {
+		final TableColumnModel columnModel = tierOrderingTable.getColumnModel();
+		if(columnModel instanceof TableColumnModelExt columnModelExt) {
+			// Load column configuration
+			for (int i = 0; i < tierOrderingTable.getModel().getColumnCount(); i++) {
+				String identifier = tierOrderingTable.getModel().getColumnName(i);
+				TableColumnExt column = columnModelExt.getColumnExt(identifier);
 
+				// Load visibility
+				String visProp = props.getProperty(COLUMN_PREFIX + identifier + VISIBLE_SUFFIX);
+				if (visProp != null) {
+					column.setVisible(Boolean.parseBoolean(visProp));
+				}
+
+				// Load width
+				String widthProp = props.getProperty(COLUMN_PREFIX + identifier + WIDTH_SUFFIX);
+				if (widthProp != null) {
+					try {
+						int width = Integer.parseInt(widthProp);
+						column.setPreferredWidth(width);
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
+				}
+
+				final int modelIndex = i;
+				SwingUtilities.invokeLater(() -> {
+					// Load order (view index)
+					String orderProp = props.getProperty(COLUMN_PREFIX + identifier + ORDER_SUFFIX);
+					if (orderProp != null) {
+						try {
+							int viewIndex = Integer.parseInt(orderProp);
+							int currentViewIndex = tierOrderingTable.convertColumnIndexToView(modelIndex);
+							if (currentViewIndex != viewIndex) {
+								columnModel.moveColumn(currentViewIndex, viewIndex);
+							}
+						} catch (NumberFormatException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
     }
 
     @Override
     public Properties getStateProperties() {
         final Properties props = new Properties();
 
+		final TableColumnModel columnModel = tierOrderingTable.getColumnModel();
+		if(columnModel instanceof TableColumnModelExt columnModelExt) {
+			// Save column configuration
+			for (int i = 0; i < tierOrderingTable.getModel().getColumnCount(); i++) {
+				String identifier = tierOrderingTable.getModel().getColumnName(i);
+				TableColumnExt column = columnModelExt.getColumnExt(identifier);
 
+				// Save visibility
+				props.setProperty(COLUMN_PREFIX + identifier + VISIBLE_SUFFIX,
+						String.valueOf(column.isVisible()));
+
+				// Save width
+				props.setProperty(COLUMN_PREFIX + identifier + WIDTH_SUFFIX,
+						String.valueOf(column.getWidth()));
+
+				// Save order (view index)
+				int viewIndex = tierOrderingTable.convertColumnIndexToView(i);
+				if (viewIndex >= 0) {
+					props.setProperty(COLUMN_PREFIX + identifier + ORDER_SUFFIX,
+							String.valueOf(viewIndex));
+				}
+			}
+		}
 
         return props;
     }
 
-    @Override
+	@Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
 		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
