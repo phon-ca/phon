@@ -29,10 +29,13 @@ import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.table.TableColumnExt;
+import org.jdesktop.swingx.table.TableColumnModelExt;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.*;
@@ -274,32 +277,84 @@ public class ParticipantsView extends EditorView {
 		return DockPosition.CENTER;
 	}
 
+    private static final String COLUMN_PREFIX = "column.";
+    private static final String VISIBLE_SUFFIX = ".visible";
+    private static final String WIDTH_SUFFIX = ".width";
+    private static final String ORDER_SUFFIX = ".order";
+
     @Override
     public Properties getStateProperties() {
         final Properties props = new Properties();
 
-        final StringBuilder visibleCols = new StringBuilder();
-        for(int i = 0; i < participantTable.getColumnCount(false); i++) {
-            final TableColumn col = participantTable.getColumnModel().getColumn(i);
-            if(participantTable.getColumnExt(col.getIdentifier()).isVisible()) {
-                if(!visibleCols.isEmpty())
-                    visibleCols.append(",");
-                visibleCols.append(col.getIdentifier().toString());
+        final TableColumnModel columnModel = participantTable.getColumnModel();
+        if(columnModel instanceof TableColumnModelExt columnModelExt) {
+            // Save column configuration
+            for (int i = 0; i < participantTable.getModel().getColumnCount(); i++) {
+                String identifier = participantTable.getModel().getColumnName(i);
+                TableColumnExt column = columnModelExt.getColumnExt(identifier);
+
+                // Save visibility
+                props.setProperty(COLUMN_PREFIX + identifier + VISIBLE_SUFFIX,
+                        String.valueOf(column.isVisible()));
+
+                // Save width
+                props.setProperty(COLUMN_PREFIX + identifier + WIDTH_SUFFIX,
+                        String.valueOf(column.getWidth()));
+
+                // Save order (view index)
+                int viewIndex = participantTable.convertColumnIndexToView(i);
+                if (viewIndex >= 0) {
+                    props.setProperty(COLUMN_PREFIX + identifier + ORDER_SUFFIX,
+                            String.valueOf(viewIndex));
+                }
             }
         }
-        props.setProperty("visibleColumns", visibleCols.toString());
 
         return props;
     }
 
     @Override
     public void loadStateProperties(Properties props) {
-        final String visibleColsStr = props.getProperty("visibleColumns", "");
-        final String[] visibleCols = visibleColsStr.split(",");
+        final TableColumnModel columnModel = participantTable.getColumnModel();
+        if(columnModel instanceof TableColumnModelExt columnModelExt) {
+            // Load column configuration
+            for (int i = 0; i < participantTable.getModel().getColumnCount(); i++) {
+                String identifier = participantTable.getModel().getColumnName(i);
+                TableColumnExt column = columnModelExt.getColumnExt(identifier);
 
-        for(String colId:visibleCols) {
-            if(!colId.isEmpty()) {
-                participantTable.getColumnExt(colId).setVisible(true);
+                // Load visibility
+                String visProp = props.getProperty(COLUMN_PREFIX + identifier + VISIBLE_SUFFIX);
+                if (visProp != null) {
+                    column.setVisible(Boolean.parseBoolean(visProp));
+                }
+
+                // Load width
+                String widthProp = props.getProperty(COLUMN_PREFIX + identifier + WIDTH_SUFFIX);
+                if (widthProp != null) {
+                    try {
+                        int width = Integer.parseInt(widthProp);
+                        column.setPreferredWidth(width);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                final int modelIndex = i;
+                SwingUtilities.invokeLater(() -> {
+                    // Load order (view index)
+                    String orderProp = props.getProperty(COLUMN_PREFIX + identifier + ORDER_SUFFIX);
+                    if (orderProp != null) {
+                        try {
+                            int viewIndex = Integer.parseInt(orderProp);
+                            int currentViewIndex = participantTable.convertColumnIndexToView(modelIndex);
+                            if (currentViewIndex != viewIndex) {
+                                columnModel.moveColumn(currentViewIndex, viewIndex);
+                            }
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         }
     }

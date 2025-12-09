@@ -535,8 +535,22 @@ public class TierManagementView extends EditorView {
 		}
 		
 	}
-	
-	@Override
+
+    @Override
+    public void loadStateProperties(Properties props) {
+
+    }
+
+    @Override
+    public Properties getStateProperties() {
+        final Properties props = new Properties();
+
+
+
+        return props;
+    }
+
+    @Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
 		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
