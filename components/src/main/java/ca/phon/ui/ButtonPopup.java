@@ -19,6 +19,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.beans.*;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ButtonPopup {
 	
@@ -29,16 +30,16 @@ public class ButtonPopup {
 	
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 	
-	private WeakReference<Object> popupRef;
+	private AtomicReference<Object> popupRef;
 	
 	private JPopupMenu menu;
 	
 	public ButtonPopup(JComponent c) {
-		popupRef = new WeakReference<Object>(c);
+		popupRef = new AtomicReference<>(c);
 	}
 	
 	public ButtonPopup(JPopupMenu popupMenu) {
-		popupRef = new WeakReference<Object>(popupMenu);
+		popupRef = new AtomicReference<>(popupMenu);
 	}
 	
 	public Object getPopupObj() {

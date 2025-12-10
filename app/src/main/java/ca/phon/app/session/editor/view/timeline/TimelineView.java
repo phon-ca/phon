@@ -69,7 +69,7 @@ public final class TimelineView extends EditorView {
 	
 	private IconStrip toolbar;
 	
-	private FlatButton playButton;
+	private PlaySegmentButton playButton;
 	private FlatButton exportButton;
 	
 	private JButton zoomOutButton;
@@ -307,36 +307,36 @@ public final class TimelineView extends EditorView {
 			
 		});
 		
-		final JPopupMenu playMenu = new JPopupMenu();
-		playMenu.addPopupMenuListener(new PopupMenuListener() {
-			
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				playMenu.removeAll();
-				setupPlaybackMenu(new MenuBuilder(playMenu));
-			}
-			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			
-		});
-		
-		final PhonUIAction<Void> playAct = PhonUIAction.runnable(this::playPause);
-		playAct.putValue(PhonUIAction.NAME, "Play segment");
-		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
-//		final ImageIcon playIcon =
-//				IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
-//		playAct.putValue(PhonUIAction.SMALL_ICON, playIcon);
-		playAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		playAct.putValue(FlatButton.ICON_NAME_PROP, "play_arrow");
-		playAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
-		playButton = new FlatButton(playAct);
+//		final JPopupMenu playMenu = new JPopupMenu();
+//		playMenu.addPopupMenuListener(new PopupMenuListener() {
+//
+//			@Override
+//			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+//				playMenu.removeAll();
+//				setupPlaybackMenu(new MenuBuilder(playMenu));
+//			}
+//
+//			@Override
+//			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+//			}
+//
+//			@Override
+//			public void popupMenuCanceled(PopupMenuEvent e) {
+//			}
+//
+//		});
+//
+//		final PhonUIAction<Void> playAct = PhonUIAction.runnable(this::playPause);
+//		playAct.putValue(PhonUIAction.NAME, "Play segment");
+//		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
+////		final ImageIcon playIcon =
+////				IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+////		playAct.putValue(PhonUIAction.SMALL_ICON, playIcon);
+//		playAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//		playAct.putValue(FlatButton.ICON_NAME_PROP, "play_arrow");
+//		playAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
+		playButton = new PlaySegmentButton(getEditor());
 		playButton.setFocusable(false);
 		playButton.setEnabled(false);
 
@@ -1221,9 +1221,6 @@ public final class TimelineView extends EditorView {
 				if(mediaPlayerPlaybackMarker != null) {
 					timeModel.removeMarker(mediaPlayerPlaybackMarker);
 				}
-
-				playButton.setIconName("stop");
-				playButton.setText("Stop playback");
 			} else {
 				if(segmentPlaybackMarker != null)
 					timeModel.removeMarker(segmentPlaybackMarker);
@@ -1231,9 +1228,6 @@ public final class TimelineView extends EditorView {
 
 				if(mediaPlayerPlaybackMarker != null)
 					timeModel.addMarker(mediaPlayerPlaybackMarker);
-
-				playButton.setIconName("play_arrow");
-				playButton.setText("Play segment");
 			}
 		} else if(SegmentPlayback.TIME_PROP.contentEquals(evt.getPropertyName())) {
 			if(segmentPlaybackMarker != null) {
