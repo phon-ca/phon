@@ -58,9 +58,12 @@ public class ExportSegmentAction extends SessionEditorAction {
 	public ExportSegmentAction(SessionEditor editor) {
 		this(editor, SegmentType.CURRENT_RECORD);
 		
-		putValue(Action.NAME, "Export segment...");
+		putValue(Action.NAME, "Export current record segment...");
 		putValue(Action.SHORT_DESCRIPTION, "Export segment for current record");
-		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+        final ImageIcon exportIcon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "file_upload", IconSize.MEDIUM, UIManager.getColor("textText"));
+
+        putValue(Action.SMALL_ICON, exportIcon);
 	}
 	
 	public ExportSegmentAction(SessionEditor editor, SegmentType segmentType) {
@@ -69,7 +72,10 @@ public class ExportSegmentAction extends SessionEditorAction {
 		this.segmentType = segmentType;
 		putValue(Action.NAME, "Export segment...");
 		putValue(Action.SHORT_DESCRIPTION, "Export segment for current record");
-		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+        final ImageIcon exportIcon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "file_upload", IconSize.MEDIUM, UIManager.getColor("textText"));
+
+        putValue(Action.SMALL_ICON, exportIcon);
 	}
 	
 	/**
@@ -103,6 +109,11 @@ public class ExportSegmentAction extends SessionEditorAction {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.outputPath = outputPath;
+
+        final ImageIcon exportIcon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "file_upload", IconSize.MEDIUM, UIManager.getColor("textText"));
+
+        putValue(Action.SMALL_ICON, exportIcon);
 	}
 	
 	private MediaSegment getMediaSegment() {
