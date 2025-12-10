@@ -70,7 +70,7 @@ public final class TimelineView extends EditorView {
 	private IconStrip toolbar;
 	
 	private PlaySegmentButton playButton;
-	private FlatButton exportButton;
+	private ExportSegmentButton exportButton;
 	
 	private JButton zoomOutButton;
 	
@@ -336,43 +336,11 @@ public final class TimelineView extends EditorView {
 //		playAct.putValue(FlatButton.ICON_NAME_PROP, "play_arrow");
 //		playAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 //		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
-		playButton = new PlaySegmentButton(getEditor());
+		playButton = new PlaySegmentButton(getEditor(), this::getSelectedMediaSegment);
 		playButton.setFocusable(false);
 		playButton.setEnabled(false);
 
-		final JPopupMenu saveMenu = new JPopupMenu();
-		saveMenu.addPopupMenuListener(new PopupMenuListener() {
-			
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				saveMenu.removeAll();
-				setupExportMenu(new MenuBuilder(saveMenu));
-			}
-			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				
-			}
-			
-		});
-		
-		final PhonUIAction<Void> exportAct = PhonUIAction.runnable(this::onExportSelectionOrSegment);
-//		final ImageIcon exportIcon =
-//				IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "file_export", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
-//		exportAct.putValue(PhonUIAction.SMALL_ICON, exportIcon);
-		exportAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		exportAct.putValue(FlatButton.ICON_NAME_PROP, "file_export");
-		exportAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
-		exportAct.putValue(PhonUIAction.NAME, "Export segment...");
-		exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
-		
-		exportButton = new FlatButton(exportAct);
+		exportButton = new ExportSegmentButton(getEditor(), this::getSelectedMediaSegment);
 		exportButton.setFocusable(false);
 		exportButton.setEnabled(false);
 
@@ -710,32 +678,6 @@ public final class TimelineView extends EditorView {
 		return getWindowEnd() - getWindowStart();
 	}
 	
-	private void setupExportMenu(MenuBuilder builder) {
-		final PhonUIAction<Void> exportSelectionAct = PhonUIAction.runnable(this::exportSelection);
-		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
-		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
-
-		final PhonUIAction<Void> exportSegmentAct = PhonUIAction.runnable(this::exportSegment);
-		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
-		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
-
-		builder.addItem(".", exportSelectionAct).setEnabled(getWaveformTier().getSelection() != null);
-		builder.addItem(".", exportSegmentAct).setEnabled(getRecordTier().currentRecordInterval() != null);
-		builder.addSeparator(".", "s1");
-		
-		builder.addItem(".", new ExportCustomSegmentAction(getEditor()));
-		builder.addItem(".", new ExportSpeechTurnAction(getEditor()));
-		builder.addItem(".", new ExportAdjacencySequenceAction(getEditor()));
-	}
-	
-	public void onExportSelectionOrSegment() {
-		if(getWaveformTier().getSelection() != null) {
-			exportSelection();
-		} else {
-			exportSegment();
-		}
-	}
-	
 	public void exportSelection() {
 		if(getWaveformTier().getSelection() != null)
 			exportInterval(getWaveformTier().getSelection());
@@ -801,6 +743,19 @@ public final class TimelineView extends EditorView {
 			playSegment();
 		}
 	}
+
+    public MediaSegment getSelectedMediaSegment() {
+        if(getWaveformTier().getSelection() != null) {
+            float startTime = getWaveformTier().getSelection().getStartMarker().getTime();
+            float endTime = getWaveformTier().getSelection().getEndMarker().getTime();
+            final MediaSegment segment = SessionFactory.newFactory().createMediaSegment();
+            segment.setUnitType(MediaUnit.Second);
+            segment.setStartTime(startTime);
+            segment.setEndTime(endTime);
+            return segment;
+        }
+        return null;
+    }
 	
 	public void playSelection() {
 		if(getWaveformTier().getSelection() != null)
