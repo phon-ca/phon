@@ -1,8 +1,14 @@
 package ca.phon.app.session.editor;
 
-import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.actions.ExportAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.ExportCustomSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSpeechTurnAction;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
+import ca.phon.session.MediaSegment;
 import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
@@ -11,49 +17,71 @@ import ca.phon.util.icons.IconSize;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import java.util.function.Supplier;
 
 public class ExportSegmentButton extends DropDownButton {
 
-    final private SpeechAnalysisEditorView view;
+    private final SessionEditor editor;
 
-    public ExportSegmentButton(SpeechAnalysisEditorView view) {
+    private Supplier<MediaSegment> selectedSegmentSupplier;
+
+    public ExportSegmentButton(SessionEditor editor) {
+        this(editor, null);
+    }
+
+    public ExportSegmentButton(SessionEditor editor, Supplier<MediaSegment> selectedSegmentSupplier) {
         super();
-        this.view = view;
+        this.editor = editor;
+        this.selectedSegmentSupplier = selectedSegmentSupplier;
 
         init();
     }
 
+    public SessionEditor getEditor() {
+        return this.editor;
+    }
+
+    private void setSelectedSegmentSupplier(Supplier<MediaSegment> selectedSegmentSupplier) {
+        this.selectedSegmentSupplier = selectedSegmentSupplier;
+    }
+
+    public MediaSegment getSelectedSegment() {
+        if(this.selectedSegmentSupplier != null) {
+            return this.selectedSegmentSupplier.get();
+        } else {
+            return null;
+        }
+    }
+
     private void init() {
-        final JPopupMenu saveMenu = new JPopupMenu();
-        saveMenu.addPopupMenuListener(new PopupMenuListener() {
+        final JPopupMenu exportSegmentMenu = new JPopupMenu();
+        exportSegmentMenu.addPopupMenuListener(new PopupMenuListener() {
 
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                saveMenu.removeAll();
-                setupExportMenu(new MenuBuilder(saveMenu));
+                exportSegmentMenu.removeAll();
+                setupExportMenu(new MenuBuilder(exportSegmentMenu));
             }
 
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-
             }
 
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
-
             }
 
         });
 
         final ImageIcon exportIcon =
                 IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "file_upload", IconSize.MEDIUM, UIManager.getColor("textText"));
-        final PhonUIAction<Void> exportAct = PhonUIAction.runnable(view::onExportSelectionOrSegment);
-        exportAct.putValue(PhonUIAction.SMALL_ICON, exportIcon);
-        exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
-        exportAct.putValue(PhonUIAction.NAME, "Export segment...");
-        exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
-        setAction(exportAct);
-        setButtonPopup(new ButtonPopup(saveMenu));
+        final PhonUIAction exportSegmentAct = PhonUIAction.eventConsumer(this::exportSegment);
+        exportSegmentAct.putValue(PhonUIAction.NAME, "Export segment");
+        exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export segment");
+        exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, exportIcon);
+        setAction(exportSegmentAct);
+        setButtonPopup(new ButtonPopup(exportSegmentMenu));
+        setOnlyPopup(false);
 
         setFocusable(false);
         setBorderPainted(false);
@@ -62,21 +90,28 @@ public class ExportSegmentButton extends DropDownButton {
         setRolloverEnabled(true);
     }
 
+    private void exportSegment(PhonActionEvent<Void> pae) {
+        (new ExportSegmentAction(getEditor())).actionPerformed(pae.getActionEvent());
+    }
+
     private void setupExportMenu(MenuBuilder builder) {
-        final PhonUIAction<Void> exportSelectionAct = PhonUIAction.runnable(view::exportSelection);
-        exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
-        exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
-        final ImageIcon exportIcon =
-                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "file_upload", IconSize.MEDIUM, UIManager.getColor("textText"));
-        exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, exportIcon);
+        final SessionMediaModel mediaModel = getEditor().getMediaModel();
 
-        final PhonUIAction<Void> exportSegmentAct = PhonUIAction.runnable(view::exportSegment);
-        exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
-        exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
-        exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, exportIcon);
+        boolean enabled = (mediaModel.isSessionAudioAvailable() ||
+                (mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
 
-        builder.addItem(".", exportSelectionAct).setEnabled(view.getSelectionInterval() != null);
-        builder.addItem(".", exportSegmentAct).setEnabled(view.getCurrentRecordInterval() != null);
+        final MediaSegment selectedSegment = getSelectedSegment();
+        if(selectedSegment != null) {
+            final ExportCustomSegmentAction exportSelectedSegAct = new ExportCustomSegmentAction(getEditor(), selectedSegment);
+            exportSelectedSegAct.putValue(PhonUIAction.NAME, "Export selected segment");
+            exportSelectedSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selected segment");
+            builder.addItem(".", exportSelectedSegAct).setEnabled(enabled);
+        }
+
+        builder.addItem(".", new ExportSegmentAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new ExportCustomSegmentAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new ExportSpeechTurnAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new ExportAdjacencySequenceAction(getEditor())).setEnabled(enabled);
     }
 
 }

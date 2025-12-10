@@ -314,7 +314,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		IconStrip toolbar = new IconStrip(SwingConstants.HORIZONTAL);
 
 		playButton = new PlaySegmentButton(getEditor(), this::getSelectedSegment);
-		exportButton = new ExportSegmentButton(this);
+		exportButton = new ExportSegmentButton(getEditor(), this::getSelectedSegment);
 
 		final ResetAction refreshAct = new ResetAction(getEditor(), this);
 

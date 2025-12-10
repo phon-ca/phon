@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.MediaSegment;
 
 public class ExportCustomSegmentAction extends ExportSegmentAction {
 
@@ -29,5 +30,19 @@ public class ExportCustomSegmentAction extends ExportSegmentAction {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 	}
+
+    public ExportCustomSegmentAction(SessionEditor editor, long startTime, long endTime) {
+        super(editor, startTime, endTime);
+
+        putValue(NAME, CMD_NAME);
+        putValue(SHORT_DESCRIPTION, SHORT_DESC);
+    }
+
+    public ExportCustomSegmentAction(SessionEditor editor, MediaSegment segment) {
+        super(editor, segment.getStartTime(), segment.getEndTime());
+
+        putValue(NAME, CMD_NAME);
+        putValue(SHORT_DESCRIPTION, SHORT_DESC);
+    }
 	
 }
