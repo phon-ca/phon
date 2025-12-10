@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.MediaSegment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,5 +43,12 @@ public class PlayCustomSegmentAction extends PlaySegmentAction {
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
 	}
+
+    public PlayCustomSegmentAction(SessionEditor editor, MediaSegment segment) {
+        super(editor, segment.getStartTime(), segment.getEndTime());
+
+        putValue(NAME, CMD_NAME);
+        putValue(SHORT_DESCRIPTION, SHORT_DESC);
+    }
 
 }

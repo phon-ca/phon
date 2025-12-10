@@ -17,7 +17,6 @@ package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
-import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.RecordSegmentEdit;
@@ -38,7 +37,6 @@ import ca.phon.worker.PhonTask.TaskStatus;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
@@ -315,7 +313,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private IconStrip setupToolbar() {
 		IconStrip toolbar = new IconStrip(SwingConstants.HORIZONTAL);
 
-		playButton = new PlaySegmentButton(getEditor());
+		playButton = new PlaySegmentButton(getEditor(), this::getSelectedSegment);
 		exportButton = new ExportSegmentButton(this);
 
 		final ResetAction refreshAct = new ResetAction(getEditor(), this);
@@ -498,6 +496,18 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public Interval getSelectionInterval() {
 		return this.selectionInterval;
 	}
+
+    public MediaSegment getSelectedSegment() {
+        if(selectionInterval != null) {
+            MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
+            seg.setUnitType(MediaUnit.Second);
+            seg.setStartTime(selectionInterval.getStartMarker().getTime());
+            seg.setEndTime(selectionInterval.getEndMarker().getTime());
+            return seg;
+        } else {
+            return null;
+        }
+    }
 	
 	/**
 	 * Interval for current current record. Changes to this interval

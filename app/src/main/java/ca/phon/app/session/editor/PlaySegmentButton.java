@@ -5,6 +5,7 @@ import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
+import ca.phon.session.MediaSegment;
 import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonActionEvent;
@@ -18,17 +19,41 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
+import java.util.function.Supplier;
 
 public class PlaySegmentButton extends DropDownButton {
 
-    private SessionEditor editor;
+    private final SessionEditor editor;
+
+    private Supplier<MediaSegment> selectedSegmentSupplier;
 
     public PlaySegmentButton(SessionEditor editor) {
+        this(editor, null);
+    }
+
+    public PlaySegmentButton(SessionEditor editor, Supplier<MediaSegment> selectedSegmentSupplier) {
         super();
         this.editor = editor;
+        this.selectedSegmentSupplier = selectedSegmentSupplier;
 
         init();
         editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(SegmentPlayback.PLAYBACK_PROP, this::onSegmentPlaybackChange);
+    }
+
+    public SessionEditor getEditor() {
+        return this.editor;
+    }
+
+    private void setSelectedSegmentSupplier(Supplier<MediaSegment> selectedSegmentSupplier) {
+        this.selectedSegmentSupplier = selectedSegmentSupplier;
+    }
+
+    public MediaSegment getSelectedSegment() {
+        if(this.selectedSegmentSupplier != null) {
+            return this.selectedSegmentSupplier.get();
+        } else {
+            return null;
+        }
     }
 
     private void init() {
@@ -82,10 +107,10 @@ public class PlaySegmentButton extends DropDownButton {
             }
         }
     }
-
-    public SessionEditor getEditor() {
-        return this.editor;
-    }
+//
+//    public SessionEditor getEditor() {
+//        return this.editor;
+//    }
 
     private void playPause(PhonActionEvent<Void> pae) {
         final SessionMediaModel mediaModel = getEditor().getMediaModel();
@@ -113,6 +138,15 @@ public class PlaySegmentButton extends DropDownButton {
 
         boolean enabled = (mediaModel.isSessionAudioAvailable() ||
                 (mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
+
+        final MediaSegment selectedSegment = getSelectedSegment();
+        if(selectedSegment != null) {
+            final PlayCustomSegmentAction playSelectedSegAct = new PlayCustomSegmentAction(getEditor(), selectedSegment);
+            playSelectedSegAct.putValue(PhonUIAction.NAME, "Play selected segment");
+            playSelectedSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selected segment");
+            builder.addItem(".", playSelectedSegAct).setEnabled(enabled);
+        }
+
         builder.addItem(".", new PlaySegmentAction(getEditor())).setEnabled(enabled);
         builder.addItem(".", new PlayCustomSegmentAction(getEditor())).setEnabled(enabled);
         builder.addItem(".", new PlaySpeechTurnAction(getEditor())).setEnabled(enabled);

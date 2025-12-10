@@ -88,6 +88,9 @@ public class PlaySegmentAction extends SessionEditorAction {
 		this.segmentType = SegmentType.CUSTOM;
 		this.startTime = startTime;
 		this.endTime = endTime;
+        final ImageIcon playIcon =
+                IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.MEDIUM, UIManager.getColor("textText"));
+        putValue(Action.SMALL_ICON, playIcon);
 	}
 
 	private MediaSegment getMediaSegment(ActionEvent ae) {

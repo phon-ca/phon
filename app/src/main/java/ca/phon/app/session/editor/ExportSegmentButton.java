@@ -1,6 +1,6 @@
-package ca.phon.app.session.editor.view.speechAnalysis;
+package ca.phon.app.session.editor;
 
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
