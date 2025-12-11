@@ -26,6 +26,7 @@ import ca.phon.util.icons.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
 
 public class EditParticipantAction extends SessionEditorAction {
 
@@ -47,9 +48,12 @@ public class EditParticipantAction extends SessionEditorAction {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
 		Participants.copyParticipantInfo(participant, part);
+
+		final LocalDate sessionDate = getEditor().getDataModel().getSession().getDate();
+		final LocalDate promptDate = (sessionDate != null ? sessionDate : LocalDate.now());
 		
 		ParticipantEditor.editParticipant(CommonModuleFrame.getCurrentFrame(), part,
-				getEditor().getDataModel().getSession().getDate(),
+				promptDate,
 				getEditor().getDataModel().getSession().getParticipants().otherParticipants(participant),
 				(wasCanceled) -> {
 					if(!wasCanceled) {

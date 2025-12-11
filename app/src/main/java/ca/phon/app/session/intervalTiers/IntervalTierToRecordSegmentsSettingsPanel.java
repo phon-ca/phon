@@ -11,6 +11,7 @@ import ca.phon.util.icons.IconSize;
 import javax.swing.*;
 import java.awt.*;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 
 /**
  * Settings panel for importing an interval tier to record segments.
@@ -161,10 +162,11 @@ public class IntervalTierToRecordSegmentsSettingsPanel extends JPanel {
     private void addNewParticipant() {
         final SessionFactory factory = SessionFactory.newFactory();
         final Participant newParticipant = factory.createParticipant();
+        final LocalDate promptDate = (session.getDate() != null ? session.getDate() : LocalDate.now());
         ParticipantEditor.editNewParticipant(
             CommonModuleFrame.getCurrentFrame(),
             newParticipant,
-            session.getDate(),
+            promptDate,
             session.getParticipants().otherParticipants(null),
             (wasCanceled) -> {
                 if (!wasCanceled) {
