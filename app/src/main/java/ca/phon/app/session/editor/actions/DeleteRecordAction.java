@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.KeyStrokeUtil;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
@@ -35,9 +36,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 	
 	private final static String SHORT_DESC = "Delete current record";
 	
-	private final static String ICON = "misc/record-delete";
-	
-	private final static KeyStroke KS = 
+	private final static KeyStroke KS =
 			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public static final String CONFIRM_DELETE_RECORD_PROP =
@@ -49,9 +48,11 @@ public class DeleteRecordAction extends SessionEditorAction {
 		super(editor);
 		
 		putValue(NAME, CMD_NAME);
-		putValue(SHORT_DESCRIPTION, SHORT_DESC);
+		putValue(SHORT_DESCRIPTION, SHORT_DESC + " (" + KeyStrokeUtil.keyStrokeToString(KS) + ")");
 		putValue(ACCELERATOR_KEY, KS);
-		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		final ImageIcon icon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"delete_forever", IconSize.SMALL, UIManager.getColor("Button.foreground"));
+		putValue(SMALL_ICON, icon);
 	}
 
 	@Override

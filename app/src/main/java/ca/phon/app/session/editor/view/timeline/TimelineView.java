@@ -473,14 +473,14 @@ public final class TimelineView extends EditorView {
 
 		final ZoomAction zoomInAct = new ZoomAction(this, true);
 		zoomInAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		zoomInAct.putValue(FlatButton.ICON_NAME_PROP, "zoom_in");
+		zoomInAct.putValue(FlatButton.ICON_NAME_PROP, "zoom_in_map");
 		zoomInAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		zoomInButton = new FlatButton(zoomInAct);
 		zoomInButton.setText("");
 
 		final ZoomAction zoomOutAct = new ZoomAction(this, false);
 		zoomOutAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		zoomOutAct.putValue(FlatButton.ICON_NAME_PROP, "zoom_out");
+		zoomOutAct.putValue(FlatButton.ICON_NAME_PROP, "zoom_out_map");
 		zoomOutAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		zoomOutButton = new FlatButton(zoomOutAct);
 		zoomOutButton.setText("");

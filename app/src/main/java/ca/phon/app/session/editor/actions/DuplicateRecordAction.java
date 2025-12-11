@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.ui.KeyStrokeUtil;
 import ca.phon.util.icons.*;
 
 import javax.swing.*;
@@ -33,8 +34,6 @@ public class DuplicateRecordAction extends SessionEditorAction {
 	
 	private final static String SHORT_DESC = "Duplicate record after current";
 	
-	private final static String ICON = "misc/record-duplicate";
-	
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(
 			KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 
@@ -42,9 +41,11 @@ public class DuplicateRecordAction extends SessionEditorAction {
 		super(editor);
 		
 		putValue(NAME, CMD_NAME);
-		putValue(SHORT_DESCRIPTION, SHORT_DESC);
+		putValue(SHORT_DESCRIPTION, SHORT_DESC + " (" + KeyStrokeUtil.keyStrokeToString(KS) + ")");
 		putValue(ACCELERATOR_KEY, KS);
-		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		final ImageIcon icon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"content_copy", IconSize.SMALL, UIManager.getColor("Button.foreground"));
+		putValue(SMALL_ICON, icon);
 	}
 
 	@Override
