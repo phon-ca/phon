@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.media.WaveformDisplay;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
@@ -71,9 +72,7 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 	}
 
 	@Override
-	public void addMenuItems(JMenu menuEle, boolean includeAccelerators) {
-		// TODO Auto-generated method stub
-		
+	public void addMenuItems(MenuBuilder menuBuilder, boolean includeAccelerators) {
 	}
 
 	@Override

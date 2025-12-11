@@ -351,35 +351,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		return toolbar;
 	}
 	
-	private void setupPlaybackMenu(MenuBuilder builder) {
-		if(isPlaying()) {
-			final PhonUIAction<Void> stopAct = PhonUIAction.runnable(SpeechAnalysisEditorView.this::stopPlaying);
-			stopAct.putValue(PhonUIAction.NAME, "Stop");
-			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop playback");
-			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-			
-			builder.addItem(".", stopAct);
-			builder.addSeparator(".", "stop");
-		}
-		
-		final PhonUIAction<Void> playSelectionAct = PhonUIAction.runnable(SpeechAnalysisEditorView.this::playSelection);
-		playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
-		playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
-		playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
-		final JMenuItem playSelectionItem = new JMenuItem(playSelectionAct);
-		playSelectionItem.setEnabled( selectionInterval != null );
-		
-		final PhonUIAction<Void> playSegmentAct = PhonUIAction.runnable(SpeechAnalysisEditorView.this::playSegment);
-		playSegmentAct.putValue(PhonUIAction.NAME, "Play record segment");
-		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
-		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
-		final JMenuItem playSegmentItem = new JMenuItem(playSegmentAct);
-		playSegmentItem.setEnabled( currentRecordInterval != null );
-		
-		builder.addItem(".", playSelectionItem);
-		builder.addItem(".", playSegmentItem);
-	}
-	
 	public void onExportSelectionOrSegment() {
 		if(selectionInterval != null) {
 			exportSelection();
@@ -786,38 +757,23 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
 		MenuBuilder builder = new MenuBuilder(retVal);
-		
-		if(selectionInterval != null) {
-			final PhonUIAction<Void> selectAct = PhonUIAction.eventConsumer(this::onEnter);
-			selectAct.putValue(PhonUIAction.NAME, "Set segment");
-			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select segment for current record");
-			builder.addItem(".", selectAct);
-			
-			builder.addItem(".", new NewRecordAction(getEditor(), this));
-			builder.addSeparator(".", "selection");
-		}
-
-		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(mediaModel.isSessionAudioAvailable()) {
-			setupPlaybackMenu(builder);
-			builder.addSeparator(".", "playback");
-			builder.addSeparator(".", "export");
-		} else {
-			if(mediaModel.isSessionMediaAvailable()) {
-				builder.addItem(".", new GenerateSessionAudioAction(getEditor()));
-				builder.addSeparator(".", "generate");
-			}
-		}
-		
-		retVal.add(new ResetAction(getEditor(), this));
-		retVal.add(new ZoomAction(getEditor(), this));
-		retVal.add(new ZoomAction(getEditor(), this, false));
-		
-		for(SpeechAnalysisTier tier:pluginTiers) {
-			tier.addMenuItems(retVal, false);
-		}
-
+		setupMenu(builder);
 		return retVal;
+	}
+
+	private void setupMenu(MenuBuilder menuBuilder) {
+		PlaySegmentButton.setupPlaySegmentMenu(getEditor(), this::getSelectedSegment, menuBuilder);
+		menuBuilder.addSeparator(".", "playback");
+		ExportSegmentButton.setupExportMenu(getEditor(), this::getSelectedSegment, menuBuilder);
+		menuBuilder.addSeparator(".", "export");
+
+		menuBuilder.addItem(".", new ResetAction(getEditor(), this));
+		menuBuilder.addItem(".", new ZoomAction(getEditor(), this));
+		menuBuilder.addItem(".", new ZoomAction(getEditor(), this, false));
+
+		for(SpeechAnalysisTier tier:pluginTiers) {
+			tier.addMenuItems(menuBuilder, false);
+		}
 	}
 
 	@Override
@@ -853,35 +809,7 @@ public class SpeechAnalysisEditorView extends EditorView {
     private JMenu createContextMenu() {
 		final JMenu menu = new JMenu();
 		MenuBuilder builder = new MenuBuilder(menu);
-		
-		if(selectionInterval != null) {
-			final PhonUIAction<Void> selectAct = PhonUIAction.eventConsumer(this::onEnter);
-			selectAct.putValue(PhonUIAction.NAME, "Assign segment to record");
-			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
-			builder.addItem(".", selectAct);
-			
-			builder.addItem(".", new NewRecordAction(getEditor(), this));
-			builder.addSeparator(".", "selection");
-		}
-
-		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(mediaModel.isSessionAudioAvailable()) {
-			setupPlaybackMenu(builder);
-			builder.addSeparator(".", "playback");
-			builder.addSeparator(".", "export");
-		} else {
-			builder.addItem(".", mediaModel.getGenerateSessionAudioAction());
-			builder.addSeparator(".", "generate");
-		}
-		
-		menu.add(new ResetAction(getEditor(), this));
-		menu.add(new ZoomAction(getEditor(), this));
-		menu.add(new ZoomAction(getEditor(), this, false));
-
-		for(SpeechAnalysisTier tier:getPluginTiers()) {
-			tier.addMenuItems(menu, true);
-		}
-
+		setupMenu(builder);
 		return menu;
 	}
 

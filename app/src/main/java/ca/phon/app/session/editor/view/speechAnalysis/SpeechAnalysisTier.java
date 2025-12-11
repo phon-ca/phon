@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.media.TimeComponent;
+import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
 import java.util.Properties;
@@ -40,10 +41,10 @@ public abstract class SpeechAnalysisTier extends TimeComponent {
 	/**
 	 * Add custom commands to the editor view menu.
 	 * 
-	 * @param menuEle
-	 * @param includeAccelerators
+	 * @param menuBuilder the menu builder
+	 * @param includeAccelerators should accelerators be included in menu item names?
 	 */
-	public abstract void addMenuItems(JMenu menuEle, boolean includeAccelerators);
+	public abstract void addMenuItems(MenuBuilder menuBuilder, boolean includeAccelerators);
 	
 	/**
 	 * Called on the Refresh action for the tier.

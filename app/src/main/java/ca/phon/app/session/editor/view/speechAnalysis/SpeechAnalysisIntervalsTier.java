@@ -703,9 +703,8 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     }
 
     @Override
-    public void addMenuItems(JMenu menuEle, boolean includeAccelerators) {
-        final MenuBuilder mb = new MenuBuilder(menuEle);
-        setupIntervalMenu(mb);
+    public void addMenuItems(MenuBuilder menuBuilder, boolean includeAccelerators) {
+        setupIntervalMenu(menuBuilder);
     }
 
     @Override
