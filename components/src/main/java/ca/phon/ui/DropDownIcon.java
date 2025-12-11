@@ -91,6 +91,11 @@ public class DropDownIcon implements Icon {
 		return IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
                 "arrow_drop_down", IconSize.MEDIUM, UIManager.getColor("textText"));
 	}
+
+	private static ImageIcon loadRolloverArrow() {
+		return IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"arrow_drop_down", IconSize.MEDIUM, UIManager.getColor("Phon.darkBlue").brighter());
+	}
 	
 	public void setArrowPainted(boolean painted) {
 		this.arrowPainted = painted;
@@ -144,24 +149,30 @@ public class DropDownIcon implements Icon {
 			arrowY = y+(h-arrowIcn.getIconHeight())/2;
 		}
 		
-		if(isArrowPainted())
-			arrowIcn.paintIcon(c, g, x+getGap()+icn.getIconWidth(), arrowY);
-		
-		if(paintRollover) {
-			Color brighter = UIManager.getColor( "controlHighlight" ); 
-            Color darker = UIManager.getColor( "controlShadow" );
-            if( brighter == null || darker == null ) {
-                brighter = c.getBackground().brighter();
-                darker = c.getBackground().darker();
-            }
-            
-            g.setColor( brighter );
-            g.drawLine( x+icn.getIconWidth()+1, y, 
-                        x+icn.getIconWidth()+1, y+getIconHeight() );
-            g.setColor( darker );
-            g.drawLine( x+icn.getIconWidth()+2, y, 
-                        x+icn.getIconWidth()+2, y+getIconHeight() );
+		if(isArrowPainted()) {
+			if(isPaintRollover()) {
+				Icon rolloverArrow = loadRolloverArrow();
+				rolloverArrow.paintIcon(c, g, x + getGap() + icn.getIconWidth(), arrowY);
+			} else {
+				arrowIcn.paintIcon(c, g, x + getGap() + icn.getIconWidth(), arrowY);
+			}
 		}
+		
+//		if(paintRollover) {
+//			Color brighter = UIManager.getColor( "controlHighlight" );
+//            Color darker = UIManager.getColor( "controlShadow" );
+//            if( brighter == null || darker == null ) {
+//                brighter = c.getBackground().brighter();
+//                darker = c.getBackground().darker();
+//            }
+//
+//            g.setColor( brighter );
+//            g.drawLine( x+icn.getIconWidth()+1, y,
+//                        x+icn.getIconWidth()+1, y+getIconHeight() );
+//            g.setColor( darker );
+//            g.drawLine( x+icn.getIconWidth()+2, y,
+//                        x+icn.getIconWidth()+2, y+getIconHeight() );
+//		}
 	}
 	
 	@Override

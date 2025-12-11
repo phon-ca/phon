@@ -155,7 +155,6 @@ public class DropDownButton extends JButton {
 	            
             @Override
             public void mousePressed( MouseEvent e ) {
-                System.out.println("mousePressed");
             	if(!isEnabled()) return;
                 popupMenuOperation = false;
                 if ( buttonPopup != null && getModel() instanceof DropDownButtonModel ) {
@@ -175,7 +174,6 @@ public class DropDownButton extends JButton {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("mouseReleased");
             	if(!isEnabled()) return;
             	if (popupMenuOperation || onlyPopup) {
                     popupMenuOperation = false;

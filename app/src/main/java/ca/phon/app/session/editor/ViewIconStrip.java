@@ -113,10 +113,6 @@ public class ViewIconStrip extends IconStrip {
                 SessionCheckView.VIEW_NAME,
                 KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
             ));
-            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(
-                IPADictionaryView.VIEW_NAME,
-                KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
-            ));
 
             add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
@@ -128,11 +124,11 @@ public class ViewIconStrip extends IconStrip {
         } else {
             viewButtons.put(SearchView.VIEW_NAME, createViewButton(
                 SearchView.VIEW_NAME,
-                KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+                KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
             ));
             viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(
                 IPADictionaryView.VIEW_NAME,
-                KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
+                KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
             ));
             viewButtons.put(SyllabificationAlignmentEditorView.VIEW_NAME, createViewButton(
                 SyllabificationAlignmentEditorView.VIEW_NAME,
