@@ -63,7 +63,7 @@ public class PlaySegmentButton extends DropDownButton {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 playSegmentMenu.removeAll();
-                setupPlaySegmentMenu(new MenuBuilder(playSegmentMenu));
+                setupPlaySegmentMenu(getEditor(), selectedSegmentSupplier, new MenuBuilder(playSegmentMenu));
             }
 
             @Override
@@ -122,8 +122,14 @@ public class PlaySegmentButton extends DropDownButton {
         }
     }
 
-    private void setupPlaySegmentMenu(MenuBuilder builder) {
-        final SessionMediaModel mediaModel = getEditor().getMediaModel();
+    /**
+     * Setup play segment menu actions for editor segment playback
+     * @param editor session editor
+     * @param segmentSupplier segment supplier (may be null)
+     * @param builder menu builder
+     */
+    public static void setupPlaySegmentMenu(SessionEditor editor, Supplier<MediaSegment> segmentSupplier, MenuBuilder builder) {
+        final SessionMediaModel mediaModel = editor.getMediaModel();
         final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
 
         if(segPlayback.isPlaying()) {
@@ -137,20 +143,20 @@ public class PlaySegmentButton extends DropDownButton {
         }
 
         boolean enabled = (mediaModel.isSessionAudioAvailable() ||
-                (mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
+                (mediaModel.isSessionMediaAvailable() && editor.getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
 
-        final MediaSegment selectedSegment = getSelectedSegment();
+        final MediaSegment selectedSegment = segmentSupplier != null ? segmentSupplier.get() : null;
         if(selectedSegment != null) {
-            final PlayCustomSegmentAction playSelectedSegAct = new PlayCustomSegmentAction(getEditor(), selectedSegment);
+            final PlayCustomSegmentAction playSelectedSegAct = new PlayCustomSegmentAction(editor, selectedSegment);
             playSelectedSegAct.putValue(PhonUIAction.NAME, "Play selected segment");
             playSelectedSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selected segment");
             builder.addItem(".", playSelectedSegAct).setEnabled(enabled);
         }
 
-        builder.addItem(".", new PlaySegmentAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new PlayCustomSegmentAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new PlaySpeechTurnAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new PlayAdjacencySequenceAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new PlaySegmentAction(editor)).setEnabled(enabled);
+        builder.addItem(".", new PlayCustomSegmentAction(editor)).setEnabled(enabled);
+        builder.addItem(".", new PlaySpeechTurnAction(editor)).setEnabled(enabled);
+        builder.addItem(".", new PlayAdjacencySequenceAction(editor)).setEnabled(enabled);
     }
 
 }

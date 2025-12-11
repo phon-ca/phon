@@ -60,7 +60,7 @@ public class ExportSegmentButton extends DropDownButton {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 exportSegmentMenu.removeAll();
-                setupExportMenu(new MenuBuilder(exportSegmentMenu));
+                setupExportMenu(getEditor(), selectedSegmentSupplier, new MenuBuilder(exportSegmentMenu));
             }
 
             @Override
@@ -94,24 +94,30 @@ public class ExportSegmentButton extends DropDownButton {
         (new ExportSegmentAction(getEditor())).actionPerformed(pae.getActionEvent());
     }
 
-    private void setupExportMenu(MenuBuilder builder) {
-        final SessionMediaModel mediaModel = getEditor().getMediaModel();
+    /**
+     * Setup export segment menu
+     * @param editor session editor
+     * @param segmentSupplier supplier for selected segment (may be null)
+     * @param builder menu builder
+     */
+    public static void setupExportMenu(SessionEditor editor, Supplier<MediaSegment> segmentSupplier, MenuBuilder builder) {
+        final SessionMediaModel mediaModel = editor.getMediaModel();
 
         boolean enabled = (mediaModel.isSessionAudioAvailable() ||
-                (mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
+                (mediaModel.isSessionMediaAvailable() && editor.getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
 
-        final MediaSegment selectedSegment = getSelectedSegment();
+        final MediaSegment selectedSegment = segmentSupplier != null ? segmentSupplier.get() : null;
         if(selectedSegment != null) {
-            final ExportCustomSegmentAction exportSelectedSegAct = new ExportCustomSegmentAction(getEditor(), selectedSegment);
+            final ExportCustomSegmentAction exportSelectedSegAct = new ExportCustomSegmentAction(editor, selectedSegment);
             exportSelectedSegAct.putValue(PhonUIAction.NAME, "Export selected segment");
             exportSelectedSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selected segment");
             builder.addItem(".", exportSelectedSegAct).setEnabled(enabled);
         }
 
-        builder.addItem(".", new ExportSegmentAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new ExportCustomSegmentAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new ExportSpeechTurnAction(getEditor())).setEnabled(enabled);
-        builder.addItem(".", new ExportAdjacencySequenceAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new ExportSegmentAction(editor)).setEnabled(enabled);
+        builder.addItem(".", new ExportCustomSegmentAction(editor)).setEnabled(enabled);
+        builder.addItem(".", new ExportSpeechTurnAction(editor)).setEnabled(enabled);
+        builder.addItem(".", new ExportAdjacencySequenceAction(editor)).setEnabled(enabled);
     }
 
 }

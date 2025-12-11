@@ -38,6 +38,7 @@ import ca.phon.session.io.*;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.*;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
@@ -757,29 +758,14 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 
 				mediaMenu.addSeparator();
 
-				boolean enabled = (mediaModel.isSessionAudioAvailable() ||
-						(mediaModel.isSessionMediaAvailable() && SessionEditor.this.getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
-				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(enabled);
+				PlaySegmentButton.setupPlaySegmentMenu(SessionEditor.this, null, new MenuBuilder(mediaMenu));
+				mediaMenu.addSeparator();
+				ExportSegmentButton.setupExportMenu(SessionEditor.this, null, new MenuBuilder(mediaMenu));
 				mediaMenu.addSeparator();
 
-				mediaMenu.add(new ExportSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.add(new ExportCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.add(new ExportSpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.add(new ExportAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.addSeparator();
-
-				final StockIcon prefIcon =
-						OSInfo.isMacOs() ? MacOSStockIcon.ToolbarCustomizeIcon
-								: OSInfo.isWindows() ?  WindowsStockIcon.APPLICATION : null;
-				final String defIcn = "categories/preferences";
-				ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
 				final PreferencesCommand prefsAct = new PreferencesCommand("Media");
 				prefsAct.putValue(PhonUIAction.NAME, "Edit media folders...");
 				prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Modify global media folders...");
-				prefsAct.putValue(PhonUIAction.SMALL_ICON, prefsIcn);
 				mediaMenu.add(prefsAct);
 			}
 

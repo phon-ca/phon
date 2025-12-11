@@ -19,7 +19,7 @@ package ca.phon.app.session.editor.view.mediaPlayer;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.AssignMediaAction;
+import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToAction;
 import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToEndOfSegmentedAction;
@@ -32,6 +32,7 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.formatter.MsFormatter;
 import ca.phon.media.MediaLocator;
 import ca.phon.media.VLCHelper;
+import ca.phon.media.VolumeModel;
 import ca.phon.media.player.IMediaMenuFilter;
 import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.media.player.PhonPlayerComponent;
@@ -750,6 +751,30 @@ public class MediaPlayerEditorView extends EditorView {
     }
 
     private void setupMenu(MenuBuilder menuBuilder) {
+        SessionMediaModel mediaModel = getEditor().getMediaModel();
+        menuBuilder.addItem(".", new AssignMediaAction(getEditor()));
+        menuBuilder.addItem(".", new UnassignMediaAction(getEditor())).setEnabled(mediaModel.isSessionMediaAvailable());
+        menuBuilder.addItem(".", new ShowMediaInfoAction(getEditor())).setEnabled(mediaModel.isSessionMediaAvailable());
+        menuBuilder.addSeparator(".", "media assignment actions");
+
+        JMenu volumeMenu = menuBuilder.addMenu(".", "Volume");
+        volumeMenu.add(new JCheckBoxMenuItem(new ToggleMuteAction(getEditor())));
+        volumeMenu.addSeparator();
+        for(float level = 0.25f; level <= VolumeModel.MAX_LEVEL; level += 0.25f) {
+            volumeMenu.add(new JMenuItem(new AdjustVolumeAction(getEditor(), level)));
+        }
+
+        JMenu playbackRateMenu = menuBuilder.addMenu(".", "Playback rate");
+        for(float rate = 0.25f; rate <= 2.0f; rate += 0.25f) {
+            playbackRateMenu.add(new JCheckBoxMenuItem(new AdjustPlaybackRate(getEditor(), rate)));
+        }
+        menuBuilder.addSeparator(".", "media playback actions");
+
+        PlaySegmentButton.setupPlaySegmentMenu(getEditor(), null, menuBuilder);
+        menuBuilder.addSeparator(".", "segment playback actions");
+        ExportSegmentButton.setupExportMenu(getEditor(), null, menuBuilder);
+        menuBuilder.addSeparator(".", "segment export actions");
+
         final PhonUIAction moveToExternalWindowAct = PhonUIAction.runnable(MediaPlayerEditorView.this::toggleEmbeddedExternal);
         moveToExternalWindowAct.putValue(PhonUIAction.NAME, embedded ? "Open Media Player in new window" : "Switch to embedded Media Player");
         moveToExternalWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, embedded ? "Move media player to external window" : "Embed media player in session editor window");
@@ -764,7 +789,7 @@ public class MediaPlayerEditorView extends EditorView {
             final JMenu videoSizeMenu = menuBuilder.addMenu(".", "Video size and position");
             final MenuBuilder videoSizeMenuBuilder = new MenuBuilder(videoSizeMenu);
 
-            final PhonUIAction resetVideoSizeAct = PhonUIAction.runnable(MediaPlayerEditorView.this::resetVideSize);
+            final PhonUIAction resetVideoSizeAct = PhonUIAction.runnable(MediaPlayerEditorView.this::resetVideoSize);
             resetVideoSizeAct.putValue(PhonUIAction.NAME, "Reset video size");
             resetVideoSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset video size to default");
             videoSizeMenuBuilder.addItem(".", new JMenuItem(resetVideoSizeAct));
@@ -809,7 +834,7 @@ public class MediaPlayerEditorView extends EditorView {
         }
     }
 
-    private void resetVideSize() {
+    private void resetVideoSize() {
         if(embedded) {
             final VideoPositionAndSizeEdit edit = new VideoPositionAndSizeEdit(this,
                     mediaCanvasX, mediaCanvasY, -1, -1,
