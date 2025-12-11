@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.ui.KeyStrokeUtil;
 import ca.phon.util.icons.*;
 
 import javax.swing.*;
@@ -33,8 +34,6 @@ public class PreviousRecordAction extends SessionEditorAction {
 	
 	private final static String SHORT_DESC = "Go to previous record";
 	
-	private final static String ICON = "actions/go-previous";
-	
 	private final static KeyStroke KS =
 			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
@@ -42,8 +41,9 @@ public class PreviousRecordAction extends SessionEditorAction {
 		super(editor);
 		
 		putValue(NAME, CMD_NAME);
-		putValue(SHORT_DESCRIPTION, SHORT_DESC);
-		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		putValue(SHORT_DESCRIPTION, SHORT_DESC + " (" + KeyStrokeUtil.keyStrokeToString(KS) + ")");
+		final ImageIcon prevIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "chevron_left", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+		putValue(SMALL_ICON, prevIcon);
 		putValue(ACCELERATOR_KEY, KS);
 	}
 

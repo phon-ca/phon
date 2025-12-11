@@ -22,9 +22,9 @@ public class KeyStrokeUtil {
         StringBuilder sb = new StringBuilder();
         int mod = ks.getModifiers();
         if ((mod & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) != 0) sb.append("⌘");
+        if ((mod & KeyEvent.CTRL_DOWN_MASK) != 0) sb.append("⌃");
         if ((mod & KeyEvent.SHIFT_DOWN_MASK) != 0) sb.append("⇧");
         if ((mod & KeyEvent.ALT_DOWN_MASK) != 0) sb.append("⌥");
-        if ((mod & KeyEvent.CTRL_DOWN_MASK) != 0) sb.append("⌃");
         sb.append(KeyEvent.getKeyText(ks.getKeyCode()));
         return sb.toString();
     }

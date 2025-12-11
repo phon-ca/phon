@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.ui.KeyStrokeUtil;
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.icons.*;
 
@@ -34,17 +35,16 @@ public class LastRecordAction extends SessionEditorAction {
 	
 	private final static String SHORT_DESC = "Go to last record";
 	
-	private final static String ICON = "actions/go-last";
-	
-	private final static KeyStroke KS = 
+	private final static KeyStroke KS =
 			KeyStroke.getKeyStroke(KeyEvent.VK_N, (OSInfo.isMacOs() ? KeyEvent.CTRL_MASK : KeyEvent.ALT_MASK) | KeyEvent.SHIFT_MASK );
 
 	public LastRecordAction(SessionEditor editor) {
 		super(editor);
 		
 		putValue(NAME, CMD_NAME);
-		putValue(SHORT_DESCRIPTION, SHORT_DESC);
-		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		putValue(SHORT_DESCRIPTION, SHORT_DESC + " (" + KeyStrokeUtil.keyStrokeToString(KS) + ")");
+		final ImageIcon lastPage = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "last_page", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+		putValue(SMALL_ICON, lastPage);
 		putValue(ACCELERATOR_KEY, KS);
 	}
 
