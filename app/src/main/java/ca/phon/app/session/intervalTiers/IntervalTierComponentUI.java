@@ -311,9 +311,7 @@ public class IntervalTierComponentUI extends TimeComponentUI {
                 .map( entry -> new Tuple<>(entry.geometry(), entry.value()))
                 .subscribe(tupleList::add);
 
-            tc.requestFocus();
-
-            SwingUtilities.invokeLater(() -> {
+            final Runnable selectRunnable = () -> {
                 if(tupleList.size() == 1) {
                     final int selectedIdx = tupleList.get(0).getObj2();
                     if(e.getButton() == MouseEvent.BUTTON1) {
@@ -328,7 +326,14 @@ public class IntervalTierComponentUI extends TimeComponentUI {
                         }
                     }
                 }
-            });
+            };
+            if(!tc.isFocusOwner()) {
+                tc.requestFocus();
+                SwingUtilities.invokeLater(selectRunnable);
+            } else {
+                selectRunnable.run();
+            }
+
             tc.repaint();
             e.consume();
         }
