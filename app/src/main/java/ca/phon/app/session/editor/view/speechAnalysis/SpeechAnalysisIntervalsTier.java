@@ -1121,12 +1121,32 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final IntervalTier.Interval phoneInterval =
                 currentIntervalTierComponent.getTimelineTier().getIntervals().get(currentIntervalIndex);
 
-        final int[] wordIntervals =
-                wordIntervalTier.getTimelineTier().overlappingIntervals(
-                        phoneInterval,
-                        SegmentOverlapUtil.OverlapType.IS_FULLY_CONTAINED,
-                        SegmentOverlapUtil.OverlapType.FULLY_CONTAINS
-                );
+//        final RecordIntervalTier worTier =
+//                wordIntervalTier.getTimelineTier().getExtension(RecordIntervalTier.class);
+        int wordIntervals[] = null;
+        // TODO fix this - inefficient way of finding overlapping intervals we don't need to check all records
+//        if(worTier != null) {
+//            final List<Integer> wordIntervalList = new ArrayList<>();
+//            final List<IntervalTier.Interval> recordIntervals = worTier.getIntervals(currentRecord);
+//            final Range intervalRange = worTier.getIntervalRangeForRecord(currentRecord);
+//            for(int i = 0; i < recordIntervals.size(); i++) {
+//                final IntervalTier.Interval interval = recordIntervals.get(i);
+//                final var overlapType = phoneInterval.overlapType(interval);
+//                System.out.println("Checking phone interval " + phoneInterval + " against word interval " + interval + ": " + overlapType);
+//                if(overlapType == SegmentOverlapUtil.OverlapType.IS_FULLY_CONTAINED ||
+//                        overlapType == SegmentOverlapUtil.OverlapType.FULLY_CONTAINS) {
+//                    wordIntervalList.add(i + intervalRange.getStart());
+//                }
+//            }
+//            wordIntervals = wordIntervalList.stream().mapToInt(i->i).toArray();
+//        } else {
+            wordIntervals = wordIntervalTier.getTimelineTier().overlappingIntervals(
+                    phoneInterval,
+                    SegmentOverlapUtil.OverlapType.IS_FULLY_CONTAINED,
+                    SegmentOverlapUtil.OverlapType.FULLY_CONTAINS
+            );
+
+//        }
         if(wordIntervals.length == 0) return;
 
         final int wordIntervalIndex = wordIntervals[0];

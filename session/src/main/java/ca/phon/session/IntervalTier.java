@@ -144,6 +144,7 @@ public final class IntervalTier extends ExtendableObject {
             for(OverlapType ot:overlapTypes) {
                 if(ot == overlapType) {
                     overlappingIndices.add(i);
+                    break;
                 }
             }
         }
