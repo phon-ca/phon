@@ -201,11 +201,9 @@ public final class TimelineView extends EditorView {
 
 		setLayout(new BorderLayout());
 
-		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel());
-		volumeSlider.setFocusable(false);
+
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(toolbar, BorderLayout.CENTER);
-		topPanel.add(volumeSlider, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 		
 		add(tierScrollPane, BorderLayout.CENTER);
@@ -496,6 +494,10 @@ public final class TimelineView extends EditorView {
 		toolbar.add(fontSizeButton, IconStrip.IconStripPosition.RIGHT);
 		toolbar.add(zoomInButton, IconStrip.IconStripPosition.RIGHT);
 		toolbar.add(zoomOutButton, IconStrip.IconStripPosition.RIGHT);
+
+		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel());
+		volumeSlider.setFocusable(false);
+		toolbar.add(volumeSlider, IconStrip.IconStripPosition.RIGHT);
 		
 		return toolbar;
 	}

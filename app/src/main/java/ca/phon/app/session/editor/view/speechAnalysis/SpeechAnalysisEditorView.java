@@ -150,11 +150,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setLayout(new BorderLayout());
 		toolbar = setupToolbar();
 
-		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel());
-		volumeSlider.setFocusable(false);
+
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(toolbar, BorderLayout.CENTER);
-		topPanel.add(volumeSlider, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
 		errorPanel = new JPanel(new VerticalLayout());
@@ -347,6 +345,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 		toolbar.add(refreshButton, IconStrip.IconStripPosition.RIGHT);
 		toolbar.add(showMoreButton, IconStrip.IconStripPosition.RIGHT);
 		toolbar.add(zoomOutButton, IconStrip.IconStripPosition.RIGHT);
+
+		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel());
+		volumeSlider.setFocusable(false);
+		toolbar.add(volumeSlider, IconStrip.IconStripPosition.RIGHT);
 
 		return toolbar;
 	}
