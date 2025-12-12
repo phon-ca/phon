@@ -111,8 +111,12 @@ public class RecordIntervalTier implements IntervalTierSPI {
         final Map<Record, List<IntervalTier.Interval>> recordIntervals =
                 getRecordIntervalData(true);
         final List<IntervalTier.Interval> intervals = new ArrayList<>();
-        for(Record record:session.getRecords()) {
-            intervals.addAll(recordIntervals.get(record));
+        for(int transcriptEleIdx = 0; transcriptEleIdx < session.getTranscript().getNumberOfElements(); transcriptEleIdx++) {
+            final Transcript.Element ele = session.getTranscript().getElementAt(transcriptEleIdx);
+            if(ele.isRecord()) {
+                final Record record = ele.asRecord();
+                intervals.addAll(recordIntervals.get(record));
+            }
         }
         return Collections.unmodifiableList(intervals);
     }
