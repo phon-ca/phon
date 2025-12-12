@@ -63,6 +63,7 @@
 		<ca.phon.native-dialogs.version>22</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>5</ca.phon.jbreadcrumb.version>
 
+		<ca.hedlund.jpraat.version>1.2.2</ca.hedlund.jpraat.version>
 		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
 		<com.fifesoft.autocomplete.version>2.6.1</com.fifesoft.autocomplete.version>
 		<com.fifesoft.rsyntaxtextarea.version>2.6.1</com.fifesoft.rsyntaxtextarea.version>
@@ -192,6 +193,12 @@
 				<groupId>ca.phon.opgraph</groupId>
 				<artifactId>opgraph-common-nodes</artifactId>
 				<version>${ca.phon.opgraph.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>ca.hedlund</groupId>
+				<artifactId>jpraat</artifactId>
+				<version>${ca.hedlund.jpraat.version}</version>
 			</dependency>
 
 			<dependency>

@@ -16,3 +16,5 @@ ca.phon.app.IPADictionaryInitHook
 ca.phon.app.ObjectLoaderHook
 # Windows URI handler
 ca.phon.app.WindowsURIHandler
+# Praat integration
+ca.phon.app.PraatStartupHook

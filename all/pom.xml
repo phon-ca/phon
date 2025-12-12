@@ -53,7 +53,6 @@
 		<ca.phon.phon-dict-data.version>57</ca.phon.phon-dict-data.version>
 		<ca.phon.phon-shell-plugin.version>30-SNAPSHOT</ca.phon.phon-shell-plugin.version>
 		<ca.phon.phon-groovy-plugin.version>9</ca.phon.phon-groovy-plugin.version>
-		<ca.phon.phon-praat-plugin.version>74-SNAPSHOT</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-version-triggers.version>12</ca.phon.phon-version-triggers.version>
 		<ca.phon.phontalk.version>4.0.0-3.2.4-SNAPSHOT</ca.phon.phontalk.version>
 	</properties>
@@ -81,12 +80,6 @@
 			<groupId>ca.phon</groupId>
 			<artifactId>phon-groovy-plugin</artifactId>
 			<version>${ca.phon.phon-groovy-plugin.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ca.phon</groupId>
-			<artifactId>phon-praat-plugin</artifactId>
-			<version>${ca.phon.phon-praat-plugin.version}</version>
 		</dependency>
 
 		<dependency>
