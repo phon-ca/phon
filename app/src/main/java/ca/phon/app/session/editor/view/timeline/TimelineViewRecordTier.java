@@ -345,11 +345,11 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 
 			MediaSegment recordSeg = r.getMediaSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
-			float startValue = recordSeg.getStartValue() + (1000.0f * secondsToAdd);
-			float endValue = recordSeg.getEndValue() + (1000.0f * secondsToAdd);
+			float startValue = recordSeg.getStartTime() + secondsToAdd;
+			float endValue = recordSeg.getEndTime() + secondsToAdd;
 			if(endValue/1000.0f <= getTimeModel().getEndTime()) {
-				seg.setStartValue(startValue);
-				seg.setEndValue(endValue);
+				seg.setStartTime(startValue);
+				seg.setEndTime(endValue);
 
 				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 				changeSeg.setValueAdjusting(false);
@@ -396,12 +396,12 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 
 			MediaSegment recordSeg = r.getMediaSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
-			float startValue = recordSeg.getStartValue() + (1000.0f * secondsToSubtract);
-			float endValue = recordSeg.getEndValue() - (1000.0f * secondsToSubtract);
+			float startValue = recordSeg.getStartTime() + secondsToSubtract;
+			float endValue = recordSeg.getEndTime() - secondsToSubtract;
 
 			if(startValue <= endValue) {
-				seg.setStartValue(startValue);
-				seg.setEndValue(endValue);
+				seg.setStartTime(startValue);
+				seg.setEndTime(endValue);
 
 				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 				changeSeg.setFireHardChangeOnUndo(true);
@@ -423,12 +423,12 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 
 			MediaSegment recordSeg = r.getMediaSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
-			float startValue =  recordSeg.getStartValue() - (1000.0f * secondsToAdd);
-			float endValue = recordSeg.getEndValue() - (1000.0f * secondsToAdd);
+			float startValue =  recordSeg.getStartTime() - secondsToAdd;
+			float endValue = recordSeg.getEndTime() - secondsToAdd;
 
 			if(startValue >= 0) {
-				seg.setStartValue(startValue);
-				seg.setEndValue(endValue);
+				seg.setStartTime(startValue);
+				seg.setEndTime(endValue);
 
 				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 				changeSeg.setFireHardChangeOnUndo(true);
