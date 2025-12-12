@@ -772,6 +772,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		menuBuilder.addItem(".", new ZoomAction(getEditor(), this, false));
 
 		for(SpeechAnalysisTier tier:pluginTiers) {
+			menuBuilder.addSeparator(".", tier.getName());
 			tier.addMenuItems(menuBuilder, false);
 		}
 	}
