@@ -286,7 +286,7 @@ public class TranscriptView extends EditorView {
         showMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Transcript menu");
         showMenuAct.putValue(PhonUIAction.NAME, "");
         showMenuAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        showMenuAct.putValue(FlatButton.ICON_NAME_PROP, "menu");
+        showMenuAct.putValue(FlatButton.ICON_NAME_PROP, "more_vert");
         showMenuAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
         final FlatButton transcriptBtn = new FlatButton(showMenuAct);
         transcriptBtn.setPadding(2);
@@ -302,8 +302,40 @@ public class TranscriptView extends EditorView {
         fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
         final FlatButton fontScaleMenuButton = new FlatButton(fontScaleMenuAct);
         fontScaleMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
 //        toolbar.add(fontScaleMenuButton);
 
+        final NewRecordAction newRecordAction = new NewRecordAction(getEditor());
+        newRecordAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        newRecordAction.putValue(FlatButton.ICON_NAME_PROP, "add_box");
+        newRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        newRecordAction.putValue(PhonUIAction.NAME, "");
+        final FlatButton newRecordButton = new FlatButton(newRecordAction);
+        newRecordButton.setPadding(2);
+
+        final DuplicateRecordAction duplicateRecordAction = new DuplicateRecordAction(getEditor());
+        duplicateRecordAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        duplicateRecordAction.putValue(FlatButton.ICON_NAME_PROP, "content_copy");
+        duplicateRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        duplicateRecordAction.putValue(PhonUIAction.NAME, "");
+        final FlatButton duplicateRecordButton = new FlatButton(duplicateRecordAction);
+        duplicateRecordButton.setPadding(2);
+
+        final DeleteRecordAction deleteRecordAction = new DeleteRecordAction(getEditor());
+        deleteRecordAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        deleteRecordAction.putValue(FlatButton.ICON_NAME_PROP, "delete_forever");
+        deleteRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        deleteRecordAction.putValue(PhonUIAction.NAME, "");
+        final FlatButton deleteRecordButton = new FlatButton(deleteRecordAction);
+        deleteRecordButton.setPadding(2);
+
+        NavigationPanel navPanel = new NavigationPanel(getEditor());
+        iconStrip.add(navPanel, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(newRecordButton, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(duplicateRecordButton, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(deleteRecordButton, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.LEFT);
 
 //        iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
@@ -313,11 +345,6 @@ public class TranscriptView extends EditorView {
 //        iconStrip.add(new JSeparator(SwingConstants.VERTICAL), IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.RIGHT);
-        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.RIGHT);
-
-        NavigationPanel navPanel = new NavigationPanel(getEditor());
-        iconStrip.add(navPanel, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.LEFT);
     }
 
     public JComponent getStatusBar() {
