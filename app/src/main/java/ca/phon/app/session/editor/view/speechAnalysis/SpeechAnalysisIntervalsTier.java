@@ -1,9 +1,14 @@
 package ca.phon.app.session.editor.view.speechAnalysis;
 
+import ca.hedlund.jpraat.binding.fon.TextGrid;
+import ca.hedlund.jpraat.binding.sys.MelderFile;
+import ca.hedlund.jpraat.exceptions.PraatException;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.undo.AddIntervalTierEdit;
 import ca.phon.app.session.editor.undo.AddTierEdit;
+import ca.phon.app.session.editor.undo.AddTimelineTierIntervalsEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.intervalTiers.*;
 import ca.phon.media.TimeUIModel;
@@ -16,11 +21,16 @@ import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.Range;
 import ca.phon.util.SegmentOverlapUtil;
 import ca.phon.util.icons.IconManager;
@@ -449,8 +459,15 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
     private String recordIntervalTierInfoText() {
         return """
-                <html><p>Record interval tiers are stored in record data<br/>
+                <html><p>Record interval tiers are stored as text in record data<br/>
                 and are updated with changes to the record segment.<br/>
+                </p></html>""";
+    }
+
+    private String sessionIntervalTierInfoText() {
+        return """
+                <html><p>Session interval tiers are stored in the session timeline<br/>
+                and are not associated with or affected by changes to record segments.<br/>
                 </p></html>""";
     }
 
@@ -460,7 +477,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final JMenu recordIntervalTiersMenu = mb.addMenu(".", "Record Interval Tiers");
 
         final HidablePanel infoPanel = new HidablePanel("SpeechAnalysisIntervalsTier.recordIntervalTierInfo");
-        infoPanel.setTopLabelText("<html><em>Record Interval Tiers</em></html>");
+        infoPanel.setTopLabelText("<html><em>Record interval tiers</em></html>");
         infoPanel.setBottomLabelText(recordIntervalTierInfoText());
 
         recordIntervalTiersMenu.add(infoPanel);
@@ -502,7 +519,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
             // add show all/hide all
             recordTierMenuBuilder.addSeparator(".", "showhide");
-            final JMenuItem showAllItem = new JMenuItem("Show All");
+            final JMenuItem showAllItem = new JMenuItem("Show all");
             showAllItem.addActionListener( (e) -> {
                 getParentView().getEditor().getUndoSupport().beginUpdate("Show all record interval tiers");
                 for(var entry: recordDataIntervalTiers.entrySet()) {
@@ -536,8 +553,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         }
 
         // add show/hide menu items for each tier
+        final JMenu sessionIntervalTiersMenu = mb.addMenu(".", "Session Interval Tiers");
+        final MenuBuilder sessionTierMenuBuilder = new MenuBuilder(sessionIntervalTiersMenu);
+        final HidablePanel infoPanel2 = new HidablePanel("SpeechAnalysisIntervalsTier.sessionIntervalTierInfo");
+        infoPanel2.setTopLabelText("<html><em>Session interval tiers</em></html>");
+        infoPanel2.setBottomLabelText(sessionIntervalTierInfoText());
+        sessionIntervalTiersMenu.add(infoPanel2);
         if(!sessionLevelIntervalTiers.isEmpty()) {
-            final MenuBuilder sessionTierMenuBuilder = new MenuBuilder(mb.addMenu(".", "Session Interval Tiers"));
             for(var entry: sessionLevelIntervalTiers.entrySet()) {
                 final String tierName = entry.getKey();
                 final IntervalTierComponent tierComp = entry.getValue();
@@ -642,6 +664,11 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             });
             sessionTierMenuBuilder.addItem(".", hideAllItem);
         }
+        sessionTierMenuBuilder.addSeparator(".", "import");
+        final PhonUIAction<SpeechAnalysisIntervalsTier> importTextGridAction = PhonUIAction.consumer(this::onImportTextGrid, this);
+        importTextGridAction.putValue(PhonUIAction.NAME, "Import TextGrid...");
+        importTextGridAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Import intervals tiers from a Praat TextGrid file");
+        sessionTierMenuBuilder.addItem(".",  importTextGridAction);
 
         // plugin point for adding menu items
         final List<IPluginExtensionPoint<IntervalTierMenuHandler>> extPts =
@@ -653,6 +680,60 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
             } catch (Exception ex) {
                 LogUtil.severe(ex);
             }
+        }
+    }
+
+    private void onImportTextGrid(SpeechAnalysisIntervalsTier speechAnalysisIntervalsTier) {
+        final Session session = speechAnalysisIntervalsTier.getParentView().getEditor().getSession();
+
+        final OpenDialogProperties props = new OpenDialogProperties();
+        props.setCanChooseFiles(true);
+        props.setCanChooseDirectories(false);
+        props.setAllowMultipleSelection(false);
+        props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+        props.setTitle("Import TextGrid file");
+        props.setMessage("Please select a file to import");
+        final FileFilter textGridFilter =  new FileFilter("TextGrid Files", "textgrid");
+        props.setFileFilter(textGridFilter);
+        props.setRunAsync(true);
+        props.setListener((openEvent) -> {
+            if(openEvent.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+                final String selectedFile = openEvent.getDialogData().toString();
+                importTextGrid(session, speechAnalysisIntervalsTier, selectedFile);
+            }
+        });
+
+        NativeDialogs.showOpenDialog(props);
+    }
+
+    private void importTextGrid(Session session, SpeechAnalysisIntervalsTier speechAnalysisIntervalsTier, String filePath) {
+        try {
+            final TextGrid tg = TextGrid.readFromTextFile(TextGrid.class, MelderFile.fromPath(filePath));
+            final TextGridImporter importer = new TextGridImporter();
+            final List<IntervalTier> importedTierData = importer.importTextGrid(tg);
+
+            speechAnalysisIntervalsTier.getParentView().getEditor().getUndoSupport().beginUpdate("Import TextGrid");
+            for(IntervalTier tier : importedTierData) {
+                final IntervalTier existingTier = session.getTimeline().getTier(tier.getName());
+                final IntervalTier importToTier = (existingTier != null ? existingTier : session.getTimeline().addTier(tier.getName()));
+
+                if(existingTier == null) {
+                    // perform add timeline tier edit
+                    final AddIntervalTierEdit addTierEdit = new AddIntervalTierEdit(session,
+                            speechAnalysisIntervalsTier.getParentView().getEditor().getEventManager(),
+                            importToTier.getName());
+                    speechAnalysisIntervalsTier.getParentView().getEditor().getUndoSupport().postEdit(addTierEdit);
+                }
+
+                // add all intervals to the tier
+                final AddTimelineTierIntervalsEdit addIntervalsEdit = new AddTimelineTierIntervalsEdit(session,
+                        speechAnalysisIntervalsTier.getParentView().getEditor().getEventManager(),
+                        importToTier.getName(), tier.getIntervals());
+                speechAnalysisIntervalsTier.getParentView().getEditor().getUndoSupport().postEdit(addIntervalsEdit);
+            }
+            speechAnalysisIntervalsTier.getParentView().getEditor().getUndoSupport().endUpdate();
+        } catch (PraatException e) {
+            LogUtil.severe(e);
         }
     }
 
