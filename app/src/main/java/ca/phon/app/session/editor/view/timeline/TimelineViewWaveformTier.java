@@ -226,8 +226,9 @@ public class TimelineViewWaveformTier extends TimelineViewTier {
 		Record utt = factory.createRecord(getParentView().getEditor().getSession(), speaker);
 
 		MediaSegment m = factory.createMediaSegment();
-		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
-		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
+		m.setUnitType(MediaUnit.Second);
+		m.setStartTime(selectionInterval.getStartMarker().getTime());
+		m.setEndTime(selectionInterval.getEndMarker().getTime());
 		utt.setMediaSegment(m);
 		
 		final SessionEditor editor = getParentView().getEditor();
@@ -245,8 +246,9 @@ public class TimelineViewWaveformTier extends TimelineViewTier {
 		
 		final SessionFactory factory = SessionFactory.newFactory();
 		MediaSegment m = factory.createMediaSegment();
-		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
-		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
+		m.setUnitType(MediaUnit.Second);
+		m.setStartTime(selectionInterval.getStartMarker().getTime());
+		m.setEndTime(selectionInterval.getEndMarker().getTime());
 
 		final RecordSegmentEdit segEdit = new RecordSegmentEdit(getParentView().getEditor(), currentRecord, m);
 		segEdit.setFireHardChangeOnUndo(true);
