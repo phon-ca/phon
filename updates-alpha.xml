@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.47/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_47.dmg" newVersion="4.0.0-alpha.47" newMediaFileId="macos" fileSize="480208627" md5Sum="77fe48e25e19d448ae82cfdbeb981845" sha256Sum="ad9027d1399ad4c0c83d586f107eb7f8d1e1d413824e3c12254bb7454f89801c" bundledJre="macos-universal-25.tar.gz" archive="true" singleBundle="true">
-    <comment language="en"># Changes since Phon 3.5
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.48/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_48.dmg" newVersion="4.0.0-alpha.48" newMediaFileId="macos" fileSize="402010953" md5Sum="2075ed6e4caeabf39b5a71feee475ae4" sha256Sum="49cf94ae0ecf7428b3ec0de56c5b129849161e9e88efbdb4370ef72743560ad9" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+
+ * Added 'fix' and 'fix all' buttons to Session Check view
+ * Update ipa fonts
+
+# Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
@@ -60,8 +65,13 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_47.dmg" newVersion="4.0.0-alpha.47" newMediaFileId="macos" fileSize="480208627" md5Sum="77fe48e25e19d448ae82cfdbeb981845" sha256Sum="ad9027d1399ad4c0c83d586f107eb7f8d1e1d413824e3c12254bb7454f89801c" bundledJre="macos-universal-25.tar.gz" archive="true" singleBundle="true">
-    <comment language="en"># Changes since Phon 3.5
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_48.dmg" newVersion="4.0.0-alpha.48" newMediaFileId="macos" fileSize="402010953" md5Sum="2075ed6e4caeabf39b5a71feee475ae4" sha256Sum="49cf94ae0ecf7428b3ec0de56c5b129849161e9e88efbdb4370ef72743560ad9" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+
+ * Added 'fix' and 'fix all' buttons to Session Check view
+ * Update ipa fonts
+
+# Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
@@ -120,8 +130,13 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_47.exe" newVersion="4.0.0-alpha.47" newMediaFileId="win64" fileSize="461990912" md5Sum="fbd60bbb5ba7b799d0dd07a9e3b4282e" sha256Sum="75fa31d7d295c016c7b9e04fd69b607761d25da7b08ee4842021b5cb5943ac05" bundledJre="windows-amd64-25.tar.gz" archive="false" singleBundle="false">
-    <comment language="en"># Changes since Phon 3.5
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.exe" newVersion="4.0.0-alpha.48" newMediaFileId="win64" fileSize="377856512" md5Sum="c97558f2b259b7e2830dd8dbe46b95b7" sha256Sum="56c5697d034d07dd5a04e797bd54f421e44d9f553042e11994ca665c9319c17c" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+
+ * Added 'fix' and 'fix all' buttons to Session Check view
+ * Update ipa fonts
+
+# Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
@@ -180,8 +195,13 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_47.exe" newVersion="4.0.0-alpha.47" newMediaFileId="win64" fileSize="461990912" md5Sum="fbd60bbb5ba7b799d0dd07a9e3b4282e" sha256Sum="75fa31d7d295c016c7b9e04fd69b607761d25da7b08ee4842021b5cb5943ac05" bundledJre="windows-amd64-25.tar.gz" archive="false" singleBundle="false">
-    <comment language="en"># Changes since Phon 3.5
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.exe" newVersion="4.0.0-alpha.48" newMediaFileId="win64" fileSize="377856512" md5Sum="c97558f2b259b7e2830dd8dbe46b95b7" sha256Sum="56c5697d034d07dd5a04e797bd54f421e44d9f553042e11994ca665c9319c17c" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+
+ * Added 'fix' and 'fix all' buttons to Session Check view
+ * Update ipa fonts
+
+# Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
@@ -240,8 +260,13 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_47.exe" newVersion="4.0.0-alpha.47" newMediaFileId="win64" fileSize="461990912" md5Sum="fbd60bbb5ba7b799d0dd07a9e3b4282e" sha256Sum="75fa31d7d295c016c7b9e04fd69b607761d25da7b08ee4842021b5cb5943ac05" bundledJre="windows-amd64-25.tar.gz" archive="false" singleBundle="false">
-    <comment language="en"># Changes since Phon 3.5
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.exe" newVersion="4.0.0-alpha.48" newMediaFileId="win64" fileSize="377856512" md5Sum="c97558f2b259b7e2830dd8dbe46b95b7" sha256Sum="56c5697d034d07dd5a04e797bd54f421e44d9f553042e11994ca665c9319c17c" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+
+ * Added 'fix' and 'fix all' buttons to Session Check view
+ * Update ipa fonts
+
+# Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
@@ -300,8 +325,13 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_47.zip" newVersion="4.0.0-alpha.47" newMediaFileId="win64zip" fileSize="460919454" md5Sum="6f24eb61978da608aee59bbd2ffee98c" sha256Sum="579c03fe072bc7968199a93c480befc4fbee76efc9095cf4489e6f87f8837dd2" bundledJre="windows-amd64-25.tar.gz" archive="true" singleBundle="false">
-    <comment language="en"># Changes since Phon 3.5
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.zip" newVersion="4.0.0-alpha.48" newMediaFileId="win64zip" fileSize="376460148" md5Sum="ea4c4623dad69930126442cadcec087f" sha256Sum="a5f9f51b95bfaa394fc227872cc833f7d3d87bc95b11d032e7b9f3a6dfc4ccb8" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+
+ * Added 'fix' and 'fix all' buttons to Session Check view
+ * Update ipa fonts
+
+# Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
 
