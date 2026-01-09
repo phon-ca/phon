@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.48/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_48.dmg" newVersion="4.0.0-alpha.48" newMediaFileId="macos" fileSize="402010953" md5Sum="2075ed6e4caeabf39b5a71feee475ae4" sha256Sum="49cf94ae0ecf7428b3ec0de56c5b129849161e9e88efbdb4370ef72743560ad9" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/speechmetrics/phon-releases/releases/download/4.0.0-alpha.49/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_49.dmg" newVersion="4.0.0-alpha.49" newMediaFileId="macos" fileSize="402006553" md5Sum="f481464cd2dd480ed353205248932a96" sha256Sum="c3040a1c289ecc6557e13aba60f876c12008c8e56f385b5fd2f70a4582267a7b" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 4.0.0-alpha.47
 
  * Added 'fix' and 'fix all' buttons to Session Check view
+ * Improved session check quick-fixes
  * Update ipa fonts
 
 # Changes since Phon 3.5
@@ -65,10 +66,11 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_48.dmg" newVersion="4.0.0-alpha.48" newMediaFileId="macos" fileSize="402010953" md5Sum="2075ed6e4caeabf39b5a71feee475ae4" sha256Sum="49cf94ae0ecf7428b3ec0de56c5b129849161e9e88efbdb4370ef72743560ad9" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_49.dmg" newVersion="4.0.0-alpha.49" newMediaFileId="macos" fileSize="402006553" md5Sum="f481464cd2dd480ed353205248932a96" sha256Sum="c3040a1c289ecc6557e13aba60f876c12008c8e56f385b5fd2f70a4582267a7b" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 4.0.0-alpha.47
 
  * Added 'fix' and 'fix all' buttons to Session Check view
+ * Improved session check quick-fixes
  * Update ipa fonts
 
 # Changes since Phon 3.5
@@ -130,10 +132,11 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.exe" newVersion="4.0.0-alpha.48" newMediaFileId="win64" fileSize="377856512" md5Sum="c97558f2b259b7e2830dd8dbe46b95b7" sha256Sum="56c5697d034d07dd5a04e797bd54f421e44d9f553042e11994ca665c9319c17c" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.exe" newVersion="4.0.0-alpha.49" newMediaFileId="win64" fileSize="377906176" md5Sum="70b4833e628584cb481a18eff7b7dfb5" sha256Sum="e068d7d6754964e1cfac8a16553c172ae93a464540f7628706d3f073144ac779" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 4.0.0-alpha.47
 
  * Added 'fix' and 'fix all' buttons to Session Check view
+ * Improved session check quick-fixes
  * Update ipa fonts
 
 # Changes since Phon 3.5
@@ -195,10 +198,11 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.exe" newVersion="4.0.0-alpha.48" newMediaFileId="win64" fileSize="377856512" md5Sum="c97558f2b259b7e2830dd8dbe46b95b7" sha256Sum="56c5697d034d07dd5a04e797bd54f421e44d9f553042e11994ca665c9319c17c" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.exe" newVersion="4.0.0-alpha.49" newMediaFileId="win64" fileSize="377906176" md5Sum="70b4833e628584cb481a18eff7b7dfb5" sha256Sum="e068d7d6754964e1cfac8a16553c172ae93a464540f7628706d3f073144ac779" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 4.0.0-alpha.47
 
  * Added 'fix' and 'fix all' buttons to Session Check view
+ * Improved session check quick-fixes
  * Update ipa fonts
 
 # Changes since Phon 3.5
@@ -260,10 +264,11 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.exe" newVersion="4.0.0-alpha.48" newMediaFileId="win64" fileSize="377856512" md5Sum="c97558f2b259b7e2830dd8dbe46b95b7" sha256Sum="56c5697d034d07dd5a04e797bd54f421e44d9f553042e11994ca665c9319c17c" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.exe" newVersion="4.0.0-alpha.49" newMediaFileId="win64" fileSize="377906176" md5Sum="70b4833e628584cb481a18eff7b7dfb5" sha256Sum="e068d7d6754964e1cfac8a16553c172ae93a464540f7628706d3f073144ac779" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 4.0.0-alpha.47
 
  * Added 'fix' and 'fix all' buttons to Session Check view
+ * Improved session check quick-fixes
  * Update ipa fonts
 
 # Changes since Phon 3.5
@@ -325,10 +330,11 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_48.zip" newVersion="4.0.0-alpha.48" newMediaFileId="win64zip" fileSize="376460148" md5Sum="ea4c4623dad69930126442cadcec087f" sha256Sum="a5f9f51b95bfaa394fc227872cc833f7d3d87bc95b11d032e7b9f3a6dfc4ccb8" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.zip" newVersion="4.0.0-alpha.49" newMediaFileId="win64zip" fileSize="376522575" md5Sum="fb86447fa3bd0ae1e30bf67b09e4059b" sha256Sum="6cb2f3ebd5a4ed26f60db6961ffcf916430d35c67aeeca14086e13e2e889c557" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 4.0.0-alpha.47
 
  * Added 'fix' and 'fix all' buttons to Session Check view
+ * Improved session check quick-fixes
  * Update ipa fonts
 
 # Changes since Phon 3.5
