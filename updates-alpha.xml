@@ -1,143 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/speechmetrics/phon-releases/releases/download/4.0.0-alpha.49/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_49.dmg" newVersion="4.0.0-alpha.49" newMediaFileId="macos" fileSize="402006553" md5Sum="f481464cd2dd480ed353205248932a96" sha256Sum="c3040a1c289ecc6557e13aba60f876c12008c8e56f385b5fd2f70a4582267a7b" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
-    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+<updateDescriptor baseUrl="https://github.com/speechmetrics/phon-releases/releases/download/4.0.0-alpha.64/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_64.dmg" newVersion="4.0.0-alpha.64" newMediaFileId="macos" fileSize="422722423" md5Sum="c6edf3d8d8d680d4439a85b7e19407df" sha256Sum="2e1d261e3b2a97ee0a53cb2f7c3a0f19a19016afb6d379de8804374d36ede820" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.59
 
- * Added 'fix' and 'fix all' buttons to Session Check view
- * Improved session check quick-fixes
- * Update ipa fonts
+## Project tree scripts
 
-# Changes since Phon 3.5
+  - add 'Script folders' node to project tree window showing user, project, and custom script folders
+  - updated script editor with AI coding agent
 
-**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+## General changs
+  
+  - fixed export to CHAT dialog
+  - fixed ordering of sessions/corpora in project tree and session selector
 
-## Backend File Format Updates
-- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
-  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
+# Changes since Phon 4.0.0-alpha.56
 
-## User Interface and Experience Improvements
+## Project Window                                     
+                                         
+  - New project tree window with dialog header, project menu, and window switching between open projects
+  - Media folder browser — the Media node now shows Global and Project media folders with lazy-loaded contents, context menus, and the ability to create
+  sessions directly from media files or reveal files in Finder
+  - Session backup management — view, restore, and delete session backups from a new Manage Backups dialog; backup limit is configurable (default 20 per
+  session)
+  - Session info panel now displays recording info and duration
+  - Project info panel gains Rename Project and Data Check action buttons
+  - Improved button appearance in icon strips with visible borders, rounded corners, and configurable layout
+  - Middle-ellipsis labels for long paths that truncate from the center
 
-### Editor Navigation and Interaction
-- Improved movement between syllabification tiers and text tiers
-- Enhanced tab/shift+tab navigation between alignment and text tiers
-- Fixed update mechanisms for syllabification component when switching tiers
-- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
-- Added a "reset layout" action to the 'more' button
-- Reorganized the transcript view toolbar (#277)
-- Media player has been embedded into the Transcript view and may be externalized into its own window.
-- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
-- Play segment keyboard shortcut is now Cmd/Ctrl+Y
+## Session Editor
 
-### Timeline and Interval Tiers
-- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
-- Added Phone intervals as a new user tier type
-- Improved tier alignment with the %wor tier
-- Enhanced word/phone interval tier updates
-- Customized tier alignment with %wor tier
+  - Corpus template editor now works correctly — opens the proper template editor, initializes the transcript view for new templates, and saves via the
+  SessionTemplate API
+  - Fixed selection escaping tier bounds — selecting within header tiers, comments, and gems no longer cascades into adjacent tiers
+  - Segment overlap detection and auto-fix — the overlap check now correctly identifies and optionally auto-repairs overlapping segments for the same
+  speaker
+  - Session media check with optional auto-fix for mismatched media filenames
 
-### Bug Fixes
-- Fixed delete participant functionality (#275)
-- Fixed duplicate session issues (#272)
-- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
-- Fixed session links in generated HTML reports
-- Fixed issues with shadow projects looking for old properties file
-- Fixed issues with GEM content updating when switching tiers
+## Session Checks
 
-## Analysis Enhancements
-- Updated numerous phonological analyses to work with the new CHAT format:
-  - Word match analysis
-  - Tier match analysis
-  - Syllable count match analysis
-  - Stress match analysis
-  - CV pattern match analysis
-  - Measure of cluster proximity analysis
-  - Consonants analysis
-  - Vocalization analysis
-  - Phone clusters analysis
-  - Multi-syllabic non-linear analysis
-  - Added PMLU (Phonological Mean Length of Utterance) analysis
-  - Added phonological process analyses
+  - New settings UI for Session Media Check (check accessibility, CHAT strict mode, fix media name) and Segment Overlap Check (fix overlaps)
+  - Auto-fix mode for both checks: when enabled, fixes are applied directly and reported as informational messages instead of warnings
+  - Session-level validation events (e.g., missing media) now appear correctly in check results
 
-## Notes
-- Default user preferences will reset for Phon 4 and will no longer affect Phon 3 preferences.
-- Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
-- Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
+## Icons
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
-</comment>
-  </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_49.dmg" newVersion="4.0.0-alpha.49" newMediaFileId="macos" fileSize="402006553" md5Sum="f481464cd2dd480ed353205248932a96" sha256Sum="c3040a1c289ecc6557e13aba60f876c12008c8e56f385b5fd2f70a4582267a7b" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
-    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+  - Replaced ca.hedlund.desktopicons dependency with Google Material Design Icons across the entire application
 
- * Added 'fix' and 'fix all' buttons to Session Check view
- * Improved session check quick-fixes
- * Update ipa fonts
+## Bug Fixes
 
-# Changes since Phon 3.5
+  - Fixed intermittent welcome window layout collapse caused by pack() caching collapsed divider positions
+  - Fixed project tree selection not restored after refresh (async child loading race condition)
+  - Fixed NewSessionDialog producing invalid paths for root-level sessions
+  - Fixed corpus extraction confusing folders with session files
+  - Fixed MiddleEllipsisLabel always rendering full text instead of truncated form
 
-**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+# Changes since Phon 4.0.0-alpha.47
 
-## Backend File Format Updates
-- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
-  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
+## New Features
+ * Added drag &amp; drop support in the Project Tree window
+ * Added automatic session editor perspective persistence — layout changes are saved and restored automatically (#297)
+ * Added Git integration to the Project Tree with status indicators, commit, pull, and push actions
+ * Added keyboard shortcuts viewer and editor in Preferences
+ * Added session editor layout preferences for customizing default editor layout
+ * Added PhonShell scripting console
+ * Added auto-transcription source configuration panel to the IPA Dictionary view
+ * Added project actions to the New Project window
 
-## User Interface and Experience Improvements
+## Bug Fixes
+ * Fixed missing Dutch (NLD) syllabifiers
+ * Fixed syllabifier ordering across all locations
+ * Fixed segment overlap check logic
+ * Fixed media location edits not updating correctly
+ * Fixed Check Wizard initialization
+ * Fixed session changes not saved before record actions (#297)
 
-### Editor Navigation and Interaction
-- Improved movement between syllabification tiers and text tiers
-- Enhanced tab/shift+tab navigation between alignment and text tiers
-- Fixed update mechanisms for syllabification component when switching tiers
-- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
-- Added a "reset layout" action to the 'more' button
-- Reorganized the transcript view toolbar (#277)
-- Media player has been embedded into the Transcript view and may be externalized into its own window.
-- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
-- Play segment keyboard shortcut is now Cmd/Ctrl+Y
+## Improvements
+ * Updated Project Tree window layout and styling
+ * Session editor now loads view properties from last used perspective
+ * Improved session media file detection
 
-### Timeline and Interval Tiers
-- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
-- Added Phone intervals as a new user tier type
-- Improved tier alignment with the %wor tier
-- Enhanced word/phone interval tier updates
-- Customized tier alignment with %wor tier
+## Imported Dictionaries
 
-### Bug Fixes
-- Fixed delete participant functionality (#275)
-- Fixed duplicate session issues (#272)
-- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
-- Fixed session links in generated HTML reports
-- Fixed issues with shadow projects looking for old properties file
-- Fixed issues with GEM content updating when switching tiers
+| Dictionary | Language | Source | License | Entries | URL |
+|-----------|----------|--------|---------|---------|-----|
+| `ara-ipadict` | Arabic | ipa-dict | MIT | 1,168,152 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ar.txt) |
+| `ara-wikipron-broad` | Arabic | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 11,560 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/ara_arab_broad.tsv) |
+| `fin-ipadict` | Finnish | ipa-dict | MIT | 92,761 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/fi.txt) |
+| `fin-wikipron-broad` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 153,401 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_broad.tsv) |
+| `fin-wikipron-narrow` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 158,641 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_narrow.tsv) |
+| `hin-wikipron-broad` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,264 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_broad.tsv) |
+| `hin-wikipron-narrow` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 22,296 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_narrow.tsv) |
+| `jpn-ipadict` | Japanese | ipa-dict | MIT | 219,283 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ja.txt) |
+| `jpn-wikipron-narrow` | Japanese | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 26,589 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/jpn_hira_narrow.tsv) |
+| `kor-ipadict` | Korean | ipa-dict | MIT | 66,442 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ko.txt) |
+| `kor-wikipron-narrow` | Korean | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,689 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/kor_hang_narrow.tsv) |
+| `nob-ipadict` | Norwegian | ipa-dict | MIT | 10,266 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/nb.txt) |
+| `nob-wikipron-broad` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 3,122 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_broad.tsv) |
+| `nob-wikipron-narrow` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 691 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_narrow.tsv) |
+| `pol-wikipron-broad` | Polish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 124,883 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/pol_latn_broad.tsv) |
+| `por-br-ipadict` | Portuguese Brazilian | ipa-dict | MIT | 95,933 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/pt_BR.txt) |
+| `por-br-wikipron-broad` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 129,105 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_broad.tsv) |
+| `por-br-wikipron-narrow` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 69,704 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_narrow.tsv) |
+| `por-eu-wikipron-broad` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 71,216 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_broad.tsv) |
+| `por-eu-wikipron-narrow` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 27,792 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_narrow.tsv) |
+| `swe-ipadict` | Swedish | ipa-dict | MIT | 21,754 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/sv.txt) |
+| `swe-wikipron-broad` | Swedish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 4,499 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/swe_latn_broad.tsv) |
+| `tur-wikipron-broad` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 6,069 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_broad.tsv) |
+| `tur-wikipron-narrow` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 1,932 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_narrow.tsv) |
 
-## Analysis Enhancements
-- Updated numerous phonological analyses to work with the new CHAT format:
-  - Word match analysis
-  - Tier match analysis
-  - Syllable count match analysis
-  - Stress match analysis
-  - CV pattern match analysis
-  - Measure of cluster proximity analysis
-  - Consonants analysis
-  - Vocalization analysis
-  - Phone clusters analysis
-  - Multi-syllabic non-linear analysis
-  - Added PMLU (Phonological Mean Length of Utterance) analysis
-  - Added phonological process analyses
+## Licenses
 
-## Notes
-- Default user preferences will reset for Phon 4 and will no longer affect Phon 3 preferences.
-- Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
-- Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
+### WikiPron
+- Data: [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- Code: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- Citation: Lee et al. (2020). "Massively Multilingual Pronunciation Modeling with WikiPron." *Proceedings of LREC 2020.*
+- Repository: https://github.com/CUNY-CL/wikipron
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
-</comment>
-  </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.exe" newVersion="4.0.0-alpha.49" newMediaFileId="win64" fileSize="377906176" md5Sum="70b4833e628584cb481a18eff7b7dfb5" sha256Sum="e068d7d6754964e1cfac8a16553c172ae93a464540f7628706d3f073144ac779" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
-    <comment language="en"># Changes since Phon 4.0.0-alpha.47
-
- * Added 'fix' and 'fix all' buttons to Session Check view
- * Improved session check quick-fixes
- * Update ipa fonts
+### ipa-dict
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Repository: https://github.com/open-dict-data/ipa-dict
 
 # Changes since Phon 3.5
 
@@ -198,12 +179,125 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.exe" newVersion="4.0.0-alpha.49" newMediaFileId="win64" fileSize="377906176" md5Sum="70b4833e628584cb481a18eff7b7dfb5" sha256Sum="e068d7d6754964e1cfac8a16553c172ae93a464540f7628706d3f073144ac779" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
-    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_64.dmg" newVersion="4.0.0-alpha.64" newMediaFileId="macos" fileSize="422722423" md5Sum="c6edf3d8d8d680d4439a85b7e19407df" sha256Sum="2e1d261e3b2a97ee0a53cb2f7c3a0f19a19016afb6d379de8804374d36ede820" bundledJre="macos-universal-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="true">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.59
 
- * Added 'fix' and 'fix all' buttons to Session Check view
- * Improved session check quick-fixes
- * Update ipa fonts
+## Project tree scripts
+
+  - add 'Script folders' node to project tree window showing user, project, and custom script folders
+  - updated script editor with AI coding agent
+
+## General changs
+  
+  - fixed export to CHAT dialog
+  - fixed ordering of sessions/corpora in project tree and session selector
+
+# Changes since Phon 4.0.0-alpha.56
+
+## Project Window                                     
+                                         
+  - New project tree window with dialog header, project menu, and window switching between open projects
+  - Media folder browser — the Media node now shows Global and Project media folders with lazy-loaded contents, context menus, and the ability to create
+  sessions directly from media files or reveal files in Finder
+  - Session backup management — view, restore, and delete session backups from a new Manage Backups dialog; backup limit is configurable (default 20 per
+  session)
+  - Session info panel now displays recording info and duration
+  - Project info panel gains Rename Project and Data Check action buttons
+  - Improved button appearance in icon strips with visible borders, rounded corners, and configurable layout
+  - Middle-ellipsis labels for long paths that truncate from the center
+
+## Session Editor
+
+  - Corpus template editor now works correctly — opens the proper template editor, initializes the transcript view for new templates, and saves via the
+  SessionTemplate API
+  - Fixed selection escaping tier bounds — selecting within header tiers, comments, and gems no longer cascades into adjacent tiers
+  - Segment overlap detection and auto-fix — the overlap check now correctly identifies and optionally auto-repairs overlapping segments for the same
+  speaker
+  - Session media check with optional auto-fix for mismatched media filenames
+
+## Session Checks
+
+  - New settings UI for Session Media Check (check accessibility, CHAT strict mode, fix media name) and Segment Overlap Check (fix overlaps)
+  - Auto-fix mode for both checks: when enabled, fixes are applied directly and reported as informational messages instead of warnings
+  - Session-level validation events (e.g., missing media) now appear correctly in check results
+
+## Icons
+
+  - Replaced ca.hedlund.desktopicons dependency with Google Material Design Icons across the entire application
+
+## Bug Fixes
+
+  - Fixed intermittent welcome window layout collapse caused by pack() caching collapsed divider positions
+  - Fixed project tree selection not restored after refresh (async child loading race condition)
+  - Fixed NewSessionDialog producing invalid paths for root-level sessions
+  - Fixed corpus extraction confusing folders with session files
+  - Fixed MiddleEllipsisLabel always rendering full text instead of truncated form
+
+# Changes since Phon 4.0.0-alpha.47
+
+## New Features
+ * Added drag &amp; drop support in the Project Tree window
+ * Added automatic session editor perspective persistence — layout changes are saved and restored automatically (#297)
+ * Added Git integration to the Project Tree with status indicators, commit, pull, and push actions
+ * Added keyboard shortcuts viewer and editor in Preferences
+ * Added session editor layout preferences for customizing default editor layout
+ * Added PhonShell scripting console
+ * Added auto-transcription source configuration panel to the IPA Dictionary view
+ * Added project actions to the New Project window
+
+## Bug Fixes
+ * Fixed missing Dutch (NLD) syllabifiers
+ * Fixed syllabifier ordering across all locations
+ * Fixed segment overlap check logic
+ * Fixed media location edits not updating correctly
+ * Fixed Check Wizard initialization
+ * Fixed session changes not saved before record actions (#297)
+
+## Improvements
+ * Updated Project Tree window layout and styling
+ * Session editor now loads view properties from last used perspective
+ * Improved session media file detection
+
+## Imported Dictionaries
+
+| Dictionary | Language | Source | License | Entries | URL |
+|-----------|----------|--------|---------|---------|-----|
+| `ara-ipadict` | Arabic | ipa-dict | MIT | 1,168,152 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ar.txt) |
+| `ara-wikipron-broad` | Arabic | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 11,560 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/ara_arab_broad.tsv) |
+| `fin-ipadict` | Finnish | ipa-dict | MIT | 92,761 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/fi.txt) |
+| `fin-wikipron-broad` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 153,401 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_broad.tsv) |
+| `fin-wikipron-narrow` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 158,641 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_narrow.tsv) |
+| `hin-wikipron-broad` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,264 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_broad.tsv) |
+| `hin-wikipron-narrow` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 22,296 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_narrow.tsv) |
+| `jpn-ipadict` | Japanese | ipa-dict | MIT | 219,283 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ja.txt) |
+| `jpn-wikipron-narrow` | Japanese | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 26,589 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/jpn_hira_narrow.tsv) |
+| `kor-ipadict` | Korean | ipa-dict | MIT | 66,442 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ko.txt) |
+| `kor-wikipron-narrow` | Korean | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,689 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/kor_hang_narrow.tsv) |
+| `nob-ipadict` | Norwegian | ipa-dict | MIT | 10,266 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/nb.txt) |
+| `nob-wikipron-broad` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 3,122 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_broad.tsv) |
+| `nob-wikipron-narrow` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 691 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_narrow.tsv) |
+| `pol-wikipron-broad` | Polish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 124,883 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/pol_latn_broad.tsv) |
+| `por-br-ipadict` | Portuguese Brazilian | ipa-dict | MIT | 95,933 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/pt_BR.txt) |
+| `por-br-wikipron-broad` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 129,105 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_broad.tsv) |
+| `por-br-wikipron-narrow` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 69,704 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_narrow.tsv) |
+| `por-eu-wikipron-broad` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 71,216 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_broad.tsv) |
+| `por-eu-wikipron-narrow` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 27,792 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_narrow.tsv) |
+| `swe-ipadict` | Swedish | ipa-dict | MIT | 21,754 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/sv.txt) |
+| `swe-wikipron-broad` | Swedish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 4,499 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/swe_latn_broad.tsv) |
+| `tur-wikipron-broad` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 6,069 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_broad.tsv) |
+| `tur-wikipron-narrow` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 1,932 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_narrow.tsv) |
+
+## Licenses
+
+### WikiPron
+- Data: [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- Code: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- Citation: Lee et al. (2020). "Massively Multilingual Pronunciation Modeling with WikiPron." *Proceedings of LREC 2020.*
+- Repository: https://github.com/CUNY-CL/wikipron
+
+### ipa-dict
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Repository: https://github.com/open-dict-data/ipa-dict
 
 # Changes since Phon 3.5
 
@@ -264,12 +358,125 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.exe" newVersion="4.0.0-alpha.49" newMediaFileId="win64" fileSize="377906176" md5Sum="70b4833e628584cb481a18eff7b7dfb5" sha256Sum="e068d7d6754964e1cfac8a16553c172ae93a464540f7628706d3f073144ac779" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
-    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_64.exe" newVersion="4.0.0-alpha.64" newMediaFileId="win64" fileSize="398564864" md5Sum="08f69b1a5984e556ba1a24192f2b4916" sha256Sum="5b1aab2ae6ac166ab449a4086f03f238e0d576923e7d39d7ed32c9ae167fab36" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.59
 
- * Added 'fix' and 'fix all' buttons to Session Check view
- * Improved session check quick-fixes
- * Update ipa fonts
+## Project tree scripts
+
+  - add 'Script folders' node to project tree window showing user, project, and custom script folders
+  - updated script editor with AI coding agent
+
+## General changs
+  
+  - fixed export to CHAT dialog
+  - fixed ordering of sessions/corpora in project tree and session selector
+
+# Changes since Phon 4.0.0-alpha.56
+
+## Project Window                                     
+                                         
+  - New project tree window with dialog header, project menu, and window switching between open projects
+  - Media folder browser — the Media node now shows Global and Project media folders with lazy-loaded contents, context menus, and the ability to create
+  sessions directly from media files or reveal files in Finder
+  - Session backup management — view, restore, and delete session backups from a new Manage Backups dialog; backup limit is configurable (default 20 per
+  session)
+  - Session info panel now displays recording info and duration
+  - Project info panel gains Rename Project and Data Check action buttons
+  - Improved button appearance in icon strips with visible borders, rounded corners, and configurable layout
+  - Middle-ellipsis labels for long paths that truncate from the center
+
+## Session Editor
+
+  - Corpus template editor now works correctly — opens the proper template editor, initializes the transcript view for new templates, and saves via the
+  SessionTemplate API
+  - Fixed selection escaping tier bounds — selecting within header tiers, comments, and gems no longer cascades into adjacent tiers
+  - Segment overlap detection and auto-fix — the overlap check now correctly identifies and optionally auto-repairs overlapping segments for the same
+  speaker
+  - Session media check with optional auto-fix for mismatched media filenames
+
+## Session Checks
+
+  - New settings UI for Session Media Check (check accessibility, CHAT strict mode, fix media name) and Segment Overlap Check (fix overlaps)
+  - Auto-fix mode for both checks: when enabled, fixes are applied directly and reported as informational messages instead of warnings
+  - Session-level validation events (e.g., missing media) now appear correctly in check results
+
+## Icons
+
+  - Replaced ca.hedlund.desktopicons dependency with Google Material Design Icons across the entire application
+
+## Bug Fixes
+
+  - Fixed intermittent welcome window layout collapse caused by pack() caching collapsed divider positions
+  - Fixed project tree selection not restored after refresh (async child loading race condition)
+  - Fixed NewSessionDialog producing invalid paths for root-level sessions
+  - Fixed corpus extraction confusing folders with session files
+  - Fixed MiddleEllipsisLabel always rendering full text instead of truncated form
+
+# Changes since Phon 4.0.0-alpha.47
+
+## New Features
+ * Added drag &amp; drop support in the Project Tree window
+ * Added automatic session editor perspective persistence — layout changes are saved and restored automatically (#297)
+ * Added Git integration to the Project Tree with status indicators, commit, pull, and push actions
+ * Added keyboard shortcuts viewer and editor in Preferences
+ * Added session editor layout preferences for customizing default editor layout
+ * Added PhonShell scripting console
+ * Added auto-transcription source configuration panel to the IPA Dictionary view
+ * Added project actions to the New Project window
+
+## Bug Fixes
+ * Fixed missing Dutch (NLD) syllabifiers
+ * Fixed syllabifier ordering across all locations
+ * Fixed segment overlap check logic
+ * Fixed media location edits not updating correctly
+ * Fixed Check Wizard initialization
+ * Fixed session changes not saved before record actions (#297)
+
+## Improvements
+ * Updated Project Tree window layout and styling
+ * Session editor now loads view properties from last used perspective
+ * Improved session media file detection
+
+## Imported Dictionaries
+
+| Dictionary | Language | Source | License | Entries | URL |
+|-----------|----------|--------|---------|---------|-----|
+| `ara-ipadict` | Arabic | ipa-dict | MIT | 1,168,152 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ar.txt) |
+| `ara-wikipron-broad` | Arabic | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 11,560 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/ara_arab_broad.tsv) |
+| `fin-ipadict` | Finnish | ipa-dict | MIT | 92,761 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/fi.txt) |
+| `fin-wikipron-broad` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 153,401 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_broad.tsv) |
+| `fin-wikipron-narrow` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 158,641 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_narrow.tsv) |
+| `hin-wikipron-broad` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,264 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_broad.tsv) |
+| `hin-wikipron-narrow` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 22,296 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_narrow.tsv) |
+| `jpn-ipadict` | Japanese | ipa-dict | MIT | 219,283 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ja.txt) |
+| `jpn-wikipron-narrow` | Japanese | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 26,589 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/jpn_hira_narrow.tsv) |
+| `kor-ipadict` | Korean | ipa-dict | MIT | 66,442 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ko.txt) |
+| `kor-wikipron-narrow` | Korean | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,689 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/kor_hang_narrow.tsv) |
+| `nob-ipadict` | Norwegian | ipa-dict | MIT | 10,266 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/nb.txt) |
+| `nob-wikipron-broad` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 3,122 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_broad.tsv) |
+| `nob-wikipron-narrow` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 691 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_narrow.tsv) |
+| `pol-wikipron-broad` | Polish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 124,883 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/pol_latn_broad.tsv) |
+| `por-br-ipadict` | Portuguese Brazilian | ipa-dict | MIT | 95,933 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/pt_BR.txt) |
+| `por-br-wikipron-broad` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 129,105 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_broad.tsv) |
+| `por-br-wikipron-narrow` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 69,704 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_narrow.tsv) |
+| `por-eu-wikipron-broad` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 71,216 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_broad.tsv) |
+| `por-eu-wikipron-narrow` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 27,792 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_narrow.tsv) |
+| `swe-ipadict` | Swedish | ipa-dict | MIT | 21,754 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/sv.txt) |
+| `swe-wikipron-broad` | Swedish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 4,499 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/swe_latn_broad.tsv) |
+| `tur-wikipron-broad` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 6,069 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_broad.tsv) |
+| `tur-wikipron-narrow` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 1,932 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_narrow.tsv) |
+
+## Licenses
+
+### WikiPron
+- Data: [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- Code: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- Citation: Lee et al. (2020). "Massively Multilingual Pronunciation Modeling with WikiPron." *Proceedings of LREC 2020.*
+- Repository: https://github.com/CUNY-CL/wikipron
+
+### ipa-dict
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Repository: https://github.com/open-dict-data/ipa-dict
 
 # Changes since Phon 3.5
 
@@ -330,12 +537,483 @@
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_49.zip" newVersion="4.0.0-alpha.49" newMediaFileId="win64zip" fileSize="376522575" md5Sum="fb86447fa3bd0ae1e30bf67b09e4059b" sha256Sum="6cb2f3ebd5a4ed26f60db6961ffcf916430d35c67aeeca14086e13e2e889c557" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="false">
-    <comment language="en"># Changes since Phon 4.0.0-alpha.47
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_64.exe" newVersion="4.0.0-alpha.64" newMediaFileId="win64" fileSize="398564864" md5Sum="08f69b1a5984e556ba1a24192f2b4916" sha256Sum="5b1aab2ae6ac166ab449a4086f03f238e0d576923e7d39d7ed32c9ae167fab36" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.59
 
- * Added 'fix' and 'fix all' buttons to Session Check view
- * Improved session check quick-fixes
- * Update ipa fonts
+## Project tree scripts
+
+  - add 'Script folders' node to project tree window showing user, project, and custom script folders
+  - updated script editor with AI coding agent
+
+## General changs
+  
+  - fixed export to CHAT dialog
+  - fixed ordering of sessions/corpora in project tree and session selector
+
+# Changes since Phon 4.0.0-alpha.56
+
+## Project Window                                     
+                                         
+  - New project tree window with dialog header, project menu, and window switching between open projects
+  - Media folder browser — the Media node now shows Global and Project media folders with lazy-loaded contents, context menus, and the ability to create
+  sessions directly from media files or reveal files in Finder
+  - Session backup management — view, restore, and delete session backups from a new Manage Backups dialog; backup limit is configurable (default 20 per
+  session)
+  - Session info panel now displays recording info and duration
+  - Project info panel gains Rename Project and Data Check action buttons
+  - Improved button appearance in icon strips with visible borders, rounded corners, and configurable layout
+  - Middle-ellipsis labels for long paths that truncate from the center
+
+## Session Editor
+
+  - Corpus template editor now works correctly — opens the proper template editor, initializes the transcript view for new templates, and saves via the
+  SessionTemplate API
+  - Fixed selection escaping tier bounds — selecting within header tiers, comments, and gems no longer cascades into adjacent tiers
+  - Segment overlap detection and auto-fix — the overlap check now correctly identifies and optionally auto-repairs overlapping segments for the same
+  speaker
+  - Session media check with optional auto-fix for mismatched media filenames
+
+## Session Checks
+
+  - New settings UI for Session Media Check (check accessibility, CHAT strict mode, fix media name) and Segment Overlap Check (fix overlaps)
+  - Auto-fix mode for both checks: when enabled, fixes are applied directly and reported as informational messages instead of warnings
+  - Session-level validation events (e.g., missing media) now appear correctly in check results
+
+## Icons
+
+  - Replaced ca.hedlund.desktopicons dependency with Google Material Design Icons across the entire application
+
+## Bug Fixes
+
+  - Fixed intermittent welcome window layout collapse caused by pack() caching collapsed divider positions
+  - Fixed project tree selection not restored after refresh (async child loading race condition)
+  - Fixed NewSessionDialog producing invalid paths for root-level sessions
+  - Fixed corpus extraction confusing folders with session files
+  - Fixed MiddleEllipsisLabel always rendering full text instead of truncated form
+
+# Changes since Phon 4.0.0-alpha.47
+
+## New Features
+ * Added drag &amp; drop support in the Project Tree window
+ * Added automatic session editor perspective persistence — layout changes are saved and restored automatically (#297)
+ * Added Git integration to the Project Tree with status indicators, commit, pull, and push actions
+ * Added keyboard shortcuts viewer and editor in Preferences
+ * Added session editor layout preferences for customizing default editor layout
+ * Added PhonShell scripting console
+ * Added auto-transcription source configuration panel to the IPA Dictionary view
+ * Added project actions to the New Project window
+
+## Bug Fixes
+ * Fixed missing Dutch (NLD) syllabifiers
+ * Fixed syllabifier ordering across all locations
+ * Fixed segment overlap check logic
+ * Fixed media location edits not updating correctly
+ * Fixed Check Wizard initialization
+ * Fixed session changes not saved before record actions (#297)
+
+## Improvements
+ * Updated Project Tree window layout and styling
+ * Session editor now loads view properties from last used perspective
+ * Improved session media file detection
+
+## Imported Dictionaries
+
+| Dictionary | Language | Source | License | Entries | URL |
+|-----------|----------|--------|---------|---------|-----|
+| `ara-ipadict` | Arabic | ipa-dict | MIT | 1,168,152 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ar.txt) |
+| `ara-wikipron-broad` | Arabic | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 11,560 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/ara_arab_broad.tsv) |
+| `fin-ipadict` | Finnish | ipa-dict | MIT | 92,761 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/fi.txt) |
+| `fin-wikipron-broad` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 153,401 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_broad.tsv) |
+| `fin-wikipron-narrow` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 158,641 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_narrow.tsv) |
+| `hin-wikipron-broad` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,264 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_broad.tsv) |
+| `hin-wikipron-narrow` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 22,296 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_narrow.tsv) |
+| `jpn-ipadict` | Japanese | ipa-dict | MIT | 219,283 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ja.txt) |
+| `jpn-wikipron-narrow` | Japanese | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 26,589 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/jpn_hira_narrow.tsv) |
+| `kor-ipadict` | Korean | ipa-dict | MIT | 66,442 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ko.txt) |
+| `kor-wikipron-narrow` | Korean | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,689 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/kor_hang_narrow.tsv) |
+| `nob-ipadict` | Norwegian | ipa-dict | MIT | 10,266 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/nb.txt) |
+| `nob-wikipron-broad` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 3,122 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_broad.tsv) |
+| `nob-wikipron-narrow` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 691 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_narrow.tsv) |
+| `pol-wikipron-broad` | Polish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 124,883 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/pol_latn_broad.tsv) |
+| `por-br-ipadict` | Portuguese Brazilian | ipa-dict | MIT | 95,933 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/pt_BR.txt) |
+| `por-br-wikipron-broad` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 129,105 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_broad.tsv) |
+| `por-br-wikipron-narrow` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 69,704 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_narrow.tsv) |
+| `por-eu-wikipron-broad` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 71,216 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_broad.tsv) |
+| `por-eu-wikipron-narrow` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 27,792 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_narrow.tsv) |
+| `swe-ipadict` | Swedish | ipa-dict | MIT | 21,754 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/sv.txt) |
+| `swe-wikipron-broad` | Swedish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 4,499 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/swe_latn_broad.tsv) |
+| `tur-wikipron-broad` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 6,069 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_broad.tsv) |
+| `tur-wikipron-narrow` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 1,932 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_narrow.tsv) |
+
+## Licenses
+
+### WikiPron
+- Data: [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- Code: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- Citation: Lee et al. (2020). "Massively Multilingual Pronunciation Modeling with WikiPron." *Proceedings of LREC 2020.*
+- Repository: https://github.com/CUNY-CL/wikipron
+
+### ipa-dict
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Repository: https://github.com/open-dict-data/ipa-dict
+
+# Changes since Phon 3.5
+
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
+
+## User Interface and Experience Improvements
+
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
+
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
+
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
+
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
+
+## Notes
+- Default user preferences will reset for Phon 4 and will no longer affect Phon 3 preferences.
+- Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
+- Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
+
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
+</comment>
+  </entry>
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_64.exe" newVersion="4.0.0-alpha.64" newMediaFileId="win64" fileSize="398564864" md5Sum="08f69b1a5984e556ba1a24192f2b4916" sha256Sum="5b1aab2ae6ac166ab449a4086f03f238e0d576923e7d39d7ed32c9ae167fab36" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="false" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.59
+
+## Project tree scripts
+
+  - add 'Script folders' node to project tree window showing user, project, and custom script folders
+  - updated script editor with AI coding agent
+
+## General changs
+  
+  - fixed export to CHAT dialog
+  - fixed ordering of sessions/corpora in project tree and session selector
+
+# Changes since Phon 4.0.0-alpha.56
+
+## Project Window                                     
+                                         
+  - New project tree window with dialog header, project menu, and window switching between open projects
+  - Media folder browser — the Media node now shows Global and Project media folders with lazy-loaded contents, context menus, and the ability to create
+  sessions directly from media files or reveal files in Finder
+  - Session backup management — view, restore, and delete session backups from a new Manage Backups dialog; backup limit is configurable (default 20 per
+  session)
+  - Session info panel now displays recording info and duration
+  - Project info panel gains Rename Project and Data Check action buttons
+  - Improved button appearance in icon strips with visible borders, rounded corners, and configurable layout
+  - Middle-ellipsis labels for long paths that truncate from the center
+
+## Session Editor
+
+  - Corpus template editor now works correctly — opens the proper template editor, initializes the transcript view for new templates, and saves via the
+  SessionTemplate API
+  - Fixed selection escaping tier bounds — selecting within header tiers, comments, and gems no longer cascades into adjacent tiers
+  - Segment overlap detection and auto-fix — the overlap check now correctly identifies and optionally auto-repairs overlapping segments for the same
+  speaker
+  - Session media check with optional auto-fix for mismatched media filenames
+
+## Session Checks
+
+  - New settings UI for Session Media Check (check accessibility, CHAT strict mode, fix media name) and Segment Overlap Check (fix overlaps)
+  - Auto-fix mode for both checks: when enabled, fixes are applied directly and reported as informational messages instead of warnings
+  - Session-level validation events (e.g., missing media) now appear correctly in check results
+
+## Icons
+
+  - Replaced ca.hedlund.desktopicons dependency with Google Material Design Icons across the entire application
+
+## Bug Fixes
+
+  - Fixed intermittent welcome window layout collapse caused by pack() caching collapsed divider positions
+  - Fixed project tree selection not restored after refresh (async child loading race condition)
+  - Fixed NewSessionDialog producing invalid paths for root-level sessions
+  - Fixed corpus extraction confusing folders with session files
+  - Fixed MiddleEllipsisLabel always rendering full text instead of truncated form
+
+# Changes since Phon 4.0.0-alpha.47
+
+## New Features
+ * Added drag &amp; drop support in the Project Tree window
+ * Added automatic session editor perspective persistence — layout changes are saved and restored automatically (#297)
+ * Added Git integration to the Project Tree with status indicators, commit, pull, and push actions
+ * Added keyboard shortcuts viewer and editor in Preferences
+ * Added session editor layout preferences for customizing default editor layout
+ * Added PhonShell scripting console
+ * Added auto-transcription source configuration panel to the IPA Dictionary view
+ * Added project actions to the New Project window
+
+## Bug Fixes
+ * Fixed missing Dutch (NLD) syllabifiers
+ * Fixed syllabifier ordering across all locations
+ * Fixed segment overlap check logic
+ * Fixed media location edits not updating correctly
+ * Fixed Check Wizard initialization
+ * Fixed session changes not saved before record actions (#297)
+
+## Improvements
+ * Updated Project Tree window layout and styling
+ * Session editor now loads view properties from last used perspective
+ * Improved session media file detection
+
+## Imported Dictionaries
+
+| Dictionary | Language | Source | License | Entries | URL |
+|-----------|----------|--------|---------|---------|-----|
+| `ara-ipadict` | Arabic | ipa-dict | MIT | 1,168,152 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ar.txt) |
+| `ara-wikipron-broad` | Arabic | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 11,560 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/ara_arab_broad.tsv) |
+| `fin-ipadict` | Finnish | ipa-dict | MIT | 92,761 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/fi.txt) |
+| `fin-wikipron-broad` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 153,401 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_broad.tsv) |
+| `fin-wikipron-narrow` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 158,641 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_narrow.tsv) |
+| `hin-wikipron-broad` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,264 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_broad.tsv) |
+| `hin-wikipron-narrow` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 22,296 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_narrow.tsv) |
+| `jpn-ipadict` | Japanese | ipa-dict | MIT | 219,283 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ja.txt) |
+| `jpn-wikipron-narrow` | Japanese | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 26,589 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/jpn_hira_narrow.tsv) |
+| `kor-ipadict` | Korean | ipa-dict | MIT | 66,442 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ko.txt) |
+| `kor-wikipron-narrow` | Korean | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,689 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/kor_hang_narrow.tsv) |
+| `nob-ipadict` | Norwegian | ipa-dict | MIT | 10,266 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/nb.txt) |
+| `nob-wikipron-broad` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 3,122 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_broad.tsv) |
+| `nob-wikipron-narrow` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 691 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_narrow.tsv) |
+| `pol-wikipron-broad` | Polish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 124,883 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/pol_latn_broad.tsv) |
+| `por-br-ipadict` | Portuguese Brazilian | ipa-dict | MIT | 95,933 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/pt_BR.txt) |
+| `por-br-wikipron-broad` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 129,105 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_broad.tsv) |
+| `por-br-wikipron-narrow` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 69,704 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_narrow.tsv) |
+| `por-eu-wikipron-broad` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 71,216 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_broad.tsv) |
+| `por-eu-wikipron-narrow` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 27,792 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_narrow.tsv) |
+| `swe-ipadict` | Swedish | ipa-dict | MIT | 21,754 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/sv.txt) |
+| `swe-wikipron-broad` | Swedish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 4,499 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/swe_latn_broad.tsv) |
+| `tur-wikipron-broad` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 6,069 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_broad.tsv) |
+| `tur-wikipron-narrow` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 1,932 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_narrow.tsv) |
+
+## Licenses
+
+### WikiPron
+- Data: [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- Code: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- Citation: Lee et al. (2020). "Massively Multilingual Pronunciation Modeling with WikiPron." *Proceedings of LREC 2020.*
+- Repository: https://github.com/CUNY-CL/wikipron
+
+### ipa-dict
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Repository: https://github.com/open-dict-data/ipa-dict
+
+# Changes since Phon 3.5
+
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
+## Backend File Format Updates
+- Major migration to the CHAT transcription system format, affecting how session data is stored and processed
+  Sessions created and upgraded to phon 4 will no longer be compatible with previous versions of Phon.
+
+## User Interface and Experience Improvements
+
+### Editor Navigation and Interaction
+- Improved movement between syllabification tiers and text tiers
+- Enhanced tab/shift+tab navigation between alignment and text tiers
+- Fixed update mechanisms for syllabification component when switching tiers
+- Added media playback keyboard shortcuts (F2, Ctrl+Enter, and Ctrl+Space)
+- Added a "reset layout" action to the 'more' button
+- Reorganized the transcript view toolbar (#277)
+- Media player has been embedded into the Transcript view and may be externalized into its own window.
+- Redo keyboard shortcut is now Cmd/Ctrl+Shift+Z
+- Play segment keyboard shortcut is now Cmd/Ctrl+Y
+
+### Timeline and Interval Tiers
+- Renamed 'timeline' and 'timelineTier' to 'intervalTiers' and 'intervalTier' for clarity
+- Added Phone intervals as a new user tier type
+- Improved tier alignment with the %wor tier
+- Enhanced word/phone interval tier updates
+- Customized tier alignment with %wor tier
+
+### Bug Fixes
+- Fixed delete participant functionality (#275)
+- Fixed duplicate session issues (#272)
+- Fixed WAP (Word-level Analysis of Phonological Patterns) analysis (#278)
+- Fixed session links in generated HTML reports
+- Fixed issues with shadow projects looking for old properties file
+- Fixed issues with GEM content updating when switching tiers
+
+## Analysis Enhancements
+- Updated numerous phonological analyses to work with the new CHAT format:
+  - Word match analysis
+  - Tier match analysis
+  - Syllable count match analysis
+  - Stress match analysis
+  - CV pattern match analysis
+  - Measure of cluster proximity analysis
+  - Consonants analysis
+  - Vocalization analysis
+  - Phone clusters analysis
+  - Multi-syllabic non-linear analysis
+  - Added PMLU (Phonological Mean Length of Utterance) analysis
+  - Added phonological process analyses
+
+## Notes
+- Default user preferences will reset for Phon 4 and will no longer affect Phon 3 preferences.
+- Application Support folder is now named 'Phon4' and will no longer contain Phon 3 data.
+- Default workspace folder will be &lt;user.home&gt;/Documents/Phon4Workspace.
+
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.46
+</comment>
+  </entry>
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_64.zip" newVersion="4.0.0-alpha.64" newMediaFileId="win64zip" fileSize="397201715" md5Sum="0ba6b1bbd59dca35d65db6590f033dee" sha256Sum="2c9911b448e45fec19c6bbb332d4d480f68fceb87fa0b008629d7c0e9b9340e3" bundledJre="windows-amd64-25.tar.gz" jreMinVersion="21" jreMaxVersion="25" archive="true" singleBundle="false">
+    <comment language="en"># Changes since Phon 4.0.0-alpha.59
+
+## Project tree scripts
+
+  - add 'Script folders' node to project tree window showing user, project, and custom script folders
+  - updated script editor with AI coding agent
+
+## General changs
+  
+  - fixed export to CHAT dialog
+  - fixed ordering of sessions/corpora in project tree and session selector
+
+# Changes since Phon 4.0.0-alpha.56
+
+## Project Window                                     
+                                         
+  - New project tree window with dialog header, project menu, and window switching between open projects
+  - Media folder browser — the Media node now shows Global and Project media folders with lazy-loaded contents, context menus, and the ability to create
+  sessions directly from media files or reveal files in Finder
+  - Session backup management — view, restore, and delete session backups from a new Manage Backups dialog; backup limit is configurable (default 20 per
+  session)
+  - Session info panel now displays recording info and duration
+  - Project info panel gains Rename Project and Data Check action buttons
+  - Improved button appearance in icon strips with visible borders, rounded corners, and configurable layout
+  - Middle-ellipsis labels for long paths that truncate from the center
+
+## Session Editor
+
+  - Corpus template editor now works correctly — opens the proper template editor, initializes the transcript view for new templates, and saves via the
+  SessionTemplate API
+  - Fixed selection escaping tier bounds — selecting within header tiers, comments, and gems no longer cascades into adjacent tiers
+  - Segment overlap detection and auto-fix — the overlap check now correctly identifies and optionally auto-repairs overlapping segments for the same
+  speaker
+  - Session media check with optional auto-fix for mismatched media filenames
+
+## Session Checks
+
+  - New settings UI for Session Media Check (check accessibility, CHAT strict mode, fix media name) and Segment Overlap Check (fix overlaps)
+  - Auto-fix mode for both checks: when enabled, fixes are applied directly and reported as informational messages instead of warnings
+  - Session-level validation events (e.g., missing media) now appear correctly in check results
+
+## Icons
+
+  - Replaced ca.hedlund.desktopicons dependency with Google Material Design Icons across the entire application
+
+## Bug Fixes
+
+  - Fixed intermittent welcome window layout collapse caused by pack() caching collapsed divider positions
+  - Fixed project tree selection not restored after refresh (async child loading race condition)
+  - Fixed NewSessionDialog producing invalid paths for root-level sessions
+  - Fixed corpus extraction confusing folders with session files
+  - Fixed MiddleEllipsisLabel always rendering full text instead of truncated form
+
+# Changes since Phon 4.0.0-alpha.47
+
+## New Features
+ * Added drag &amp; drop support in the Project Tree window
+ * Added automatic session editor perspective persistence — layout changes are saved and restored automatically (#297)
+ * Added Git integration to the Project Tree with status indicators, commit, pull, and push actions
+ * Added keyboard shortcuts viewer and editor in Preferences
+ * Added session editor layout preferences for customizing default editor layout
+ * Added PhonShell scripting console
+ * Added auto-transcription source configuration panel to the IPA Dictionary view
+ * Added project actions to the New Project window
+
+## Bug Fixes
+ * Fixed missing Dutch (NLD) syllabifiers
+ * Fixed syllabifier ordering across all locations
+ * Fixed segment overlap check logic
+ * Fixed media location edits not updating correctly
+ * Fixed Check Wizard initialization
+ * Fixed session changes not saved before record actions (#297)
+
+## Improvements
+ * Updated Project Tree window layout and styling
+ * Session editor now loads view properties from last used perspective
+ * Improved session media file detection
+
+## Imported Dictionaries
+
+| Dictionary | Language | Source | License | Entries | URL |
+|-----------|----------|--------|---------|---------|-----|
+| `ara-ipadict` | Arabic | ipa-dict | MIT | 1,168,152 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ar.txt) |
+| `ara-wikipron-broad` | Arabic | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 11,560 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/ara_arab_broad.tsv) |
+| `fin-ipadict` | Finnish | ipa-dict | MIT | 92,761 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/fi.txt) |
+| `fin-wikipron-broad` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 153,401 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_broad.tsv) |
+| `fin-wikipron-narrow` | Finnish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 158,641 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/fin_latn_narrow.tsv) |
+| `hin-wikipron-broad` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,264 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_broad.tsv) |
+| `hin-wikipron-narrow` | Hindi | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 22,296 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/hin_deva_narrow.tsv) |
+| `jpn-ipadict` | Japanese | ipa-dict | MIT | 219,283 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ja.txt) |
+| `jpn-wikipron-narrow` | Japanese | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 26,589 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/jpn_hira_narrow.tsv) |
+| `kor-ipadict` | Korean | ipa-dict | MIT | 66,442 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/ko.txt) |
+| `kor-wikipron-narrow` | Korean | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 25,689 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/kor_hang_narrow.tsv) |
+| `nob-ipadict` | Norwegian | ipa-dict | MIT | 10,266 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/nb.txt) |
+| `nob-wikipron-broad` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 3,122 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_broad.tsv) |
+| `nob-wikipron-narrow` | Norwegian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 691 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/nob_latn_narrow.tsv) |
+| `pol-wikipron-broad` | Polish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 124,883 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/pol_latn_broad.tsv) |
+| `por-br-ipadict` | Portuguese Brazilian | ipa-dict | MIT | 95,933 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/pt_BR.txt) |
+| `por-br-wikipron-broad` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 129,105 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_broad.tsv) |
+| `por-br-wikipron-narrow` | Portuguese Brazilian | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 69,704 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_bz_narrow.tsv) |
+| `por-eu-wikipron-broad` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 71,216 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_broad.tsv) |
+| `por-eu-wikipron-narrow` | Portuguese European | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 27,792 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/por_latn_po_narrow.tsv) |
+| `swe-ipadict` | Swedish | ipa-dict | MIT | 21,754 | [link](https://raw.githubusercontent.com/open-dict-data/ipa-dict/master/data/sv.txt) |
+| `swe-wikipron-broad` | Swedish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 4,499 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/swe_latn_broad.tsv) |
+| `tur-wikipron-broad` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 6,069 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_broad.tsv) |
+| `tur-wikipron-narrow` | Turkish | WikiPron | Apache 2.0 / CC-BY-SA 3.0 | 1,932 | [link](https://raw.githubusercontent.com/CUNY-CL/wikipron/master/data/scrape/tsv/tur_latn_narrow.tsv) |
+
+## Licenses
+
+### WikiPron
+- Data: [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- Code: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- Citation: Lee et al. (2020). "Massively Multilingual Pronunciation Modeling with WikiPron." *Proceedings of LREC 2020.*
+- Repository: https://github.com/CUNY-CL/wikipron
+
+### ipa-dict
+- License: [MIT](https://opensource.org/licenses/MIT)
+- Repository: https://github.com/open-dict-data/ipa-dict
 
 # Changes since Phon 3.5
 
