@@ -114,8 +114,8 @@
  * Update ara syllabifier
 
 ### CHAT/TalkBank Support
- * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
- * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://phon-ca.github.io/phon/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://phon-ca.github.io/phon/phon-manual/chat/export.html.
  * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
  * Added round-trip support for CA elements/delimiters
  * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
@@ -390,7 +390,7 @@ Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
 &gt; Phon 3.0+ only supports 64-bit operating systems.
 
-The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://phon-ca.github.io/phon/.
 
 ## Changes from Phon 3.0.0b5
 
@@ -665,8 +665,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Update ara syllabifier
 
 ### CHAT/TalkBank Support
- * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
- * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://phon-ca.github.io/phon/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://phon-ca.github.io/phon/phon-manual/chat/export.html.
  * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
  * Added round-trip support for CA elements/delimiters
  * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
@@ -941,7 +941,7 @@ Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
 &gt; Phon 3.0+ only supports 64-bit operating systems.
 
-The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://phon-ca.github.io/phon/.
 
 ## Changes from Phon 3.0.0b5
 
@@ -1216,8 +1216,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Update ara syllabifier
 
 ### CHAT/TalkBank Support
- * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
- * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://phon-ca.github.io/phon/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://phon-ca.github.io/phon/phon-manual/chat/export.html.
  * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
  * Added round-trip support for CA elements/delimiters
  * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
@@ -1492,7 +1492,7 @@ Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
 &gt; Phon 3.0+ only supports 64-bit operating systems.
 
-The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://phon-ca.github.io/phon/.
 
 ## Changes from Phon 3.0.0b5
 
@@ -1767,8 +1767,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Update ara syllabifier
 
 ### CHAT/TalkBank Support
- * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
- * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://phon-ca.github.io/phon/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://phon-ca.github.io/phon/phon-manual/chat/export.html.
  * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
  * Added round-trip support for CA elements/delimiters
  * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
@@ -2043,7 +2043,7 @@ Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
 &gt; Phon 3.0+ only supports 64-bit operating systems.
 
-The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://phon-ca.github.io/phon/.
 
 ## Changes from Phon 3.0.0b5
 
@@ -2318,8 +2318,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Update ara syllabifier
 
 ### CHAT/TalkBank Support
- * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
- * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://phon-ca.github.io/phon/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://phon-ca.github.io/phon/phon-manual/chat/export.html.
  * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
  * Added round-trip support for CA elements/delimiters
  * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
@@ -2594,7 +2594,7 @@ Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
 &gt; Phon 3.0+ only supports 64-bit operating systems.
 
-The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://phon-ca.github.io/phon/.
 
 ## Changes from Phon 3.0.0b5
 
@@ -2869,8 +2869,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Update ara syllabifier
 
 ### CHAT/TalkBank Support
- * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
- * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://phon-ca.github.io/phon/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://phon-ca.github.io/phon/phon-manual/chat/export.html.
  * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
  * Added round-trip support for CA elements/delimiters
  * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
@@ -3145,7 +3145,7 @@ Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
 &gt; Phon 3.0+ only supports 64-bit operating systems.
 
-The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://phon-ca.github.io/phon/.
 
 ## Changes from Phon 3.0.0b5
 
